@@ -1,0 +1,12 @@
+{
+    "tabs": [
+        {
+            "link": "/vc/admin/user-management",
+            "name": "User Management"
+        },
+        {
+            "link": "/vc/admin/settings/church/",
+            "name": "Settings"
+        }
+    ]
+}

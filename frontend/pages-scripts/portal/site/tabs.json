@@ -1,0 +1,24 @@
+{
+    "tabs": [
+        {
+            "id": "discussion",
+            "link": "/portal/site/discussion",
+            "name": "Discussion"
+        },
+        {
+            "id": "page",
+            "link": "/portal/site/pages",
+            "name": "Pages"
+        },
+        {
+            "id": "page_templates",
+            "link": "/portal/site/page-templates",
+            "name": "Page Templates"
+        },
+        {
+            "id": "publish",
+            "link": "/portal/site/publish",
+            "name": "Publish"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "test",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": ":memory:"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "test",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

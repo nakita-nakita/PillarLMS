@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: user/user.logic.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: user/user.logic.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const db = require("../../../models")
+var bcrypt = require("bcryptjs");
+const authLogic = require("../auth/auth.logic")
+const authValidation = require("../auth/auth.validation")
+const Op = db.Sequelize.Op;
+
+/**
+ * description of Editor.
+ * @namespace user_logic
+ */
+
+/**
+ * Find a user with the sequelize "findOne" function.
+ * @param {{where: Object, include: Object}} sequelizeSearch  - [Sequelize fineOne Example](https://sequelize.org/master/manual/model-querying-finders.html#-code-findone--code-)
+ * @returns {User}
+ * @memberof user_logic
+ */
+const findOne = (sequelizeSearch) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await db.user.findOne(sequelizeSearch);
+
+    resolve(user);
+  })
+}
+
+const getOneById = ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await db.user.findOne({ where: { id, isDeleted: false } });
+
+    if (user) {
+      user.profile = await db.userProfile.findOne({ where: { userId: id } });
+    }
+
+    resolve(user);
+  })
+}
+
+const getManyWithPagination = ({ q, page, pageSize }) => {
+  return new Promise(async (resolve, reject) => {
+
+    page = page ? page - 1 : 0;
+    pageSize = pageSize || 10;
+
+    if (page &lt; 0) {
+      return new Error("Please start the page at 1.");
+    }
+    if (pageSize &lt; 0 || pageSize >= 100) {
+      return new Error("Please keep pageSize inbetween 1 - 100.");
+    }
+
+    const offset = page * pageSize;
+    const limit = pageSize;
+
+    let search = {
+      where: {
+        isDeleted: false,
+      },
+      include: {
+        model: db.userProfile,
+        // where: { isDeleted: false },
+      }
+    };
+
+    if (q) {
+      search = {
+        where: {
+          username: {
+            [Op.like]: "%" + q + "%",
+          },
+          isDeleted: false,
+        },
+      };
+    }
+
+    search.offset = offset;
+    search.limit = limit;
+
+    const users = await db.user.findAndCountAll(search);
+    users.rows = users.rows.map(user => {
+      if (user.users_profile) {
+        user.profile = user.users_profile.dataValues
+      }
+
+      return user
+    })
+    users.page = page + 1;
+    users.pageSize = pageSize;
+    users.pageCount = Math.ceil(users.count / users.pageSize);
+
+
+    resolve(users)
+  })
+}
+
+const createOne = ({ username, email, password, profile, permissionMany, roleMany }) => {
+  return new Promise(async (resolve, reject) => {
+
+    const user = await db.user.create({
+      username: username,
+      email: email,
+      password: bcrypt.hashSync(password, 8),
+    });
+
+    // Save Profile
+    if (profile) {
+      const userProfile = db.userProfile.build({ ...profile, userId: user.id });
+
+      const newUserProfile = await userProfile.save();
+
+      user.profile = newUserProfile;
+    }
+
+    // Save Permissions
+    if (permissionMany) {
+      await db.userManyPermission.bulkCreate(permissionMany.map(permission => ({
+        userId: user.id,
+        permissionId: permission.id,
+      })));
+    }
+
+    // Save Roles
+    if (roleMany) {
+      await db.userManyRole.bulkCreate(roleMany.map(role => ({
+        userId: user.id,
+        roleId: role.id,
+      })));
+    }
+
+    resolve(user.dataValues);
+  })
+}
+
+const createMany = ({ userArray }) => {
+  return new Promise(async (resolve, reject) => {
+    for (var i = 0; i &lt; userArray.length; i++) {
+      const user = userArray[i];
+
+      await create({
+        username: user.username,
+        email: user.email,
+        password: user.password,
+        profile: user.profile,
+        permissionMany: user.permissionMany,
+        roleMany: user.roleMany
+      })
+    }
+  })
+}
+
+const updateOne = ({ id, username, email, password, profile }) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await db.user.update(
+      {
+        username: username,
+        email: email,
+        password: password ? bcrypt.hashSync(password, 8) : undefined,
+      },
+      {
+        where: { id, isDeleted: false },
+        returning: true,
+        plain: true,
+      }
+    );
+
+
+    let userProfile
+
+    // Save Profile
+    if (profile) {
+      userProfile = await db.userProfile.update(
+        {
+          ...profile
+        },
+        {
+          where: { userId: user.id },
+          returning: true,
+        });
+
+    }
+
+    resolve(user[0] !== 0 ? { ...user[1].dataValues, profile: userProfile } : null)
+  })
+}
+
+const deleteOne = ({ id }) => {
+  return new Promise(async (resolve, reject) => {
+    const user = await db.user.update(
+      { isDeleted: true },
+      {
+        where: { id, isDeleted: false },
+        returning: true,
+      }
+    );
+
+    resolve(user[0] !== 0 ? user[1][0].dataValues : null)
+  })
+}
+
+const addPermission = ({userId, permissionId}) => {
+  return new Promise(async (resolve, reject) => {
+    const newPermissionRelation = db.userManyPermission.build({ userId, permissionId });
+
+    resolve(await newPermissionRelation.save())
+  });
+}
+
+const addPermissionMany = ({userId, permissionManyArray}) => {
+  return new Promise(async (resolve, reject) => {
+
+    const newPermissionRelationships = await db.userManyPermission.bulkCreate(permissionManyArray.map(permission => ({
+      userId: userId,
+      permissionId: permission.id,
+    })));
+
+    resolve(newPermissionRelationships)
+  });
+}
+
+const deletePermission = ({userId, permissionId}) => {
+  return new Promise(async (resolve, reject) => {
+    const userManyPermission = await db.userManyPermission.update(
+      { isDeleted: true },
+      {
+        where: { userId, permissionId, isDeleted: false },
+        returning: true,
+      }
+    );
+
+    resolve(userManyPermission[0] !== 0 ? userManyPermission[1][0].dataValues : null)
+  });
+}
+
+const deletePermissionMany = ({userId, permissionIdsArray}) => {
+  return new Promise(async (resolve, reject) => {
+
+    for (var i = 0; i &lt; permissionIdsArray.length; i++) {
+      const user = await db.userManyPermission.update(
+        { isDeleted: true },
+        {
+          where: { userId, permissionId: permissionIdsArray[i], isDeleted: false },
+          returning: true,
+          plain: true,
+        }
+      );
+    }
+
+    resolve(true)
+  });
+}
+
+const addRole = ({userId, roleId}) => {
+  return new Promise(async (resolve, reject) => {
+    const newRoleRelation = db.userManyRole.build({ userId, roleId });
+
+    resolve(await newRoleRelation.save())
+  });
+}
+
+const addRoleMany = ({userId, roleManyArray}) => {
+  return new Promise(async (resolve, reject) => {
+
+    const newRoleRelationships = await db.userManyRole.bulkCreate(roleManyArray.map(role => ({
+      userId: userId,
+      roleId: role.id,
+    })));
+
+    resolve(newRoleRelationships)
+  });
+}
+
+const deleteRole = ({userId, roleId}) => {
+  return new Promise(async (resolve, reject) => {
+    const userManyRole = await db.userManyRole.update(
+      { isDeleted: true },
+      {
+        where: { userId, roleId, isDeleted: false },
+        returning: true,
+      }
+    );
+
+    resolve(userManyRole[0] !== 0 ? userManyRole[1][0].dataValues : null)
+  });
+}
+
+const deleteRoleMany = ({userId, roleIdsArray}) => {
+  return new Promise(async (resolve, reject) => {
+
+    for (var i = 0; i &lt; roleIdsArray.length; i++) {
+      const userManyRole = await db.userManyRole.update(
+        { isDeleted: true },
+        {
+          where: { userId, roleId: roleIdsArray[i], isDeleted: false },
+          returning: true,
+          plain: true,
+        }
+      );
+    }
+
+    resolve(true)
+  });
+}
+
+
+module.exports = {
+  findOne,
+  getOneById,
+  getManyWithPagination,
+  createOne,
+  createMany,
+  updateOne,
+  deleteOne,
+  // permissions
+  addPermission,
+  addPermissionMany,
+  deletePermission,
+  deletePermissionMany,
+  // roles
+  addRole,
+  addRoleMany,
+  deleteRole,
+  deleteRoleMany,
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="user_logic.html">user_logic</a></li><li><a href="user_type.html">user_type</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Nov 20 2021 15:09:00 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

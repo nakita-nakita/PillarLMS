@@ -1,0 +1,78 @@
+import { Sequelize } from "sequelize-typescript";
+import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
+import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
+import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
+import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import makeBackendSettingChurchSql from "../backendSetting_church.sql";
+jest.setTimeout(100000)
+
+describe("test backendSetting_church.sql.js", () => {
+  let d: d_sub;
+
+  beforeAll(async () => {
+    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
+    const transaction = await subDomainDb.transaction();
+
+    d = {
+      errorHandler: sequelizeErrorHandler,
+      subDomainDb,
+      transaction,
+      loggers: [
+        console,
+        throwIt,
+      ]
+    };
+  }, 100000)
+
+  test("updateOne: backendSetting_church can update record.", async () => {
+    const churchSql = makeBackendSettingChurchSql(d)
+
+    const updateOne = await churchSql.updateOne({
+      logo: "test",
+      streetAddress: "123 fake st",
+      suiteNumber: "C",
+      zipCode: "11111",
+      city: "fake city",
+      state: "Texas",
+      socialTwitter: "test",
+      socialFacebook: "test",
+      socialInstagram: "test",
+      socialWhatsapp: "test",
+      socialTelegram: "test",
+    })
+    expect(updateOne.data.dataValues.logo).toEqual("test")
+    expect(updateOne.data.dataValues.streetAddress).toEqual("123 fake st")
+    expect(updateOne.data.dataValues.suiteNumber).toEqual("C")
+    expect(updateOne.data.dataValues.zipCode).toEqual("11111")
+    expect(updateOne.data.dataValues.city).toEqual("fake city")
+    expect(updateOne.data.dataValues.state).toEqual("Texas")
+    expect(updateOne.data.dataValues.socialTwitter).toEqual("test")
+    expect(updateOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(updateOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(updateOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(updateOne.data.dataValues.socialFacebook).toEqual("test")
+  })
+
+  test("getOne: backendSetting_church can get record.", async () => {
+    const backendUserRequestLogic = makeBackendSettingChurchSql(d)
+
+    const getOne = await backendUserRequestLogic.getOne()
+
+    expect(getOne.data.dataValues.logo).toEqual("test")
+    expect(getOne.data.dataValues.streetAddress).toEqual("123 fake st")
+    expect(getOne.data.dataValues.suiteNumber).toEqual("C")
+    expect(getOne.data.dataValues.zipCode).toEqual("11111")
+    expect(getOne.data.dataValues.city).toEqual("fake city")
+    expect(getOne.data.dataValues.state).toEqual("Texas")
+    expect(getOne.data.dataValues.socialTwitter).toEqual("test")
+    expect(getOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(getOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(getOne.data.dataValues.socialFacebook).toEqual("test")
+    expect(getOne.data.dataValues.socialFacebook).toEqual("test")
+  })
+
+  afterAll(async () => {
+    await d.transaction.rollback();
+  })
+})
+

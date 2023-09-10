@@ -1,0 +1,32 @@
+{
+  "name": "church-first-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/interaction": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
+    "@fullcalendar/timegrid": "^6.1.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/joy": "^5.0.0-alpha.83",
+    "@mui/material": "^5.13.4",
+    "@mui/x-data-grid": "^6.6.0",
+    "@mui/x-date-pickers": "^6.7.0",
+    "axios": "^1.4.0",
+    "dayjs": "^1.11.8",
+    "http": "^0.0.1-security",
+    "mui-color-input": "^1.0.6",
+    "next": "13.4.4",
+    "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "18.2.0"
+  }
+}

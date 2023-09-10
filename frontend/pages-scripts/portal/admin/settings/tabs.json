@@ -1,0 +1,20 @@
+{
+    "tabs": [
+        {
+            "link": "/vc/admin/settings/church/",
+            "name": "Church"
+        },
+        {
+            "link": "/vc/admin/settings/colors/",
+            "name": "Colors"
+        },
+        {
+            "link": "/vc/admin/settings/links/",
+            "name": "Links"
+        },
+        {
+            "link": "/vc/admin/settings/site",
+            "name": "Site"
+        }
+    ]
+}
