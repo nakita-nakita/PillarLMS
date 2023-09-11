@@ -1,6 +1,7 @@
 // Libraries
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SettingTabsProvider } from '@/pages-scripts/portal/admin/settings/setting-tabs.context';
+import { getAdminLayoutInitGraphQL } from '../store/init.store';
 
 export const AdminLayoutContext = React.createContext();
 
@@ -78,6 +79,39 @@ export function AdminLayoutProvider({ children }) {
     selectedValue: null,
   })
 
+  const [idChip, setIdChip] = React.useState({
+    callByType: null,
+    circleColor: null,
+    email: null,
+    firstName: null,
+    id: null,
+    labelColor: null,
+    lastName: null,
+    picture: null, 
+    username: null,
+  })
+
+  useEffect(() => {
+    getAdminLayoutInitGraphQL().then(initAdminStore => {
+      const id = initAdminStore.data.backendUserBasicView_me;
+      console.log("initAdminStore", initAdminStore, id)
+
+      setIdChip(prevState => ({
+        ...prevState,
+        callByType: id.callByType,
+        circleColor: id.circleColor,
+        email: id.email,
+        firstName: id.firstName,
+        id: id.id,
+        labelColor: id.labelColor,
+        lastName: id.lastName,
+        picture: id.picture, 
+        username: id.username,
+      }))
+    })
+
+  }, [])
+
 
   return (
     <AdminLayoutContext.Provider value={{
@@ -89,6 +123,7 @@ export function AdminLayoutProvider({ children }) {
       whoIsOnPage, setWhoIsOnPage,
       notifications, setNotifications,
       tabs, setTabs,
+      idChip, setIdChip,
     }}>
       <SettingTabsProvider>
         {children}

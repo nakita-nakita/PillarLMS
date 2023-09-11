@@ -11,6 +11,7 @@ import { getUserToken } from "@/utils/graphql/user";
 import uploaderUtil from "@/utils/uploader/callUploaderApi";
 import { getProfileGraphQL, postProfileGraphQL } from "@/pages-scripts/portal/profile/profile.graphql";
 import UserChip from "@/components/chip/user.chip";
+import AdminLayoutContext from "@/layouts/admin/layout/adminLayout.context";
 
 // MUI
 import { useTheme } from '@mui/material/styles';
@@ -28,6 +29,7 @@ import Stack from '@mui/material/Stack';
 
 function Page() {
   const theme = useTheme();
+  const { idChip, setIdChip } = React.useContext(AdminLayoutContext)
 
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -55,7 +57,7 @@ function Page() {
   useEffect(() => {
     getProfileGraphQL().then(profileData => {
       setEmail(profileData.data.foundationUser_getOne.email)
-      
+
       if (profileData.data.foundationUserProfile_getOne) {
         setCallByType(profileData.data.foundationUserProfile_getOne.callByType)
         setCircleColor(profileData.data.foundationUserProfile_getOne.circleColor)
@@ -65,8 +67,8 @@ function Page() {
         setPicturePreview(profileData.data.foundationUserProfile_getOne.picture)
         setUsername(profileData.data.foundationUserProfile_getOne.username)
       }
-  
-      setIsLoaded(true)  
+
+      setIsLoaded(true)
     })
   }, [])
 
@@ -86,7 +88,7 @@ function Page() {
       }
     }
 
-    
+
 
     await postProfileGraphQL({
       callByType,
@@ -97,6 +99,18 @@ function Page() {
       circleColor,
       labelColor,
     })
+
+    console.log('idChip', idChip)
+    setIdChip(prevState => ({
+      ...prevState,
+      callByType: callByType ? callByType : prevState.callByType,
+      firstName: firstName ? firstName : prevState.firstName,
+      lastName: lastName ? lastName : prevState.lastName,
+      username: username ? username : prevState.username,
+      picture: newPicture ? newPicture?.data?.data?.link : prevState.picture,
+      circleColor: circleColor ? circleColor : prevState.circleColor,
+      labelColor: labelColor ? labelColor : prevState.labelColor,
+    }))
     // await uploaderUtil.postUserAvatar({})
   }
 

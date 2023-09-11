@@ -1,12 +1,12 @@
 // Libraries
-import React from 'react'; 
+import React from 'react';
 import { useRouter } from 'next/navigation'
-import Link from 'next/link';
 
 // import { globalHistory } from "@reach/router"
-// import { Link as GatsbyLink, navigate } from 'gatsby';
 
 // Mine
+import AdminLayoutContext from '../adminLayout.context';
+import UserChip from '@/components/chip/user.chip';
 // import { doYouHaveNewNotifications } from '../store/Navigator.graphql.store';
 // import PageLink from '../../../components/realtime/link/PageLink.component';
 // import pageNavigate from '../../../components/realtime/link/pageNavigate.func';
@@ -14,34 +14,22 @@ import Link from 'next/link';
 
 // MUI
 import { useTheme } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import GolfCourseIcon from '@mui/icons-material/GolfCourse';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import PeopleIcon from '@mui/icons-material/People';
-import SettingsIcon from '@mui/icons-material/Settings';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
-import Alert from '@mui/material/Alert'
-import AdminLayoutContext from '../adminLayout.context';
-// import AdminLayoutContext from "../adminLayout.context"
 
 // import PeopleIcon from '@mui/icons-material/People';
 // const path = globalHistory.location.pathname
 
 export default function Navigator(props) {
-  const { tabs, setLeftDrawer } = React.useContext(AdminLayoutContext)
+  const { tabs, setLeftDrawer, idChip } = React.useContext(AdminLayoutContext)
   const router = useRouter()
   const [newBadge, setNewBadge] = React.useState(false)
   const other = props;
@@ -104,9 +92,9 @@ export default function Navigator(props) {
       <List disablePadding>
         <ListItem sx={{ ...itemCategory, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "#230f34" }}>
 
-          <br/>
-          <br/>
-          <br/>
+          <br />
+          <br />
+          <br />
           {/* <Alert severity="warning">
             <small>
               <strong>
@@ -126,33 +114,27 @@ export default function Navigator(props) {
           <ListItemButton onClick={() => changeUrl("/portal/profile")}>
 
             <ListItem
-              // sx={{ py: 2, px: 3 }}
-              secondaryAction={
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://random.imagecdn.app/v1/image?width=56&height=56"
-                  sx={{ width: 40, height: 40, mr: 1 }}
-                />
-              }
+            // sx={{ py: 2, px: 3 }}
+            // // will replace secondary action with gear for user settings at a later date
+            // secondaryAction={
+            //   <Avatar
+            //     alt="Remy Sharp"
+            //     src="https://random.imagecdn.app/v1/image?width=56&height=56"
+            //     sx={{ width: 40, height: 40, mr: 1 }}
+            //   />
+            // }
             >
               <ListItemText>
-                {/* <div style={{ display: "flex" }}>
-                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-
-
-                  </div>
-                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}> */}
-
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    lineHeight: 1.1,
-                    color: theme.palette.grey[700]
-                  }}
-                >
-                  John Edwards
-                </Typography>
-                {/* </div>
-                </div> */}
+                <UserChip
+                  callByType={idChip.callByType}
+                  circleColor={idChip.circleColor}
+                  email={idChip.email}
+                  firstName={idChip.firstName}
+                  labelColor={idChip.labelColor}
+                  lastName={idChip.lastName}
+                  picturePreview={idChip.picture}
+                  username={idChip.username}
+                />
 
 
 
@@ -190,9 +172,9 @@ export default function Navigator(props) {
           <ListItem
             sx={{ py: 0, px: 3 }}
 
-            // secondaryAction={
-            //   <Alert severity="warning"><small><strong>Upgrade</strong></small><hr /><span>Virtual Plan</span></Alert>
-            // }
+          // secondaryAction={
+          //   <Alert severity="warning"><small><strong>Upgrade</strong></small><hr /><span>Virtual Plan</span></Alert>
+          // }
           >
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"

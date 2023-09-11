@@ -13,9 +13,14 @@ type input = {
 
 type returnBasicViewType = {
   id: string
-  picture: string
-  username: string
-  email: string
+  email: String
+  firstName: String
+  lastName: String
+  username: String
+  picture: String
+  callByType: String
+  circleColor: String
+  labelColor: String
 }
 
 export default function me(d: d_domain) {
@@ -73,10 +78,17 @@ export default function me(d: d_domain) {
     return {
       success: true,
       data: {
-        email: userResponse.data.dataValues.email,
-        picture: userProfileResponse.data?.dataValues?.picture,
+        // user table
         id: userResponse.data.dataValues.id,
+        email: userResponse.data.dataValues.email,
+        //user profile table
+        firstName: userProfileResponse.data?.dataValues?.firstName,
+        lastName: userProfileResponse.data?.dataValues?.lastName,
         username: userProfileResponse.data?.dataValues?.username,
+        picture: userProfileResponse.data?.dataValues?.picture,
+        callByType: userProfileResponse.data?.dataValues?.callByType,
+        circleColor: userProfileResponse.data?.dataValues?.circleColor,
+        labelColor: userProfileResponse.data?.dataValues?.labelColor,
       }
     }
   }

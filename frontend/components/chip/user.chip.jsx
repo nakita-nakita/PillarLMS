@@ -61,7 +61,8 @@ export default function UserChip({ email, firstName, lastName, username, callByT
           color: theme.palette.getContrastText(labelColor),
           "&:hover": {
             color: theme.palette.grey[800]
-          }
+          },
+          cursor: "pointer"
         }}
         avatar={
           <Avatar

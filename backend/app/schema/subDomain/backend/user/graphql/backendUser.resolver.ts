@@ -41,7 +41,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data.dataValues
 
       } else {
@@ -61,7 +62,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -79,7 +81,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -97,7 +100,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -115,7 +119,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -133,7 +138,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -151,7 +157,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data.dataValues
 
       } else {
@@ -174,7 +181,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -197,7 +205,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data.dataValues
 
       } else {
@@ -215,7 +224,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data.dataValues
 
       } else {
@@ -231,7 +241,8 @@ const userResolver = {
       const response = await main.setList(args.list)
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -247,7 +258,8 @@ const userResolver = {
       const response = await main.setList(args.list)
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -265,7 +277,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -283,7 +296,8 @@ const userResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data
 
       } else {
@@ -303,17 +317,18 @@ const userResolver = {
         // picture: args.picture,
         // username: args.username,
         // website: args.website,
-        callByType:args.callByType,
-        circleColor:args.circleColor,
-        firstName:args.firstName,
-        labelColor:args.labelColor,
-        lastName:args.lastName,
-        picture:args.picture,
-        username:args.username,
+        callByType: args.callByType,
+        circleColor: args.circleColor,
+        firstName: args.firstName,
+        labelColor: args.labelColor,
+        lastName: args.lastName,
+        picture: args.picture,
+        username: args.username,
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
+        d.subDomaintransaction.commit()
         return response.data.dataValues
 
       } else {

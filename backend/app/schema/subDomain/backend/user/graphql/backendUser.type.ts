@@ -27,11 +27,6 @@ const userType = gql`
 
   type UserProfileType {
     id: ID
-    # name: String
-    # birthday: String
-    # location: String
-    # website: String
-    # picture: String
     callByType: String
     circleColor: String
     firstName: String
@@ -43,11 +38,6 @@ const userType = gql`
 
   input UserProfileInput {
     id: ID
-    # birthday: String
-    # location: String
-    # username: String
-    # picture: String
-    # website: String
     callByType: String
     circleColor: String
     firstName: String
@@ -58,7 +48,7 @@ const userType = gql`
   }
 
   type UserAvatarChipType {
-    username: String,
+    username: String
     profile_picture: String
   }
 
@@ -67,17 +57,43 @@ const userType = gql`
     permissionId: String!
     id: String
   }
+
+  input UserManyPermissionInput {
+    userId: String!
+    permissionId: String!
+    id: String
+  }
+
   type UserManyRoleType {
     userId: String!
     roleId: String!
     id: String
   }
 
+  input UserManyRoleInput {
+    userId: String!
+    roleId: String!
+    id: String
+  }
+
+  enum CallByTypeEnum {
+    EMAIL,
+    USERNAME,
+    FIRST_NAME,
+    LAST_NAME,
+    FULL_NAME
+  }
+  
   type UserDisplay { 
     id: ID!
-    picture: String
-    username: String
     email: String
+    firstName: String 
+    lastName: String 
+    username: String 
+    picture: String 
+    callByType: CallByTypeEnum 
+    circleColor: String 
+    labelColor: String
   }
 
 
@@ -98,8 +114,8 @@ const userType = gql`
     backendUser_deleteOne(id: ID!) : GlobalSuccessType
     backendUser_updateOne(id: ID!, username: String!, email: String!, password: String!, isAdmin: Boolean): UserType
 
-    backendUserManyPermission_setList(list: [UserManyPermissionType]): GlobalSuccessType
-    backendUserManyRole_setList(list: [UserManyRoleType]): GlobalSuccessType
+    backendUserManyPermission_setList(list: [UserManyPermissionInput]): GlobalSuccessType
+    backendUserManyRole_setList(list: [UserManyRoleInput]): GlobalSuccessType
 
     backendUserProfile_deactivateOne(id: ID!): GlobalSuccessType
     backendUserProfile_reactivateOne(id: ID!): GlobalSuccessType

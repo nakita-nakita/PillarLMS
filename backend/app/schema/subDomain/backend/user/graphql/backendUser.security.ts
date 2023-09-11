@@ -6,8 +6,8 @@ const backendPermissionSecurity = {
     backendUser_getOneById: and(isAuthenticated, isAdmin),
     backendUser_getManyWithPagination: and(isAuthenticated, isAdmin),
     
-    backendUserBasicView_me: and(isAuthenticated, isAdmin),
-    backendUserBasicView_them: and(isAuthenticated, isAdmin),
+    backendUserBasicView_me: and(isAuthenticated),
+    backendUserBasicView_them: and(isAuthenticated),
     
     backendUserManyPermission_getAll: and(isAuthenticated, isAdmin),
     backendUserManyRole_getAll: and(isAuthenticated, isAdmin),
