@@ -115,7 +115,7 @@ export default function AdminLayoutPage(props) {
             }}> */}
               {props.children}
             {/* </Box> */}
-          </Box>=
+          </Box>
         </Box>
       </Box>
       {/* Possible repeat from header.js file */}

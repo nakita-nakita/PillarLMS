@@ -9,13 +9,23 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
-export default function PreviewChip({ email, firstName, lastName, username, callByType, picturePreview, labelColor, circleColor }) {
+function avatarInitials(name) {
+  const nameArray = name.split(' ')
+
+  if (nameArray[1]) {
+    return `${nameArray[0][0]}${nameArray[1][0]}`
+  }
+  if (nameArray[0]) {
+    return `${nameArray[0][0]}`
+  }
+
+  return undefined
+}
+
+export default function UserChip({ email, firstName, lastName, username, callByType, picturePreview, labelColor, circleColor }) {
   const theme = useTheme()
-  const defaultColor = "#f1f4f5"
 
   const [display, setDisplay] = useState('')
-
-  console.log('blah', { email, firstName, lastName, username, callByType, picturePreview, labelColor, circleColor })
 
   useEffect(() => {
     let fullname = "";
@@ -42,13 +52,31 @@ export default function PreviewChip({ email, firstName, lastName, username, call
     }
   }, [email, firstName, lastName, username, callByType])
 
-
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
       {/* <Chip avatar={<Avatar>M</Avatar>} label="Avatar" /> */}
       <Chip
-        avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-        label="Avatar"
+        sx={{
+          background: labelColor,
+          color: theme.palette.getContrastText(labelColor),
+          "&:hover": {
+            color: theme.palette.grey[800]
+          }
+        }}
+        avatar={
+          <Avatar
+            size="sm"
+            src={picturePreview ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${picturePreview}` : undefined}
+            sx={{
+              background: circleColor,
+              color: `${theme.palette.getContrastText(circleColor)} !important`
+            }}
+            alt={display}
+          >
+            {display && avatarInitials(display)}
+          </Avatar>
+        }
+        label={display}
         variant="outlined"
       />
       {/* <Chip

@@ -9,8 +9,8 @@ import axios from 'axios';
 import AdminLayout from "@/layouts/admin/layout";
 import { getUserToken } from "@/utils/graphql/user";
 import uploaderUtil from "@/utils/uploader/callUploaderApi";
-import PreviewChip from "@/pages-scripts/portal/profile/preview.chip";
 import { getProfileGraphQL, postProfileGraphQL } from "@/pages-scripts/portal/profile/profile.graphql";
+import UserChip from "@/components/chip/user.chip";
 
 // MUI
 import { useTheme } from '@mui/material/styles';
@@ -77,7 +77,7 @@ function Page() {
     let newPicture = null;
 
 
-    if (hasPicturedPreviewChanged && doesPictureHaveValue) {
+    if (hasPicturedPreviewChanged && data.get('picture')) {
 
       if (data.get('picture')) {
         newPicture = await uploaderUtil.postUserAvatar({
@@ -93,7 +93,7 @@ function Page() {
       firstName,
       lastName,
       username,
-      picture: newPicture ? newPicture?.data?.data?.link : "",
+      picture: newPicture ? newPicture?.data?.data?.link : undefined,
       circleColor,
       labelColor,
     })
@@ -115,7 +115,7 @@ function Page() {
         'content-type': 'multipart/form-data',
       }
     }
-    console.log('config', config)
+
     const response = await axios.post(userAvatarPreview, formData, config)
     // const response = await post(userAvatarPreview, formData,config)
     setPicturePreview(response.data.data.link);
@@ -259,7 +259,7 @@ function Page() {
             <br />
             <Paper elevation={3} sx={{ p: "15px" }}>
               <p>Preview</p>
-              <PreviewChip
+              <UserChip
                 email={email}
                 firstName={firstName}
                 lastName={lastName}
