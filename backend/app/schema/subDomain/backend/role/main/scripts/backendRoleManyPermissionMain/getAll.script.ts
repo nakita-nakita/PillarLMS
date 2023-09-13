@@ -12,15 +12,15 @@ type input = {
   roleId: string
 }
 
-export default function getAll({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getAll({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRoleManyPermission>[] | null>> => {
     const { roleId } = args
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
     const roleValidation = makeBackendRoleValidation(d);

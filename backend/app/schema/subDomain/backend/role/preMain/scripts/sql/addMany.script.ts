@@ -9,14 +9,14 @@ type roleNamesArrayObjectType = {
 
 type input = { roleNamesArray: roleNamesArrayObjectType[] }
 
-export default function addMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async ({ roleNamesArray }: input): Promise<returningSuccessObj<Model<backendRole>[] | null>> => {
 
     const data = await db.backendRole.bulkCreate(roleNamesArray, {
-      transaction,
+      transaction: subDomainTransaction,
       returning: true,
     }).catch(error => errorHandler(error, loggers))
 

@@ -15,14 +15,14 @@ type input = {
   vote: backendSiteDesignerDiscussionVoteEnum
 }
 
-export default function getMyVote({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getMyVote({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const discussionCommentVoteSql = makeBackendSiteDesignerDiscussionCommentVoteSql(d)
     const backendDiscussionValidation = makeBackendSiteDesignerDiscussionCommentValidation(d)

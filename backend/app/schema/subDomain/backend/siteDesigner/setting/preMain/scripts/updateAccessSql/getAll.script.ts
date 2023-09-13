@@ -3,14 +3,14 @@ import backendSiteDesignerSetting_updateAccess from "../../../../../../../../mod
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
-export default function getAll({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getAll({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<Model<backendSiteDesignerSetting_updateAccess>[]>> => {
 
     const data = await db.backendSiteDesignerSetting_updateAccess.findAll({
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

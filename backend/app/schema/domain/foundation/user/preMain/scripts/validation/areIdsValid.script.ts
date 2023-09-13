@@ -4,7 +4,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { idArray: string[] }
 
-export default function areIdsValid({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function areIdsValid({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -16,7 +16,7 @@ export default function areIdsValid({ domainDb, errorHandler, transaction, logge
           [Op.in]: idArray
         }
       },
-      transaction,
+      transaction: domainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

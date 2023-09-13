@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 // import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import backendUser from "../../../../../../../../models/subDomain/backend/user/backendUser.model";
 import backendSiteDesigner_discussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussion.model";
 import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
@@ -16,7 +16,7 @@ jest.setTimeout(100000)
 
 
 describe("test backendSiteDesigner_discussionComment.logic.js", () => {
-  let d: d_sub;
+  let d: d_allDomain;
   let user: Model<backendUser>;
   let discussion: Model<backendSiteDesigner_discussion>
 
@@ -25,30 +25,23 @@ describe("test backendSiteDesigner_discussionComment.logic.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
     
 
     d = {
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      domainDb,
+      domainTransaction,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    const userLogic = makeBackendUserSql({
-      subDomainDb,
-      domainDb,
-      subDomaintransaction,
-      domainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers:[
-        console,
-      ],
-    })
+    const userLogic = makeBackendUserSql(d)
 
     const discussionLogic = makeBackendSiteDesignerDiscussionSql(d)
 
@@ -104,7 +97,8 @@ describe("test backendSiteDesigner_discussionComment.logic.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

@@ -13,14 +13,14 @@ type input = {
   defaultMetaDescription?: string,
 }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSetting_links> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const linksSql = makeBackendSettingLinksSql(d);
 

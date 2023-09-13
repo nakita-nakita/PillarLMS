@@ -12,14 +12,14 @@ type input = {
   id: string
 }
 
-export default function getOneById({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendPermission> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const backendPermissionSql = makeBackendPermissionSql(d);
     const backendPermissionValidation = makeBackendPermissionValidation(d);

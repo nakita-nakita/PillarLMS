@@ -8,7 +8,7 @@
 //   isAdmin: boolean,
 // }
 
-// export default function findOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+// export default function findOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
 //   const db = subDomainDb.models;
 
@@ -16,7 +16,7 @@
 
 //     const data = await db.backendUser.findOne({
 //       where,
-//       transaction,
+//       transaction: subDomainTransaction,
 //     }).catch(error => errorHandler(error, loggers))
 
 //     return {

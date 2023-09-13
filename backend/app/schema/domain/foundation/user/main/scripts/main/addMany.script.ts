@@ -14,14 +14,14 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function addMany({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function addMany({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
   return async (foundationUserArray: input[]): Promise<returningSuccessObj<Model<foundationUser>[] | null>> => {
 
     const d = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      domainTransaction,
+      loggers,
     }
 
     const foundationUserSql = makeFoundationUserSql(d)

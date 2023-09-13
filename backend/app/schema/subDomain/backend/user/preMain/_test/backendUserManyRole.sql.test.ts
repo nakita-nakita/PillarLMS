@@ -9,47 +9,36 @@ import makeBackendUserSql from "../backendUser.sql"
 import makeBackendRoleSql from "../../../role/preMain/backendRole.sql"
 import { v4 as uuidv4 } from "uuid"
 import { Model } from "sequelize";
-import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
 import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 jest.setTimeout(100000)
 
 
 describe("test backendUserManyRole.sql.js", () => {
   let d: d_allDomain
-  let ds: d_sub
   let user: Model<backendUser>
   let role: Model<backendRole>
 
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    ds = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      transaction: subDomaintransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    }
-
     const backendUserSql = makeBackendUserSql(d)
-    const backendRoleSql = makeBackendRoleSql(ds)
+    const backendRoleSql = makeBackendRoleSql(d)
 
     let uuid = uuidv4();
 
@@ -64,7 +53,7 @@ describe("test backendUserManyRole.sql.js", () => {
   }, 100000)
 
   test("addOne & getOne: backendUserManyRoles can add record.", async () => {
-    const userManyRoleSql = makeBackendUserManyRoleSql(ds)
+    const userManyRoleSql = makeBackendUserManyRoleSql(d)
 
     const newUserManyRole = await userManyRoleSql.addOne({
       roleId: role.dataValues.id,
@@ -97,8 +86,8 @@ describe("test backendUserManyRole.sql.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomaintransaction.rollback();
     await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

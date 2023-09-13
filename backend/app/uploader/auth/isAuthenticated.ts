@@ -6,11 +6,11 @@ import { d_domain } from "../../schema/utils/types/dependencyInjection.types";
 
 const makeDomainDObj = async (): Promise<d_domain> => {
   const domainDb: Sequelize = await emptyTestDomainDb();
-  const transaction = await domainDb.transaction();
+  const domainTransaction = await domainDb.transaction();
 
   return {
     domainDb,
-    transaction,
+    domainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }

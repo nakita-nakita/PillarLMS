@@ -11,15 +11,10 @@ type input = {
   id: string
 }
 
-export default function reactivateOne({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers }: d_allDomain) {
+export default function reactivateOne(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUserProfile>>> => {
 
-    const d = {
-      domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: domainTransaction,
-      loggers: [console],
-    }
+    const { errorHandler, loggers } = d
 
     const userSql = makeFoundationUserSql(d)
 

@@ -8,14 +8,14 @@ type input = {
   permissionId: string
 }
 
-export default function addManyPermissions({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function addManyPermissions({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async (args: input[]): Promise<returningSuccessObj<Model<backendRoleManyPermission>>> => {
 
     const data = await db.backendRoleManyPermission.bulkCreate(args, {
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

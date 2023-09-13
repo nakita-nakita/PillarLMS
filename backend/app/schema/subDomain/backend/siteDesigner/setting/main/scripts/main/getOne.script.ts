@@ -9,15 +9,15 @@ import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/hand
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
-export default function getOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   return async (): Promise<returningSuccessObj<Model<backendSiteDesignerSetting> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
 
     const settingSql = makeBackendSiteDesignerSettingSql(d)

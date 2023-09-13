@@ -8,7 +8,7 @@ type input = {
   permissionId: string
 }
 
-export default function addOnePermission({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function addOnePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -18,7 +18,7 @@ export default function addOnePermission({ subDomainDb, errorHandler, transactio
       roleId,
       permissionId
     }, {
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

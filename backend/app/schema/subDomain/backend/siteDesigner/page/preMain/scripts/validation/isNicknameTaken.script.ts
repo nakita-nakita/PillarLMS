@@ -2,7 +2,7 @@ import { d_sub } from "../../../../../../../utils/types/dependencyInjection.type
 
 type input = { nickname: string }
 
-export default function isNicknameTaken({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function isNicknameTaken({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -10,7 +10,7 @@ export default function isNicknameTaken({ subDomainDb, errorHandler, transaction
 
     const data: number = await db.backendSiteDesigner_page.count({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
 

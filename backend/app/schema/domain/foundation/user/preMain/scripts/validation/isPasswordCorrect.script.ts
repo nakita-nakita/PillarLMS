@@ -4,7 +4,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { password: string, encryptedPassword: string }
 
-export default function isPasswordCorrect({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function isPasswordCorrect({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
 
   const db = domainDb.models;
 

@@ -16,10 +16,12 @@ type input = {
   isAdmin?: boolean
 }
 
-export default function updateOne({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers }: d_allDomain) {
+export default function updateOne(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUser>>> => {
 
-    const userSql = makeBackendUserSql({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers })
+    const { errorHandler, loggers } = d
+
+    const userSql = makeBackendUserSql(d)
 
     //////////////////////////////////////
     // Validations

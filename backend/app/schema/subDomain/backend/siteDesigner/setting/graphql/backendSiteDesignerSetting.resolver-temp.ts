@@ -10,11 +10,11 @@ import makeBackendSiteDesignerSettingUpdateAccessMain from "../main/backendSiteD
 
 const makeDObj = async (): Promise<d_sub> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const transaction = await subDomainDb.transaction();
+  const subDomainTransaction = await subDomainDb.transaction();
 
   return {
     subDomainDb,
-    transaction,
+    subDomainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -30,11 +30,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.getOne()
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -46,11 +46,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.getAll()
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.map(res => res.dataValues)
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -62,11 +62,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.getAll()
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.map(res => res.dataValues)
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -78,11 +78,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.getAll()
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.map(res => res.dataValues)
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -100,11 +100,11 @@ const backendSiteSettingGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -116,11 +116,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.setList(args.list)
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -132,11 +132,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.setList(args.list)
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -148,11 +148,11 @@ const backendSiteSettingGqlResolver = {
       const response = await main.setList(args.list)
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

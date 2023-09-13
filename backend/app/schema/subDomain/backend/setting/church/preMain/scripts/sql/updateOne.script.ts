@@ -18,14 +18,14 @@ type input = {
   socialTelegram?: string,
 }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSetting_church> | null>> => {
     //count for 1
     const doesRecordExist = await db.backendSetting_church.count({
       where: { },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     //if not count, add instead
@@ -33,7 +33,7 @@ export default function updateOne({ subDomainDb, errorHandler, transaction, logg
       const newData = await db.backendSetting_church.create(
         args,
         {
-          transaction,
+          transaction: subDomainTransaction,
           returning: true,
         }
       ).catch(error => errorHandler(error, loggers))
@@ -50,7 +50,7 @@ export default function updateOne({ subDomainDb, errorHandler, transaction, logg
       {
         where: {},
         returning: true,
-        transaction,
+        transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

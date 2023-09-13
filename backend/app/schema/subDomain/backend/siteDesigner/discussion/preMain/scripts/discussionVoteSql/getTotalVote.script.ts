@@ -6,7 +6,7 @@ type input = {
   discussionId: string
 }
 
-export default function getTotalVoteForDiscussion({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getTotalVoteForDiscussion({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
@@ -16,7 +16,7 @@ export default function getTotalVoteForDiscussion({ subDomainDb, errorHandler, t
         [sequelize.fn('sum', sequelize.col('vote')), 'voteTotal']
       ],
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

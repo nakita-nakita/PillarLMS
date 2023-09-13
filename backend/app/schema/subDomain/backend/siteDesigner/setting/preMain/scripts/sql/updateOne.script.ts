@@ -8,7 +8,7 @@ type input = {
   canAllUpdate: boolean
  }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -19,7 +19,7 @@ export default function updateOne({ subDomainDb, errorHandler, transaction, logg
       {
         where: {},
         returning: true,
-        transaction,
+        transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

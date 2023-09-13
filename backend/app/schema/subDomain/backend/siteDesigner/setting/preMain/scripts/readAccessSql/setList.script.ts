@@ -7,20 +7,21 @@ type input = {
   userId: string
 }
 
-export default function setList({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function setList({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async (setArray: input[]): Promise<returningSuccessObj<null>> => {
 
-    const setListEngine = makeSetList({ errorHandler, transaction, loggers, })
+    const setListEngine = makeSetList({ errorHandler, loggers, })
 
 
     const response = await setListEngine({
       setArray,
       dbEntity: db.backendSiteDesignerSetting_readAccess,
+      transaction: subDomainTransaction,
       currentDbArray: await db.backendSiteDesignerSetting_readAccess.findAll({
-        transaction,
+        transaction: subDomainTransaction,
       })
     }).catch(error => errorHandler(error, loggers))
 

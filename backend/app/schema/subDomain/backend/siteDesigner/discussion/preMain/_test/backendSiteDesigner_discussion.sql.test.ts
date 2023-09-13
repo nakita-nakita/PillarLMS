@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 // import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
 import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesigner_discussionSql from "../backendSiteDesigner_discussion.sql"
 import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
@@ -14,7 +14,7 @@ import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logge
 jest.setTimeout(100000)
 
 describe("test backendSiteDesigner_discussion.sql.js", () => {
-  let d: d_sub;
+  let d: d_allDomain;
   let user: Model<backendUser>;
 
   beforeAll(async () => {
@@ -22,30 +22,23 @@ describe("test backendSiteDesigner_discussion.sql.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
     
 
     d = {
-      errorHandler: sequelizeErrorHandler,
+      domainDb,
+      domainTransaction,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    const userSql = makeBackendUserSql({
-      subDomainDb,
-      domainDb,
-      subDomaintransaction,
-      domainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers:[
-        console,
-      ],
-    })
+    const userSql = makeBackendUserSql(d)
 
     user = (await userSql.addOne({
       id: uuid,
@@ -99,7 +92,8 @@ describe("test backendSiteDesigner_discussion.sql.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

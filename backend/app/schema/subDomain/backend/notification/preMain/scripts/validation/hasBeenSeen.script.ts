@@ -4,7 +4,7 @@ type input = {
   userId: string
 }
 
-export default function hasBeenSeen({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function hasBeenSeen({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ userId }: input) => {
@@ -18,7 +18,7 @@ export default function hasBeenSeen({ subDomainDb, errorHandler, transaction, lo
           userId
         },
         returning: true,
-        transaction,
+        transaction: subDomainTransaction,
       }
     ).catch(error => errorHandler(error, loggers))
 

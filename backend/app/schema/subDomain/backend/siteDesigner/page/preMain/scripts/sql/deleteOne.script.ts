@@ -3,7 +3,7 @@ import { returningSuccessObj } from "../../../../../../../utils/types/returningO
 
 type input = { id: string }
 
-export default function deleteOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -11,7 +11,7 @@ export default function deleteOne({ subDomainDb, errorHandler, transaction, logg
 
     const data = await db.backendSiteDesigner_page.destroy({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

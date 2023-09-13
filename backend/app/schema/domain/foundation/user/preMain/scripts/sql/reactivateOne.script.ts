@@ -4,7 +4,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { id: string }
 
-export default function reactivate({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function reactivate({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -17,7 +17,7 @@ export default function reactivate({ domainDb, errorHandler, transaction, logger
       {
         where,
         returning: true,
-        transaction,
+        transaction: domainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

@@ -15,13 +15,13 @@ import makeBackendUserProfileMain from "../main/backendUserProfile.main";
 const makeDObj = async (): Promise<d_allDomain> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
   const domainDb: Sequelize = await emptyTestDomainDb();
-  const subDomaintransaction = await subDomainDb.transaction();
+  const subDomainTransaction = await subDomainDb.transaction();
   const domainTransaction = await domainDb.transaction();
 
   return {
     subDomainDb,
     domainDb,
-    subDomaintransaction,
+    subDomainTransaction,
     domainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
@@ -42,11 +42,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -63,11 +64,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -82,11 +84,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -101,11 +104,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -120,11 +124,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -139,11 +144,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -158,11 +164,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     }
@@ -182,11 +189,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -206,11 +214,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -225,11 +234,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -242,11 +252,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -259,11 +270,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -278,11 +290,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -297,11 +310,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -328,11 +342,12 @@ const userResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
-        d.subDomaintransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

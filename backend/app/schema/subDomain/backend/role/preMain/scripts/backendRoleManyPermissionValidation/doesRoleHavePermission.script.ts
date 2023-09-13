@@ -2,7 +2,7 @@ import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 
 type input = { permissionId: string, roleId: string, }
 
-export default function doesRoleHavePermission({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function doesRoleHavePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -13,7 +13,7 @@ export default function doesRoleHavePermission({ subDomainDb, errorHandler, tran
         permissionId,
         roleId
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

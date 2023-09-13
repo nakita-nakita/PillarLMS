@@ -21,9 +21,9 @@
 
 //     const d = {
 //       domainDb,
-//       errorHandler: sequelizeErrorHandler,
+//       errorHandler,
 //       transaction,
-//       loggers: [console],
+//       loggers,
 //     }
 //     const emailSql = makeFoundationSettingEmailSql(d);
 

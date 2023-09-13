@@ -15,16 +15,16 @@ type input = {
   password?: string
 }
 
-export default function updateOne({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function updateOne({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
   let recordId;
 
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
     const d = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      domainTransaction,
+      loggers,
     }
     const foundationUserSql = makeFoundationUserSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);

@@ -3,14 +3,14 @@
 // import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 // import foundationSetting_email from "../../../../../../../../models/domain/foundation/setting/foundationSetting_email.model";
 
-// export default function getOne({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+// export default function getOne({ domainDb, errorHandler, subDomainTransaction, loggers, }: d_domain) {
 
 //   const db = domainDb.models;
 
 //   return async (): Promise<returningSuccessObj<Model<foundationSetting_email> | null>>  => {
 
 //     const data = await db.foundationSetting_email.findOne({
-//       transaction,
+//       transaction: subDomainTransaction,
 //     })
     
 //     // .catch(error => errorHandler(error, loggers))

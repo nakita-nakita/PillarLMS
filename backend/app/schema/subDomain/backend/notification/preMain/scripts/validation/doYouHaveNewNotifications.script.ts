@@ -4,7 +4,7 @@ type input = {
   userId: string
 }
 
-export default function doYouHaveNewBackendNotifications({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function doYouHaveNewBackendNotifications({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ userId }: input) => {
@@ -15,7 +15,7 @@ export default function doYouHaveNewBackendNotifications({ subDomainDb, errorHan
         hasBeenSeen: false,
         isDeleted: false
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

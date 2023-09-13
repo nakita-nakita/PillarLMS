@@ -12,14 +12,14 @@ type input = {
   id: string
 }
 
-export default function getMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
 
     const d = {
       subDomainDb,
       errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      subDomainTransaction,
+      loggers,
     }
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentMain(d)
     const backendDiscussionValidation = makeBackendSiteDesignerDiscussionCommentValidation(d)

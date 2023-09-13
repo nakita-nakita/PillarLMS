@@ -8,7 +8,7 @@ type input = {
   roleIdsArray: string[]
 }
 
-export default function deleteMany({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function deleteMany({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ userId, roleIdsArray, }: input): Promise<returningSuccessObj<Model<backendUserManyRole>[] | null>> => {
@@ -17,7 +17,7 @@ export default function deleteMany({ subDomainDb, errorHandler, transaction, log
       userId,
       roleId,
     })), {
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

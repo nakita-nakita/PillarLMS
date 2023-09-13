@@ -12,7 +12,7 @@ type input = {
 
 // type: sequelize.ENUM("SYSTEM", "DISCUSSION"),
 
-export default function addOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   const db = subDomainDb.models;
 
   return async (args: input) => {
@@ -20,7 +20,7 @@ export default function addOne({ subDomainDb, errorHandler, transaction, loggers
     const data = await db.backendNotification.create(
       args,
       {
-        transaction,
+        transaction: subDomainTransaction,
         returning: true,
       }
     ).catch(error => errorHandler(error, loggers))

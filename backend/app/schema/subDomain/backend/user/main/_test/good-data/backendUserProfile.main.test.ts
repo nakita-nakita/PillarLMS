@@ -21,37 +21,26 @@ jest.setTimeout(100000)
 
 describe("test backendUserManyRole.main.js", () => {
   let d: d_allDomain
-  let dd: d_domain
   let user: addOneBackendUserResponse
   let role: Model<backendRole>
 
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
-
-    dd ={
-      domainDb,
-      transaction: domainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt
-      ],
-    }
 
     const backendUserMain = makeBackendUserMain(d)
 
@@ -84,7 +73,7 @@ describe("test backendUserManyRole.main.js", () => {
   // })
 
   test("getOneById: makeBackendUserProfile.", async () => {
-    const backendUserBasicViewMain = makeBackendUserProfileMain(dd)
+    const backendUserBasicViewMain = makeBackendUserProfileMain(d)
 
     const me = await backendUserBasicViewMain.getOneById({
       id: user.id
@@ -93,7 +82,7 @@ describe("test backendUserManyRole.main.js", () => {
   })
 
   test("updateOne: makeBackendUserProfile.", async () => {
-    const backendUserBasicViewMain = makeBackendUserProfileMain(dd)
+    const backendUserBasicViewMain = makeBackendUserProfileMain(d)
 
     const me = await backendUserBasicViewMain.updateOne({
       id: user.id,
@@ -103,7 +92,7 @@ describe("test backendUserManyRole.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomaintransaction.rollback();
+    await d.subDomainTransaction.rollback();
     await d.domainTransaction.rollback();
   })
 })

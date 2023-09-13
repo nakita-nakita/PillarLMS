@@ -1,19 +1,43 @@
-import { RedisClientType } from '@redis/client';
-import { createClient } from 'redis'
+import * as redis from 'redis';
 
-const initServer = async (client) => {
+const connectToRedis = (): ReturnType<typeof redis.createClient> => {
+  // Create a client and connect to default Redis port 6379 on localhost
+  const client = redis.createClient({
+    // host: 'localhost',    // Replace with your Redis server's address if different
+    // port: 6379            // Replace with your Redis server's port if different
+  });
 
-  client.on('error', err => console.log('Redis Client Error', err));
+  // Handle connection errors
+  client.on('error', (err: Error) => {
+    console.error('Error connecting to Redis:', err);
+  });
 
-  await client.connect();
+  // Once connected, log to the console
+  client.on('connect', () => {
+    console.log('Connected to Redis successfully!');
+  });
 
-  return client
+  return client;
 }
 
-let redisClient = createClient()
+export default connectToRedis;
 
-initServer(redisClient).then(client => {
-  redisClient = client
-})
+// import { RedisClientType } from '@redis/client';
+// import { createClient } from 'redis'
 
-export default redisClient
+// const initServer = async (client) => {
+
+//   client.on('error', err => console.log('Redis Client Error', err));
+
+//   await client.connect();
+
+//   return client
+// }
+
+// let redisClient = createClient()
+
+// initServer(redisClient).then(client => {
+//   redisClient = client
+// })
+
+// export default redisClient

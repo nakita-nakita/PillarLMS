@@ -10,7 +10,7 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function updateOne({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function updateOne({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -23,7 +23,7 @@ export default function updateOne({ domainDb, errorHandler, transaction, loggers
           id,
         },
         returning: true,
-        transaction,
+        transaction: domainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

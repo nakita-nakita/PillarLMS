@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
 import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../user/preMain/backendUser.sql";
 import makeBackendNotificationSql from "../backendNotification.sql";
 import { v4 as uuidv4 } from "uuid"
@@ -12,20 +12,22 @@ jest.setTimeout(100000)
 
 
 describe("test backendNotification.sql.js", () => {
-  let d: d_sub
+  let d: d_allDomain
   let recordId: string
   let userId: string
 
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
       errorHandler: sequelizeErrorHandler,
+      domainDb,
+      domainTransaction,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
       loggers: [
         console,
         throwIt,
@@ -35,8 +37,8 @@ describe("test backendNotification.sql.js", () => {
     const backendUserSql = makeBackendUserSql({
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
+      subDomainTransaction,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
       loggers: [
         console,
@@ -112,7 +114,8 @@ describe("test backendNotification.sql.js", () => {
   // })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback();
   })
 })
 

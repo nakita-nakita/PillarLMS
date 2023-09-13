@@ -11,15 +11,8 @@ type input = {
   id: string
 }
 
-export default function deactivateOne({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers }: d_allDomain) {
+export default function deactivateOne(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUserProfile>>> => {
-
-    const d = {
-      domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: domainTransaction,
-      loggers: [console],
-    }
 
     const userSql = makeFoundationUserSql(d)
 

@@ -23,7 +23,7 @@ type input = {
 export default function signup(d: d_domain) {
   return async (args: input): Promise<returningSuccessObj<returningTokenObj>> => {
 
-    const { domainDb, errorHandler, transaction, loggers } = d
+    const { domainDb, errorHandler, domainTransaction, loggers } = d
 
     const { userMain, userProfileMain } = makeFoundationUserEntity(d)
     const authFunc = makeFoundationAuthFunc(d)

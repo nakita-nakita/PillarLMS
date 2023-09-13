@@ -4,7 +4,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { nameArray: string[] }
 
-export default function areNamesTaken({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function areNamesTaken({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -16,7 +16,7 @@ export default function areNamesTaken({ subDomainDb, errorHandler, transaction, 
           [Op.in]: nameArray
         }
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

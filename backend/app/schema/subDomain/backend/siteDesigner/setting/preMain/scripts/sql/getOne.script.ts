@@ -3,14 +3,14 @@ import backendSiteDesignerSetting from "../../../../../../../../models/subDomain
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
-export default function getOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<Model<backendSiteDesignerSetting> | null>> => {
 
     const data = await db.backendSiteDesignerSetting.findOne({
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesignerDiscussionSql from "../backendSiteDesigner_discussion.sql"
 import makeBackendSiteDesigner_discussionVoteSql from "../backendSiteDesigner_discussionVote.sql"
@@ -16,7 +16,7 @@ jest.setTimeout(100000)
 
 
 describe("test backendSiteDesigner_discussionVote.sql.js", () => {
-  let d: d_sub;
+  let d: d_allDomain;
   let user: Model<backendUser>;
   let discussion: Model<backendSiteDesigner_discussion>
 
@@ -25,30 +25,23 @@ describe("test backendSiteDesigner_discussionVote.sql.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
     
 
     d = {
-      errorHandler: sequelizeErrorHandler,
+      domainDb,
+      domainTransaction,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    const userSql = makeBackendUserSql({
-      subDomainDb,
-      domainDb,
-      subDomaintransaction,
-      domainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers:[
-        console,
-      ],
-    })
+    const userSql = makeBackendUserSql(d)
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d)
 
     user = (await userSql.addOne({
@@ -173,7 +166,8 @@ describe("test backendSiteDesigner_discussionVote.sql.js", () => {
   // })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

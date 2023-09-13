@@ -12,10 +12,12 @@ type input = {
   id: string
 }
 
-export default function getOneById({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers }: d_allDomain) {
+export default function getOneById(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUser>>> => {
 
-    const userSql = makeBackendUserSql({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers })
+    const { errorHandler, loggers } = d
+ 
+    const userSql = makeBackendUserSql(d)
 
     //////////////////////////////////////
     // Validations
@@ -45,8 +47,7 @@ export default function getOneById({ domainDb, subDomainDb, domainTransaction, s
 
     const response = await userSql.getOneById({
       id: args.id
-    })
-    // .catch(error => errorHandler(error, loggers))
+    }).catch(error => errorHandler(error, loggers))
 
     return response
   }

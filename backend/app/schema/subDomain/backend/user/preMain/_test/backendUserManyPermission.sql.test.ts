@@ -15,40 +15,29 @@ jest.setTimeout(100000)
 
 describe("test backendUserManyPermission.sql.js", () => {
   let d: d_allDomain
-  let ds: d_sub
   let user: Model<backendUser>
   let permission: Model<backendPermission>
 
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    ds = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      transaction: subDomaintransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    }
-
     const backendUserSql = makeBackendUserSql(d)
-    const backendPermissionSql = makeBackendPermissionSql(ds)
+    const backendPermissionSql = makeBackendPermissionSql(d)
 
     let uuid = uuidv4();
 
@@ -65,7 +54,7 @@ describe("test backendUserManyPermission.sql.js", () => {
   }, 100000)
 
   test("addOne & getOne: backendUserManyPermissions can add record.", async () => {
-    const userManyPermissionSql = makeBackendUserManyPermissionSql(ds)
+    const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
 
     const newUserManyPermission = await userManyPermissionSql.addOne({
       permissionId: permission.dataValues.id,
@@ -82,7 +71,7 @@ describe("test backendUserManyPermission.sql.js", () => {
   })
 
   test("addMany & deleteMany: backendUserManyPermissions can add many records at once.", async () => {
-    const userManyPermissionSql = makeBackendUserManyPermissionSql(ds)
+    const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
 
     const addManyPermission = await userManyPermissionSql.addMany({
       userId: user.dataValues.id,
@@ -98,8 +87,8 @@ describe("test backendUserManyPermission.sql.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomaintransaction.rollback();
     await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

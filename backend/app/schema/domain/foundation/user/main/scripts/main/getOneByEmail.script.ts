@@ -12,14 +12,14 @@ type input = {
   email: string
 }
 
-export default function getOneByEmail({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function getOneByEmail({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
     const d = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      domainTransaction,
+      loggers,
     }
     const foundationUserSql = makeFoundationUserSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);

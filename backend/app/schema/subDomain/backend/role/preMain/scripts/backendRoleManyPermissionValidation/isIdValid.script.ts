@@ -2,7 +2,7 @@ import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 
 type input = { id: string }
 
-export default function isIdValid({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function isIdValid({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -10,7 +10,7 @@ export default function isIdValid({ subDomainDb, errorHandler, transaction, logg
 
     const data = await db.backendRoleManyPermission.count({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

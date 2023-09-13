@@ -5,14 +5,14 @@
 // import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 // import makeFoundationSettingEmailSql from "../../../preMain/foundationSetting_email.sql";
 
-// export default function getOne({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+// export default function getOne({ domainDb, errorHandler, subDomainTransaction, loggers, }: d_domain) {
 //   return async (): Promise<returningSuccessObj<Model<backendSetting_email> | null>> => {
 
 //     const d = {
 //       domainDb,
-//       errorHandler: sequelizeErrorHandler,
-//       transaction,
-//       loggers: [console],
+//       errorHandler,
+//       transaction: subDomainTransaction,
+//       loggers,
 //     }
 //     const emailSql = makeFoundationSettingEmailSql(d);
 

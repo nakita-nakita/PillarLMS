@@ -27,31 +27,20 @@ describe("test backendUserManyRole.main.js", () => {
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
-
-    dd ={
-      domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-
-    }
 
     const backendUserMain = makeBackendUserMain(d)
 
@@ -66,7 +55,7 @@ describe("test backendUserManyRole.main.js", () => {
   }, 100000)
 
   test("me & them: backendUserBasicView can add many records at once.", async () => {
-    const backendUserBasicViewMain = makeBackendUserBasicViewMain(dd)
+    const backendUserBasicViewMain = makeBackendUserBasicViewMain(d)
 
     const me = await backendUserBasicViewMain.me({
       id: user.id
@@ -80,7 +69,7 @@ describe("test backendUserManyRole.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomaintransaction.rollback();
+    await d.subDomainTransaction.rollback();
     await d.domainTransaction.rollback();
   })
 })

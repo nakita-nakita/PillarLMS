@@ -11,14 +11,14 @@ type input = {
   name: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendPermission> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const permissionSql = makeBackendPermissionSql(d);
     const permissionValidation = makeBackendPermissionValidation(d);

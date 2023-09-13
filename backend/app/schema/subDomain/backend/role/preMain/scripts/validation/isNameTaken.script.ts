@@ -2,7 +2,7 @@ import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 
 type input = { name: string }
 
-export default function isNameTaken({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function isNameTaken({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -10,7 +10,7 @@ export default function isNameTaken({ subDomainDb, errorHandler, transaction, lo
 
     const data = await db.backendRole.count({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

@@ -8,7 +8,7 @@ type input = {
   roleId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyRole> | null>> => {
@@ -16,7 +16,7 @@ export default function addOne({ subDomainDb, errorHandler, transaction, loggers
     const data = await db.backendUserManyRole.create(
       args,
       {
-        transaction,
+        transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

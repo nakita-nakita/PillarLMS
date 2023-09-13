@@ -10,7 +10,7 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -40,7 +40,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, trans
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction,
+      transaction: subDomainTransaction,
     };
 
     if (q) {

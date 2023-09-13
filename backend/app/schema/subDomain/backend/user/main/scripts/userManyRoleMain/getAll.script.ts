@@ -16,19 +16,9 @@ type input = {
 export default function getAll(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyRole>[]>> => {
 
-    const { subDomainDb, domainDb, errorHandler, subDomaintransaction, domainTransaction, loggers } = d
+    const { errorHandler, loggers } = d
 
-    const ds = {
-      ...d,
-      transaction: subDomaintransaction,
-    }
-
-    const dd = {
-      ...d,
-      transaction: domainTransaction,
-    }
-
-    const userManyRoleSql = makeBackendUserManyRoleSql(ds)
+    const userManyRoleSql = makeBackendUserManyRoleSql(d)
     const userValidation = makeBackendUserValidation(d)
 
     //////////////////////////////////////

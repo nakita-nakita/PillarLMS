@@ -20,7 +20,7 @@ type input = {
   labelColor?: string,
 }
 
-export default function upsertOne({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function upsertOne({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -28,9 +28,9 @@ export default function upsertOne({ domainDb, errorHandler, transaction, loggers
 
     const d = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      domainTransaction,
+      loggers,
     }
     const foundationUserProfileSql = makeFoundationUserProfileSql(d)
     // const foundationUserValidation = makeFoundationUserValidation(d)

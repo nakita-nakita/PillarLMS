@@ -8,7 +8,7 @@ type input = {
   post?: string
 }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussionComment> | null>> => {
@@ -21,7 +21,7 @@ export default function updateOne({ subDomainDb, errorHandler, transaction, logg
       {
         where: { id, },
         returning: true,
-        transaction,
+        transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

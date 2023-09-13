@@ -9,7 +9,7 @@ type input = {
   discussionId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -18,7 +18,7 @@ export default function addOne({ subDomainDb, errorHandler, transaction, loggers
     const data = await db.backendSiteDesigner_discussionComment.create(
       args,
       {
-        transaction,
+        transaction: subDomainTransaction,
         returning: true,
       }
     ).catch(error => errorHandler(error, loggers))

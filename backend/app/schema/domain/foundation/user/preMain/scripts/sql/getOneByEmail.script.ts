@@ -7,14 +7,14 @@ type input = {
   email: string
 }
 
-export default function getOneByEmail({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function getOneByEmail({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
   const db = domainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
     const data = await db.foundationUser.findOne({
       where,
-      transaction,
+      transaction: domainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

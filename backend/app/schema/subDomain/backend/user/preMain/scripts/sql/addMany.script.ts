@@ -8,13 +8,13 @@ type input = {
   isAdmin: boolean,
 }
 
-export default function addMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   const db = subDomainDb.models;
 
   return async (args: input[]): Promise<returningSuccessObj<Model<backendUser>[] | null>> => {
 
     const data = await db.backendUser.bulkCreate(args, {
-      transaction,
+      transaction: subDomainTransaction,
       returning: true,
     }).catch(error => errorHandler(error, loggers))
 

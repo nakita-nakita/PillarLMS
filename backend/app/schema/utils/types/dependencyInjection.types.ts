@@ -1,14 +1,16 @@
+import { createClient } from "redis"
 import { Model, Transaction } from "sequelize"
 import { Sequelize } from "sequelize-typescript"
 
-type dObj = {
+export type dObj = {
   errorHandler: any,
   loggers: any[],
-  transaction?: Transaction
+  redisClient?: ReturnType<typeof createClient>
 }
 
 export interface d_sub extends dObj {
   subDomainDb: Sequelize,
+  subDomainTransaction: Transaction,
 }
 
 // export interface d_sub_test extends dObj {
@@ -18,6 +20,7 @@ export interface d_sub extends dObj {
 
 export interface d_domain extends dObj {
   domainDb: Sequelize,
+  domainTransaction: Transaction,
 }
 
 // export interface d_domain_test extends dObj {
@@ -27,10 +30,10 @@ export interface d_domain extends dObj {
 
 export interface d_allDomain extends dObj {
   domainDb: Sequelize,
-  subDomainDb: Sequelize,
-
-  subDomaintransaction: Transaction,
   domainTransaction: Transaction,
+  
+  subDomainDb: Sequelize,
+  subDomainTransaction: Transaction,
 }
 
 // export interface d_allDomain_test extends dObj {
@@ -39,9 +42,11 @@ export interface d_allDomain extends dObj {
 //   testMode: boolean,
 // }
 
-export interface d extends dObj {
-  dbEntity?: Model<any>,
-  domainDb?: Sequelize,
-  subDomainDb?: Sequelize,
-  testMode?: boolean,
-}
+// export interface d extends dObj {
+//   dbEntity?: Model<any>,
+//   // domainDb?: Sequelize,
+//   // subDomainDb?: Sequelize,
+//   transaction: Transaction,
+
+//   testMode?: boolean,
+// }

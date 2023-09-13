@@ -12,12 +12,12 @@ describe("test backendPermission.sql.js", () => {
 
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const transaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
 
     d = {
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
-      transaction,
+      subDomainTransaction,
       loggers: [
         console,
         throwIt,
@@ -96,7 +96,7 @@ describe("test backendPermission.sql.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

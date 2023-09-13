@@ -1,13 +1,13 @@
 import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
-export default function canUserSignUp({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function canUserSignUp({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<null>> => {
 
     const settingRequest = await db.backendSetting_backendUserRequest.findOne({
-      transaction
+      transaction: subDomainTransaction
     }).catch(error => errorHandler(error, loggers))
 
     switch (settingRequest.type) {

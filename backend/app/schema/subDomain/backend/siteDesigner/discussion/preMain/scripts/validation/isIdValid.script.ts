@@ -4,14 +4,14 @@ type input = {
   id: string 
 }
 
-export default function isIdValid({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function isIdValid({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input) => {
 
     const data = await db.backendSiteDesigner_discussion.count({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

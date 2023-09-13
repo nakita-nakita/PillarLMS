@@ -4,7 +4,7 @@ type input = {
   id: string
 }
 
-export default function getOneById({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ id }: input) => {
@@ -13,7 +13,7 @@ export default function getOneById({ subDomainDb, errorHandler, transaction, log
       where: {
         id
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

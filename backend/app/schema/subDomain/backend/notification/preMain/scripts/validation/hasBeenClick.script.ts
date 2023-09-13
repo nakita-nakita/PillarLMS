@@ -4,7 +4,7 @@ type input = {
   id: string
 }
 
-export default function hasBeenClick({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function hasBeenClick({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ id }: input) => {
@@ -18,7 +18,7 @@ export default function hasBeenClick({ subDomainDb, errorHandler, transaction, l
           id,
         },
         returning: true,
-        transaction,
+        transaction: subDomainTransaction,
       }
     ).catch(error => errorHandler(error, loggers))
 

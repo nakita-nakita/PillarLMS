@@ -11,11 +11,11 @@ import makeBackendSiteDesignerPageMain from "../main/backendSiteDesigner_page.ma
 
 const makeDObj = async (): Promise<d_sub> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const transaction = await subDomainDb.transaction();
+  const subDomainTransaction = await subDomainDb.transaction();
 
   return {
     subDomainDb,
-    transaction,
+    subDomainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -32,11 +32,11 @@ const permissionResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -51,14 +51,14 @@ const permissionResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.rows.map(result => ({
           ...result,
           dataJSON: JSON.stringify(result.dataValues.data)
         }))
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     }
@@ -76,11 +76,11 @@ const permissionResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -97,11 +97,11 @@ const permissionResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -114,11 +114,11 @@ const permissionResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     }

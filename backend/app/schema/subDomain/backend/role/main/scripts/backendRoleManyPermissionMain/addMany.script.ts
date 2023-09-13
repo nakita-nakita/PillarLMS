@@ -15,14 +15,14 @@
 //   roleId: string
 // }
 
-// export default function addMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+// export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 //   return async (args: input[]): Promise<returningSuccessObj<Model<backendRoleManyPermission>[] | null>> => {
 
 //     const d = {
 //       subDomainDb,
-//       errorHandler: sequelizeErrorHandler,
-//       transaction,
-//       loggers: [console],
+//       errorHandler,
+//       subDomainTransaction,
+//       loggers,
 //     }
 //     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
 //     const roleManyPermissionValidation = makeBackendRoleManyPermissionValidation(d);

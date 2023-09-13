@@ -1,12 +1,12 @@
-import { Op } from "sequelize";
+import { Op, Transaction } from "sequelize";
 import { WhereOptions, ModelCtor, Model } from "sequelize";
 import backendPermission from "../../../../models/subDomain/backend/permission/backendPermission.model";
-import { d } from "../../types/dependencyInjection.types";
+import { dObj } from "../../types/dependencyInjection.types";
 import { returningSuccessObj } from "../../types/returningObjs.types";
 
-export default function makeSetList({ errorHandler, transaction, loggers, }: d) {
+export default function makeSetList({ errorHandler, loggers, }: dObj) {
 
-  return async ({ dbEntity, setArray, currentDbArray }: { dbEntity: ModelCtor<Model<any, any>>, setArray: any[], currentDbArray: Model<any>[] }): Promise<returningSuccessObj<null>> => {
+  return async ({ dbEntity, setArray, currentDbArray, transaction }: { dbEntity: ModelCtor<Model<any, any>>, setArray: any[], currentDbArray: Model<any>[], transaction: Transaction }): Promise<returningSuccessObj<null>> => {
 
     const deleteList: string[] = currentDbArray.filter((currentArr) => {
       for (let i = 0; i < setArray.length; i++) {

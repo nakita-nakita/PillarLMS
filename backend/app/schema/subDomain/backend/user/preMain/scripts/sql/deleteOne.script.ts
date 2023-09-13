@@ -5,14 +5,14 @@ type input = {
   id: string,
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
 
     const data = await db.backendUser.destroy({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

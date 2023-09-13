@@ -11,11 +11,11 @@ import makeBackendSiteDesignerDiscussionVoteMain from "../main/backendSiteDesign
 
 const makeDObj = async (): Promise<d_sub> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const transaction = await subDomainDb.transaction();
+  const subDomainTransaction = await subDomainDb.transaction();
 
   return {
     subDomainDb,
-    transaction,
+    subDomainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -33,11 +33,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -53,11 +53,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -71,11 +71,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -91,11 +91,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -110,11 +110,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -128,11 +128,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -151,11 +151,11 @@ const backendDiscussionVoteGqlResolver = {
   //     })
 
   //     if (response?.success) {
-  //       d.transaction.commit()
+  //       d.subDomainTransaction.commit()
   //       return response.data
 
   //     } else {
-  //       d.transaction.rollback()
+  //       d.subDomainTransaction.rollback()
   //       return graphqlError(response)
   //     }
   //   },
@@ -173,11 +173,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -191,11 +191,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -212,11 +212,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -232,11 +232,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -250,11 +250,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -269,11 +269,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -289,11 +289,11 @@ const backendDiscussionVoteGqlResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

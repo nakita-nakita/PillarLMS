@@ -10,7 +10,7 @@ import makeFoundationUserValidation from "../../../preMain/foundationUser.valida
 
 type input = { id: string }
 
-export default function getOneById({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function getOneById({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -18,9 +18,9 @@ export default function getOneById({ domainDb, errorHandler, transaction, logger
 
     const d = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      domainTransaction,
+      loggers,
     }
     const foundationUserProfileSql = makeFoundationUserProfileSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);

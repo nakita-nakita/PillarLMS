@@ -16,7 +16,7 @@ type input = {
   type: backendSiteDesigner_discussion_getManyWithPaginationTypeEnum
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesigner_discussion>>> => {
@@ -40,7 +40,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, trans
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction,
+      transaction: subDomainTransaction,
 
       attributes: [
         ...Object.keys(db.backendSiteDesigner_discussion.rawAttributes),

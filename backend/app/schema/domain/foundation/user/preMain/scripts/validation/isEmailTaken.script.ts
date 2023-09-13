@@ -3,7 +3,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { email: string }
 
-export default function isEmailTaken({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function isEmailTaken({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -11,7 +11,7 @@ export default function isEmailTaken({ domainDb, errorHandler, transaction, logg
 
     const data: number = await db.foundationUser.count({
       where,
-      transaction,
+      transaction:domainTransaction,
     })
     //.catch(error => errorHandler(error, loggers))
 

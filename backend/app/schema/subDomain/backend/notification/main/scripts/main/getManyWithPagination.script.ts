@@ -13,14 +13,14 @@ type input = {
   userId?: string
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendNotification> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const notificationSql = makeBackendNotificationSql(d);
 

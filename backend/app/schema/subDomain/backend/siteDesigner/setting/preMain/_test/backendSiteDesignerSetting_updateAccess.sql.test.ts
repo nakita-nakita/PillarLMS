@@ -24,15 +24,15 @@ describe("test backendSiteDesignerSetting_updateAccess.sql.js", () => {
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
@@ -131,7 +131,8 @@ describe("test backendSiteDesignerSetting_updateAccess.sql.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

@@ -3,14 +3,14 @@ import foundationSetting_password from "../../../../../../../../models/domain/fo
 import { d_domain } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
-export default function getOneById({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function getOneById({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
   return async (): Promise<returningSuccessObj<Model<foundationSetting_password> | null>> => {
 
     const data = await db.foundationSetting_password.findOne({
-      transaction,
+      transaction: domainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

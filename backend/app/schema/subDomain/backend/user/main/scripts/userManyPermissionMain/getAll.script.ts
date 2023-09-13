@@ -12,25 +12,20 @@ type input = {
   id: string
 }
 
-export default function getAll({ subDomainDb, domainDb, errorHandler, transaction, loggers }: d_allDomain) {
+export default function getAll({ subDomainDb, domainDb, errorHandler, subDomainTransaction, domainTransaction, loggers }: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyPermission>[]>> => {
 
     const d = {
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
-    }
-
-    const d_domain = {
       domainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler,
+      loggers,
     }
 
     const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
-    const userValidation = makeFoundationUserValidation(d_domain)
+    const userValidation = makeFoundationUserValidation(d)
 
     //////////////////////////////////////
     // Validations

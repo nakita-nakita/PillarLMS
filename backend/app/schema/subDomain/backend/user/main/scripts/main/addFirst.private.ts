@@ -21,27 +21,21 @@ type input = {
   isAdmin: boolean
 }
 
-export default function addFirst({ subDomainDb, domainDb, errorHandler, subDomaintransaction, domainTransaction, loggers }: d_allDomain) {
+export default function addFirst({ subDomainDb, domainDb, errorHandler, subDomainTransaction, domainTransaction, loggers }: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<dataResponse>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: subDomaintransaction,
-      loggers: [console],
-    }
-
-    const d_domain = {
+    const d: d_allDomain = {
       domainDb,
+      domainTransaction,
       subDomainDb,
+      subDomainTransaction,
       errorHandler: sequelizeErrorHandler,
-      transaction: domainTransaction,
-      loggers: [console],
+      loggers,
     }
 
-    const foundationUserSql = makeFoundationUserSql(d_domain)
-    const foundationUserValidation = makeFoundationUserValidation(d_domain)
-    const backendUserSql = makeBackendUserSql({ subDomainDb, domainDb, errorHandler, subDomaintransaction, domainTransaction, loggers })
+    const foundationUserSql = makeFoundationUserSql(d)
+    const foundationUserValidation = makeFoundationUserValidation(d)
+    const backendUserSql = makeBackendUserSql(d)
 
     //////////////////////////////////////
     // Sql

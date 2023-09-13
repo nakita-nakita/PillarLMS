@@ -12,12 +12,12 @@ describe("test foundationSetting_password.sql.js", () => {
 
   beforeAll(async () => {
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const transaction = await domainDb.transaction();
+    const domainTransaction = await domainDb.transaction();
 
     d = {
       errorHandler: sequelizeErrorHandler,
       domainDb,
-      transaction,
+      domainTransaction,
       loggers: [
         console,
         throwIt,
@@ -50,7 +50,7 @@ describe("test foundationSetting_password.sql.js", () => {
   })
   
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
   })
 })
 

@@ -13,14 +13,14 @@ type input = {
   post: string
 }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
 
     const d = {
       subDomainDb,
       errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      subDomainTransaction,
+      loggers,
     }
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentSql(d)
     const backendDiscussionValidation = makeBackendSiteDesignerDiscussionCommentValidation(d)

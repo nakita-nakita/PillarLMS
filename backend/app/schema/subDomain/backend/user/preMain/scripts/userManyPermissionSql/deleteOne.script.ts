@@ -6,7 +6,7 @@ type input = {
   permissionId: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
@@ -14,7 +14,7 @@ export default function deleteOne({ subDomainDb, errorHandler, transaction, logg
     const data = await db.backendUserManyPermission.destroy(
       {
         where,
-        transaction,
+        transaction: subDomainTransaction,
       }
     ).catch(error => errorHandler(error, loggers))
 

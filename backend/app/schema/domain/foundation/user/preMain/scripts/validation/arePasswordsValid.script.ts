@@ -6,7 +6,7 @@ type input = {
   password: string 
 }
 
-export default function arePasswordsValid({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function arePasswordsValid({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
 
   const db = domainDb.models
 

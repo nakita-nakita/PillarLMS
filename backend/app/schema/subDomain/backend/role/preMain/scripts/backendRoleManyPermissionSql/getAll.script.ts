@@ -7,7 +7,7 @@ type input = {
   roleId: string
 }
 
-export default function getAll({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getAll({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -17,7 +17,7 @@ export default function getAll({ subDomainDb, errorHandler, transaction, loggers
       where: {
         roleId: args.roleId,
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

@@ -6,14 +6,14 @@ type input = {
   roleId: string
 }
 
-export default function doesUserHaveRole({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function doesUserHaveRole({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<null>> => {
 
     const data: number = await db.backendUserManyRole.count({
       where,
-      transaction
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

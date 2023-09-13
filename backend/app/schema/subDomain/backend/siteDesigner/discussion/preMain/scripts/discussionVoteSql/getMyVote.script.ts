@@ -10,7 +10,7 @@ type input = {
   userId: string,
 }
 
-export default function getMyVoteForDiscussion({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getMyVoteForDiscussion({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -18,7 +18,7 @@ export default function getMyVoteForDiscussion({ subDomainDb, errorHandler, tran
 
     const data : Model<backendSiteDesigner_discussionVote> = await db.backendSiteDesigner_discussionVote.findOne({
         where,
-        transaction,
+        transaction: subDomainTransaction,
     }).catch(errorHandler)
 
     return {

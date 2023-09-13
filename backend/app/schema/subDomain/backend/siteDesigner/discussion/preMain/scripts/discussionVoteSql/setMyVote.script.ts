@@ -11,7 +11,7 @@ type input = {
   vote: backendSiteDesignerDiscussionVoteEnum
 }
 
-export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -25,7 +25,7 @@ export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, tran
         discussionId,
         userId,
       },
-      transaction,
+      transaction: subDomainTransaction,
 
     }).catch(error => errorHandler(error, loggers))
 
@@ -38,7 +38,7 @@ export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, tran
             userId,
           },
           returning: true,
-          transaction,
+          transaction: subDomainTransaction,
         }
       ).catch(error => errorHandler(error, loggers))
 
@@ -51,7 +51,7 @@ export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, tran
         userId,
         vote: voteNumber
       }, {
-        transaction,
+        transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
     }
 

@@ -10,7 +10,7 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function addOne({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function addOne({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
   const db = domainDb.models
 
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
@@ -20,7 +20,7 @@ export default function addOne({ domainDb, errorHandler, transaction, loggers }:
     const data = await db.foundationUser.create(
       args,
       {
-        transaction,
+        transaction: domainTransaction,
         returning: true,
       }
     ).catch(error => errorHandler(error, loggers))

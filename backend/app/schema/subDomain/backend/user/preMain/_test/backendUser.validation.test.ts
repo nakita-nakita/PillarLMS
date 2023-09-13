@@ -20,7 +20,6 @@ jest.setTimeout(100000)
 
 describe("test backendUser.validation.js", () => {
   let d: d_allDomain
-  let ds: d_sub
   let user: Model<backendUser>
   let role: Model<backendRole>
   let permission: Model<backendPermission>
@@ -28,36 +27,26 @@ describe("test backendUser.validation.js", () => {
   beforeAll(async () => {
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
       domainDb,
-      subDomaintransaction,
       domainTransaction,
+      subDomainDb,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    ds = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      transaction: subDomaintransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    }
-
     let uuid = uuidv4()
 
     const backendUserSql = makeBackendUserSql(d)
-    const backendPermissionSql = makeBackendPermissionSql(ds)
-    const backendRoleSql = makeBackendRoleSql(ds)
+    const backendPermissionSql = makeBackendPermissionSql(d)
+    const backendRoleSql = makeBackendRoleSql(d)
 
     user = (await backendUserSql.addOne({
       id: uuid
@@ -146,8 +135,8 @@ describe("test backendUser.validation.js", () => {
 
   test("doesUserHavePermission: Yes", async () => {
 
-    const userValidation = makeBackendUserValidation(ds)
-    const userManyPermissionSql = makeBackendUserManyPermissionSql(ds)
+    const userValidation = makeBackendUserValidation(d)
+    const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
 
     await userManyPermissionSql.addOne({
       userId: user.dataValues.id,
@@ -164,7 +153,7 @@ describe("test backendUser.validation.js", () => {
 
   test("doesUserHavePermission: No", async () => {
 
-    const userValidation = makeBackendUserValidation(ds)
+    const userValidation = makeBackendUserValidation(d)
     // const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
 
     const doesUserHavePermission = await userValidation.doesUserHavePermission({
@@ -179,8 +168,8 @@ describe("test backendUser.validation.js", () => {
 
   test("doesUserHaveRole: Yes", async () => {
 
-    const userManyRoleSql = makeBackendUserManyRoleSql(ds)
-    const userValidation = makeBackendUserValidation(ds)
+    const userManyRoleSql = makeBackendUserManyRoleSql(d)
+    const userValidation = makeBackendUserValidation(d)
 
     // const addManyPermission = 
     await userManyRoleSql.addOne({
@@ -198,7 +187,7 @@ describe("test backendUser.validation.js", () => {
 
   test("doesUserHaveRole: No", async () => {
 
-    const userValidation = makeBackendUserValidation(ds)
+    const userValidation = makeBackendUserValidation(d)
     // const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
 
     const doesUserHaveRole = await userValidation.doesUserHaveRole({
@@ -212,7 +201,7 @@ describe("test backendUser.validation.js", () => {
 
 
   afterAll(async () => {
-    await d.subDomaintransaction.rollback();
     await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })

@@ -14,14 +14,14 @@ type input = {
   roleId: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<number | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
 
     const userManyRoleSql = makeBackendUserManyRoleSql(d)

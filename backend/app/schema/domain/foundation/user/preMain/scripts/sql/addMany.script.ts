@@ -9,7 +9,7 @@ type input = {
   password: string
 }
 
-export default function addMany({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function addMany({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
 
   const db = domainDb.models;
 
@@ -21,7 +21,7 @@ export default function addMany({ domainDb, errorHandler, transaction, loggers }
     }))
 
     const data = await db.foundationUser.bulkCreate(savingArray, {
-      transaction,
+      transaction: domainTransaction,
       returning: true,
     }).catch(error => errorHandler(error, loggers))
 

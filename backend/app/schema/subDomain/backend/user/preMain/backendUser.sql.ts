@@ -7,21 +7,13 @@ import updateOne from "./scripts/sql/updateOne.script"
 import getManyWithPagination from "./scripts/sql/getManyWithPagination.script"
 
 export default function makeBackendUserSql(d: d_allDomain) {
-  let d_subDomain =  {
-    ...d,
-    transaction: d.subDomaintransaction,
-  };
 
-  // let d_domain =  {
-  //   ...d,
-  //   transaction: d.domainTransaction,
-  // };
   return {
-    addMany: addMany(d_subDomain),
-    addOne: addOne(d_subDomain),
+    addMany: addMany(d),
+    addOne: addOne(d),
     getManyWithPagination: getManyWithPagination(d),
-    deleteOne: deleteOne(d_subDomain),
-    getOneById: getOneById(d_subDomain),
-    updateOne: updateOne(d_subDomain),
+    deleteOne: deleteOne(d),
+    getOneById: getOneById(d),
+    updateOne: updateOne(d),
   }
 }

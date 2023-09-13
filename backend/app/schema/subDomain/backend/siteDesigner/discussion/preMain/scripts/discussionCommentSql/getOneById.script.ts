@@ -7,14 +7,14 @@ type input = {
   id: string 
 }
 
-export default function getOneById({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussionComment> | null>> => {
 
     const data = await db.backendSiteDesigner_discussionComment.findOne({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

@@ -8,7 +8,7 @@ type input = {
   userId?: string
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -34,7 +34,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, trans
       offset: page * pageSize,
       limit: pageSize,
       raw: true,
-      transaction,
+      transaction: subDomainTransaction,
     };
 
     if (userId) {

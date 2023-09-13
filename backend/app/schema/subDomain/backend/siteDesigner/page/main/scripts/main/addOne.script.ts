@@ -15,15 +15,15 @@ type input = {
   isReady?: boolean
 }
 
-export default function addOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_page> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      subDomainTransaction,
+      errorHandler,
+      loggers,
     }
     const pageSql = makeBackendSiteDesignerPageSql(d);
     const pageValidation = makeBackendSiteDesignerPageValidation(d);

@@ -10,11 +10,11 @@ import makeFoundationAuthMain from "../main/foundationAuth.main";
 
 const makeDObj = async (): Promise<d_domain> => {
   const domainDb: Sequelize = await emptyTestDomainDb();
-  const transaction = await domainDb.transaction();
+  const domainTransaction = await domainDb.transaction();
 
   return {
     domainDb,
-    transaction,
+    domainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -34,11 +34,11 @@ const foundation_authResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -52,11 +52,11 @@ const foundation_authResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
         return response.data
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -69,11 +69,11 @@ const foundation_authResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
         return response
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -86,11 +86,11 @@ const foundation_authResolver = {
       })
 
       if (response?.success) {
-        d.transaction.commit()
+        d.domainTransaction.commit()
         return response
 
       } else {
-        d.transaction.rollback()
+        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },

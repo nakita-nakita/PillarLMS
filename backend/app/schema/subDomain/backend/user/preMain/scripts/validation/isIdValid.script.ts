@@ -5,14 +5,14 @@ type input = {
   id: string
 }
 
-export default function isIdValid({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function isIdValid({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   const db = subDomainDb.models
 
   return async (where: input): Promise<returningSuccessObj<null>> => {
 
     const data = await db.backendUser.count({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

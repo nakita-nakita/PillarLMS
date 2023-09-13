@@ -3,7 +3,7 @@ import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 
 type input = { idArray: string[] }
 
-export default function areIdsValid({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function areIdsValid({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -15,7 +15,7 @@ export default function areIdsValid({ subDomainDb, errorHandler, transaction, lo
           [Op.in]: idArray
         }
       },
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

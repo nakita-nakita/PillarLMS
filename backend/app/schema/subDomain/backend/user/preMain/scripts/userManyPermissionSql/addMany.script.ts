@@ -8,7 +8,7 @@ type input = {
   permissionIdsArray: string[]
 }
 
-export default function addMany({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async ({ userId, permissionIdsArray, }: input): Promise<returningSuccessObj<Model<backendRoleManyPermission>>> => {
@@ -17,7 +17,7 @@ export default function addMany({ subDomainDb, errorHandler, transaction, logger
       userId,
       permissionId,
     })), {
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

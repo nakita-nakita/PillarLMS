@@ -9,14 +9,14 @@ type permissionNamesArrayObjectType = {
 
 type input = { permissionNamesArray: permissionNamesArrayObjectType[] }
 
-export default function addMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   const db = subDomainDb.models;
 
   return async ({ permissionNamesArray }: input): Promise<returningSuccessObj<Model<backendPermission>[] | null>> => {
 
     const data = await db.backendPermission.bulkCreate(permissionNamesArray, {
-      transaction,
+      transaction: subDomainTransaction,
       returning: true,
     }).catch(error => errorHandler(error, loggers))
 

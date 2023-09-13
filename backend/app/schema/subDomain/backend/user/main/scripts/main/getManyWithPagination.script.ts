@@ -11,17 +11,11 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ domainDb, subDomainDb, domainTransaction, subDomaintransaction, errorHandler, loggers }: d_allDomain) {
+export default function getManyWithPagination(d: d_allDomain) {
   return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendRole> | null>> => {
 
-    const d = {
-      domainDb,
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      domainTransaction,
-      subDomaintransaction,
-      loggers: [console],
-    }
+    const { errorHandler, loggers } = d
+
     const userSql = makeBackendUserSql(d);
 
     //////////////////////////////////////

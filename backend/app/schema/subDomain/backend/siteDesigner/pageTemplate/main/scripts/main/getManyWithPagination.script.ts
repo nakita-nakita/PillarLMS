@@ -11,15 +11,15 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
 
   return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesigner_pageTemplate> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const pageTemplateSql = makeBackendSiteDesignerPageTemplateSql(d);
 

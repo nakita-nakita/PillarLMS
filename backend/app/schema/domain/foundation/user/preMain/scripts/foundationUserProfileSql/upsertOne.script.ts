@@ -22,7 +22,7 @@ type input = {
   labelColor?: string,
 }
 
-export default function upsertOne({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function upsertOne({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -31,7 +31,7 @@ export default function upsertOne({ domainDb, errorHandler, transaction, loggers
     //count for 1
     const doesUserHaveAProfile = await db.foundationUserProfile.count({
       where: { id, },
-      transaction,
+      transaction: domainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     //if not count, add instead
@@ -39,7 +39,7 @@ export default function upsertOne({ domainDb, errorHandler, transaction, loggers
       const newData = await db.foundationUserProfile.create(
         { id, ...args },
         {
-          transaction,
+          transaction: domainTransaction,
           returning: true,
         }
       ).catch(error => errorHandler(error, loggers))
@@ -55,7 +55,7 @@ export default function upsertOne({ domainDb, errorHandler, transaction, loggers
       {
         where: { id, },
         returning: true,
-        transaction,
+        transaction: domainTransaction,
       }).catch(error => errorHandler(error, loggers))
 
     return {

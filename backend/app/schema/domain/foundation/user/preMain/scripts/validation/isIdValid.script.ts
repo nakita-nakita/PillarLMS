@@ -3,7 +3,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { id: string }
 
-export default function isIdValid({ domainDb, errorHandler, transaction, loggers }: d_domain) {
+export default function isIdValid({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
 
   const db = domainDb.models;
 
@@ -11,10 +11,8 @@ export default function isIdValid({ domainDb, errorHandler, transaction, loggers
 
     const data = await db.foundationUser.findOne({
       where,
-      transaction,
-    })
-    
-    // .catch(error => errorHandler(error, loggers))
+      transaction: domainTransaction,
+    }).catch(error => errorHandler(error, loggers))
 
     return {
       success: true,

@@ -4,7 +4,7 @@ import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTes
 import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb"
 import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
 import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger"
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types"
+import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types"
 import makeBackendUserSql from "../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesignerDiscussionSql from "../backendSiteDesigner_discussion.sql"
 import makeBackendSiteDesignerDiscussionCommentSql from "../backendSiteDesigner_discussionComment.sql"
@@ -12,7 +12,7 @@ import makeBackendSiteDesignerDiscussionCommentValidation from "../backendSiteDe
 jest.setTimeout(100000)
 
 describe("test backendSiteDesigner_discussionComment.validation.js", () => {
-  let d: d_sub
+  let d: d_allDomain
   let recordId: string
 
   beforeAll(async () => {
@@ -20,30 +20,22 @@ describe("test backendSiteDesigner_discussionComment.validation.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
-      errorHandler: sequelizeErrorHandler,
+      domainDb,
+      domainTransaction,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      errorHandler: sequelizeErrorHandler,
       loggers: [
         console,
         throwIt,
       ]
     };
 
-    const userSql = makeBackendUserSql({
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      domainDb,
-      subDomaintransaction,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    })
+    const userSql = makeBackendUserSql(d)
 
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d)
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentSql(d)
@@ -112,6 +104,7 @@ describe("test backendSiteDesigner_discussionComment.validation.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })

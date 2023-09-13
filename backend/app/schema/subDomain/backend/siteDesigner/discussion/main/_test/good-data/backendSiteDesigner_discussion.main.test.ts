@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
 import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
 import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
@@ -13,7 +13,7 @@ import { addOneBackendUserResponse } from "../../../../../user/main/scripts/main
 jest.setTimeout(100000)
 
 describe("test backendSiteDesigner_discussion.main.js", () => {
-  let d: d_sub;
+  let d: d_allDomain;
   let user: addOneBackendUserResponse;
 
   beforeAll(async () => {
@@ -21,14 +21,16 @@ describe("test backendSiteDesigner_discussion.main.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
 
     d = {
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      domainDb,
+      domainTransaction,
       loggers: [
         console,
         throwIt,
@@ -38,7 +40,7 @@ describe("test backendSiteDesigner_discussion.main.js", () => {
     const userMain = makeBackendUserMain({
       subDomainDb,
       domainDb,
-      subDomaintransaction,
+      subDomainTransaction,
       domainTransaction,
       errorHandler: sequelizeErrorHandler,
       loggers: [
@@ -102,7 +104,8 @@ describe("test backendSiteDesigner_discussion.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
+    await d.subDomainTransaction.rollback();
   })
 })
 

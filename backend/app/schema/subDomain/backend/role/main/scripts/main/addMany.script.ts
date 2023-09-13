@@ -12,14 +12,14 @@ type input = {
   name: string
 }
 
-export default function addMany({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (roleArray: input[]): Promise<returningSuccessObj<Model<backendRole>[] | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const roleSql = makeBackendRoleSql(d);
     const roleValidation = makeBackendRoleValidation(d);

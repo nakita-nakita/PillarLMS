@@ -5,14 +5,14 @@ import { returningSuccessObj } from "../../../../../../../utils/types/returningO
 import makeBackendSettingSiteSql from "../../../preMain/backendSetting_site.sql";
 import backendSetting_site from "../../../../../../../../models/subDomain/backend/setting/backendSetting_site.model";
 
-export default function getOne({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   return async (): Promise<returningSuccessObj<Model<backendSetting_site> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const siteSql = makeBackendSettingSiteSql(d);
 

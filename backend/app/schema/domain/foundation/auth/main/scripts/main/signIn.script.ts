@@ -26,7 +26,7 @@ export default function signIn(d: d_domain) {
     }
 
     const { email, password, } = args
-    const { domainDb, errorHandler, transaction, loggers } = d
+    const { domainDb, errorHandler, domainTransaction, loggers } = d
 
     const { userMain, } = makeFoundationUserEntity(d)
     const authFunc = makeFoundationAuthFunc(d)

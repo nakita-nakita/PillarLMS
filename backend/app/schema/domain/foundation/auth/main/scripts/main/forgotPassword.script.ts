@@ -13,7 +13,7 @@ type input = {
 export default function forgotPassword(d: d_domain) {
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
-    const { domainDb, errorHandler, transaction, loggers } = d
+    const { domainDb, errorHandler, domainTransaction, loggers } = d
 
     const { userMain, } = makeFoundationUserEntity(d)
 

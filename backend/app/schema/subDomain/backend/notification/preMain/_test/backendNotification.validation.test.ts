@@ -15,7 +15,7 @@ import { Model } from "sequelize"
 jest.setTimeout(100000)
 
 describe("test backendNotification.validation.js", () => {
-  let d: d_sub
+  let d: d_allDomain
   let recordId: string
   let userId: string
   let user: Model<backendUser>
@@ -24,13 +24,15 @@ describe("test backendNotification.validation.js", () => {
 
     const subDomainDb: Sequelize = await emptyTestSubdomainDb();
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomaintransaction = await subDomainDb.transaction();
+    const subDomainTransaction = await subDomainDb.transaction();
     const domainTransaction = await domainDb.transaction();
 
     d = {
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
-      transaction: subDomaintransaction,
+      subDomainTransaction,
+      domainDb,
+      domainTransaction,
       loggers: [
         console,
         throwIt,
@@ -41,7 +43,7 @@ describe("test backendNotification.validation.js", () => {
       errorHandler: sequelizeErrorHandler,
       subDomainDb,
       domainDb,
-      subDomaintransaction,
+      subDomainTransaction,
       domainTransaction,
       loggers: [
         console,
@@ -132,6 +134,7 @@ describe("test backendNotification.validation.js", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback();
   })
 })

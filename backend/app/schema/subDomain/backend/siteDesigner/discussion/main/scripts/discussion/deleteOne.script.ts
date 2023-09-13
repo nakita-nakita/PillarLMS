@@ -12,14 +12,14 @@ type input = {
   id: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d)
     const backendDiscussionValidation = makeBackendSiteDesignerDiscussionValidation(d)

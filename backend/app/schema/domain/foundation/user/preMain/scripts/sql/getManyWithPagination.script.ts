@@ -12,7 +12,7 @@ type input = {
   userId?: string
 }
 
-export default function getManyWithPagination({ domainDb, errorHandler, transaction, loggers, }: d_domain) {
+export default function getManyWithPagination({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
 
   const db = domainDb.models;
 
@@ -37,7 +37,7 @@ export default function getManyWithPagination({ domainDb, errorHandler, transact
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction,
+      transaction: domainTransaction,
     };
 
     if (q) {

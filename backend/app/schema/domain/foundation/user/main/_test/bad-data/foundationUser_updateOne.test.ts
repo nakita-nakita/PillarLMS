@@ -15,12 +15,12 @@ describe("test backendSiteDesigner_pageTemplate.main.js with bad data.", () => {
 
   beforeAll(async () => {
     const domainDb: Sequelize = await emptyTestDomainDb();
-    const transaction = await domainDb.transaction();
+    const domainTransaction = await domainDb.transaction();
 
     d = {
       errorHandler: sequelizeErrorHandler,
       domainDb,
-      transaction,
+      domainTransaction,
       loggers: [
         console,
         throwIt,
@@ -144,6 +144,6 @@ describe("test backendSiteDesigner_pageTemplate.main.js with bad data.", () => {
   })
 
   afterAll(async () => {
-    await d.transaction.rollback();
+    await d.domainTransaction.rollback();
   })
 })

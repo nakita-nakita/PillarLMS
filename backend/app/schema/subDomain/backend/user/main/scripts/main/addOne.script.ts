@@ -33,28 +33,13 @@ type input = {
 export default function addOne(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<addOneBackendUserResponse>> => {
 
-    const { subDomainDb, domainDb, errorHandler, subDomaintransaction, domainTransaction, loggers } = d
+    const { errorHandler, loggers } = d
 
-    const d_sub = {
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: subDomaintransaction,
-      loggers: [console],
-    }
-
-    const d_domain = {
-      domainDb,
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction: domainTransaction,
-      loggers: [console],
-    }
-
-    const foundationUserSql = makeFoundationUserSql(d_domain)
-    const foundationUserProfileSql = makeFoundationUserProfileSql(d_domain)
-    const foundationUserValidation = makeFoundationUserValidation(d_domain)
+    const foundationUserSql = makeFoundationUserSql(d)
+    const foundationUserProfileSql = makeFoundationUserProfileSql(d)
+    const foundationUserValidation = makeFoundationUserValidation(d)
     const backendUserSql = makeBackendUserSql(d)
-    const backendUserValidation = makeBackendUserValidation(d_sub)
+    const backendUserValidation = makeBackendUserValidation(d)
 
     //////////////////////////////////////
     // Validations
@@ -118,14 +103,7 @@ export default function addOne(d: d_allDomain) {
     const doesAUserExists = await foundationUserValidation.doesAUserExists()
 
     if (!doesAUserExists.result) {
-      const addFirstFunction = addFirst({
-        subDomainDb,
-        domainDb,
-        errorHandler: sequelizeErrorHandler,
-        domainTransaction,
-        subDomaintransaction,
-        loggers: [console],
-      })
+      const addFirstFunction = addFirst(d)
 
       return await addFirstFunction({
         email: args.email,

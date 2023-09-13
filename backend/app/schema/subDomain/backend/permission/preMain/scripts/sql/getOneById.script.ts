@@ -5,7 +5,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { id: string }
 
-export default function getOneById({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -13,7 +13,7 @@ export default function getOneById({ subDomainDb, errorHandler, transaction, log
 
     const data = await db.backendPermission.findOne({
       where,
-      transaction,
+      transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 
     return {

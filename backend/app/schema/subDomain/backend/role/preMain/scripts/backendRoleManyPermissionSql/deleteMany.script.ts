@@ -3,7 +3,7 @@ import { returningSuccessObj } from "../../../../../../utils/types/returningObjs
 
 type input = { roleId: string, permissionId: string, }
 
-export default function deleteOnePermission({ subDomainDb, errorHandler, transaction, loggers, }: d_sub) {
+export default function deleteOnePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
@@ -15,7 +15,7 @@ export default function deleteOnePermission({ subDomainDb, errorHandler, transac
       await db.backendRoleManyPermission.destroy(
         {
           where: { roleId, permissionId, },
-          transaction,
+          transaction: subDomainTransaction,
         }
       ).catch(error => errorHandler(error, loggers))
     }

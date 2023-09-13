@@ -13,14 +13,14 @@ type input = {
   name: string
 }
 
-export default function updateOne({ subDomainDb, errorHandler, transaction, loggers }: d_sub) {
+export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRole> | null>> => {
 
     const d = {
       subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      transaction,
-      loggers: [console],
+      errorHandler,
+      subDomainTransaction,
+      loggers,
     }
     const backendRoleSql = makeBackendRoleSql(d);
     const backendRoleValidation = makeBackendRoleValidation(d);
