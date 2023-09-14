@@ -2,10 +2,13 @@ import { Model } from "sequelize";
 import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
 import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeCollaborateSamePageType from "../../collaborateSamePage.type";
+import makeCollaborateSamePageType from "../../collaborateSamePage.types";
 import makeBackendUserMain from "../../../../../backend/user/main/backendUser.main";
 import makeBackendUserProfileMain from "../../../../../backend/user/main/backendUserProfile.main";
 import makeFoundationUserMain from "../../../../../../domain/foundation/user/main/foundationUser.main";
+import { CallByTypeEnum } from "../../../../../../domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
+import { SamePageObject } from "./getAllUsersFromPage.script";
+import _ from "lodash"
 
 type input = {
   userId: string,
@@ -15,7 +18,7 @@ type input = {
 
 export default function addUserToPage(d: d_allDomain) {
 
-  return async (args: input): Promise<returningSuccessObj<null>> => {
+  return async (args: input): Promise<returningSuccessObj<SamePageObject>> => {
 
     // import prebuilts
     const collaborateSamePageType = makeCollaborateSamePageType()
@@ -23,14 +26,14 @@ export default function addUserToPage(d: d_allDomain) {
     const backendUserProfile = makeBackendUserProfileMain(d)
 
     // get data from sql
-    const user = await backendUser.getOneById({id: args.userId})
-    const userProfile = await backendUserProfile.getOneById({id: args.userId})
+    const user = await backendUser.getOneById({ id: args.userId })
+    const userProfile = await backendUserProfile.getOneById({ id: args.userId })
 
     // use type construction to create new object.
-    const userForListings = collaborateSamePageType.UserObject({
+    const userForListings = await collaborateSamePageType.UserObject({
       id: user.data.dataValues.id,
       email: user.data.dataValues.email,
-      callByType: userProfile.data?.dataValues?.callByType,
+      callByType: CallByTypeEnum[userProfile.data?.dataValues?.callByType],
       circleColor: userProfile.data?.dataValues?.circleColor,
       firstName: userProfile.data?.dataValues?.firstName,
       labelColor: userProfile.data?.dataValues?.labelColor,
@@ -41,25 +44,39 @@ export default function addUserToPage(d: d_allDomain) {
 
     const hashname = "collaborateSamePage"
     const location = args.testmode ? `test-${hashname}` : hashname
+    const key = `${args.url}`;
 
     //get current listings and add this user to it, yes there will be doubles with multiple tabs.
-    const currentPage = await d.redisClient.hGet(location, args.url)
+    const currentPage = await d.cacheService.get({
+      location,
+      key,
+    })
     let listings;
 
     if (currentPage) {
-      listings = JSON.parse(currentPage)
-      listings.users.push(userForListings)
+      currentPage.users.push(userForListings.data)
+      listings = { ...currentPage }
 
     } else {
       listings = {
-        users: [userForListings]
+        users: [userForListings.data]
       }
+
+      await d.cacheService.set({
+        location,
+        key,
+        value: listings
+      })
     }
 
-    await d.redisClient.hSet(location, args.url, JSON.stringify(listings))
+    listings.users = _.uniqBy(listings.users, 'id');
 
     return {
       success: true,
+      data: {
+        total: listings?.users?.length || 0,
+        users: listings?.users || []
+      }
     }
   }
 }

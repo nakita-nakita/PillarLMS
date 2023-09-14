@@ -3,13 +3,11 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 
 const backendPermissionSecurity = {
   Query: {
-    backendPermission_getOneById: and(isAuthenticated, isAdmin),
-    backendPermission_getManyWithPagination: and(isAuthenticated, isAdmin),
+    collaborateSamePage_getAllUsersFromPage: isAuthenticated,
   },
   Mutation: {
-    backendPermission_addOne: and(isAuthenticated, isAdmin),
-    backendPermission_updateOne: and(isAuthenticated, isAdmin),
-    backendPermission_deleteOne: and(isAuthenticated, isAdmin),
+    collaborateSamePage_addUserToPage: isAuthenticated,
+    collaborateSamePage_removeUserFromPage: isAuthenticated,
   }
 }
 

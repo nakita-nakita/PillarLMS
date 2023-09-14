@@ -4,11 +4,11 @@ import { d_domain } from "../../../../../../utils/types/dependencyInjection.type
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 export enum CallByTypeEnum {
-  EMAIL,
-  USERNAME,
-  FIRST_NAME,
-  LAST_NAME,
-  FULL_NAME,
+  EMAIL = "EMAIL",
+  USERNAME = "USERNAME",
+  FIRST_NAME = "FIRST_NAME",
+  LAST_NAME = "LAST_NAME",
+  FULL_NAME = "FULL_NAME",
 }
 
 type input = {

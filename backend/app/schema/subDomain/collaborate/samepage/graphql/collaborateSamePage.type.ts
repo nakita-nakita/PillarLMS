@@ -13,8 +13,8 @@ const backendPermissionGqlType = gql`
   }
 
   type Mutation {
-    collaborateSamePage_addUserToPage(userId: ID, url: String): GlobalSuccessType
-    collaborateSamePage_removeUserFromPage(userId: ID, url: String): GlobalSuccessType
+    collaborateSamePage_addUserToPage(userId: ID, url: String): samePageType
+    collaborateSamePage_removeUserFromPage(userId: ID, url: String): samePageType
   }
 `
 

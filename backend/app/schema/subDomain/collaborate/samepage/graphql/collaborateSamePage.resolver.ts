@@ -2,17 +2,24 @@ import { Sequelize } from "sequelize-typescript";
 import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
 import graphqlError from "../../../../utils/errorHandling/handers/graphql.errorhandler";
 import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../utils/types/dependencyInjection.types";
-import makeBackendPermissionMain from "../../../backend/permission/main/backendPermission.main";
+import { d_allDomain } from "../../../../utils/types/dependencyInjection.types";
+import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
+import singletonCachingService from "../../../../../singleton.ram-cache";
+import makeCollaborateSamePageMain from "../main/collaborateSamePage.main";
 // import makeBackendPermissionMain from "../main/backendPermission.main";
 
-const makeDObj = async (): Promise<d_sub> => {
+const makeDObj = async (): Promise<d_allDomain> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
   const subDomainTransaction = await subDomainDb.transaction();
+  const domainDb = await emptyTestDomainDb()
+  const domainTransaction = await domainDb.transaction();
 
   return {
+    domainDb,
+    domainTransaction,
     subDomainDb,
     subDomainTransaction,
+    cacheService: singletonCachingService,
     loggers: [console],
     errorHandler: sequelizeErrorHandler
   }
@@ -20,33 +27,13 @@ const makeDObj = async (): Promise<d_sub> => {
 
 const backendPermissionGqlResolver = {
   Query: {
-    backendPermission_getOneById: async (parent, args, context) => {
+    collaborateSamePage_getAllUsersFromPage: async (parent, args, context) => {
 
       const d = await makeDObj()
-      const main = makeBackendPermissionMain(d)
+      const main = makeCollaborateSamePageMain(d)
 
-      const response = await main.getOneById({
-        id: args.id,
-      })
-
-      if (response?.success) {
-        d.subDomainTransaction.commit()
-        return response.data.dataValues
-
-      } else {
-        d.subDomainTransaction.rollback()
-        return graphqlError(response)
-      }
-    },
-    backendPermission_getManyWithPagination: async (parent, args, ctx) => {
-
-      const d = await makeDObj()
-      const main = makeBackendPermissionMain(d)
-
-      const response = await main.getManyWithPagination({
-        q: args.q,
-        page: args.page,
-        pageSize: args.pageSize,
+      const response = await main.getAllUsersFromPage({
+        url: args.url
       })
 
       if (response?.success) {
@@ -57,16 +44,17 @@ const backendPermissionGqlResolver = {
         d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
-    }
+    },
   },
   Mutation: {
-    backendPermission_addOne: async (parent, args, ctx) => {
+    collaborateSamePage_addUserToPage: async (parent, args, ctx) => {
 
       const d = await makeDObj()
-      const main = makeBackendPermissionMain(d)
+      const main = makeCollaborateSamePageMain(d)
 
-      const response = await main.addOne({
-        name: args.name,
+      const response = await main.addUserToPage({
+        userId: args.userId,
+        url: args.url,
       })
 
       if (response?.success) {
@@ -78,14 +66,14 @@ const backendPermissionGqlResolver = {
         return graphqlError(response)
       }
     },
-    backendPermission_updateOne: async (parent, args, ctx) => {
+    collaborateSamePage_removeUserFromPage: async (parent, args, ctx) => {
 
       const d = await makeDObj()
-      const main = makeBackendPermissionMain(d)
+      const main = makeCollaborateSamePageMain(d)
 
-      const response = await main.updateOne({
-        id: args.id,
-        name: args.name,
+      const response = await main.removeUserFromPage({
+        userId: args.userId,
+        url: args.url,
       })
 
       if (response?.success) {
@@ -97,24 +85,6 @@ const backendPermissionGqlResolver = {
         return graphqlError(response)
       }
     },
-    backendPermission_deleteOne: async (parent, args, ctx) => {
-
-      const d = await makeDObj()
-      const main = makeBackendPermissionMain(d)
-
-      const response = await main.deleteOne({
-        id: args.id,
-      })
-
-      if (response?.success) {
-        d.subDomainTransaction.commit()
-        return response.data
-
-      } else {
-        d.subDomainTransaction.rollback()
-        return graphqlError(response)
-      }
-    }
   },
 };
 

@@ -2,6 +2,7 @@ import { Model } from "sequelize";
 import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
 import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { CallByTypeEnum } from "../../../../../../domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
 
 export type UserObjectType = {
   id: String
@@ -10,7 +11,7 @@ export type UserObjectType = {
   lastName?: String
   username?: String
   picture?: String
-  callByType?: String
+  callByType?: CallByTypeEnum
   circleColor?: String
   labelColor?: String
 }

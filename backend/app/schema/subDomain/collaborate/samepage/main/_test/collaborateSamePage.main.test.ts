@@ -12,12 +12,12 @@ import { Model } from "sequelize";
 import foundationUser from "../../../../../../models/domain/foundation/user/foundationUser.model";
 import foundationUserProfile from "../../../../../../models/domain/foundation/user/foundationUserProfile.model";
 import connectToRedis from "../../../../../../reddis";
-import makeCollaborateSamePageCache from "../collaborateSamePage.cache";
+import makeCollaborateSamePageMain from "../collaborateSamePage.main";
 import singletonCachingService from "../../../../../../singleton.ram-cache";
 jest.setTimeout(100000)
 
 
-describe("test collaborateSamePage.cache.js", () => {
+describe("test collaborateSamePage.main.js", () => {
   let d: d_allDomain
   const url = "/fake/test/url"
   let user1: Model<foundationUser>
@@ -104,7 +104,7 @@ describe("test collaborateSamePage.cache.js", () => {
   }, 100000)
 
   test("addUserToPage: test adding one user.", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.addUserToPage({
       url,
@@ -124,7 +124,7 @@ describe("test collaborateSamePage.cache.js", () => {
   })
 
   test("getAllUsersFromPage: test adding get users.", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.getAllUsersFromPage({
       url,
@@ -144,7 +144,7 @@ describe("test collaborateSamePage.cache.js", () => {
 
 
   test("addUserToPage 2nd time: test adding one user.", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.addUserToPage({
       url,
@@ -164,7 +164,7 @@ describe("test collaborateSamePage.cache.js", () => {
   })
 
   test("addUserToPage: should still be two users after adding same users twice (two tabs).", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.addUserToPage({
       url,
@@ -175,7 +175,7 @@ describe("test collaborateSamePage.cache.js", () => {
   })
 
   test("removeUserFromPage: should still be two users after adding same users twice (two tabs).", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.removeUserFromPage({
       url,
@@ -186,7 +186,7 @@ describe("test collaborateSamePage.cache.js", () => {
   })
 
   test("removeUserFromPage: should be one user.", async () => {
-    const samePage = makeCollaborateSamePageCache(d)
+    const samePage = makeCollaborateSamePageMain(d)
 
     const page = await samePage.removeUserFromPage({
       url,
