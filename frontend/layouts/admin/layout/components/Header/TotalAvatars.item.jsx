@@ -2,13 +2,18 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import PropTypes from 'prop-types';
+import AdminLayoutContext from '../../adminLayout.context';
+import UserAvatar from '@/components/chip/user.avatar';
 
-export default function TotalAvatars({ total, max, listOfIcons, ...props }) {
+export default function TotalAvatars({ max, ...props }) {
+  const {whoIsOnPage} = React.useContext(AdminLayoutContext)
+  
   return (
     <div {...props}>
-      <AvatarGroup total={total} max={max}>
-        {listOfIcons && listOfIcons.length > 0 && listOfIcons.map(icon => (
-          <Avatar alt={icon.alt} src={icon.src} />
+      <AvatarGroup max={max}> 
+      {/* //total={total} */}
+        {whoIsOnPage?.list && whoIsOnPage.list.length > 0 && whoIsOnPage.list.map(user => (
+          <UserAvatar {...user} />
         ))}
       </AvatarGroup>
     </div>

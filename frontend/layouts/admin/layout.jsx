@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 
 // Mine
 // import { getSavedUser, user } from '../../components/admin/utils/user';
+import AdminLayoutPage from './layout/AdminLayoutPage';
+import { AdminLayoutProvider } from './layout/adminLayout.context';
 
 // MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MuiAlert from '@mui/material/Alert';
 
 // Icons
-import AdminLayoutPage from './layout/AdminLayoutPage';
-import { AdminLayoutProvider } from './layout/adminLayout.context';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -176,6 +176,8 @@ theme = {
 const drawerWidth = 350;
 
 export default function AdminLayout(props) {
+  const router = useRouter();
+
   return (
     <ThemeProvider theme={theme}>
       {/* <SiteDesignerProvider> */}

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 // import { navigate } from 'gatsby-link';
 
-
 // Mine
 // import { getSavedUser, user } from '../../components/admin/utils/user';
 import Navigator from './components/Navigator.jsx';
@@ -29,6 +28,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 // import { ___theme } from './layout';
 import MeetingPanel from './components/MeetingPanel';
 import AdminLayoutContext from './adminLayout.context';
+import { initSocket } from '@/utils/realtime/socket.js';
+import { getSamePageGraphQL } from '../store/samepage.store.js';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -37,7 +38,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const drawerWidth = 350;
 
 export default function AdminLayoutPage(props) {
+  const router = useRouter();
   const adminLayoutContext = React.useContext(AdminLayoutContext)
+  
   // console.log('adminLayoutContext', adminLayoutContext)
   // const theme = ___theme;
   // const router = useRouter()
@@ -52,6 +55,39 @@ export default function AdminLayoutPage(props) {
 
   // console.log('socket')
 
+  let lastRoute;
+
+  React.useEffect(() => {
+    
+    const url = router.pathname
+
+    const socket = initSocket()
+    socket.emit('addUserToUrl', {
+      url,
+    });
+
+    if (lastRoute) {
+      socket.emit('removeUserFromUrl', {
+        url,
+      });
+    }
+    lastRoute = router
+
+    socket.on('samepage', async () => {
+      const usersOnPage = await getSamePageGraphQL({url,})
+      console.log('usersOnPage', usersOnPage);
+      adminLayoutContext.setWhoIsOnPage(prevState => ({
+        ...prevState,
+        list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users
+      }))
+      // collaborateSamePage_getAllUsersFromPage
+    })
+
+    return () => {
+      socket.off('samepage')
+    }
+
+  }, [router.asPath]);
 
   const handleDrawerToggle = () => {
     // setMobileOpen(!mobileOpen);

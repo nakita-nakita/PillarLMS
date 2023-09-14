@@ -36,7 +36,9 @@ export default function getAllUsersFromPage(d: d_allDomain) {
     const response = await samePage.getAllUsersFromPage({
       url: args.url,
       testmode: args.testmode,
-    }).catch(error => errorHandler(error, loggers))
+    })
+    
+    // .catch(error => errorHandler(error, loggers))
 
     return response
   }
