@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 // import { navigate } from 'gatsby-link';
+import { enqueueSnackbar } from 'notistack';
 
 // Mine
 // import { getSavedUser, user } from '../../components/admin/utils/user';
@@ -40,7 +41,7 @@ const drawerWidth = 350;
 export default function AdminLayoutPage(props) {
   const router = useRouter();
   const adminLayoutContext = React.useContext(AdminLayoutContext)
-  
+
   // console.log('adminLayoutContext', adminLayoutContext)
   // const theme = ___theme;
   // const router = useRouter()
@@ -49,45 +50,74 @@ export default function AdminLayoutPage(props) {
   const [isSavedAlertOpened, setIsSavedAlertOpened] = React.useState(false)
   // const [savedMessage, setSavedMessage] = React.useState(saveAlertMessage)
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [lastRoute, setLastRoute] = React.useState({
+    pathname: undefined,
+    asPath: undefined
+  })
   // const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
   // const { socket } = React.useContext(SocketContext)
 
   // console.log('socket')
 
-  let lastRoute;
+
+  const refreshWhoIsOnPage = async ({ url }) => {
+    const usersOnPage = await getSamePageGraphQL({ url, })
+    console.log('usersOnPage', usersOnPage);
+    adminLayoutContext.setWhoIsOnPage(prevState => ({
+      ...prevState,
+      list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users
+    }))
+  }
 
   React.useEffect(() => {
-    
-    const url = router.pathname
+    console.log('router', router)
+    console.log('lastRoute', lastRoute)
 
     const socket = initSocket()
-    socket.emit('addUserToUrl', {
-      url,
+
+    // delay for socket to fully connect.
+    // setTimeout(() => {
+    socket.emit('change-url', {
+      currentAsPath: router.asPath,
+      currentPathname: router.pathname,
+      oldAsPath: lastRoute?.asPath,
+      oldPathname: lastRoute?.pathname,
     });
 
-    if (lastRoute) {
-      socket.emit('removeUserFromUrl', {
-        url,
-      });
-    }
-    lastRoute = router
-
-    socket.on('samepage', async () => {
-      const usersOnPage = await getSamePageGraphQL({url,})
-      console.log('usersOnPage', usersOnPage);
-      adminLayoutContext.setWhoIsOnPage(prevState => ({
-        ...prevState,
-        list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users
-      }))
-      // collaborateSamePage_getAllUsersFromPage
+    setLastRoute({
+      pathname: router.pathname,
+      asPath: router.asPath,
     })
 
+    // }, 500)
+
+    // user left page
+    socket.on('user-left-page', async (data) => {
+      console.log(data.message)
+      await refreshWhoIsOnPage({ url: router.pathname })
+      enqueueSnackbar(data.message)
+    })
+
+    // toast
+    // refreshWhoIsOnPage
+
+    //user enter page
+    socket.on('user-enter-page', async (data) => {
+      console.log(data.message)
+      await refreshWhoIsOnPage({ url: router.pathname })
+      enqueueSnackbar(data.message)
+    })
+
+    refreshWhoIsOnPage({ url: router.pathname })
+
+
     return () => {
-      socket.off('samepage')
+      socket.off('user-enter-page')
+      socket.off('user-left-page')
     }
 
-  }, [router.asPath]);
+  }, [router.pathname]);
 
   const handleDrawerToggle = () => {
     // setMobileOpen(!mobileOpen);
@@ -128,8 +158,8 @@ export default function AdminLayoutPage(props) {
             onClose={handleDrawerToggle}
           // location={props.location}
           />
-          
-              {/* // REAL TIME DISCONNECTED */}
+
+          {/* // REAL TIME DISCONNECTED */}
           <MeetingPanel
             PaperProps={{ style: { width: drawerWidth } }}
             variant="temporary"
@@ -142,14 +172,14 @@ export default function AdminLayoutPage(props) {
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} onMeetingDrawerToggle={onMeetingDrawerToggle} tabs={props?.pageContext?.tabs || props?.tabs || []} title={props?.pageContext?.title || props?.title || ""} location={props.location} pageContext={props.pageContext} />
           <Box component="main" sx={{ flex: 1, py: 3, px: 2, bgcolor: '#eaeff1', }}>
-{/* 
+            {/* 
             <Box sx={{
               flexGrow: 1,
               width: "100%",
               maxWidth: "900px",
               m: "auto"
             }}> */}
-              {props.children}
+            {props.children}
             {/* </Box> */}
           </Box>
         </Box>

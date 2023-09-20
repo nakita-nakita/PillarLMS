@@ -1,39 +1,40 @@
 import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { UserObjectType } from "../types/UserObject.script";
+import makeSamepage from "../../../../_singleton/preMain/samepage.ram-cache";
+import { socketLookUpType } from "../../../../_singleton/preMain/scripts/socketLookUp/socketRecord.types";
 import _ from "lodash"
 
 export type SamePageObject = {
   total: number
-  users: [UserObjectType]
+  users: socketLookUpType[]
 }
 
 type input = {
-  url: string,
-  testmode?: boolean
+  url: string
 }
 
 export default function getAllUsersFromPage(d: d_allDomain) {
 
   return async (args: input): Promise<returningSuccessObj<SamePageObject>> => {
 
-    const hashname = "collaborateSamePage"
-    const location = args.testmode ? `test-${hashname}` : hashname
-    const key = `${args.url}`;
+    const samePage = makeSamepage(d)
 
-    //redis
-    let listings = await d.cacheService.get({
-      location,
-      key,
+    const result = await samePage.getAllUsersFromUrl({
+      url: args.url
     })
 
-    listings.users = _.uniqBy(listings.users, 'id');
+    //clean-up userId should be id in this context
+    const listings = [...result.data].map(l => {
+      l.id = l.userId
+
+      return l
+    })
 
     return {
       success: true,
       data: {
-        total: listings?.users?.length || 0,
-        users: listings?.users || []
+        total: listings?.length || 0,
+        users: listings || []
       }
     }
   }

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 // import { getSavedUser, user } from '../../components/admin/utils/user';
 import AdminLayoutPage from './layout/AdminLayoutPage';
 import { AdminLayoutProvider } from './layout/adminLayout.context';
+import { initSocket } from '@/utils/realtime/socket';
 
 // MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -177,6 +178,11 @@ const drawerWidth = 350;
 
 export default function AdminLayout(props) {
   const router = useRouter();
+
+  React.useEffect(() => {
+
+    initSocket()
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>

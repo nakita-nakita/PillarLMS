@@ -11,13 +11,7 @@ import http from 'http'
 import socketIO from 'socket.io'
 import bodyParser from "body-parser"
 import formData from "express-form-data"
-import glob from "glob"
 import cors from "cors"
-import expressPlayground from "graphql-playground-middleware-express"
-import { graphqlHTTP } from "express-graphql"
-import { makeExecutableSchema } from "@graphql-tools/schema"
-import { applyMiddleware } from "graphql-middleware"
-import { shield } from "graphql-shield"
 import subDomainInitScript from "./subDomain-init";
 import domainInitScript from "./domain-init";
 import multer from 'multer'
@@ -25,10 +19,13 @@ import uploadControllers from "./uploader/uploadControllers.app";
 import makeFoundationAuthFunc from "./schema/domain/foundation/auth/preMain/foundationAuth.func";
 import emptyTestDomainDb from "./models/domain/_test/emptyTestDb";
 import sequelizeErrorHandler from "./schema/utils/errorHandling/handers/sequelize.errorHandler";
-import makeCollaborateSamePageMain from "./schema/subDomain/collaborate/samepage/main/collaborateSamePage.main";
 import emptyTestSubdomainDb from "./models/subDomain/_test/emptyTestDb";
 import { d_allDomain } from "./schema/utils/types/dependencyInjection.types";
-import singletonCachingService from "./singleton.ram-cache";
+import makeSocketLookUp from "./schema/subDomain/collaborate/_singleton/preMain/socketLookUp.ram-cache";
+import makeFoundationUserMain from "./schema/domain/foundation/user/main/foundationUser.main";
+import makeFoundationUserProfileMain from "./schema/domain/foundation/user/main/foundationUserProfile.main";
+import { CallByTypeEnum } from "./schema/domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
+import socketInitScript from "./socket-init";
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -78,31 +75,53 @@ const makeApp = async function () {
   await subDomainInitScript({ app })
 
 
+  const domainDb = await emptyTestDomainDb()
+  const subDomainDb = await emptyTestSubdomainDb()
+
+  const d: d_allDomain = {
+    domainDb,
+    domainTransaction: await domainDb.transaction(),
+    subDomainDb,
+    subDomainTransaction: await subDomainDb.transaction(),
+    loggers: [console],
+    errorHandler: sequelizeErrorHandler,
+  }
 
   io.on('connection', async (socket) => {
     const authToken = socket.handshake.query.authToken;
-
-    const domainDb = await emptyTestDomainDb()
-    const subDomainDb = await emptyTestSubdomainDb()
-
-    const d: d_allDomain = {
-      domainDb,
-      domainTransaction: await domainDb.transaction(),
-      subDomainDb,
-      subDomainTransaction: await subDomainDb.transaction(),
-      cacheService: singletonCachingService,
-      loggers: [console],
-      errorHandler: sequelizeErrorHandler,
-    }
-
     try {
 
       const AuthFuncs = makeFoundationAuthFunc(d)
       const decodedToken = await AuthFuncs.getDataFromToken({ token: authToken });
 
-      // Assuming your token's payload has a 'userId' field
       const userId = decodedToken.data.userId;
 
+      const foundationUser = makeFoundationUserMain(d)
+      const foundationUserProfile = makeFoundationUserProfileMain(d)
+
+      const user = await foundationUser.getOneById({
+        id: userId
+      })
+
+      const userProfile = await foundationUserProfile.getOneById({
+        id: userId
+      })
+
+      const lookUp = makeSocketLookUp(d)
+
+      await lookUp.set({
+        socket: socket,
+        socketId: socket.id,
+        userId,
+        email: user.data.dataValues.email,
+        callByType: userProfile.data.dataValues.callByType as CallByTypeEnum,
+        circleColor: userProfile.data.dataValues.circleColor,
+        firstName: userProfile.data.dataValues.firstName,
+        labelColor: userProfile.data.dataValues.labelColor,
+        lastName: userProfile.data.dataValues.lastName,
+        picture: userProfile.data.dataValues.picture,
+        username: userProfile.data.dataValues.username,
+      })
       // Store userId in the socket object
       socket.userId = userId;
 
@@ -114,27 +133,17 @@ const makeApp = async function () {
       return;
     }
 
-    // ... rest of your code ...
+    await socketInitScript({
+      socket,
+      d,
+    })
+    
+    socket.on('disconnect', function () {
+      const lookUp = makeSocketLookUp(d)
 
-    // For any emit or other interactions, you can now use socket.userId
-    socket.on('addUserToUrl', async (data) => {
-      const samePage = makeCollaborateSamePageMain(d)
-
-      await samePage.addUserToPage({
-        url: data.url,
-        userId: socket.userId,
+      lookUp.removeBySocketId({
+        socketId: socket.id,
       })
-      socket.emit('samepage')
-    });
-
-    socket.on('removeUserFromUrl', async (data) => {
-      const samePage = makeCollaborateSamePageMain(d)
-
-      await samePage.removeUserFromPage({
-        url: data.url,
-        userId: socket.userId,
-      })
-      socket.emit('samepage')
     });
   });
 
@@ -144,17 +153,10 @@ const makeApp = async function () {
     res.redirect("./domain/playground");
   });
 
-  // app.post("/api/v1/user-avatar/", upload.single("avatar"), fileUploadsController.setUserAvatar)
-  // app.get("/api/v1/user-avatar/:filename", fileUploadsController.getUserAvatar)
-  // app.post("/api/v1/user-avatar-preview/", fileUploadsController.setUserAvatarPreview)
-  // app.get("/api/v1/user-avatar-preview/:filename", fileUploadsController.getUserAvatarPreview)
-  // app.post("/api/v1/company-logo/", setCompanyLogo)
-  // app.get("/api/v1/company-logo/:filename", getCompanyLogo)
-
+  //temp, will be moved to domain-init and subDomain-init soon.
   await uploadControllers({ app })
 
   return server
 }
 
 export default makeApp
-

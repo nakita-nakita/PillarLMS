@@ -11,11 +11,6 @@ const backendPermissionGqlType = gql`
   type Query {
     collaborateSamePage_getAllUsersFromPage(url: String): samePageType
   }
-
-  type Mutation {
-    collaborateSamePage_addUserToPage(userId: ID, url: String): samePageType
-    collaborateSamePage_removeUserFromPage(userId: ID, url: String): samePageType
-  }
 `
 
 export default backendPermissionGqlType

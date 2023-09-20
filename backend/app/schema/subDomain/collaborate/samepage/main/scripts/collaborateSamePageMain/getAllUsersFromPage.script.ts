@@ -8,7 +8,6 @@ import { SamePageObject } from "../../../preMain/scripts/collaborateSamePageCach
 
 type input = {
   url: string,
-  testmode?: boolean
 }
 
 export default function getAllUsersFromPage(d: d_allDomain) {
@@ -35,10 +34,9 @@ export default function getAllUsersFromPage(d: d_allDomain) {
 
     const response = await samePage.getAllUsersFromPage({
       url: args.url,
-      testmode: args.testmode,
     })
     
-    // .catch(error => errorHandler(error, loggers))
+    //.catch(error => errorHandler(error, loggers))
 
     return response
   }

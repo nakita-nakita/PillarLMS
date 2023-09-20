@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react'
 import { SettingTabsProvider } from '@/pages-scripts/portal/admin/settings/setting-tabs.context';
 import { getAdminLayoutInitGraphQL } from '../store/init.store';
+import { SnackbarProvider } from 'notistack';
 
 export const AdminLayoutContext = React.createContext();
 
@@ -87,7 +88,7 @@ export function AdminLayoutProvider({ children }) {
     id: null,
     labelColor: null,
     lastName: null,
-    picture: null, 
+    picture: null,
     username: null,
   })
 
@@ -105,7 +106,7 @@ export function AdminLayoutProvider({ children }) {
         id: id.id,
         labelColor: id.labelColor,
         lastName: id.lastName,
-        picture: id.picture, 
+        picture: id.picture,
         username: id.username,
       }))
     })
@@ -114,21 +115,23 @@ export function AdminLayoutProvider({ children }) {
 
 
   return (
-    <AdminLayoutContext.Provider value={{
-      leftDrawer, setLeftDrawer,
-      rightDrawer, setRightDrawer,
-      meetingPanel, setMeetingPanel,
-      panelHomeDoc, setPanelHomeDoc,
-      panelMeetingDoc, setPanelMeetingDoc,
-      whoIsOnPage, setWhoIsOnPage,
-      notifications, setNotifications,
-      tabs, setTabs,
-      idChip, setIdChip,
-    }}>
-      <SettingTabsProvider>
-        {children}
-      </SettingTabsProvider>
-    </AdminLayoutContext.Provider>
+    <SnackbarProvider>
+      <AdminLayoutContext.Provider value={{
+        leftDrawer, setLeftDrawer,
+        rightDrawer, setRightDrawer,
+        meetingPanel, setMeetingPanel,
+        panelHomeDoc, setPanelHomeDoc,
+        panelMeetingDoc, setPanelMeetingDoc,
+        whoIsOnPage, setWhoIsOnPage,
+        notifications, setNotifications,
+        tabs, setTabs,
+        idChip, setIdChip,
+      }}>
+        <SettingTabsProvider>
+          {children}
+        </SettingTabsProvider>
+      </AdminLayoutContext.Provider>
+    </SnackbarProvider>
   )
 }
 
