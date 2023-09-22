@@ -61,6 +61,7 @@ export function AdminLayoutProvider({ children }) {
     //doc
     isHidden: false,
     list: [],
+    total: 0,
 
     //modals
     modal_isEveryoneOnPageModalOpened: false,

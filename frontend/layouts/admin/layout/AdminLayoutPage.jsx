@@ -66,7 +66,9 @@ export default function AdminLayoutPage(props) {
     console.log('usersOnPage', usersOnPage);
     adminLayoutContext.setWhoIsOnPage(prevState => ({
       ...prevState,
-      list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users
+      list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users,
+      total: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.total,
+
     }))
   }
 
