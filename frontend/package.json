@@ -23,6 +23,7 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",
     "http": "^0.0.1-security",
+    "moment": "^2.29.4",
     "mui-color-input": "^1.0.6",
     "next": "13.4.4",
     "notistack": "^3.0.1",

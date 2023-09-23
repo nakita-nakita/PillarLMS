@@ -8,16 +8,9 @@ async function up({ context: queryInterface }) {
       defaultValue: sequelize.UUIDV4,
       primaryKey: true,
     },
-    type: {
-      type: sequelize.ENUM("SYSTEM", "SITEDESIGNER_DISCUSSION", "SITEDESIGNER_PUBLISH", "FEATUREMODELDESIGNER_DISCUSSION"),
-      allowNull: false,
-    },
     message: {
       type: sequelize.STRING,
       allowNull: false,
-    },
-    locationMessage: {
-      type: sequelize.STRING,
     },
     hasBeenSeen: {
       type: sequelize.BOOLEAN,
@@ -28,9 +21,8 @@ async function up({ context: queryInterface }) {
       type: sequelize.BOOLEAN,
       defaultValue: false,
       allowNull: false,
-
     },
-    url: {
+    action: {
       type: sequelize.STRING,
       allowNull: false,
     },

@@ -14,6 +14,7 @@ const checkTokenValid = async ({ token }) => {
     variables: { token }
   })
 
+  console.log('!!!!', response.data?.foundationAuth_isTokenValid?.result)
   return response.data?.foundationAuth_isTokenValid?.result ? true : false
 }
 

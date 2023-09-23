@@ -69,9 +69,9 @@ export function AdminLayoutProvider({ children }) {
 
   const [notifications, setNotifications] = React.useState({
     // isBadgeHidden: zero or null value makes hidden
-    badgeCount: "New", // badgeCount: null,
+    badgeCount: 0, // badgeCount: null,
     isPopDownOpen: false,
-    notificationList: [],
+    list: [],
 
 
   })
@@ -96,6 +96,8 @@ export function AdminLayoutProvider({ children }) {
   useEffect(() => {
     getAdminLayoutInitGraphQL().then(initAdminStore => {
       const id = initAdminStore.data.backendUserBasicView_me;
+      const notificationCount = initAdminStore.data.backendNotification_getUnseenNotificationCount
+      const listOfNewNotification = initAdminStore.data.backendNotification_getFirstByCount
       console.log("initAdminStore", initAdminStore, id)
 
       setIdChip(prevState => ({
@@ -109,6 +111,12 @@ export function AdminLayoutProvider({ children }) {
         lastName: id.lastName,
         picture: id.picture,
         username: id.username,
+      }))
+
+      setNotifications(prevState => ({
+        ...prevState,
+        badgeCount: notificationCount,
+        list: listOfNewNotification,
       }))
     })
 

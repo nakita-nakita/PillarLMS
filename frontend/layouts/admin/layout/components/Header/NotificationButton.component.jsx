@@ -14,9 +14,12 @@ import Logout from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import Badge from '@mui/material/Badge';
 import FixedBottomNavigation from './FixedBottomNavigation.item';
+import AdminLayoutContext from '../../adminLayout.context';
+import NotificationPopup from '@/components/notification/NotificationPopup';
 // import FixedBottomNavigation from "../../items/FixedBottomNavigation/FixedBottomNavigation.item"
 
 export default function NotificationButton() {
+  const { notifications } = React.useContext(AdminLayoutContext)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -25,6 +28,7 @@ export default function NotificationButton() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <div style={{ display: 'inline-block', position: "relative" }}>
       <Box sx={{ alignItems: 'center', textAlign: 'center' }}>
@@ -48,7 +52,7 @@ export default function NotificationButton() {
             }}
           >
             {/* <Avatar sx={{ width: 32, height: 32 }}>M</Avatar> */}
-            <Badge badgeContent={""} color="secondary" style={{ color: "white" }}>
+            <Badge badgeContent={notifications.badgeCount} color="secondary" style={{ color: "white" }}>
               <NotificationsIcon fontSize="large" />
             </Badge>
           </IconButton>
@@ -60,6 +64,7 @@ export default function NotificationButton() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
+        MenuListProps={{ sx: { pb: 0 } }}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -92,32 +97,7 @@ export default function NotificationButton() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {/* <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Logout
-        </MenuItem> */}
-        <FixedBottomNavigation />
+        <NotificationPopup />
       </Menu>
     </div>
   );

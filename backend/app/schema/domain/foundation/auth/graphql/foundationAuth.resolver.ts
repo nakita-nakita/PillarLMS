@@ -3,18 +3,22 @@ import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
 import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
 import graphqlError from "../../../../utils/errorHandling/handers/graphql.errorhandler"
 import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_domain } from "../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_domain } from "../../../../utils/types/dependencyInjection.types";
 import makeFoundationAuthMain from "../main/foundationAuth.main";
 
 
 
-const makeDObj = async (): Promise<d_domain> => {
+const makeDObj = async (): Promise<d_allDomain> => {
   const domainDb: Sequelize = await emptyTestDomainDb();
+  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
   const domainTransaction = await domainDb.transaction();
+  const subDomainTransaction = await subDomainDb.transaction()
 
   return {
     domainDb,
+    subDomainDb,
     domainTransaction,
+    subDomainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -35,10 +39,12 @@ const foundation_authResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
         d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

@@ -24,22 +24,11 @@ export default class backendNotification extends Model {
   id: string;
 
   @Column({
-    type: sequelize.ENUM("SYSTEM", "DISCUSSION"),
-    allowNull: false,
-  })
-  type: BackendNotificationEnum;
-
-  @Column({
     type: sequelize.STRING,
     allowNull: false,
   })
   message: string;
-
-  @Column({
-    type: sequelize.STRING,
-  })
-  locationMessage: string;
-
+  
   @Column({
     type: sequelize.BOOLEAN,
     defaultValue: false,
@@ -58,7 +47,7 @@ export default class backendNotification extends Model {
     type: sequelize.STRING,
     allowNull: false,
   })
-  url: boolean;
+  action: string;
 
   @ForeignKey(() => backendUser)
   @Column({

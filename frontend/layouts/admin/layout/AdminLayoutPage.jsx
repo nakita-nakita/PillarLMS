@@ -31,6 +31,7 @@ import MeetingPanel from './components/MeetingPanel';
 import AdminLayoutContext from './adminLayout.context';
 import { initSocket } from '@/utils/realtime/socket.js';
 import { getSamePageGraphQL } from '../store/samepage.store.js';
+import { getTopNotificationsGraphQL } from '../store/top-notifications.js';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -63,7 +64,7 @@ export default function AdminLayoutPage(props) {
 
   const refreshWhoIsOnPage = async ({ url }) => {
     const usersOnPage = await getSamePageGraphQL({ url, })
-    console.log('usersOnPage', usersOnPage);
+
     adminLayoutContext.setWhoIsOnPage(prevState => ({
       ...prevState,
       list: usersOnPage.data.collaborateSamePage_getAllUsersFromPage.users,
@@ -73,8 +74,6 @@ export default function AdminLayoutPage(props) {
   }
 
   React.useEffect(() => {
-    console.log('router', router)
-    console.log('lastRoute', lastRoute)
 
     const socket = initSocket()
 
@@ -96,7 +95,6 @@ export default function AdminLayoutPage(props) {
 
     // user left page
     socket.on('user-left-page', async (data) => {
-      console.log(data.message)
       await refreshWhoIsOnPage({ url: router.pathname })
       enqueueSnackbar(data.message)
     })
@@ -106,17 +104,28 @@ export default function AdminLayoutPage(props) {
 
     //user enter page
     socket.on('user-enter-page', async (data) => {
-      console.log(data.message)
       await refreshWhoIsOnPage({ url: router.pathname })
       enqueueSnackbar(data.message)
     })
 
     refreshWhoIsOnPage({ url: router.pathname })
 
+    socket.on('new-notification', async () => {
+      const newNoti = getTopNotificationsGraphQL();
+      const listOfNewNotification = newNoti.data.backendNotification_getFirstByCount
+
+      adminLayoutContext.setNotifications(prevState => ({
+        ...prevState,
+        badgeCount: adminLayoutContext.notificationCount + 1,
+        list: listOfNewNotification,
+      }))
+
+    })
 
     return () => {
       socket.off('user-enter-page')
       socket.off('user-left-page')
+      socket.off('new-notification')
     }
 
   }, [router.pathname]);

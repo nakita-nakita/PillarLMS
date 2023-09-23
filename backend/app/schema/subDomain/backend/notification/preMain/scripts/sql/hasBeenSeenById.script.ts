@@ -2,29 +2,30 @@ import { Model } from "sequelize";
 import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
-import { notificationAction } from "./addOne.script";
 
 type input = {
   id: string
-  message?: string
-  hasBeenSeen?: boolean
-  hasBeenClicked?: boolean
-  action?: notificationAction,
-  userId?: string,  
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function hasBeenSeenById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
-  return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<backendNotification>>> => {
+  return async ({ id }: input): Promise<returningSuccessObj<Model<backendNotification>>> => {
 
     const data = await db.backendNotification.update(
-      args,
       {
-        where: { id, },
+        hasBeenSeen: true
+      },
+      {
+        where: {
+          id,
+        },
         returning: true,
         transaction: subDomainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+      }
+    )
+    
+    // .catch(error => errorHandler(error, loggers))
 
     return {
       success: true,
@@ -32,5 +33,3 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     }
   }
 }
-
-

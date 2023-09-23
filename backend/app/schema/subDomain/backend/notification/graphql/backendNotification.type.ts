@@ -5,49 +5,38 @@ const backendNotificationGqlType = gql`
 
   ${paginationType("NotificationPaginationType", "NotificationType")}
 
-  enum NotificationTypeEnum {
-    SYSTEM
-    DISCUSSION
-  }
-
-  type JsonResponseType {
-    success: Boolean
-  }
-
-  type NewNotificationResponseType {
-    doesUserHaveNewNotifications: Boolean
-  }
 
   type NotificationType {
     id: ID
-    type: NotificationTypeEnum
     message: String
-    locationMessage: String
     hasBeenSeen: Boolean
     hasBeenClicked: Boolean
-    url: String
+    action: String
     createdAt: String
   }
 
   input NotificationInput {
     id: ID
-    type: NotificationTypeEnum
     message: String
-    locationMessage: String
     hasBeenSeen: Boolean
     hasBeenClicked: Boolean
-    url: String
+    action: String
+    createdAt: String
   }
   
   type Query {
     backendNotification_getOneById(id: ID!): NotificationType
     backendNotification_getManyWithPagination(q: String, page: Int, pageSize: Int): NotificationPaginationType
-    backendNotification_doYouHaveNewBackendNotifications: NewNotificationResponseType
+    backendNotification_getFirstByCount(count: Int): [NotificationType]
+    backendNotification_getUnseenNotificationCount: Int
+
   }
   type Mutation {
-    backendNotification_hasBeenClicked(id: ID!): NotificationType
-    backendNotifications_haveBeenSeen: JsonResponseType
-    backendNotification_haveBeenSeen(userId: ID!): GlobalSuccessType
+    backendNotification_hasBeenClicked(id: ID!): GlobalSuccessType
+    backendNotification_hasBeenSeen: GlobalSuccessType
+    backendNotification_hasBeenSeenById(id: ID!): GlobalSuccessType
+    
+
   }
   `
 

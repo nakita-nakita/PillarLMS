@@ -1,13 +1,10 @@
 import makeFoundationUserEntity from "../../../../../../domain/foundation/user"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
+import makeBackendUserEntity from "../../../../../../subDomain/backend/user"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
 import stringHelpers from "../../../../../../utils/stringHelpers"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
+import { d_allDomain, d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
-import makeBackendUserEntity from "../../../../user"
-import makeBackendAuthCache from "../../../preMain/foundationAuth.cache"
 import makeFoundationAuthFunc from "../../../preMain/foundationAuth.func"
-import makeBackendAuthSql from "../../../preMain/foundationAuth.func"
 
 type returningTokenObj = {
   token: string
@@ -20,15 +17,15 @@ type input = {
   username?: string,
 }
 
-export default function signup(d: d_domain) {
+export default function signup(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<returningTokenObj>> => {
 
     const { domainDb, errorHandler, domainTransaction, loggers } = d
 
-    const { userMain, userProfileMain } = makeFoundationUserEntity(d)
+    const { userMain, userProfileMain, userProfileValidation } = makeFoundationUserEntity(d)
     const authFunc = makeFoundationAuthFunc(d)
-    // const backendUserEntity = makeBackendUserEntity(d)
-    const lookUpCookieCache = makeBackendAuthCache(d)
+    const backendUserEntity = makeBackendUserEntity(d)
+    // const lookUpCookieCache = makeBackendAuthCache(d)
 
     //////////////////////////////////////
     // Validations
@@ -97,6 +94,11 @@ export default function signup(d: d_domain) {
         errorIdentifier: "backendAuth_signUp_error:0007"
       })
     }
+    //////////////////////////////////////
+    // Sql
+    // ===================================
+
+    const doesAUserExists = await userProfileValidation.doesAUserExists();
 
     const user = await userMain.addOne({
       email: args.email,
@@ -112,10 +114,15 @@ export default function signup(d: d_domain) {
 
     const token = await authFunc.signinToken({ userId: user.data.dataValues.id })
 
-    //reddis storage matching with cookie
-    // const cookie = await lookUpCookieCache.lookupCookieTokenSet({
-    //   token: token.data,
-    // })
+    // if first user: add to backend
+    if (!doesAUserExists.result) {
+      await backendUserEntity.userMain.addOneById({
+        userId: user.data.dataValues.id,
+        isAdmin: true,
+      })
+    }
+
+    // add all users to client.
 
     return {
       success: true,

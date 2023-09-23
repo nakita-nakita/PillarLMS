@@ -1,4 +1,5 @@
 import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = {
   id: string
@@ -7,7 +8,7 @@ type input = {
 export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
-  return async ({ id }: input) => {
+  return async ({ id }: input): Promise<returningSuccessObj<number | null>> => {
 
     const data = await db.backendNotification.destroy({
       where: {

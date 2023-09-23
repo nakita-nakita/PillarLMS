@@ -28,7 +28,11 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     // Sql
     // ===================================
 
-    const response = await notificationSql.getManyWithPagination(args).catch(error => errorHandler(error, loggers))
+    const response = await notificationSql.getManyWithPagination({
+      userId: args.userId,
+      page: args.page,
+      pageSize: args.pageSize,
+    }).catch(error => errorHandler(error, loggers))
 
     return response;
   }

@@ -1,13 +1,11 @@
 import { createClient } from "redis"
 import { Model, Transaction } from "sequelize"
 import { Sequelize } from "sequelize-typescript"
-import singletonCachingService from "../../../singleton.ram-cache"
 
 export type dObj = {
   errorHandler: any,
   loggers: any[],
   // redisClient?: ReturnType<typeof createClient>
-  cacheService?: typeof singletonCachingService
 
 }
 

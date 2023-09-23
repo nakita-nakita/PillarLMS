@@ -27,6 +27,14 @@ export default function UserChip({ email, firstName, lastName, username, callByT
 
   const [display, setDisplay] = useState('')
 
+  if (!circleColor) {
+    circleColor = "#f1f4f5"
+  }
+
+  if (!labelColor) {
+    labelColor = "#abf123"
+  }
+
   useEffect(() => {
     let fullname = "";
     if (firstName && lastName) {
@@ -49,6 +57,8 @@ export default function UserChip({ email, firstName, lastName, username, callByT
       case "FULL_NAME":
         setDisplay(fullname)
         break;
+      default:
+        setDisplay(email)
     }
   }, [email, firstName, lastName, username, callByType])
 

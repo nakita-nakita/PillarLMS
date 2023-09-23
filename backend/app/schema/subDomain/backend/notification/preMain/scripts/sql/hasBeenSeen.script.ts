@@ -1,4 +1,7 @@
+import { Model } from "sequelize";
 import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
 
 type input = {
   userId: string
@@ -7,7 +10,7 @@ type input = {
 export default function hasBeenSeen({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
-  return async ({ userId }: input) => {
+  return async ({ userId }: input): Promise<returningSuccessObj<Model<backendNotification>[]>> => {
 
     const data = await db.backendNotification.update(
       {
@@ -24,7 +27,7 @@ export default function hasBeenSeen({ subDomainDb, errorHandler, subDomainTransa
 
     return {
       success: true,
-      result: data ? true : false,
+      data: data ? data[1] : null,
     }
   }
 }

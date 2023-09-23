@@ -1,22 +1,12 @@
 import { callSubDomainApi } from "@/utils/graphql/backend-api"
 
-export const getAdminLayoutInitGraphQL = () => {
+export const getTopNotificationsGraphQL = () => {
   return new Promise(async (resolve) => {
 
     const response = await callSubDomainApi({
       query: `
-      query {
-        backendUserBasicView_me {
-          id
-          email
-          firstName
-          lastName
-          username
-          picture
-          callByType
-          circleColor
-          labelColor
-        }
+      
+      {
         backendNotification_getFirstByCount {
           id
           message
@@ -25,9 +15,8 @@ export const getAdminLayoutInitGraphQL = () => {
           action
           createdAt
         }
-        backendNotification_getUnseenNotificationCount
       }
-      `,
+      `
     })
 
     //clean up

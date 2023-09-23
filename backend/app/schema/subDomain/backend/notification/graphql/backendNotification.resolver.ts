@@ -2,14 +2,19 @@ import { Sequelize } from "sequelize-typescript";
 import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
 import graphqlError from "../../../../utils/errorHandling/handers/graphql.errorhandler";
 import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../utils/types/dependencyInjection.types";
 import makeBackendNotificationMain from "../main/backendNotification.main";
+import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
 
-const makeDObj = async (): Promise<d_sub> => {
+const makeDObj = async (): Promise<d_allDomain> => {
+  const domainDb: Sequelize = await emptyTestDomainDb();
+  const domainTransaction = await domainDb.transaction();
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
   const subDomainTransaction = await subDomainDb.transaction();
 
   return {
+    domainDb,
+    domainTransaction,
     subDomainDb,
     subDomainTransaction,
     loggers: [console],
@@ -46,6 +51,7 @@ const backendNotificationGqlResolver = {
         q: args.q,
         page: args.page,
         pageSize: args.pageSize,
+        userId: ctx.user.id,
       })
 
       if (response?.success) {
@@ -57,18 +63,37 @@ const backendNotificationGqlResolver = {
         return graphqlError(response)
       }
     },
-    backendNotification_doYouHaveNewBackendNotifications: async (parent, args, ctx) => {
+    backendNotification_getFirstByCount: async (parent, args, ctx) => {
 
       const d = await makeDObj()
       const main = makeBackendNotificationMain(d)
 
-      const response = await main.doYouHaveNewNotifications({
-        userId: ctx.user.id
+      const response = await main.getFirstByCount({
+        userId: ctx.user.id,
+        count: args.count,
       })
 
       if (response?.success) {
         d.subDomainTransaction.commit()
-        return response
+        return response.data
+
+      } else {
+        d.subDomainTransaction.rollback()
+        return graphqlError(response)
+      }
+    },
+    backendNotification_getUnseenNotificationCount: async (parent, args, ctx) => {
+
+      const d = await makeDObj()
+      const main = makeBackendNotificationMain(d)
+
+      const response = await main.getUnseenNotificationCount({
+        userId: ctx.user.id,
+      })
+
+      if (response?.success) {
+        d.subDomainTransaction.commit()
+        return response.data
 
       } else {
         d.subDomainTransaction.rollback()
@@ -95,13 +120,31 @@ const backendNotificationGqlResolver = {
         return graphqlError(response)
       }
     },
-    backendNotification_haveBeenSeen: async (parent, args, ctx) => {
+    backendNotification_hasBeenSeen: async (parent, args, ctx) => {
 
       const d = await makeDObj()
       const main = makeBackendNotificationMain(d)
 
       const response = await main.hasBeenSeen({
         userId: ctx.user.id
+      })
+
+      if (response?.success) {
+        d.subDomainTransaction.commit()
+        return response.data
+
+      } else {
+        d.subDomainTransaction.rollback()
+        return graphqlError(response)
+      }
+    },
+    backendNotification_hasBeenSeenById: async (parent, args, ctx) => {
+
+      const d = await makeDObj()
+      const main = makeBackendNotificationMain(d)
+
+      const response = await main.hasBeenSeenById({
+        id: args.id,
       })
 
       if (response?.success) {

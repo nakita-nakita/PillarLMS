@@ -3,18 +3,16 @@ import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/empty
 import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
 import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
-import makeBackendUserSql from "../../../user/preMain/backendUser.sql";
-import makeBackendNotificationSql from "../backendNotification.sql";
+import makeBackendNotificationMain from "../backendNotification.main";
 import { v4 as uuidv4 } from "uuid"
 import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
-import { notificationIconEnum, notificationTypeEnum } from "../scripts/sql/addOne.script";
-import backendNotification from "../../../../../../models/subDomain/backend/notification/backendNotification.model";
-import { Model } from "sequelize";
-// import makeBackendNotificationSql from "../backendNotification.sql"
+import makeBackendUserMain from "../../../user/main/backendUser.main";
+import { notificationIconEnum, notificationTypeEnum } from "../../preMain/scripts/sql/addOne.script";
+import makeBackendUserSql from "../../../user/preMain/backendUser.sql";
 jest.setTimeout(100000)
 
 
-describe("test backendNotification.sql.js", () => {
+describe("test backendNotification.main.js", () => {
   let d: d_allDomain
   let recordId: string
   let userId: string
@@ -37,17 +35,7 @@ describe("test backendNotification.sql.js", () => {
       ]
     };
 
-    const backendUserSql = makeBackendUserSql({
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      subDomainTransaction,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    })
+    const backendUserSql = makeBackendUserSql(d)
 
     let uuid = uuidv4();
 
@@ -55,15 +43,14 @@ describe("test backendNotification.sql.js", () => {
       id: uuid
     })).data
 
-
     userId = user.dataValues.id
 
   }, 100000)
 
   test("addOne: backendNotification can add record.", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const addOne = await notificationSql.addOne({
+    const addOne = await notificationMain.addOne({
       userId,
       message: "Cool message!",
       action: {
@@ -79,29 +66,29 @@ describe("test backendNotification.sql.js", () => {
   })
 
   test("getOneById: backendNotification can add record.", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const getNotification = await notificationSql.getOneById({
+    const getNotification = await notificationMain.getOneById({
       id: recordId,
     })
     expect(getNotification.data.dataValues.message).toEqual("Cool message!")
   })
 
   test("updateOne: backendNotification can add record.", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const updateNotification = await notificationSql.updateOne({
+    const updateNotification = await notificationMain.updateOne({
       id: recordId,
       message: "Cool message notifications!",
     })
     expect(updateNotification.data.dataValues.message).toEqual("Cool message notifications!")
   })
 
-  
-  test("getFirstByCount: backendNotification can add record.", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
 
-    await notificationSql.addOne({
+  test("getFirstByCount: backendNotification can add record.", async () => {
+    const notificationMain = makeBackendNotificationMain(d)
+
+    await notificationMain.addOne({
       userId,
       message: "Cool message1!",
       action: {
@@ -112,8 +99,8 @@ describe("test backendNotification.sql.js", () => {
         }
       }
     })
-    
-    await notificationSql.addOne({
+
+    await notificationMain.addOne({
       userId,
       message: "Cool message12",
       action: {
@@ -124,8 +111,8 @@ describe("test backendNotification.sql.js", () => {
         }
       }
     })
-    
-    await notificationSql.addOne({
+
+    await notificationMain.addOne({
       userId,
       message: "Cool message3!",
       action: {
@@ -136,8 +123,8 @@ describe("test backendNotification.sql.js", () => {
         }
       }
     })
-    
-    await notificationSql.addOne({
+
+    await notificationMain.addOne({
       userId,
       message: "Cool message4!",
       action: {
@@ -149,7 +136,7 @@ describe("test backendNotification.sql.js", () => {
       }
     })
 
-    const result = await notificationSql.getFirstByCount({
+    const result = await notificationMain.getFirstByCount({
       userId,
     })
 
@@ -157,9 +144,9 @@ describe("test backendNotification.sql.js", () => {
   })
 
   test("getUnseenNotificationCount", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const hasBeenSeen = await notificationSql.getUnseenNotificationCount({
+    const hasBeenSeen = await notificationMain.getUnseenNotificationCount({
       userId,
     })
 
@@ -167,64 +154,33 @@ describe("test backendNotification.sql.js", () => {
     expect(hasBeenSeen.data).toBe(5)
   })
 
-  test("hasBeenSeenById", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
-
-    const allNotifications = await notificationSql.getManyWithPagination({
-      userId,
-    })
-
-    const oneSelected: any = allNotifications.data.rows[0]
-
-    const markedAsSeen = await notificationSql.hasBeenSeenById({
-      id: oneSelected.id
-    })
-
-    const allNotificationsAgain = await notificationSql.getManyWithPagination({
-      userId,
-    })
-
-    let targetedNotification: any
-    for (let i = 0; i < allNotificationsAgain.data.rows.length; i++) {
-      const noti: any = allNotificationsAgain.data.rows[i];
-      
-      if(noti.id === oneSelected.id) {
-        targetedNotification = noti
-        break;
-      }
-    }
-
-    expect(targetedNotification.hasBeenSeen).toBe(true)
-
-  })
-
   test("hasBeenClick", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const hasBeenClick = await notificationSql.hasBeenClick({
+    const hasBeenClick = await notificationMain.hasBeenClick({
       id: recordId,
     })
 
     expect(hasBeenClick.success).toBe(true)
     expect(hasBeenClick.data.dataValues.hasBeenClicked).toBe(true)
   })
-  
+
 
   test("hasBeenSeen", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const hasBeenSeen = await notificationSql.hasBeenSeen({
+    const hasBeenSeen = await notificationMain.hasBeenSeen({
       userId,
     })
 
     expect(hasBeenSeen.success).toBe(true)
     expect(hasBeenSeen.data.length).toBe(5)
   })
-  
-  test("getUnseenNotificationCount: should be all seen", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
 
-    const hasBeenSeen = await notificationSql.getUnseenNotificationCount({
+  test("getUnseenNotificationCount: should be all seen", async () => {
+    const notificationMain = makeBackendNotificationMain(d)
+
+    const hasBeenSeen = await notificationMain.getUnseenNotificationCount({
       userId,
     })
 
@@ -233,9 +189,9 @@ describe("test backendNotification.sql.js", () => {
   })
 
   test("deleteOne: backendNotification can delete record.", async () => {
-    const notificationSql = makeBackendNotificationSql(d)
+    const notificationMain = makeBackendNotificationMain(d)
 
-    const deletedNotification = await notificationSql.deleteOne({
+    const deletedNotification = await notificationMain.deleteOne({
       id: recordId,
     })
 
@@ -243,9 +199,9 @@ describe("test backendNotification.sql.js", () => {
   })
   // test("doYouHaveNewNotifications", async () => {
 
-  //   const notificationSql = makeBackendNotificationSql(d)
+  //   const notificationMain = makeBackendNotificationMain(d)
 
-  //   const deletedNotification = await notificationSql.doYouHaveNewNotifications({
+  //   const deletedNotification = await notificationMain.doYouHaveNewNotifications({
   //     userId,
   //     // id: recordId,
   //   })

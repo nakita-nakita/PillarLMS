@@ -10,6 +10,7 @@ import makeBackendNotificationValidation from "../backendNotification.validation
 import { v4 as uuidv4 } from "uuid"
 import backendUser from "../../../../../../models/subDomain/backend/user/backendUser.model"
 import { Model } from "sequelize"
+import { notificationTypeEnum } from "../scripts/sql/addOne.script"
 // import makeBackendNotificationSql from "../backendNotification.sql"
 // import makeBackendNotificationValidation from "../backendNotification.validation"
 jest.setTimeout(100000)
@@ -63,9 +64,13 @@ describe("test backendNotification.validation.js", () => {
 
     const notification = await notificationSql.addOne({
       message: "testing-blah-blah-1",
-      type: "SYSTEM",
-      url: "URL",
       userId: uuid,
+      action: {
+        type: notificationTypeEnum.URL,
+        data: {
+          url: "url"
+        }
+      }
     })
 
     recordId = notification.data.dataValues.id
@@ -111,26 +116,6 @@ describe("test backendNotification.validation.js", () => {
     })
 
     expect(isIdValid.result).toBe(false);
-  })
-
-  test("hasBeenClick", async () => {
-    const notificationValidation = makeBackendNotificationValidation(d)
-
-    const hasBeenClick = await notificationValidation.hasBeenClick({
-      id: recordId,
-    })
-
-    expect(hasBeenClick.success).toBe(true)
-  })
-
-  test("hasBeenSeen", async () => {
-    const notificationValidation = makeBackendNotificationValidation(d)
-
-    const hasBeenSeen = await notificationValidation.hasBeenSeen({
-      userId,
-    })
-
-    expect(hasBeenSeen.success).toBe(true)
   })
 
   afterAll(async () => {
