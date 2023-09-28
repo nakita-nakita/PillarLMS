@@ -18,7 +18,7 @@ export const callApi = ({ query, variables }) => {
 
     const response = await axios({
       url: endpoint,
-      method: 'post',
+      method: 'POST',
       headers:
         token ?
           {

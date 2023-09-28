@@ -8,11 +8,7 @@ import { enqueueSnackbar } from 'notistack';
 // import { getSavedUser, user } from '../../components/admin/utils/user';
 import Navigator from './components/Navigator.jsx';
 import Header from './components/Header';
-// import { documentSaved } from './layout.store'
-// import { SocketContext } from "../../global/Socket"
-// import pageNavigate from '../../components/realtime/link/pageNavigate.func';
-// import { SiteDesignerProvider } from '../../pagesMirror/admin/site-designer/site-designer.context';
-// import PageCopyright from "../../components/admin/panels/PageCopyright/PageCopyright.component"
+// import NewMeetingModal from './components/MeetingPanel/modals/NewMeeting.modal.js'
 
 // MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -32,6 +28,18 @@ import AdminLayoutContext from './adminLayout.context';
 import { initSocket } from '@/utils/realtime/socket.js';
 import { getSamePageGraphQL } from '../store/samepage.store.js';
 import { getTopNotificationsGraphQL } from '../store/top-notifications.js';
+import NewMeetingModal from './components/MeetingPanel/modals/NewMeeting.modal.js';
+import { getMeetingById } from '../store/meeting-getById.store.js';
+import { getUsersNotInMeetingGraphQL } from '../store/meeting-getUsersNotInMeeting.store.js';
+import { getMeetingUsers } from '../store/meeting-getMeetingUsers.store.js';
+import HangUpModal from './components/MeetingPanel/modals/HangUp.modal.js';
+import EndMeetingModal from './components/MeetingPanel/modals/EndMeeting.modal.js';
+import MeetingChangeNameModal from './components/MeetingPanel/modals/ChangeName.modal.js';
+import MeetingChangeLeaderModal from './components/MeetingPanel/modals/ChangeLeader.modal.js';
+import MeetingKickUserModal from './components/MeetingPanel/modals/KickUser.modal.js';
+import NoMeetingModal from './components/MeetingPanel/modals/MeetingDoesn\'tExist.modal.js';
+import RecievedUrlRequestModal from './components/MeetingPanel/modals/RecieveUrlRequest.modal.js';
+import SendUrlRequestModal from './components/MeetingPanel/modals/SendUrlRequest.modal.js';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -110,26 +118,236 @@ export default function AdminLayoutPage(props) {
 
     refreshWhoIsOnPage({ url: router.pathname })
 
+    return () => {
+      socket.off('user-enter-page')
+      socket.off('user-left-page')
+    }
+
+  }, [router.pathname]);
+
+  React.useEffect(() => {
+    // router updated instead of adminLayoutContext
+    if (router.pathname !== lastRoute.pathname) {
+      //if there is a meeting and you are the leader, emit url change to everyone else.
+      if (adminLayoutContext.panelMeetingDoc.id && adminLayoutContext.idChip.id === adminLayoutContext.panelMeetingDoc.leader?.id) {
+        const socket = initSocket()
+
+        socket.emit("server-meeting-url-change", {
+          meetingId: adminLayoutContext.panelMeetingDoc.id,
+          url: router.pathname,
+        })
+      }
+    }
+
+  }, [router.pathname, adminLayoutContext])
+
+  React.useEffect(() => {
+
+    const socket = initSocket()
+
     socket.on('new-notification', async () => {
-      const newNoti = getTopNotificationsGraphQL();
+      const newNoti = await getTopNotificationsGraphQL();
       const listOfNewNotification = newNoti.data.backendNotification_getFirstByCount
 
       adminLayoutContext.setNotifications(prevState => ({
         ...prevState,
-        badgeCount: adminLayoutContext.notificationCount + 1,
+        badgeCount: adminLayoutContext.notifications.badgeCount + 1,
         list: listOfNewNotification,
       }))
 
     })
 
+    socket.on('meeting-start', (data) => {
+      getMeetingById({ id: data.id }).then(result => {
+        const meeting = result.data.collaborateMeeting_getMeetingById
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          id: meeting.id,
+          name: meeting.name,
+          leader: meeting.leader,
+          users: meeting.users || [],
+
+        }))
+
+        adminLayoutContext.setMeetingPanel(prevState => ({
+          ...prevState,
+          slide: "MEETING"
+        }))
+      })
+    })
+
+    socket.on('meeting-user-join', data => {
+      enqueueSnackbar(data.message)
+
+      getUsersNotInMeetingGraphQL({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const onlineUserListNotInMeeting = result.data.collaborateMeeting_getOnlineUsersNotInMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          onlineUserListNotInMeeting,
+        }))
+
+      })
+
+      getMeetingUsers({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const users = result.data.collaborateMeeting_getUsersForMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          users,
+        }))
+
+      })
+    })
+
+    socket.on('meeting-hang-up', data => {
+      adminLayoutContext.setMeetingPanel(prevState => ({
+        ...prevState,
+        slide: "HOME"
+      }))
+
+      adminLayoutContext.setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        id: null,
+        name: null,
+        leader: null,
+        users: [],
+        onlineUserListNotInMeeting: []
+      }))
+    })
+
+    socket.on('meeting-user-left', data => {
+      enqueueSnackbar(data.message)
+
+      getUsersNotInMeetingGraphQL({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const onlineUserListNotInMeeting = result.data.collaborateMeeting_getOnlineUsersNotInMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          onlineUserListNotInMeeting,
+        }))
+
+      })
+
+      getMeetingUsers({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const users = result.data.collaborateMeeting_getUsersForMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          users,
+        }))
+
+      })
+    })
+
+    socket.on('meeting-end', data => {
+      enqueueSnackbar('Meeting has ended.')
+      adminLayoutContext.setMeetingPanel(prevState => ({
+        ...prevState,
+        slide: "HOME"
+      }))
+
+      adminLayoutContext.setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        id: null,
+        name: null,
+        leader: null,
+        users: [],
+        onlineUserListNotInMeeting: []
+      }))
+    })
+
+    socket.on('meeting-change-name', data => {
+      enqueueSnackbar(`Meeting changed name to '${data.name}'.`)
+
+      adminLayoutContext.setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        name: data.name,
+      }))
+    })
+
+    socket.on('meeting-change-leader', data => {
+      enqueueSnackbar(data.message)
+      getMeetingById({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const meeting = result.data.collaborateMeeting_getMeetingById
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          leader: meeting.leader,
+        }))
+      })
+    })
+
+    socket.on('meeting-info', data => {
+      enqueueSnackbar(data.message)
+
+      getUsersNotInMeetingGraphQL({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const onlineUserListNotInMeeting = result.data.collaborateMeeting_getOnlineUsersNotInMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          onlineUserListNotInMeeting,
+        }))
+      })
+
+      getMeetingUsers({ id: adminLayoutContext.panelMeetingDoc.id }).then(result => {
+        const users = result.data.collaborateMeeting_getUsersForMeeting
+
+        adminLayoutContext.setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          users,
+        }))
+      })
+    })
+
+    socket.on('meeting-kick', data => {
+      enqueueSnackbar('You have been kicked from the meeting.')
+
+      adminLayoutContext.setMeetingPanel(prevState => ({
+        ...prevState,
+        slide: "HOME"
+      }))
+
+      adminLayoutContext.setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        id: null,
+        name: null,
+        leader: null,
+        users: [],
+        onlineUserListNotInMeeting: []
+      }))
+    })
+
+    socket.on('meeting-change-url', data => {
+      router.push(data.url)
+    })
+
+    socket.on('meeting-request-url', data => {
+      adminLayoutContext.setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        modal_isRecieveUrlRequestModalOpened: true,
+        recievedUrlRequestUserId: data.userId,
+        requestedUrl: data.url,
+      }))
+    })
+
     return () => {
-      socket.off('user-enter-page')
-      socket.off('user-left-page')
       socket.off('new-notification')
+      socket.off('meeting-start')
+      socket.off('meeting-user-join')
+      socket.off('meeting-hang-up')
+      socket.off('meeting-user-left')
+      socket.off('meeting-end')
+      socket.off('meeting-change-name')
+      socket.off('meeting-change-leader')
+      socket.off('meeting-info')
+      socket.off('meeting-kick')
+      socket.off('meeting-doesnt-exist')
+      socket.off('meeting-request-url')
     }
 
-  }, [router.pathname]);
-
+  }, [adminLayoutContext.panelMeetingDoc]);
   const handleDrawerToggle = () => {
     // setMobileOpen(!mobileOpen);
     adminLayoutContext.setLeftDrawer(prevState => ({
@@ -195,17 +413,98 @@ export default function AdminLayoutPage(props) {
           </Box>
         </Box>
       </Box>
-      {/* Possible repeat from header.js file */}
-      <Snackbar
-        open={isSavedAlertOpened}
-        autoHideDuration={6000}
-        onClose={handleSavedClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert onClose={handleSavedClose} severity="success" sx={{ width: '100%' }}>
-          testing
-        </Alert>
-      </Snackbar>
+      <NewMeetingModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isNewMeetingModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isNewMeetingModalOpened: false,
+          }))
+        }}
+      />
+      <HangUpModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isHangUpMeetingModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isHangUpMeetingModalOpened: false,
+          }))
+        }}
+      />
+      <EndMeetingModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isEndMeetingModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isEndMeetingModalOpened: false,
+          }))
+        }}
+
+      />
+      <MeetingChangeNameModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isChangeNameModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isChangeNameModalOpened: false,
+          }))
+        }}
+
+      />
+      <MeetingChangeLeaderModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isChangeLeaderModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isChangeLeaderModalOpened: false,
+          }))
+        }}
+      />
+
+      <MeetingKickUserModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isKickUserModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isKickUserModalOpened: false,
+          }))
+        }}
+      />
+
+      <NoMeetingModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isNoMeetingModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isNoMeetingModalOpened: false,
+          }))
+        }}
+
+      />
+
+      <SendUrlRequestModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isSendUrlRequestModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isSendUrlRequestModalOpened: false,
+          }))
+        }}
+
+      />
+
+
+      <RecievedUrlRequestModal
+        isOpened={adminLayoutContext.panelMeetingDoc.modal_isRecieveUrlRequestModalOpened}
+        onClose={() => {
+          adminLayoutContext.setPanelMeetingDoc(prevState => ({
+            ...prevState,
+            modal_isRecieveUrlRequestModalOpened: false,
+          }))
+        }}
+
+      />
+
     </>
 
 

@@ -7,10 +7,7 @@ import { useRouter } from 'next/navigation'
 // Mine
 import AdminLayoutContext from '../adminLayout.context';
 import UserChip from '@/components/chip/user.chip';
-// import { doYouHaveNewNotifications } from '../store/Navigator.graphql.store';
-// import PageLink from '../../../components/realtime/link/PageLink.component';
-// import pageNavigate from '../../../components/realtime/link/pageNavigate.func';
-// import { user } from '../../../components/admin/utils/user'
+import { realtimeLink } from '@/utils/realtime/link';
 
 // MUI
 import { useTheme } from '@mui/material/styles';
@@ -25,13 +22,9 @@ import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Typography from '@mui/material/Typography';
 
-// import PeopleIcon from '@mui/icons-material/People';
-// const path = globalHistory.location.pathname
-
 export default function Navigator(props) {
-  const { tabs, setLeftDrawer, idChip } = React.useContext(AdminLayoutContext)
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
   const router = useRouter()
-  const [newBadge, setNewBadge] = React.useState(false)
   const other = props;
   const theme = useTheme();
 
@@ -40,7 +33,16 @@ export default function Navigator(props) {
       ...prevState,
       isOpened: false,
     }))
-    router.push(href)
+    // router.push(href)
+    realtimeLink({
+      to: href,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      meetingId: panelMeetingDoc.id,
+      router,
+      userId: idChip.id,
+      setPanelMeetingDoc,
+
+    })
   }
 
 

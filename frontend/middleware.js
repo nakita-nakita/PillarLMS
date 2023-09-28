@@ -15,7 +15,7 @@ const checkTokenValid = async ({ token }) => {
   })
 
   console.log('!!!!', response.data?.foundationAuth_isTokenValid?.result)
-  return response.data?.foundationAuth_isTokenValid?.result ? true : false
+  return response?.data?.foundationAuth_isTokenValid?.result ? true : false
 }
 
 const getSignUpURL = ({origin, returnURL}) => {
@@ -60,7 +60,7 @@ export async function middleware(req) {
 
       if (isTokenValid) {
 
-        return NextResponse.redirect(`${origin}/client/vcs`)
+        return NextResponse.redirect(`${origin}/portal/profile`)
       } 
       // else {
       //   return NextResponse.redirect(`${origin}/auth/signin?url=${returnURL}`)

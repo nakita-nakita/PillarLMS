@@ -35,10 +35,12 @@ const backendPermissionGqlResolver = {
       })
 
       if (response?.success) {
+        d.domainTransaction.commit()
         d.subDomainTransaction.commit()
         return response.data
 
       } else {
+        d.domainTransaction.rollback()
         d.subDomainTransaction.rollback()
         return graphqlError(response)
       }

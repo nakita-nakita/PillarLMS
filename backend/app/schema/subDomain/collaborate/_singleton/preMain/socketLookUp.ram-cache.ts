@@ -1,5 +1,6 @@
 import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
 import get from "./scripts/socketLookUp/get.script"
+import getLookUpBySocketId from "./scripts/socketLookUp/getLookUpBySocketId.script"
 import getSocketsByUserId from "./scripts/socketLookUp/getSocketsByUserId.script"
 import getUsernameForSocket from "./scripts/socketLookUp/getUsernameForSocket"
 import removeBySocketId from "./scripts/socketLookUp/removeBySocketId.script"
@@ -14,5 +15,6 @@ export default function makeSocketLookUp(d: d_allDomain) {
     updateBySocketId: updateBySocketId(d),
     getUsernameForSocket: getUsernameForSocket(d),
     getSocketsByUserId: getSocketsByUserId(d),
+    getLookUpBySocketId: getLookUpBySocketId(d),
   }
 }

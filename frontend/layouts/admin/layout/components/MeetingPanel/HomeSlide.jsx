@@ -1,33 +1,111 @@
 import React from 'react'
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import { useRouter } from 'next/router';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import AdminLayoutContext from '../../adminLayout.context';
+import { getGetAllMeetingsGraphQL } from '@/layouts/admin/store/meeting-getall.store';
+import { getMeetingByUrl } from '@/layouts/admin/store/meeting-getByUrl.story';
+import { initSocket } from '@/utils/realtime/socket';
+import { getMeetingById } from '@/layouts/admin/store/meeting-getById.store';
 
 function HomeSlide() {
+  const router = useRouter();
 
-  const { meetingPanel, setMeetingPanel, } = React.useContext(AdminLayoutContext)
+  const { meetingPanel, setMeetingPanel, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
 
-  const goToMeeting = () => {
-    setMeetingPanel(prevState => ({
+  const [meetings, setMeeting] = React.useState([])
+  const [meetingsForUrl, setMeetingForUrl] = React.useState([])
+
+  // const goToMeeting = () => {
+  //   setMeetingPanel(prevState => ({
+  //     ...prevState,
+  //     slide: "MEETING"
+  //   }))
+  // }
+
+  const handleStartMeeting = () => {
+    setPanelMeetingDoc(prevState => ({
       ...prevState,
-      slide: "MEETING"
+      modal_isNewMeetingModalOpened: true
     }))
   }
+
+  const handleJoin = ({ id }) => {
+    const socket = initSocket()
+
+    socket.emit('server-meeting-join', {
+      meetingId: id
+    })
+
+    getMeetingById({ id }).then(result => {
+      const meeting = result.data?.collaborateMeeting_getMeetingById
+
+      if (meeting) {
+        setPanelMeetingDoc(prevState => ({
+          ...prevState,
+          id: meeting.id,
+          name: meeting.name,
+          url: meeting.url,
+          leader: meeting.leader,
+          users: meeting.users || [],
+
+        }))
+
+        setMeetingPanel(prevState => ({
+          ...prevState,
+          slide: "MEETING"
+        }))
+
+
+        router.push(meeting.url)
+      }
+    })
+  }
+
+
+  React.useEffect(() => {
+    getGetAllMeetingsGraphQL().then((result) => {
+      const data = result.data.collaborateMeeting_getAllMeetings
+      setMeeting(data)
+    })
+
+    getMeetingByUrl({ url: router.pathname }).then(result => {
+      const data = result.data.collaborateMeeting_getMeetingsForUrl
+      setMeetingForUrl(data)
+    })
+  }, [])
+
+
+  React.useEffect(() => {
+    const socket = initSocket()
+
+    socket.on('meeting-doesnt-exist', data => {
+
+      setPanelMeetingDoc(prevState => ({
+        ...prevState,
+        modal_isNoMeetingModalOpened: true,
+      }))
+      getGetAllMeetingsGraphQL().then((result) => {
+        const data = result.data.collaborateMeeting_getAllMeetings
+        setMeeting(data)
+      })
+
+      getMeetingByUrl({ url: router.pathname }).then(result => {
+        const data = result.data.collaborateMeeting_getMeetingsForUrl
+        setMeetingForUrl(data)
+      })
+
+    }, [])
+
+    return () => {
+      socket.off('meeting-doesnt-exist')
+    }
+  }, [])
+
+
 
   return (
     <>
@@ -41,7 +119,7 @@ function HomeSlide() {
 
           secondaryAction={
             // <a href="#">New</a>
-            <Button variant="contained" onClick={goToMeeting}>New</Button>
+            <Button variant="contained" onClick={handleStartMeeting}>New</Button>
           }>
           <ListItemText
             primary={(
@@ -55,17 +133,27 @@ function HomeSlide() {
       </List>
       {/* <Demo> */}
       <List sx={{ backgroundColor: "aliceblue", width: "100%", mb: 3, }}>
-        {/* {generate( */}
-        <ListItem
 
-          secondaryAction={
-            <a href="#">Join</a>
-          }>
-          <ListItemText
-            primary="Weekly Meeting"
-          // secondary="Secondary text"
-          />
-        </ListItem>
+        {meetings && meetings.length > 0 && meetings.map(m => (
+          <ListItem
+
+            secondaryAction={
+              <a href="#" onClick={() => handleJoin({ id: m.id })}>Join</a>
+            }>
+            <ListItemText
+              primary={m.name}
+            // secondary="Secondary text"
+            />
+          </ListItem>
+        ))}
+
+        {!meetings || meetings.length === 0 && (
+          <ListItem>
+            <ListItemText
+              primary={<em>No Meetings</em>}
+            />
+          </ListItem>
+        )}
       </List>
       {/* </Demo> */}
       {/* </Grid>
@@ -79,12 +167,26 @@ function HomeSlide() {
       {/* <Demo> */}
       <List sx={{ width: "100%" }}>
         {/* {generate( */}
-        <ListItem>
-          <ListItemText
-            primary={<em>No Meetings</em>}
-          // secondary="Secondary text"
-          />
-        </ListItem>
+        {meetingsForUrl && meetingsForUrl.length > 0 && meetingsForUrl.map(m => (
+          <ListItem
+
+            secondaryAction={
+              <a href="#" onClick={() => handleJoin({ id: m.id })}>Join</a>
+            }>
+            <ListItemText
+              primary={m.name}
+            // secondary="Secondary text"
+            />
+          </ListItem>
+        ))}
+
+        {!meetingsForUrl || meetingsForUrl.length === 0 && (
+          <ListItem>
+            <ListItemText
+              primary={<em>No Meetings</em>}
+            />
+          </ListItem>
+        )}
       </List>
       {/* </Demo> */}
       {/* </Grid>

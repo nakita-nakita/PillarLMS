@@ -9,12 +9,13 @@ type input = {
 export default function isTokenValid(d: d_domain) {
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
+     console.log('checking token!!!!!!!!!!!!!!')
     const authFunc = makeFoundationAuthFunc(d)
 
     //////////////////////////////////////
     // Validations
     // ===================================
-    const token = await authFunc.getDataFromToken({ token: args.token })
+    const token = await authFunc.getDataFromToken({ token: args.token }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

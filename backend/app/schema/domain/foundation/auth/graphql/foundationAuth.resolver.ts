@@ -59,10 +59,12 @@ const foundation_authResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
+        d.subDomainTransaction.commit()
         return response.data
 
       } else {
         d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -76,10 +78,12 @@ const foundation_authResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
+        d.subDomainTransaction.commit()
         return response
 
       } else {
         d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -93,10 +97,12 @@ const foundation_authResolver = {
 
       if (response?.success) {
         d.domainTransaction.commit()
+        d.subDomainTransaction.commit()
         return response
 
       } else {
         d.domainTransaction.rollback()
+        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

@@ -34,12 +34,16 @@ export default function DeleteEntityModal({ modalTitle, deleteButtonLabel, isOpe
     setOpen(isOpened)
   }, [isOpened])
 
-
   const handleSubmit = function (event) {
     event.preventDefault();
 
-    if (onSubmit) onSubmit(event);
+    if (!disableSubmit) {
+      if (onSubmit) onSubmit(event);
+    } else {
+      handleClose()
+    }
   }
+
 
   return (
     <div>
@@ -59,24 +63,24 @@ export default function DeleteEntityModal({ modalTitle, deleteButtonLabel, isOpe
           </Box>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: "100%", p: 2 }}>
             {children}
-<div>
-<br/>
-            <Button
-            sx={{float: "right"}}
+            <div>
+              <br />
+              <Button
+                sx={{ float: "right" }}
               // variant="contained"
               // sx={{ background: theme.palette.error.main, color: theme.palette.primary.contrastText, borderColor: theme.palette.error.contrastText }}
-            >
-              Cancel
-            </Button>
+              >
+                Cancel
+              </Button>
 
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{ background: theme.palette.error.main, color: theme.palette.primary.contrastText, borderColor: theme.palette.error.contrastText }}
-              onClick={handleClose}
-            >
-              {deleteButtonLabel || "DELETE"}
-            </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ background: theme.palette.error.main, color: theme.palette.primary.contrastText, borderColor: theme.palette.error.contrastText }}
+                onClick={handleClose}
+              >
+                {deleteButtonLabel || "DELETE"}
+              </Button>
             </div>
           </Box>
 

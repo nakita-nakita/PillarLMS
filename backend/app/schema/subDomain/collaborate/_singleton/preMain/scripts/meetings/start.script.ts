@@ -2,46 +2,55 @@ import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.t
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
-import { meeting } from "./meeting.types";
+import { meetingType } from "./meeting.types";
 import { v4 as uuidv4 } from "uuid"
 
 type input = {
   name: string,
   url: string,
-  userId: string,
-  // socketId?: string,
+  socketId: string,
 }
 
-export default function get(d: d_allDomain) {
+export default function start(d: d_allDomain) {
 
-  return async (args: input): Promise<returningSuccessObj<meeting>> => {
+  return async (args: input): Promise<returningSuccessObj<meetingType>> => {
+
+    const meetingId = uuidv4()
 
     const singletonFunc = makeSingleton(d)
+    const lookUp = makeSocketLookUp(d)
 
     const singleton = await singletonFunc.get()
 
-    if (!singleton.data?.meeetings) {
+    if (!singleton.data?.socketLookUp) {
       // init if doesn't exist.
-      singleton.data.meeetings = []
+      singleton.data.socketLookUp = []
     }
 
-    const lookUp = makeSocketLookUp(d)
+    if (!singleton.data?.meetings) {
+      // init if doesn't exist.
+      singleton.data.meetings = []
+    }
 
-    const leader = lookUp.getSocketsByUserId({
-      userId: args.userId
+    const leader = await lookUp.getLookUpBySocketId({
+      socketId: args.socketId
     })
 
-    singleton.data.meeetings.push({
-      id: uuidv4(),
+    const data = {
+      id: meetingId,
       name: args.name,
       url: args.url,
-      leader
-    })
+      leader: leader.data,
+      sockets: [leader.data]
+    }
 
+    singleton.data.meetings.push(data)
+
+    leader.data.meetingId = meetingId;
 
     return {
       success: true,
-      data: singleton.data.socketLookUp
+      data,
     }
   }
 }

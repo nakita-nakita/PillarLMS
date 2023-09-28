@@ -80,9 +80,7 @@ const makeApp = async function () {
 
   const d: d_allDomain = {
     domainDb,
-    domainTransaction: await domainDb.transaction(),
     subDomainDb,
-    subDomainTransaction: await subDomainDb.transaction(),
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -114,13 +112,13 @@ const makeApp = async function () {
         socketId: socket.id,
         userId,
         email: user.data.dataValues.email,
-        callByType: userProfile.data.dataValues.callByType as CallByTypeEnum,
-        circleColor: userProfile.data.dataValues.circleColor,
-        firstName: userProfile.data.dataValues.firstName,
-        labelColor: userProfile.data.dataValues.labelColor,
-        lastName: userProfile.data.dataValues.lastName,
-        picture: userProfile.data.dataValues.picture,
-        username: userProfile.data.dataValues.username,
+        callByType: userProfile.data?.dataValues?.callByType as CallByTypeEnum,
+        circleColor: userProfile.data?.dataValues?.circleColor,
+        firstName: userProfile.data?.dataValues?.firstName,
+        labelColor: userProfile.data?.dataValues?.labelColor,
+        lastName: userProfile.data?.dataValues?.lastName,
+        picture: userProfile.data?.dataValues?.picture,
+        username: userProfile.data?.dataValues?.username,
       })
       // Store userId in the socket object
       socket.userId = userId;

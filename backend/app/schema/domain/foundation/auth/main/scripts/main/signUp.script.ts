@@ -115,12 +115,12 @@ export default function signup(d: d_allDomain) {
     const token = await authFunc.signinToken({ userId: user.data.dataValues.id })
 
     // if first user: add to backend
-    if (!doesAUserExists.result) {
+    // if (!doesAUserExists.result) { // removed for building backend. will put back when working on security patching updates.
       await backendUserEntity.userMain.addOneById({
         userId: user.data.dataValues.id,
         isAdmin: true,
       })
-    }
+    // }
 
     // add all users to client.
 

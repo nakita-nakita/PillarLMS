@@ -20,6 +20,14 @@ export default function UserAvatar({ email, firstName, lastName, username, callB
 
   const [display, setDisplay] = useState('')
 
+  if (!circleColor) {
+    circleColor = "#f1f4f5"
+  }
+
+  if (!labelColor) {
+    labelColor = "#abf123"
+  }
+  
   useEffect(() => {
     let fullname = "";
     if (firstName && lastName) {

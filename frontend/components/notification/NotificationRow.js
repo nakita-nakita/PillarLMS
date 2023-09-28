@@ -11,6 +11,8 @@ import { setNotificationClickedGraphQL } from './store/notificationClicked.store
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import moment from "moment"
 import { setNotificationSeenByIdGraphQL } from './store/notificationSeenById.store';
+import { initSocket } from '@/utils/realtime/socket';
+import { getMeetingById } from '@/layouts/admin/store/meeting-getById.store';
 
 
 const SelectIcon = ({ icon }) => {
@@ -56,7 +58,7 @@ const buildUrl = ({ noti }) => {
 
 export default function NotificationRow({ action, hasBeenClicked, hasBeenSeen, message, id, createdAt, stopSeenRequest }) {
   const router = useRouter()
-  const { notifications, setNotifications } = React.useContext(AdminLayoutContext)
+  const { notifications, setNotifications, setPanelMeetingDoc, setMeetingPanel, setRightDrawer } = React.useContext(AdminLayoutContext)
 
   const [noti] = React.useState(JSON.parse(action))
   const hasBeenClickedColor = "#E0E0E0"
@@ -66,15 +68,15 @@ export default function NotificationRow({ action, hasBeenClicked, hasBeenSeen, m
   // setNotificationSeenByIdGraphQL
   React.useEffect(() => {
     if (!stopSeenRequest && !hasBeenSeen) {
-      setNotificationSeenByIdGraphQL({id}).then(result => {
+      setNotificationSeenByIdGraphQL({ id }).then(result => {
         const updatedNotifications = [...notifications.list].map(n => {
           if (n.id === id) {
             n.hasBeenSeen = true
           }
-    
+
           return n
         })
-    
+
         setNotifications(prevState => ({
           ...prevState,
           list: updatedNotifications,
@@ -88,8 +90,47 @@ export default function NotificationRow({ action, hasBeenClicked, hasBeenSeen, m
     switch (noti.type) {
       case "URL":
         router.push(buildUrl({ noti }))
+        break;
       case "MEETING":
-        // not implemented
+        let socket = initSocket()
+
+        socket.emit('server-meeting-join', {
+          meetingId: noti.data.meetingId
+        })
+
+        getMeetingById({ id: noti.data.meetingId }).then(result => {
+          const meeting = result.data?.collaborateMeeting_getMeetingById
+
+          if (meeting) {
+
+            setPanelMeetingDoc(prevState => ({
+              ...prevState,
+              id: meeting.id,
+              name: meeting.name,
+              leader: meeting.leader,
+              users: meeting.users || [],
+
+            }))
+
+            setMeetingPanel(prevState => ({
+              ...prevState,
+              slide: "MEETING"
+            }))
+
+            setRightDrawer(prevState => ({
+              ...prevState,
+              isOpened: true,
+            }))
+          } else {
+            // meeting is probably over.
+            setPanelMeetingDoc(prevState => ({
+              ...prevState,
+              modal_isNoMeetingModalOpened: true,
+
+            }))
+
+          }
+        })
         break;
     }
   }

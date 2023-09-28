@@ -24,36 +24,35 @@ export function AdminLayoutProvider({ children }) {
     slide: 'HOME', // HOME || MEETING
   })
 
-  const [panelHomeDoc, setPanelHomeDoc] = React.useState({
-    // doc
-    allMeetingsList: [],
-    listOfMeetingsOnThisPage: [],
-    //being handled by notifications: // listOfMeetingInvites: [],
-
-    //modal
-    modal_isNewMeetingOpened: false,
-  })
-
   const [panelMeetingDoc, setPanelMeetingDoc] = React.useState({
     // doc
-    meetingId: null,
-    meetingName: null,
-    meetingLeaderId: null,
-    meetingLeaderUsername: null,
-    meetingLeaderPicture: null,
-    meetingLeaderEmail: null,
-
-    // user list:
-    meetingUserList: [],
-    offlineUserList: [],
+    id: null,
+    name: null,
+    leader: null,
+    users: [],
     onlineUserListNotInMeeting: [],
 
+    //use for selecting user in drop down
+    selectedUserId: null,
+
+    // to show the leader who is requesting url change
+    recievedUrlRequestUserId: null,
+    requestedUrl: null,
+
+    // for non leader url request hold
+    sendRequestedUrl: null,
+
     // modals
+    modal_isNoMeetingModalOpened: false,
+    modal_isNewMeetingModalOpened: false,
     modal_isEndMeetingModalOpened: false,
+    modal_isHangUpMeetingModalOpened: false,
     modal_isChangeLeaderModalOpened: false,
+    modal_isKickUserModalOpened: false,
+    modal_isChangeNameModalOpened: false,
     modal_isRequestPageModalOpened: false,
-    modal_isInviteUsersModalOpened: false,
-    modal_isSearchOnlineUsersModalOpened: false,
+    modal_isRecieveUrlRequestModalOpened: false,
+    modal_isSendUrlRequestModalOpened: false,
 
   })
 
@@ -129,7 +128,6 @@ export function AdminLayoutProvider({ children }) {
         leftDrawer, setLeftDrawer,
         rightDrawer, setRightDrawer,
         meetingPanel, setMeetingPanel,
-        panelHomeDoc, setPanelHomeDoc,
         panelMeetingDoc, setPanelMeetingDoc,
         whoIsOnPage, setWhoIsOnPage,
         notifications, setNotifications,

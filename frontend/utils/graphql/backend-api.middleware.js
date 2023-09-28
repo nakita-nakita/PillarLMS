@@ -11,7 +11,7 @@ export const callApiMiddleware = ({ query, variables }) => {
       query,
       variables
     };
-    console.log('graphqlQuery', graphqlQuery)
+    console.log('!!!!', graphqlQuery)
     const response = await fetch(endpoint,
       {
         method: 'POST',
@@ -35,6 +35,7 @@ export const callApiMiddleware = ({ query, variables }) => {
     // });
 
     const result = await response.json();
+    console.log('graphqlQuery', result)
 
     return resolve(result);
   })

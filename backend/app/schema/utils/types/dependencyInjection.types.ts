@@ -11,7 +11,7 @@ export type dObj = {
 
 export interface d_sub extends dObj {
   subDomainDb: Sequelize,
-  subDomainTransaction: Transaction,
+  subDomainTransaction?: Transaction,
 }
 
 // export interface d_sub_test extends dObj {
@@ -21,7 +21,7 @@ export interface d_sub extends dObj {
 
 export interface d_domain extends dObj {
   domainDb: Sequelize,
-  domainTransaction: Transaction,
+  domainTransaction?: Transaction,
 }
 
 // export interface d_domain_test extends dObj {
@@ -31,10 +31,10 @@ export interface d_domain extends dObj {
 
 export interface d_allDomain extends dObj {
   domainDb: Sequelize,
-  domainTransaction: Transaction,
+  domainTransaction?: Transaction,
   
   subDomainDb: Sequelize,
-  subDomainTransaction: Transaction,
+  subDomainTransaction?: Transaction,
 }
 
 // export interface d_allDomain_test extends dObj {
