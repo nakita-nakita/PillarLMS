@@ -24,6 +24,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box'
 // icons
 
 
@@ -146,149 +147,151 @@ function Page() {
   return (
     <>
       {isLoaded && (
-        <form style={{ minHeight: "155px" }} onSubmit={handleSubmit}>
-          <div style={{ margin: "30px" }}>
-            <h1>Profile</h1>
-            <h2>Manage your appearance.</h2>
-            <hr style={{ marginTop: "33px", marginBottom: "33px" }} />
+        <Box sx={{
+          flexGrow: 1,
+          width: "100%",
+          maxWidth: "900px",
+          m: "auto"
+        }}>
+          <Paper elevation={3} sx={{ padding: "20px", minHeight: "350px" }}>
+            <form style={{ minHeight: "155px" }} onSubmit={handleSubmit}>
+              <div style={{ margin: "30px" }}>
+                {/* <FirstNameInput /> */}
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  name="firstName"
+                  autoFocus
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
 
-
-          </div>
-          <div style={{ margin: "30px" }}>
-            {/* <FirstNameInput /> */}
-            <TextField
-              margin="normal"
-              fullWidth
-              id="firstName"
-              label="First Name"
-              name="firstName"
-              autoFocus
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
-
-              error={firstNameError.length}
-              helperText={firstNameError}
-            // error={emailErrorMessage.length}
-            // helperText={emailErrorMessage}
-            />
-            <br />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="lastName"
-              label="Last Name"
-              name="lastName"
-              value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
-              error={lastNameError.length}
-              helperText={lastNameError}
-            // error={emailErrorMessage.length}
-            // helperText={emailErrorMessage}
-            />
-            {/* <LastNameInput /> */}
-            <br />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              error={usernameError.length}
-              helperText={usernameError}
-            // error={emailErrorMessage.length}
-            // helperText={emailErrorMessage}
-            />
-            {/* <UsernameInput /> */}
-            <br />
-            <br />
-            <FormControl fullWidth error={callByTypeError.length}>
-              <InputLabel id="demo-simple-select-label">What to call you by?</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                // value={age}
-                label="What to call you by?"
-                // onChange={handleChange}
-                value={callByType}
-                onChange={(event) => setCallByType(event.target.value)}
-
-
-              >
-                <MenuItem value="EMAIL">Email</MenuItem>
-                <MenuItem value="USERNAME">Username</MenuItem>
-                <MenuItem value="FIRST_NAME">First Name</MenuItem>
-                <MenuItem value="LAST_NAME">LastName</MenuItem>
-                <MenuItem value="FULL_NAME">Full Name</MenuItem>
-              </Select>
-              {callByTypeError && (<FormHelperText>{callByTypeError}</FormHelperText>)}
-            </FormControl>
-            <br />
-            <br />
-            <InputLabel id="select-field-demo-label" htmlFor="select-field-demo-button">
-              Picture
-            </InputLabel>
-
-            <Stack spacing={2} direction="row">
-              <Button
-                variant="contained"
-                component="label"
-              >
-                Upload File
-                <input
-                  id="picture"
-                  name="picture"
-                  onChange={previewImage}
-                  type="file"
-                  hidden
+                  error={firstNameError.length}
+                  helperText={firstNameError}
+                // error={emailErrorMessage.length}
+                // helperText={emailErrorMessage}
                 />
-              </Button>
-              <Button onClick={handleClearPicture}>Clear</Button>
-            </Stack>
-            <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
-              <img src={picturePreview && picturePreview.length !== 0 ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${picturePreview}` : "/no-image/8_Bit_Dinosaur_With_Laptop.png"} style={{ width: "150px" }} />
-            </div>
-            <br />
-            <FormControl>
-              <p>Primary Color</p>
-              <br />
-              <MuiColorInput
-                value={labelColor}
-                onChange={(newValue) => setLabelColor(newValue)}
-              />
-            </FormControl>
-            {/* <PrimaryColorSelect /> */}
-            <br />
-            <br />
-            <FormControl>
-              <p>Secondary Color</p>
-              <MuiColorInput
-                value={circleColor}
-                onChange={(newValue) => setCircleColor(newValue)}
-              />
-            </FormControl>
-            {/* <SecondaryColorSelect /> */}
-            <br />
-            <br />
-            <Paper elevation={3} sx={{ p: "15px" }}>
-              <p>Preview</p>
-              <UserChip
-                email={email}
-                firstName={firstName}
-                lastName={lastName}
-                username={username}
-                callByType={callByType}
-                picturePreview={picturePreview}
-                labelColor={labelColor}
-                circleColor={circleColor}
-              />
+                <br />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                  error={lastNameError.length}
+                  helperText={lastNameError}
+                // error={emailErrorMessage.length}
+                // helperText={emailErrorMessage}
+                />
+                {/* <LastNameInput /> */}
+                <br />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  error={usernameError.length}
+                  helperText={usernameError}
+                // error={emailErrorMessage.length}
+                // helperText={emailErrorMessage}
+                />
+                {/* <UsernameInput /> */}
+                <br />
+                <br />
+                <FormControl fullWidth error={callByTypeError.length}>
+                  <InputLabel id="demo-simple-select-label">What to call you by?</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={age}
+                    label="What to call you by?"
+                    // onChange={handleChange}
+                    value={callByType}
+                    onChange={(event) => setCallByType(event.target.value)}
 
-            </Paper>
-            <br />
-            <Button variant="contained" type="submit">Save</Button>
-          </div>
-        </form >
+
+                  >
+                    <MenuItem value="EMAIL">Email</MenuItem>
+                    <MenuItem value="USERNAME">Username</MenuItem>
+                    <MenuItem value="FIRST_NAME">First Name</MenuItem>
+                    <MenuItem value="LAST_NAME">LastName</MenuItem>
+                    <MenuItem value="FULL_NAME">Full Name</MenuItem>
+                  </Select>
+                  {callByTypeError && (<FormHelperText>{callByTypeError}</FormHelperText>)}
+                </FormControl>
+                <br />
+                <br />
+                <InputLabel id="select-field-demo-label" htmlFor="select-field-demo-button">
+                  Picture
+                </InputLabel>
+
+                <Stack spacing={2} direction="row">
+                  <Button
+                    variant="contained"
+                    component="label"
+                  >
+                    Upload File
+                    <input
+                      id="picture"
+                      name="picture"
+                      onChange={previewImage}
+                      type="file"
+                      hidden
+                    />
+                  </Button>
+                  <Button onClick={handleClearPicture}>Clear</Button>
+                </Stack>
+                <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
+                  <img src={picturePreview && picturePreview.length !== 0 ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${picturePreview}` : "/no-image/8_Bit_Dinosaur_With_Laptop.png"} style={{ width: "150px" }} />
+                </div>
+                <br />
+                <FormControl>
+                  <p>Primary Color</p>
+                  <br />
+                  <MuiColorInput
+                    value={labelColor}
+                    onChange={(newValue) => setLabelColor(newValue)}
+                  />
+                </FormControl>
+                {/* <PrimaryColorSelect /> */}
+                <br />
+                <br />
+                <FormControl>
+                  <p>Secondary Color</p>
+                  <MuiColorInput
+                    value={circleColor}
+                    onChange={(newValue) => setCircleColor(newValue)}
+                  />
+                </FormControl>
+                {/* <SecondaryColorSelect /> */}
+                <br />
+                <br />
+                <Paper elevation={3} sx={{ p: "15px" }}>
+                  <p>Preview</p>
+                  <UserChip
+                    email={email}
+                    firstName={firstName}
+                    lastName={lastName}
+                    username={username}
+                    callByType={callByType}
+                    picturePreview={picturePreview}
+                    labelColor={labelColor}
+                    circleColor={circleColor}
+                  />
+
+                </Paper>
+                <br />
+                <Button variant="contained" type="submit">Save</Button>
+              </div>
+            </form >
+          </Paper>
+        </Box>
       )}
     </>
   )
