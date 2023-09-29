@@ -136,7 +136,7 @@ function HomeSlide() {
 
         {meetings && meetings.length > 0 && meetings.map(m => (
           <ListItem
-
+            key={m.id}
             secondaryAction={
               <a href="#" onClick={() => handleJoin({ id: m.id })}>Join</a>
             }>
@@ -169,7 +169,7 @@ function HomeSlide() {
         {/* {generate( */}
         {meetingsForUrl && meetingsForUrl.length > 0 && meetingsForUrl.map(m => (
           <ListItem
-
+            key={m.id}
             secondaryAction={
               <a href="#" onClick={() => handleJoin({ id: m.id })}>Join</a>
             }>

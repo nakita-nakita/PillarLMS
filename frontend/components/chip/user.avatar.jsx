@@ -25,7 +25,7 @@ export default function UserAvatar({ email, firstName, lastName, username, callB
   }
 
   if (!labelColor) {
-    labelColor = "#abf123"
+    labelColor = "#000"
   }
   
   useEffect(() => {
@@ -50,6 +50,9 @@ export default function UserAvatar({ email, firstName, lastName, username, callB
       case "FULL_NAME":
         setDisplay(fullname)
         break;
+      default:
+        setDisplay(email)
+        break;
     }
   }, [email, firstName, lastName, username, callByType])
 
@@ -60,7 +63,8 @@ export default function UserAvatar({ email, firstName, lastName, username, callB
       src={picture ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${picture}` : undefined}
       sx={{
         background: circleColor,
-        color: `${theme.palette.getContrastText(circleColor)} !important`
+        color: `${theme.palette.getContrastText(circleColor)} !important`,
+        border: `2px solid ${labelColor}`
       }}
       alt={display}
     >

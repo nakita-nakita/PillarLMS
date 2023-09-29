@@ -81,9 +81,9 @@ function RecievedUrlRequestModal({ isOpened, onClose }) {
   )
 }
 
-RecievedUrlRequestModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// RecievedUrlRequestModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default RecievedUrlRequestModal

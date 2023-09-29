@@ -46,9 +46,9 @@ function SendUrlRequestModal({ isOpened, onClose }) {
   )
 }
 
-SendUrlRequestModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// SendUrlRequestModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default SendUrlRequestModal

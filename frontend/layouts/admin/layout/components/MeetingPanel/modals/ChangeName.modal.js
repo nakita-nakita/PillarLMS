@@ -59,9 +59,9 @@ function MeetingChangeNameModal({ isOpened, onClose }) {
   )
 }
 
-MeetingChangeNameModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// MeetingChangeNameModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default MeetingChangeNameModal

@@ -24,9 +24,9 @@ function NoMeetingModal({ isOpened, onClose }) {
   )
 }
 
-NoMeetingModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// NoMeetingModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default NoMeetingModal

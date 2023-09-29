@@ -1,13 +1,13 @@
 import { callSubDomainApi } from "@/utils/graphql/backend-api"
 
-export const getSamePageGraphQL = ({url}) => {
+export const getWhoIsOnPageGraphQL = ({url}) => {
   return new Promise(async (resolve) => {
 
     const response = await callSubDomainApi({
       query: `
       
 query($url: String!) {
-    collaborateSamePage_getAllUsersFromPage(url: $url) {
+    collaborateWhoIsOnPage_getAllUsersFromPage(url: $url) {
       total
       users {
         id

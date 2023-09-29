@@ -1,5 +1,5 @@
 import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
-import makeSamepage from "../../_singleton/preMain/whoIsOnPage.ram-cache";
+import makeWhoIsOnPage from "../../_singleton/preMain/whoIsOnPage.ram-cache";
 
 
 type input = {
@@ -8,10 +8,10 @@ type input = {
 }
 
 export default ({ socket, d }: input) => {
-  socket.on('change-url', async (data) => {
-    const samePage = makeSamepage(d)
+  socket.on('server-change-url', async (data) => {
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samePage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       // userId: socket.userId,
       socketId: socket.id,
       currentAsPath: data.currentAsPath,

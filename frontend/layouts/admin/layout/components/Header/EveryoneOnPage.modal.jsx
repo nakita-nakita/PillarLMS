@@ -11,11 +11,8 @@ import UserChip from '@/components/chip/user.chip';
 import Stack from '@mui/material/Stack';
 
 
-function EveryoneOnPageModal({ isOpened, onClose, listOfIcons, total }) {
-
+function EveryoneOnPageModal({ isOpened, onClose }) {
   const { whoIsOnPage } = React.useContext(AdminLayoutContext)
-
-  console.log('whoIsOnPage', whoIsOnPage)
 
   return (
     <InformationModal
@@ -30,6 +27,7 @@ function EveryoneOnPageModal({ isOpened, onClose, listOfIcons, total }) {
         {/* <AlignItemsList listOfIcons={listOfIcons} /> */}
         {whoIsOnPage.list && whoIsOnPage.list.map(user => (
           <UserChip
+            key={user.id}
             email={user.email}
             firstName={user.firstName}
             lastName={user.lastName}
@@ -45,16 +43,9 @@ function EveryoneOnPageModal({ isOpened, onClose, listOfIcons, total }) {
   )
 }
 
-EveryoneOnPageModal.propTypes = {
-  total: PropTypes.string.isRequired,
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-  listOfIcons: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    alt: PropTypes.string.isRequired,
-    src: PropTypes.string.isRequired,
-    status: PropTypes.string,
-  })).isRequired,
-}
+// EveryoneOnPageModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default EveryoneOnPageModal

@@ -40,9 +40,9 @@ function HangUpModal({ isOpened, onClose }) {
   )
 }
 
-HangUpModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// HangUpModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default HangUpModal

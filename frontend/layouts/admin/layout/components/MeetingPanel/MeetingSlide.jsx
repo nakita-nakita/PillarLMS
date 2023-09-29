@@ -94,7 +94,7 @@ function MeetingSlide() {
     }))
   }
 
-  const inviteUser = ({id}) => {
+  const inviteUser = ({ id }) => {
     let socket = initSocket()
 
     socket.emit('server-meeting-invite-user', {
@@ -103,7 +103,7 @@ function MeetingSlide() {
     })
 
     setInviteUsers(prevState => {
-      const data = {...prevState}
+      const data = { ...prevState }
       data[id] = true
       return data
     })
@@ -166,9 +166,9 @@ function MeetingSlide() {
   }, [])
 
   useEffect(() => {
-    
+
     const newDropDown = {}
-    const newInvites = {...inviteUsers}
+    const newInvites = { ...inviteUsers }
     panelMeetingDoc.users.map(u => {
       newDropDown[u.id] = false
 
@@ -254,7 +254,7 @@ function MeetingSlide() {
               firstName={panelMeetingDoc?.leader?.firstName}
               labelColor={panelMeetingDoc?.leader?.labelColor}
               lastName={panelMeetingDoc?.leader?.lastName}
-              picturePreview={panelMeetingDoc?.leader?.picturePreview}
+              picturePreview={panelMeetingDoc?.leader?.picture}
               username={panelMeetingDoc?.leader?.username}
             />)}
           />
@@ -276,6 +276,7 @@ function MeetingSlide() {
         {Object.keys(dropDowns).length !== 0 && panelMeetingDoc.users.map(u => {
           return (
             <ListItem
+              key={u.id}
               secondaryAction={(
                 <div key={u.id}>
                   {idChip.id === panelMeetingDoc.leader.id && u.id !== panelMeetingDoc.leader.id && (
@@ -317,7 +318,7 @@ function MeetingSlide() {
                 firstName={u?.firstName}
                 labelColor={u?.labelColor}
                 lastName={u?.lastName}
-                picturePreview={u?.picturePreview}
+                picturePreview={u?.picture}
                 username={u?.username}
               />
             </ListItem>
@@ -338,11 +339,12 @@ function MeetingSlide() {
       <List sx={{ backgroundColor: "aliceblue", width: "100%", mb: 3, }}>
         {panelMeetingDoc.onlineUserListNotInMeeting.map(u => (
           <ListItem
+            key={u.id}
             secondaryAction={(
               <>
-              {!inviteUsers[u.id] && (
-                <p onClick={() => inviteUser({id: u.id})} style={{ cursor: "pointer", textDecoration: "underline" }}>Invite</p>
-              )}
+                {!inviteUsers[u.id] && (
+                  <p onClick={() => inviteUser({ id: u.id })} style={{ cursor: "pointer", textDecoration: "underline" }}>Invite</p>
+                )}
               </>
             )}
           >
@@ -353,7 +355,7 @@ function MeetingSlide() {
               firstName={u?.firstName}
               labelColor={u?.labelColor}
               lastName={u?.lastName}
-              picturePreview={u?.picturePreview}
+              picturePreview={u?.picture}
               username={u?.username}
             />
           </ListItem>
@@ -366,36 +368,6 @@ function MeetingSlide() {
             />
           </ListItem>
         )}
-        {/* <ListItem
-          secondaryAction={
-            <a href="#">Invite</a>
-          }
-        >
-          <ListItemText
-            // primary="Leader"
-            primary={(<Chip avatar={<Avatar>M</Avatar>} label="Avatar" />)}
-          />
-        </ListItem>
-        <ListItem
-          secondaryAction={
-            <a href="#">Invite</a>
-          }
-        >
-          <ListItemText
-            // primary="Leader"
-            primary={(<Chip avatar={<Avatar>M</Avatar>} label="Avatar" />)}
-          />
-        </ListItem>
-        <ListItem
-          secondaryAction={
-            <a href="#">Invite</a>
-          }
-        >
-          <ListItemText
-            // primary="Leader"
-            primary={(<Chip avatar={<Avatar>M</Avatar>} label="Avatar" />)}
-          />
-        </ListItem> */}
       </List>
     </>
   )

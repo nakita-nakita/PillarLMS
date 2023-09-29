@@ -48,9 +48,9 @@ function NewMeetingModal({ isOpened, onClose }) {
   )
 }
 
-NewMeetingModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// NewMeetingModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default NewMeetingModal

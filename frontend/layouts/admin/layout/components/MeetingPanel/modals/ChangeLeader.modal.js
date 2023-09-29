@@ -79,9 +79,9 @@ function MeetingChangeLeaderModal({ isOpened, onClose }) {
   )
 }
 
-MeetingChangeLeaderModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// MeetingChangeLeaderModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default MeetingChangeLeaderModal

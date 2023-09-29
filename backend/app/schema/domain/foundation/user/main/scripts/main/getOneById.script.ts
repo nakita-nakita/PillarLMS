@@ -46,16 +46,16 @@ export default function getOneById({ domainDb, errorHandler, domainTransaction, 
       })
     }
 
-    const isIdValid = await foundationUserValidation.isIdValid({
-      id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    // const isIdValid = await foundationUserValidation.isIdValid({
+    //   id: args.id
+    // }).catch(error => errorHandler(error, loggers))
 
-    if (!isIdValid.result) {
-      return endMainFromError({
-        hint: "Datapoint 'id' is not a valid UUID.",
-        errorIdentifier: "foundationUser_getOneById_error0003"
-      })
-    }
+    // if (!isIdValid.result) {
+    //   return endMainFromError({
+    //     hint: "Datapoint 'id' is not a valid UUID.",
+    //     errorIdentifier: "foundationUser_getOneById_error0003"
+    //   })
+    // }
 
     //////////////////////////////////////
     // Sql

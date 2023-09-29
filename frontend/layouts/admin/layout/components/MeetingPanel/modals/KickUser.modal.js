@@ -78,9 +78,9 @@ function MeetingKickUserModal({ isOpened, onClose }) {
   )
 }
 
-MeetingKickUserModal.propTypes = {
-  isOpened: PropTypes.boolean,
-  onClose: PropTypes.func,
-}
+// MeetingKickUserModal.propTypes = {
+//   isOpened: PropTypes.boolean,
+//   onClose: PropTypes.func,
+// }
 
 export default MeetingKickUserModal
