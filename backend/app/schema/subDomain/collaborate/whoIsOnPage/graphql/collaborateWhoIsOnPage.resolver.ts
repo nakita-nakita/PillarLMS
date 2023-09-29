@@ -4,8 +4,7 @@ import graphqlError from "../../../../utils/errorHandling/handers/graphql.errorh
 import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { d_allDomain } from "../../../../utils/types/dependencyInjection.types";
 import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
-import makeCollaborateSamePageMain from "../main/collaborateSamePage.main";
-// import makeBackendPermissionMain from "../main/backendPermission.main";
+import makeCollaborateWhoIsOnPageMain from "../main/collaborateWhoIsOnPage.main";
 
 const makeDObj = async (): Promise<d_allDomain> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
@@ -23,12 +22,12 @@ const makeDObj = async (): Promise<d_allDomain> => {
   }
 }
 
-const backendPermissionGqlResolver = {
+const collaborateWhoIsOnPageResolver = {
   Query: {
-    collaborateSamePage_getAllUsersFromPage: async (parent, args, context) => {
+    collaborateWhoIsOnPage_getAllUsersFromPage: async (parent, args, context) => {
 
       const d = await makeDObj()
-      const main = makeCollaborateSamePageMain(d)
+      const main = makeCollaborateWhoIsOnPageMain(d)
 
       const response = await main.getAllUsersFromPage({
         url: args.url
@@ -48,4 +47,4 @@ const backendPermissionGqlResolver = {
   },
 };
 
-export default backendPermissionGqlResolver
+export default collaborateWhoIsOnPageResolver

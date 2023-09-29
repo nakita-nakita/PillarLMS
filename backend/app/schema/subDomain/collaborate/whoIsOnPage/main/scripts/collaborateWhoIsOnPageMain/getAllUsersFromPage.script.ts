@@ -3,8 +3,8 @@ import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.t
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import { Model } from "sequelize";
-import makeCollaborateSamePageCache from "../../../preMain/collaborateSamePage.cache";
-import { SamePageObject } from "../../../preMain/scripts/collaborateSamePageCache/getAllUsersFromPage.script";
+import makeCollaborateSamePageCache from "../../../preMain/collaborateWhoIsOnPage.cache";
+import { SamePageObject } from "../../../preMain/scripts/collaborateWhoIsOnPageCache/getAllUsersFromPage.script";
 
 type input = {
   url: string,

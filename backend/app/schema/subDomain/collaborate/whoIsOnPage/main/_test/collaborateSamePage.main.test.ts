@@ -4,14 +4,13 @@ import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/se
 import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
 import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
 import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
-import { CallByTypeEnum } from "../../../../../domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
 import makeSocketLookUp from "../../../_singleton/preMain/socketLookUp.ram-cache";
-import makeSamepage from "../../../_singleton/preMain/samepage.ram-cache";
-import makeCollaborateSamePageMain from "../collaborateSamePage.main";
+import makeWhoIsOnPage from "../../../_singleton/preMain/whoIsOnPage.ram-cache";
+import makeCollaborateWhoIsOnPageMain from "../collaborateWhoIsOnPage.main";
 jest.setTimeout(100000)
 
 
-describe("test collaborateSamePage.main.js", () => {
+describe("test collaborateWhoIsOnPage.main.js", () => {
   let d: d_allDomain
 
   beforeAll(async () => {
@@ -63,19 +62,19 @@ describe("test collaborateSamePage.main.js", () => {
     })
   }, 100000)
 
-  test("samepage collab: get all users.", async () => {
+  test("WhoIsOnPage collab: get all users.", async () => {
 
-    const samepage = makeSamepage(d)
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samepage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       socketId: "testSocketId3",
       currentAsPath: "/test/test",
       currentPathname: "/test/test",
     })
 
-    const collabSamePage = makeCollaborateSamePageMain(d)
+    const collabWhoIsOnPage = makeCollaborateWhoIsOnPageMain(d)
 
-    const result = await collabSamePage.getAllUsersFromPage({
+    const result = await collabWhoIsOnPage.getAllUsersFromPage({
       url: "/test/test"
     })
 

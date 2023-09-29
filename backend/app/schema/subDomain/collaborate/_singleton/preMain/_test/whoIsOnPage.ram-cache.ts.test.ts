@@ -5,12 +5,11 @@ import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
 import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
 import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 import makeSocketLookUp from "../socketLookUp.ram-cache";
-import { CallByTypeEnum } from "../../../../../domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
-import makeSamepage from "../samepage.ram-cache";
+import makeWhoIsOnPage from "../whoIsOnPage.ram-cache";
 jest.setTimeout(100000)
 
 
-describe("test collaborateSamePage.main.js", () => {
+describe("test collaborateWhoIsOnPage.ram-cache.js", () => {
   let d: d_allDomain
 
   beforeAll(async () => {
@@ -62,62 +61,62 @@ describe("test collaborateSamePage.main.js", () => {
     })
   }, 100000)
 
-  test("samepage: changing url.", async () => {
+  test("whoIsOnPage: changing url.", async () => {
 
-    const samepage = makeSamepage(d)
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samepage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       socketId: "testSocketId3",
       currentAsPath: "/test/test",
       currentPathname: "/test/test",
     })
 
-    const result = await samepage.getAllUsersFromUrl({
+    const result = await whoIsOnPage.getAllUsersFromUrl({
       url: "/test/test"
     })
 
     expect(result.data.length).toBe(1)
   })
 
-  test("samepage: two of the same users on one page will show one user.", async () => {
+  test("whoIsOnPage: two of the same users on one page will show one user.", async () => {
 
-    const samepage = makeSamepage(d)
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samepage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       socketId: "testSocketId4",
       currentAsPath: "/test/test",
       currentPathname: "/test/test",
     })
 
-    const result = await samepage.getAllUsersFromUrl({
+    const result = await whoIsOnPage.getAllUsersFromUrl({
       url: "/test/test"
     })
 
     expect(result.data.length).toBe(1)
   })
 
-  test("samepage: two users on page", async () => {
+  test("whoIsOnPage: two users on page", async () => {
 
-    const samepage = makeSamepage(d)
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samepage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       socketId: "testSocketId1",
       currentAsPath: "/test/test",
       currentPathname: "/test/test",
     })
 
-    const result = await samepage.getAllUsersFromUrl({
+    const result = await whoIsOnPage.getAllUsersFromUrl({
       url: "/test/test"
     })
 
     expect(result.data.length).toBe(2)
   })
 
-  test("samepage: two of the same users on one page will show one user.", async () => {
+  test("whoIsOnPage: two of the same users on one page will show one user.", async () => {
 
-    const samepage = makeSamepage(d)
+    const whoIsOnPage = makeWhoIsOnPage(d)
 
-    await samepage.changeUrlForUser({
+    await whoIsOnPage.changeUrlForUser({
       socketId: "testSocketId4",
       currentAsPath: "/test/test2",
       currentPathname: "/test/test2",
@@ -125,13 +124,13 @@ describe("test collaborateSamePage.main.js", () => {
       oldPathname: "/test/test",
     })
 
-    const result = await samepage.getAllUsersFromUrl({
+    const result = await whoIsOnPage.getAllUsersFromUrl({
       url: "/test/test"
     })
 
     expect(result.data.length).toBe(2)
     
-    const result2 = await samepage.getAllUsersFromUrl({
+    const result2 = await whoIsOnPage.getAllUsersFromUrl({
       url: "/test/test2"
     })
 

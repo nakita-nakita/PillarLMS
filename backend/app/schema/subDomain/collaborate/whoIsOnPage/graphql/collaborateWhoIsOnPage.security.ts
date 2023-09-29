@@ -1,10 +1,10 @@
 import { and, or } from "graphql-shield"
 import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../../shield/rules"
 
-const backendPermissionSecurity = {
+const collaborateWhoIsOnPageSecurity = {
   Query: {
-    collaborateSamePage_getAllUsersFromPage: isAuthenticated,
+    collaborateWhoIsOnPage_getAllUsersFromPage: isAuthenticated,
   }
 }
 
-export default backendPermissionSecurity
+export default collaborateWhoIsOnPageSecurity

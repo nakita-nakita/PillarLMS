@@ -1,5 +1,5 @@
 import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
-import makeSamepage from "../../_singleton/preMain/samepage.ram-cache";
+import makeSamepage from "../../_singleton/preMain/whoIsOnPage.ram-cache";
 
 
 type input = {
@@ -8,9 +8,7 @@ type input = {
 }
 
 export default ({ socket, d }: input) => {
-  console.log('socket read!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   socket.on('change-url', async (data) => {
-    console.log('change-url!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
     const samePage = makeSamepage(d)
 
     await samePage.changeUrlForUser({
