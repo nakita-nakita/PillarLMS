@@ -114,17 +114,6 @@ const MediaManager = () => {
     })
   }
 
-  const navigateToTrashFolder = () => {
-    realtimeLink({
-      to: `/portal/media-manager/trash`,
-      meetingId: panelMeetingDoc.id,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      router,
-      setPanelMeetingDoc,
-      userId: idChip.id,
-    })
-  }
-
   return (
     <Box sx={{
       flexGrow: 1,
@@ -134,68 +123,22 @@ const MediaManager = () => {
       padding: "20px",
       minHeight: "350px",
     }}>
-
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12}>
-          <Stack direction="row" spacing={2} sx={{ justifyContent: "flex-end" }}>
-            <Button variant="contained" color="error" onClick={() => navigateToTrashFolder()}>
-              View Trash
-            </Button>
-            <Button
-              id="demo-customized-button"
-              aria-controls={open ? 'demo-customized-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              variant="contained"
-              disableElevation
-              onClick={handleClick}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              New
-            </Button>
-            <StyledMenu
-              id="demo-customized-menu"
-              MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                <FolderIcon />
-                Folder
-              </MenuItem>
-              <Divider sx={{ my: 0.5 }} />
-              <MenuItem onClick={handleClose}>
-                <FileUploadIcon />
-                Upload
-              </MenuItem>
-            </StyledMenu>
-          </Stack>
-        </Grid>
-      </Grid>
-      <br />
+      <p>Trash Folder</p>
+      <br/>
       <Paper elevation={3}>
-
-        {/* import FolderIcon from '@mui/icons-material/Folder'; */}
-
-
-
-
         <Grid container spacing={2}>
           <Grid item xs={12}>
 
             <List dense={false}>
-
-              <ListItem sx={menuItem} onClick={() => navigateFolder()}>
+              <ListItem sx={menuItem} onClick={() => navigateItem()}>
                 <ListItemIcon>
-                  <FolderIcon />
+                  <ImageIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Cool folder name"
+                  primary="blah.test.jpg"
                 />
               </ListItem>
+
               <Divider />
               <ListItem sx={menuItem} onClick={() => navigateItem()}>
                 <ListItemIcon>

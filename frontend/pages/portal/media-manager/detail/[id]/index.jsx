@@ -23,6 +23,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 //icon
 import FolderIcon from '@mui/icons-material/Folder';
@@ -94,18 +97,7 @@ const MediaManager = () => {
 
   const navigateItem = () => {
     realtimeLink({
-      to: `/portal/media-manager/detail/123`,
-      meetingId: panelMeetingDoc.id,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      router,
-      setPanelMeetingDoc,
-      userId: idChip.id,
-    })
-  }
-
-  const navigateFolder = () => {
-    realtimeLink({
-      to: `/portal/media-manager/folder/123`,
+      to: `/media-manager/detail/123`,
       meetingId: panelMeetingDoc.id,
       leaderUserId: panelMeetingDoc.leader?.id,
       router,
@@ -124,6 +116,16 @@ const MediaManager = () => {
       userId: idChip.id,
     })
   }
+  const navigateFolder = () => {
+    realtimeLink({
+      to: `/media-manager/folder/123`,
+      meetingId: panelMeetingDoc.id,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      router,
+      setPanelMeetingDoc,
+      userId: idChip.id,
+    })
+  }
 
   return (
     <Box sx={{
@@ -135,47 +137,6 @@ const MediaManager = () => {
       minHeight: "350px",
     }}>
 
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12}>
-          <Stack direction="row" spacing={2} sx={{ justifyContent: "flex-end" }}>
-            <Button variant="contained" color="error" onClick={() => navigateToTrashFolder()}>
-              View Trash
-            </Button>
-            <Button
-              id="demo-customized-button"
-              aria-controls={open ? 'demo-customized-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              variant="contained"
-              disableElevation
-              onClick={handleClick}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              New
-            </Button>
-            <StyledMenu
-              id="demo-customized-menu"
-              MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                <FolderIcon />
-                Folder
-              </MenuItem>
-              <Divider sx={{ my: 0.5 }} />
-              <MenuItem onClick={handleClose}>
-                <FileUploadIcon />
-                Upload
-              </MenuItem>
-            </StyledMenu>
-          </Stack>
-        </Grid>
-      </Grid>
-      <br />
       <Paper elevation={3}>
 
         {/* import FolderIcon from '@mui/icons-material/Folder'; */}
@@ -183,29 +144,41 @@ const MediaManager = () => {
 
 
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ p: 5 }}>
           <Grid item xs={12}>
 
-            <List dense={false}>
-
-              <ListItem sx={menuItem} onClick={() => navigateFolder()}>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Cool folder name"
-                />
-              </ListItem>
-              <Divider />
-              <ListItem sx={menuItem} onClick={() => navigateItem()}>
-                <ListItemIcon>
-                  <ImageIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="blah.test.jpg"
-                />
-              </ListItem>
-            </List>
+            <img src="/blah/blah.jpg" style={{ width: "250px", height: "250px" }} />
+            <br />
+            <br />
+            <p>
+              <strong>This file is in the trash folder</strong>
+              <br />
+              <span>Deleted on (Jul 30) <span style={{textDecoration: "underline"}}>Restore?</span></span>
+            </p>
+            <br />
+            <p>
+              <strong>Name</strong>
+              <br />
+              <span>blah.jpg</span>
+            </p>
+            <br />
+            <p>
+              <strong>Location</strong>
+              <br />
+              <span>Media Manager / cool folder</span>
+            </p>
+            <br />
+            <p>
+              <strong>Uploaded On</strong>
+              <br />
+              <span>May 04, 2023</span>
+            </p>
+            <br />
+            <p>
+              <strong>Uploaded By</strong>
+              <br />
+              <span>Bob Dole (user chip)</span>
+            </p>
           </Grid>
         </Grid>
       </Paper>

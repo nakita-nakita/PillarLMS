@@ -23,6 +23,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 //icon
 import FolderIcon from '@mui/icons-material/Folder';
@@ -103,9 +106,9 @@ const MediaManager = () => {
     })
   }
 
-  const navigateFolder = () => {
+  const navigateToTrashFolder = () => {
     realtimeLink({
-      to: `/portal/media-manager/folder/123`,
+      to: `/portal/media-manager/trash`,
       meetingId: panelMeetingDoc.id,
       leaderUserId: panelMeetingDoc.leader?.id,
       router,
@@ -113,10 +116,9 @@ const MediaManager = () => {
       userId: idChip.id,
     })
   }
-
-  const navigateToTrashFolder = () => {
+  const navigateFolder = () => {
     realtimeLink({
-      to: `/portal/media-manager/trash`,
+      to: `/portal/media-manager/folder/123`,
       meetingId: panelMeetingDoc.id,
       leaderUserId: panelMeetingDoc.leader?.id,
       router,
@@ -134,6 +136,19 @@ const MediaManager = () => {
       padding: "20px",
       minHeight: "350px",
     }}>
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link underline="hover" color="inherit" href="/">
+          MUI
+        </Link>
+        <Link
+          underline="hover"
+          color="inherit"
+          href="/material-ui/getting-started/installation/"
+        >
+          Core
+        </Link>
+        <Typography color="text.primary">Breadcrumbs</Typography>
+      </Breadcrumbs>
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12}>
