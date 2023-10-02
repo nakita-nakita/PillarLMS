@@ -8,6 +8,9 @@ import { shield } from "graphql-shield"
 import expressPlayground from "graphql-playground-middleware-express"
 
 const subDomainInitScript = async ({ app, }) => {
+  //////////////////////////////////////
+  // Force database migrations if new database.
+  // ===================================
   const subDomainDb = await emptyTestSubDomainDb();
 
 
@@ -15,6 +18,18 @@ const subDomainInitScript = async ({ app, }) => {
   //////////////////////////////////////
   // Load image uploader controlers
   // ===================================
+  let controllers = [
+    ...glob.sync("app/schema/subDomain/*/*/*.controller.ts"),
+    ...glob.sync("app/schema/subDomain/*/*/*/*.controller.ts"),
+    ...glob.sync("app/schema/subDomain/*/*/*/*/*.controller.ts"),
+    ...glob.sync("app/schema/subDomain/*/*/*/*/*/*.controller.ts"),
+    ...glob.sync("app/schema/subDomain/*/*/*/*/*/*/*.controller.ts"),
+    ...glob.sync("app/schema/subDomain/*/*/*/*/*/*/*/*.controller.ts"),
+  ];
+
+  for (const controller of controllers) {
+    require("../" + controller).default({ app })
+  }
 
 
   //////////////////////////////////////
@@ -103,6 +118,11 @@ const subDomainInitScript = async ({ app, }) => {
 
   const schemaWithPermissions = applyMiddleware(schema, permissions);
 
+
+  //////////////////////////////////////
+  // load documentation env...
+  // ===================================
+  
   app.use(
     "/subDomain/graphql",
     graphqlHTTP({
@@ -111,10 +131,6 @@ const subDomainInitScript = async ({ app, }) => {
     })
   );
 
-
-  //////////////////////////////////////
-  // load documentation env...
-  // ===================================
   app.get("/subDomain/playground", expressPlayground({ endpoint: "/subDomain/graphql" }));
 }
 
