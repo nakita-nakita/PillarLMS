@@ -21,8 +21,8 @@ const makeDObj = async (): Promise<d_sub> => {
 export default ({ app }) => {
 
   app.post('/api/v1/media-manager/file', uploaderAuth.isAuthenticated, mediaManagerUpload.single("files"), async (req, res) => {
-    const url = `/api/v1/media-manager/file/${req.file.fileName}`
-    const systemFileName = req.file.fileName
+    const url = `/api/v1/media-manager/file/${req.file.filename}`
+    const systemFileName = req.file.filename
     const userFileName = req.file.originalname
     const folderId = req.body.folderId
 
@@ -37,6 +37,8 @@ export default ({ app }) => {
       userFileName,
       folderId,
     })
+
+    d.subDomainTransaction.commit()
 
     return res.status(200).json({
       success: true,

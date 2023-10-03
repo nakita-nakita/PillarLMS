@@ -141,7 +141,7 @@ const backendMediaManagerGqlResolver = {
 
       if (response?.success) {
         d.subDomainTransaction.commit()
-        return true
+        return response.success
 
       } else {
         d.subDomainTransaction.rollback()
@@ -161,7 +161,7 @@ const backendMediaManagerGqlResolver = {
 
       if (response?.success) {
         d.subDomainTransaction.commit()
-        return response.data
+        return response
 
       } else {
         d.subDomainTransaction.rollback()
@@ -199,7 +199,7 @@ const backendMediaManagerGqlResolver = {
 
       if (response?.success) {
         d.subDomainTransaction.commit()
-        return true
+        return response
 
       } else {
         d.subDomainTransaction.rollback()

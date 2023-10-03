@@ -35,10 +35,10 @@ const backendMediaManagerGqlType = gql`
     backendMediaManagerFile_getOneById(id: ID!): BackendMediaManagerFileType
     backendMediaManagerFile_viewTrash: [BackendMediaManagerFileType]
   
-    backendMediaManagerFile_getMany(folderId: String): [BackendMediaManagerFileType]
-    backendMediaManagerFolder_getMany(folderId: String): [BackendMediaManagerFolderType]
+    backendMediaManagerFile_getMany(folderId: ID): [BackendMediaManagerFileType]
+    backendMediaManagerFolder_getMany(folderId: ID): [BackendMediaManagerFolderType]
 
-    backendMediaManagerFolder_getBreadCrumb(folderId: String): [BreadCrumbType]
+    backendMediaManagerFolder_getBreadCrumb(folderId: ID!): [BreadCrumbType]
   }
 
   type Mutation {
@@ -46,7 +46,7 @@ const backendMediaManagerGqlType = gql`
     backendMediaManagerFile_rename(id: ID!, name: String!): BackendMediaManagerFileType
     backendMediaManagerFile_deleteOne(id: ID!): GlobalSuccessType
 
-    backendMediaManagerFolder_addOne(name: String!, folderId: String): BackendMediaManagerFolderType
+    backendMediaManagerFolder_addOne(name: String!, folderId: ID): BackendMediaManagerFolderType
     backendMediaManagerFolder_rename(id: ID!, name: String!): BackendMediaManagerFolderType
     backendMediaManagerFolder_deleteOne(id: ID!): GlobalSuccessType
 

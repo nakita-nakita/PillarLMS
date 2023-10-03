@@ -1,103 +1,114 @@
 'use client'
 
 // Library
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import moment from 'moment';
 
 // Mine
 import AdminLayout from '@/layouts/admin/layout';
 import { realtimeLink } from '@/utils/realtime/link';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import { getMediaManagerFileByIdGraphQL } from '@/pages-scripts/portal/media-manager/store/mediaManager-getFileById.store';
+import { getMediaManagerUserChipGraphQL } from '@/pages-scripts/portal/media-manager/store/mediaManager-getUserChip.store';
+import { getMediaManagerBreadCrumbsGraphQL } from '@/pages-scripts/portal/media-manager/store/mediaManager-breadCrumbs.store';
+import UserChip from '@/components/chip/user.chip';
+import MediaManagerProvider, { MediaManagerContext } from '@/pages-scripts/portal/media-manager/context/mediaManager.context';
+import RestoreFileModal from '@/pages-scripts/portal/media-manager/modals/restoreFile.modal';
 
 // MUI
-import { styled, alpha } from '@mui/material/styles';
-import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 
-//icon
-import FolderIcon from '@mui/icons-material/Folder';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ImageIcon from '@mui/icons-material/Image';
-
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-    boxShadow:
-      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity,
-        ),
-      },
-    },
-  },
-}));
-
-const menuItem = {
-  cursor: "pointer",
-  "&:hover": {
-    backgroundColor: "rgb(224, 224, 224)"
-  }
-}
 
 const MediaManager = () => {
   const router = useRouter()
-  const { idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+  const { idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
+  const { mediaManager, setMediaManager } = useContext(MediaManagerContext)
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [isLoaded, setIsLoaded] = useState(false)
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [file, setFile] = useState({})
+  const [uploadedUser, setUploadedUser] = useState({})
+  const [deletedByUser, setDeleteByUser] = useState({})
+  const [breadCrumbs, setBreadCrumbs] = useState([])
 
-  const navigateItem = () => {
+  const loadData = ({ id, }) => {
+
+    getMediaManagerFileByIdGraphQL({
+      id,
+    }).then(result => {
+
+      const targetFile = result.data.backendMediaManagerFile_getOneById
+      setFile(targetFile)
+
+      if (targetFile.folderId) {
+        getMediaManagerBreadCrumbsGraphQL({
+          folderId: targetFile.folderId,
+        }).then(breadResult => {
+          let newBreadCrumbs = breadResult.data?.backendMediaManagerFolder_getBreadCrumb || []
+
+          newBreadCrumbs = newBreadCrumbs.sort((a, b) => b.order - a.order)
+          setBreadCrumbs(newBreadCrumbs)
+        })
+      }
+
+      getMediaManagerUserChipGraphQL({
+        id: targetFile.uploadedBy
+      }).then(uploadUserResult => {
+
+        const uploadUser = uploadUserResult.data.backendUserBasicView_them
+        setUploadedUser(uploadUser)
+
+        if (targetFile.deletedAt) {
+          getMediaManagerUserChipGraphQL({
+            id: targetFile.deletedBy
+          }).then(deletedByResult => {
+
+            const deletedUser = deletedByResult.data.backendUserBasicView_them
+            setDeleteByUser(deletedUser)
+            setIsLoaded(true)
+
+          })
+        } else {
+          setIsLoaded(true)
+        }
+
+      })
+    })
+
+  }
+
+  useEffect(() => {
+    if (router.query?.id) {
+      loadData({ id: router.query.id })
+    }
+  }, [router.query])
+
+  // reload after restoring file.
+  useEffect(() => {
+    if (isLoaded && mediaManager.selectedFileId === null) {
+      loadData({ id: router.query.id })
+    }
+  }, [mediaManager, isLoaded])
+
+  const navigateToMediaManager = () => {
     realtimeLink({
-      to: `/media-manager/detail/123`,
+      to: `/portal/media-manager`,
+      meetingId: panelMeetingDoc.id,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      router,
+      setPanelMeetingDoc,
+      userId: idChip.id,
+    })
+
+  }
+  const navigateFolder = ({ id }) => {
+    realtimeLink({
+      to: `/portal/media-manager/folder/${id}`,
       meetingId: panelMeetingDoc.id,
       leaderUserId: panelMeetingDoc.leader?.id,
       router,
@@ -106,25 +117,14 @@ const MediaManager = () => {
     })
   }
 
-  const navigateToTrashFolder = () => {
-    realtimeLink({
-      to: `/portal/media-manager/trash`,
-      meetingId: panelMeetingDoc.id,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      router,
-      setPanelMeetingDoc,
-      userId: idChip.id,
-    })
-  }
-  const navigateFolder = () => {
-    realtimeLink({
-      to: `/media-manager/folder/123`,
-      meetingId: panelMeetingDoc.id,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      router,
-      setPanelMeetingDoc,
-      userId: idChip.id,
-    })
+  const openRestoreFile = () => {
+
+    setMediaManager(prevState => ({
+      ...prevState,
+      modal_isRestoreFileModalOpened: true,
+      selectFileName: file.userFileName,
+      selectedFileId: router.query.id,
+    }))
   }
 
   return (
@@ -137,51 +137,134 @@ const MediaManager = () => {
       minHeight: "350px",
     }}>
 
-      <Paper elevation={3}>
+      {isLoaded && (
+        <>
 
-        {/* import FolderIcon from '@mui/icons-material/Folder'; */}
+          <Paper elevation={3}>
+
+            {/* import FolderIcon from '@mui/icons-material/Folder'; */}
 
 
 
 
-        <Grid container spacing={2} sx={{ p: 5 }}>
-          <Grid item xs={12}>
+            <Grid container spacing={2} sx={{ p: 5 }}>
+              <Grid item xs={12}>
 
-            <img src="/blah/blah.jpg" style={{ width: "250px", height: "250px" }} />
-            <br />
-            <br />
-            <p>
-              <strong>This file is in the trash folder</strong>
-              <br />
-              <span>Deleted on (Jul 30) <span style={{textDecoration: "underline"}}>Restore?</span></span>
-            </p>
-            <br />
-            <p>
-              <strong>Name</strong>
-              <br />
-              <span>blah.jpg</span>
-            </p>
-            <br />
-            <p>
-              <strong>Location</strong>
-              <br />
-              <span>Media Manager / cool folder</span>
-            </p>
-            <br />
-            <p>
-              <strong>Uploaded On</strong>
-              <br />
-              <span>May 04, 2023</span>
-            </p>
-            <br />
-            <p>
-              <strong>Uploaded By</strong>
-              <br />
-              <span>Bob Dole (user chip)</span>
-            </p>
-          </Grid>
-        </Grid>
-      </Paper>
+                <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${file.url}`} style={{ width: "100%" }} />
+                <br />
+                <br />
+                {file.deletedAt && (
+                  <div>
+                    <p>
+                      <strong>This file is in the trash folder</strong>
+                    </p>
+                    <br />
+                    <p>Deleted on:</p>
+                    <p>{moment(parseInt(file.deletedAt)).toLocaleString()}</p>
+
+                    {/* <span>Deleted on (Jul 30) <span style={{ textDecoration: "underline" }}>Restore?</span></span> */}
+                    <br />
+                    <p>Deleted by user:</p>
+
+                    <UserChip
+                      callByType={deletedByUser.callByType}
+                      circleColor={deletedByUser.circleColor}
+                      email={deletedByUser.email}
+                      firstName={deletedByUser.firstName}
+                      labelColor={deletedByUser.labelColor}
+                      lastName={deletedByUser.lastName}
+                      username={deletedByUser.username}
+                      picturePreview={deletedByUser.picture}
+                    />
+                    <br />
+                    <Button variant="contained" color="info" onClick={() => openRestoreFile()}>
+                      Restore File
+                    </Button>
+                    <br />
+                    <br />
+                    <hr />
+                  </div>
+                )}
+                <br />
+                <p>
+                  <strong>Name</strong>
+                  <br />
+                  <span>{file.userFileName}</span>
+                </p>
+                <br />
+                <p>
+                  <strong>Location</strong>
+                  <br />
+                  <Link
+                    sx={{ lineHeight: "50px", cursor: "pointer" }}
+                    underline="hover"
+                    color="inherit"
+                    onClick={() => navigateToMediaManager()}
+                  >
+                    Media Manager
+                  </Link>
+                  {breadCrumbs.length !== 0 && (
+                    <>
+                      <span> / </span>
+                      {breadCrumbs.map(b => (
+                        <span key={b.id}>
+                          <Link
+                            sx={{ lineHeight: "50px", cursor: "pointer" }}
+                            underline="hover"
+                            color="inherit"
+                            onClick={() => navigateFolder({ id: b.id })}
+                          >
+                            {b.name}
+                          </Link>
+
+                          <span> / </span>
+                        </span>
+                      ))}
+                    </>
+                  )}
+                  {/* <span>Media Manager / cool folder</span> */}
+                </p>
+                <br />
+                <p>
+                  <strong>Uploaded On</strong>
+                  <br />
+                  <span>{moment(parseInt(file.createdAt)).toLocaleString()}</span>
+                </p>
+                <br />
+                <p>
+                  <strong>Uploaded By</strong>
+                  <br />
+                  <span>
+                    <UserChip
+                      callByType={uploadedUser.callByType}
+                      circleColor={uploadedUser.circleColor}
+                      email={uploadedUser.email}
+                      firstName={uploadedUser.firstName}
+                      labelColor={uploadedUser.labelColor}
+                      lastName={uploadedUser.lastName}
+                      username={uploadedUser.username}
+                      picturePreview={uploadedUser.picture}
+                    />
+
+                  </span>
+                </p>
+              </Grid>
+            </Grid>
+          </Paper>
+          <RestoreFileModal
+            isOpened={mediaManager.modal_isRestoreFileModalOpened}
+            onClose={() => {
+              setMediaManager(prevState => ({
+                ...prevState,
+                modal_isRestoreFileModalOpened: false,
+                selectedFileId: null,
+              }))
+            }}
+
+          />
+        </>
+
+      )}
     </Box>
   )
 }
@@ -189,7 +272,9 @@ const MediaManager = () => {
 MediaManager.getLayout = function getLayout(page) {
   return (
     <AdminLayout>
-      {page}
+      <MediaManagerProvider>
+        {page}
+      </MediaManagerProvider>
     </AdminLayout>
   )
 }

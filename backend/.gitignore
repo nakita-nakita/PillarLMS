@@ -43,3 +43,6 @@ yarn.lock
 # random scripts for development that will not be needed when more features are available
 app/_scratch_paper
 app/_scratch_paper/*
+
+#Don't upload the upload folder content
+uploads/*
