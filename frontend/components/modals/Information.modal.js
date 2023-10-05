@@ -28,9 +28,9 @@ export default function InformationModal({ isOpened, onClose, onSubmit, children
   const theme = useTheme();
   const [open, setOpen] = React.useState(isOpened);
 
-  const handleClose = () => {
+  const handleClose = (event) => {
     if (onClose) {
-      onClose()
+      onClose(event)
     }
   }
 
@@ -45,7 +45,7 @@ export default function InformationModal({ isOpened, onClose, onSubmit, children
     if (!disableSubmit) {
       if (onSubmit) onSubmit(event);
     } else {
-      handleClose()
+      handleClose(event)
     }
   }
 

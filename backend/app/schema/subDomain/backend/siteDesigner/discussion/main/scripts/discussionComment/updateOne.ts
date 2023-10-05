@@ -1,12 +1,11 @@
 import { Model } from "sequelize";
-import backendSiteDesigner_discussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussion.model";
 import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import makeBackendSiteDesignerDiscussionCommentSql from "../../../preMain/backendSiteDesigner_discussionComment.sql";
-import makeBackendSiteDesignerDiscussionCommentValidation from "../../../preMain/backendSiteDesigner_discussionComment.validation";
+import makeBackendSiteDesignerDiscussionCommentSql from "../../../preMain/backendSiteDesignerDiscussionComment.sql";
+import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
 
 type input = {
   id: string
@@ -14,7 +13,7 @@ type input = {
 }
 
 export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionComment> | null>> => {
 
     const d = {
       subDomainDb,
@@ -23,7 +22,6 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       loggers,
     }
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentSql(d)
-    const backendDiscussionValidation = makeBackendSiteDesignerDiscussionCommentValidation(d)
 
     //////////////////////////////////////
     // Validations
@@ -32,7 +30,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     if (!args.id) {
       return endMainFromError({
         hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_deleteOne_error0001"
+        errorIdentifier: "backendSiteDesignerDiscussionComment_updateOne_error:0001"
       })
     }
 
@@ -43,18 +41,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     if (!isIdStringFromUuid.result) {
       return endMainFromError({
         hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_deleteOne_error0002"
-      })
-    }
-
-    const isIdValid = await backendDiscussionValidation.isIdValid({
-      id: args.id
-    }).catch(error => errorHandler(error, loggers))
-
-    if (!isIdValid.result) {
-      return endMainFromError({
-        hint: "Datapoint 'id' is not a valid UUID.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_deleteOne_error0003"
+        errorIdentifier: "backendSiteDesignerDiscussionComment_updateOne_error:0001"
       })
     }
 

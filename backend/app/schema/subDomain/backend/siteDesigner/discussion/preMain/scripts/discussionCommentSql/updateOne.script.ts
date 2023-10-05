@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import backendSiteDesigner_discussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussionComment.model";
+import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
@@ -11,9 +11,9 @@ type input = {
 export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
-  return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussionComment> | null>> => {
+  return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionComment> | null>> => {
 
-    const data = await db.backendSiteDesigner_discussionComment.update(
+    const data = await db.backendSiteDesignerDiscussionComment.update(
       {
         ...args,
         hasBeenEdited: true,

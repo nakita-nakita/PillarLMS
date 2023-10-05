@@ -10,7 +10,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
 
-    const data = await db.backendSiteDesigner_discussionComment.destroy({
+    const data = await db.backendSiteDesignerDiscussionComment.destroy({
       where,
       transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))

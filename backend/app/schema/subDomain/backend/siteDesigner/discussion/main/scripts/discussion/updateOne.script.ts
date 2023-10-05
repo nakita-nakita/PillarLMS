@@ -1,12 +1,12 @@
 import { Model } from "sequelize";
-import backendSiteDesigner_discussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussion.model";
+import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
 import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesigner_discussion.sql";
-import makeBackendSiteDesignerDiscussionValidation from "../../../preMain/backendSiteDesigner_discussion.validation";
+import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesignerDiscussion.sql";
+import makeBackendSiteDesignerDiscussionValidation from "../../../preMain/backendSiteDesignerDiscussion.validation";
 
 type input = {
   id: string,
@@ -16,7 +16,7 @@ type input = {
 }
 
 export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussion> | null>> => {
 
     const d = {
       subDomainDb,
@@ -25,7 +25,6 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       loggers,
     }
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d);
-    const discussionValidation = makeBackendSiteDesignerDiscussionValidation(d);
 
     //////////////////////////////////////
     // Validations
@@ -34,56 +33,51 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     if (!args.id) {
       return endMainFromError({
         hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussion_updateOne_error0001"
+        errorIdentifier: "backendSiteDesignerDiscussion_updateOne_error:0001"
       })
     }
 
     const isIdStringFromUuid = stringHelpers.isStringValidUuid({
       str: args.id
     })
-    
+
     if (!isIdStringFromUuid.result) {
       return endMainFromError({
         hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussion_updateOne_error0002"
+        errorIdentifier: "backendSiteDesignerDiscussion_updateOne_error:0001"
       })
     }
 
-    const isIdValid = await discussionValidation.isIdValid({
-      id: args.id
-    }).catch(error => errorHandler(error, loggers))
-
-    if (!isIdValid.result) {
-      return endMainFromError({
-        hint: "Datapoint 'id' is not a valid UUID.",
-        errorIdentifier: "backendSiteDesigner_discussion_updateOne_error0003"
+    if (args.userId) {
+      const isUserIdStringFromUuid = stringHelpers.isStringValidUuid({
+        str: args.userId
       })
+
+      if (!isUserIdStringFromUuid.result) {
+        return endMainFromError({
+          hint: "Datapoint 'userId' is not UUID format.",
+          errorIdentifier: "backendSiteDesignerDiscussion_updateOne_error:0002"
+        })
+      }
     }
 
-    // if (!args.name) {
-    //   return endMainFromError({
-    //     hint: "Datapoint 'name' is missing.",
-    //     errorIdentifier: "backendRole_updateOne_error0004"
-    //   })
-    // }
+    if (args.title) {
+      if (args.title.length == 0) {
+        return endMainFromError({
+          hint: "Datapoint 'title' does not have value.",
+          errorIdentifier: "backendSiteDesignerDiscussion_updateOne_error:0003"
+        })
+      }
+    }
 
-    // if (args.name.length > 50) {
-    //   return endMainFromError({
-    //     hint: "Datapoint 'name' is too long. 50 character max.",
-    //     errorIdentifier: "backendRole_updateOne_error0005"
-    //   })
-    // }
-
-    // const isNameTaken = await discussionValidation.isNameTaken({
-    //   name: args.name
-    // }).catch(error => errorHandler(error, loggers))
-
-    // if (isNameTaken.result) {
-    //   return endMainFromError({
-    //     hint: "Datapoint 'name' is already taken. Please select a new name.",
-    //     errorIdentifier: "backendRole_updateOne_error0006"
-    //   })
-    // }
+    if (args.post) {
+      if (args.post.length == 0) {
+        return endMainFromError({
+          hint: "Datapoint 'post' does not have value.",
+          errorIdentifier: "backendSiteDesignerDiscussion_updateOne_error:0004"
+        })
+      }
+    }
 
     //////////////////////////////////////
     // Sql

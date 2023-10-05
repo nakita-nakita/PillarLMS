@@ -1,19 +1,19 @@
-import backendSiteDesigner_discussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussion.model";
+import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
 import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../../utils/types/sequelize.types";
-import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesigner_discussion.sql";
-import { backendSiteDesigner_discussion_getManyWithPaginationTypeEnum } from "../../../preMain/scripts/sql/getManyWithPagination.script"
+import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesignerDiscussion.sql";
+import { backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum } from "../../../preMain/scripts/discussionSql/getManyWithPagination.script"
 
 type input = {
   page?: number
   pageSize?: number
-  type: backendSiteDesigner_discussion_getManyWithPaginationTypeEnum
+  type: backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum
 }
 
 export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesigner_discussion> | null>> => {
+  return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesignerDiscussion> | null>> => {
 
     const d = {
       subDomainDb,

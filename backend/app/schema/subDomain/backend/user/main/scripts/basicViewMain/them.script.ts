@@ -1,6 +1,6 @@
 import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain, d_domain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeFoundationUserProfileSql from "../../../../../../domain/foundation/user/preMain/foundationUserProfile.sql";
@@ -13,9 +13,14 @@ type input = {
 
 type returnBasicViewType = {
   id: string
-  picture: string
-  username: string
-  email: string
+  email: String
+  firstName: String
+  lastName: String
+  username: String
+  picture: String
+  callByType: String
+  circleColor: String
+  labelColor: String
 }
 
 export default function them(d: d_domain) {
@@ -47,16 +52,6 @@ export default function them(d: d_domain) {
       })
     }
 
-    const isUserIdValid = await foundationUserValidation.isIdValid({
-      id: args.id
-    })
-
-    if (!isUserIdValid.result) {
-      return endMainFromError({
-        hint: "'id' is not valid.",
-        errorIdentifier: "backendUser_addOne_error0003"
-      })
-    }
 
     //////////////////////////////////////
     // Sql
@@ -73,10 +68,17 @@ export default function them(d: d_domain) {
     return {
       success: true,
       data: {
-        email: userResponse.data.dataValues.email,
-        picture: userProfileResponse.data?.dataValues?.picture,
+        // user table
         id: userResponse.data.dataValues.id,
+        email: userResponse.data.dataValues.email,
+        //user profile table
+        firstName: userProfileResponse.data?.dataValues?.firstName,
+        lastName: userProfileResponse.data?.dataValues?.lastName,
         username: userProfileResponse.data?.dataValues?.username,
+        picture: userProfileResponse.data?.dataValues?.picture,
+        callByType: userProfileResponse.data?.dataValues?.callByType,
+        circleColor: userProfileResponse.data?.dataValues?.circleColor,
+        labelColor: userProfileResponse.data?.dataValues?.labelColor,
       }
     }
   }

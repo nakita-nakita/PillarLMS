@@ -1,12 +1,10 @@
 import { Model } from "sequelize";
-import backendSiteDesigner_discussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussion.model";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import makeBackendSiteDesignerDiscussionCommentValidation from "../../../preMain/backendSiteDesigner_discussionComment.validation";
-import makeBackendSiteDesignerDiscussionCommentVoteSql from "../../../preMain/backendSiteDesigner_discussionVote.sql";
+import makeBackendSiteDesignerDiscussionVoteSql from "../../../preMain/backendSiteDesignerDiscussionVote.sql";
+import backendSiteDesignerDiscussionVote from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionVote.model";
 
 type input = {
   userId: string
@@ -14,7 +12,7 @@ type input = {
 }
 
 export default function getMyVote({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussion> | null>> => {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionVote> | null>> => {
 
     const d = {
       subDomainDb,
@@ -22,8 +20,7 @@ export default function getMyVote({ subDomainDb, errorHandler, subDomainTransact
       subDomainTransaction,
       loggers,
     }
-    const discussionCommentVoteSql = makeBackendSiteDesignerDiscussionCommentVoteSql(d)
-    const backendDiscussionValidation = makeBackendSiteDesignerDiscussionCommentValidation(d)
+    const discussionVoteSql = makeBackendSiteDesignerDiscussionVoteSql(d)
 
     //////////////////////////////////////
     // Validations
@@ -31,8 +28,8 @@ export default function getMyVote({ subDomainDb, errorHandler, subDomainTransact
 
     if (!args.userId) {
       return endMainFromError({
-        hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0001"
+        hint: "Datapoint 'userId' is not UUID format.",
+        errorIdentifier: "backendSiteDesignerDiscussionVote_getMyVote_error:0001"
       })
     }
 
@@ -42,48 +39,26 @@ export default function getMyVote({ subDomainDb, errorHandler, subDomainTransact
     
     if (!isIdStringFromUuid_userId.result) {
       return endMainFromError({
-        hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0002"
-      })
-    }
-
-    const isIdValid_userId = await backendDiscussionValidation.isIdValid({
-      id: args.userId
-    }).catch(error => errorHandler(error, loggers))
-
-    if (!isIdValid_userId.result) {
-      return endMainFromError({
-        hint: "Datapoint 'id' is not a valid UUID.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0003"
+        hint: "Datapoint 'userId' is not UUID format.",
+        errorIdentifier: "backendSiteDesignerDiscussionVote_getMyVote_error:0001"
       })
     }
 
     if (!args.discussionId) {
       return endMainFromError({
-        hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0004"
+        hint: "Datapoint 'discussionId' is not UUID format.",
+        errorIdentifier: "backendSiteDesignerDiscussionVote_getMyVote_error:0002"
       })
     }
 
-    const isIdStringFromUuid_discussionId = stringHelpers.isStringValidUuid({
-      str: args.userId
+    const isIdStringFromUuidDiscussionId = stringHelpers.isStringValidUuid({
+      str: args.discussionId
     })
     
-    if (!isIdStringFromUuid_discussionId.result) {
+    if (!isIdStringFromUuidDiscussionId.result) {
       return endMainFromError({
-        hint: "Datapoint 'id' is not UUID format.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0005"
-      })
-    }
-
-    const isIdValid_discussionId = await backendDiscussionValidation.isIdValid({
-      id: args.userId
-    }).catch(error => errorHandler(error, loggers))
-
-    if (!isIdValid_discussionId.result) {
-      return endMainFromError({
-        hint: "Datapoint 'id' is not a valid UUID.",
-        errorIdentifier: "backendSiteDesigner_discussionComment_getMyVote_error0006"
+        hint: "Datapoint 'discussionId' is not UUID format.",
+        errorIdentifier: "backendSiteDesignerDiscussionVote_getMyVote_error:0002"
       })
     }
 
@@ -91,7 +66,7 @@ export default function getMyVote({ subDomainDb, errorHandler, subDomainTransact
     // Sql
     // ===================================
 
-    const response = await discussionCommentVoteSql.getMyVote({
+    const response = await discussionVoteSql.getMyVote({
       discussionId: args.discussionId,
       userId: args.userId,
     }).catch(error => errorHandler(error, loggers))

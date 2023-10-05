@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-import backendSiteDesigner_discussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussionComment.model";
+import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
@@ -13,9 +13,9 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
 
   const db = subDomainDb.models;
 
-  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_discussionComment> | null>> => {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionComment> | null>> => {
 
-    const data = await db.backendSiteDesigner_discussionComment.create(
+    const data = await db.backendSiteDesignerDiscussionComment.create(
       args,
       {
         transaction: subDomainTransaction,

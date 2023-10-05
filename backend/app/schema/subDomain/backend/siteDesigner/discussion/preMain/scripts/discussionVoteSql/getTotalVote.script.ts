@@ -6,12 +6,12 @@ type input = {
   discussionId: string
 }
 
-export default function getTotalVoteForDiscussion({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getTotalVote({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
   const db = subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
 
-    const data = await db.backendSiteDesigner_discussionVote.findOne({
+    const data = await db.backendSiteDesignerDiscussionVote.findOne({
       attributes: [
         [sequelize.fn('sum', sequelize.col('vote')), 'voteTotal']
       ],

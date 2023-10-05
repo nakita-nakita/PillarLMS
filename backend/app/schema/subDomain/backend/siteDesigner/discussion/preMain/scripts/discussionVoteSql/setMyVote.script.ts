@@ -1,6 +1,6 @@
 import sequelize from "sequelize";
 import { Model } from "sequelize";
-import backendSiteDesigner_discussionVote from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesigner_discussionVote.model";
+import backendSiteDesignerDiscussionVote from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionVote.model";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { backendSiteDesignerDiscussionVoteEnum, convertNumberToVote, convertVoteToNumber } from "./_utils.private";
@@ -11,16 +11,16 @@ type input = {
   vote: backendSiteDesignerDiscussionVoteEnum
 }
 
-export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function setMyVote({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
-  return async ({ discussionId, userId, vote }: input): Promise<returningSuccessObj<backendSiteDesignerDiscussionVoteEnum | null>> => {
+  return async ({ discussionId, userId, vote }: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionVote> | null>> => {
 
-    let data: Model<backendSiteDesigner_discussionVote>;
+    let data: Model<backendSiteDesignerDiscussionVote>;
     const voteNumber = convertVoteToNumber(vote);
 
-    const record = await db.backendSiteDesigner_discussionVote.findOne({
+    const record = await db.backendSiteDesignerDiscussionVote.findOne({
       where: {
         discussionId,
         userId,
@@ -30,7 +30,7 @@ export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, subD
     }).catch(error => errorHandler(error, loggers))
 
     if (record) {
-      data = await db.backendSiteDesigner_discussionVote.update(
+      data = await db.backendSiteDesignerDiscussionVote.update(
         { vote: voteNumber },
         {
           where: {
@@ -46,18 +46,19 @@ export default function setMyVoteForDiscussion({ subDomainDb, errorHandler, subD
 
     } else {
 
-      data = await db.backendSiteDesigner_discussionVote.create({
+      data = await db.backendSiteDesignerDiscussionVote.create({
         discussionId,
         userId,
         vote: voteNumber
       }, {
+        returning: true,
         transaction: subDomainTransaction,
       }).catch(error => errorHandler(error, loggers))
     }
 
     return {
       success: true,
-      data: convertNumberToVote(data?.dataValues?.vote)
+      data,
     }
   }
 }

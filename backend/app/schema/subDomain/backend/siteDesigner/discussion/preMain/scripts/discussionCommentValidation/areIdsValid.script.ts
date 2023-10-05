@@ -10,7 +10,7 @@ export default function areIdsValid({ subDomainDb, errorHandler, subDomainTransa
 
   return async ({ idArray }: input) => {
 
-    const data = await db.backendSiteDesigner_discussionComment.count({
+    const data = await db.backendSiteDesignerDiscussionComment.count({
       where: {
         id: {
           [Op.in]: idArray

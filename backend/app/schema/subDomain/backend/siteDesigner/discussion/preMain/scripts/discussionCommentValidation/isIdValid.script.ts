@@ -9,7 +9,7 @@ export default function isIdValid({ subDomainDb, errorHandler, subDomainTransact
 
   return async (where: input) => {
 
-    const data = await db.backendSiteDesigner_discussionComment.count({
+    const data = await db.backendSiteDesignerDiscussionComment.count({
       where,
       transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
