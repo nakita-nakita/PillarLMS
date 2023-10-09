@@ -16,7 +16,9 @@ export default function getOneById({ domainDb, errorHandler, domainTransaction, 
         id
       },
       transaction: domainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+    })
+    
+    //.catch(error => errorHandler(error, loggers))
 
     return {
       success: true,

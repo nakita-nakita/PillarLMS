@@ -53,7 +53,9 @@ export default function getOneById({ domainDb, errorHandler, domainTransaction, 
 
     const response = await foundationUserProfileSql.getOneById({
       id: args.id,
-    }).catch(error => errorHandler(error, loggers))
+    })
+    
+    // .catch(error => errorHandler(error, loggers))
 
     return response
   }
