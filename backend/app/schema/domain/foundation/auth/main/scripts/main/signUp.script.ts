@@ -1,6 +1,7 @@
 import makeFoundationUserEntity from "../../../../../../domain/foundation/user"
 import makeBackendUserEntity from "../../../../../../subDomain/backend/user"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
+import getRandomColor from "../../../../../../utils/helpers/getRandomColor"
 import stringHelpers from "../../../../../../utils/stringHelpers"
 import { d_allDomain, d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
@@ -105,21 +106,21 @@ export default function signup(d: d_allDomain) {
       password: args.password,
     })
 
-    if (args.username) {
-      await userProfileMain.upsertOne({
-        id: user.data.dataValues.id,
-        username: args.username,
-      })
-    }
+    await userProfileMain.upsertOne({
+      id: user.data.dataValues.id,
+      username: args.username,
+      labelColor: getRandomColor(),
+      circleColor: getRandomColor(),
+    })
 
     const token = await authFunc.signinToken({ userId: user.data.dataValues.id })
 
     // if first user: add to backend
     // if (!doesAUserExists.result) { // removed for building backend. will put back when working on security patching updates.
-      await backendUserEntity.userMain.addOneById({
-        userId: user.data.dataValues.id,
-        isAdmin: true,
-      })
+    await backendUserEntity.userMain.addOneById({
+      userId: user.data.dataValues.id,
+      isAdmin: true,
+    })
     // }
 
     // add all users to client.
