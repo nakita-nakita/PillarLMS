@@ -20,9 +20,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { useTheme } from '@mui/material';
+import { Badge, useTheme } from '@mui/material';
 import { realtimeLink } from '@/utils/realtime/link';
 
+import GroupIcon from '@mui/icons-material/Group';
 function Header(props) {
   const router = useRouter()
   const theme = useTheme()
@@ -85,21 +86,34 @@ function Header(props) {
               </Tooltip>
 
               <NotificationButton />
-              <Button
-                color="secondary"
-                variant="contained"
-                aria-label="meeting panel"
-                onClick={onMeetingDrawerToggle}
-                edge="start"
-                sx={{
-                  my: 1,
-                  color: "#fff"
-                }}
-              >
-                <strong>
-                  Meetings
-                </strong>
-              </Button>
+              <Tooltip title="Meetings">
+                <IconButton
+                  variant="contained"
+                  aria-label="meeting panel"
+                  onClick={onMeetingDrawerToggle}
+                  edge="start"
+                  sx={{
+                    my: 1,
+                    color: "#fff"
+                  }}
+                >
+                  {panelMeetingDoc.id && (
+
+                    <Badge badgeContent={"LIVE"} color="error" sx={{
+                      '& .MuiBadge-badge': {
+                        right: -3,
+                        top: -10,
+                      }
+                    }}>
+                      <GroupIcon fontSize="large" />
+                    </Badge>
+                  )}
+                  {!panelMeetingDoc.id && (
+                    <GroupIcon fontSize="large" />
+                  )}
+
+                </IconButton>
+              </Tooltip>
 
             </Grid>
           </Grid>
@@ -111,8 +125,8 @@ function Header(props) {
           <div style={{ maxWidth: 936, margin: 'auto', width: "100%" }}>
             <Tabs value={tabs.selectedValue} textColor="inherit">
               {tabs.tabs.map(({ id, link, name }, index) => (
-                <Link onClick={(() => changeUrl(link)) } key={id || index}
-                sx={{color: theme.palette.primary.contrastText}}>
+                <Link onClick={(() => changeUrl(link))} key={id || index}
+                  sx={{ color: theme.palette.primary.contrastText }}>
                   <Tab
                     index={0}
                     label={name}

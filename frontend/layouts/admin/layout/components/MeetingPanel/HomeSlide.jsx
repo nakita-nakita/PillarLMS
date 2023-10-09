@@ -124,7 +124,7 @@ function HomeSlide() {
           <ListItemText
             primary={(
               <Typography variant="h6" component="div">
-                All Meetings
+                Meetings
               </Typography>
             )}
           // secondary="Secondary text"
