@@ -6,13 +6,15 @@ import React from 'react'
 // Mine
 import tabsJson from '@/pages-scripts/portal/site/tabs.json';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import PagesDataGrid from '@/pages-scripts/portal/site/pages/data.grid';
+import PagesDataGrid from '@/pages-scripts/portal/site/pages/components/data.grid';
 import AdminLayout from '@/layouts/admin/layout';
 
 // MUI
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import PageDataGrid from '@/pages-scripts/portal/site/pages/components/PageDataGrid';
+import { Paper } from '@mui/material';
 
 const Page = () => {
   const { setTabs } = React.useContext(AdminLayoutContext)
@@ -27,7 +29,7 @@ const Page = () => {
   }, [])
 
   return (
-    
+
     <Box sx={{
       flexGrow: 1,
       width: "100%",
@@ -40,8 +42,10 @@ const Page = () => {
       </Stack>
       <br />
       <br />
-      <PagesDataGrid />
-    </Box>
+      <Paper sx={{p:0}} className='admin-card'>
+        <PageDataGrid />
+      </Paper>
+    </Box >
   )
 }
 

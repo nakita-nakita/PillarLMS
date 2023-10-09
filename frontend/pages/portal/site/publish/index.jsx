@@ -22,7 +22,7 @@ const PublishPage = () => {
     setTabs(prevState => ({
       ...prevState,
       tabs: tabsJson.tabs,
-      selectedValue: 3,
+      selectedValue: 2,
     }))
 
   }, [])

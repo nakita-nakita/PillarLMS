@@ -1,7 +1,7 @@
 // libraries
 import * as React from 'react';
-import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/navigation'
 
 // mine
 import NotificationButton from './Header/NotificationButton.component';
@@ -19,10 +19,29 @@ import Tabs from '@mui/material/Tabs';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import { useTheme } from '@mui/material';
+import { realtimeLink } from '@/utils/realtime/link';
 
 function Header(props) {
+  const router = useRouter()
+  const theme = useTheme()
+
   const { onDrawerToggle, onMeetingDrawerToggle } = props;
-  const { tabs } = React.useContext(AdminLayoutContext)
+  const { tabs, setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+
+  const changeUrl = (href) => {
+    // router.push(href)
+    realtimeLink({
+      to: href,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      meetingId: panelMeetingDoc.id,
+      router,
+      userId: idChip.id,
+      setPanelMeetingDoc,
+
+    })
+  }
 
   return (
     <React.Fragment>
@@ -92,7 +111,8 @@ function Header(props) {
           <div style={{ maxWidth: 936, margin: 'auto', width: "100%" }}>
             <Tabs value={tabs.selectedValue} textColor="inherit">
               {tabs.tabs.map(({ id, link, name }, index) => (
-                <Link href={link} key={id || index}>
+                <Link onClick={(() => changeUrl(link)) } key={id || index}
+                sx={{color: theme.palette.primary.contrastText}}>
                   <Tab
                     index={0}
                     label={name}

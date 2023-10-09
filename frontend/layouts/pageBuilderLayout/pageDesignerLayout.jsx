@@ -36,6 +36,10 @@ import Header from '@/layouts/admin/layout/components/Header';
 import PageDesignerLayoutContext from './pageDesignerLayout.context';
 import SitePreview from './components/main-slides/site-preview';
 import MetaDataPreview from './components/main-slides/meta-data-preview';
+import WhoIsOnPageSockets from '../admin/sockets/WhoIsOnPageSockets';
+import NotificationSockets from '../admin/sockets/NotificationsSockets';
+import MeetingSockets from '../admin/sockets/MeetingSockets';
+import MeetingPanel from '../admin/layout/components/MeetingPanel';
 
 
 // import MeetingPanel from '../../../vc/layout/components/MeetingPanel';
@@ -43,52 +47,7 @@ import MetaDataPreview from './components/main-slides/meta-data-preview';
 
 const drawerWidth = 350;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  }),
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
-
-export default function PageBuilderLayout() {
+export default function PageBuilderLayout({ children, ...props }) {
 
   const headerRef = React.useRef();
   const theme = useTheme();
@@ -171,37 +130,19 @@ export default function PageBuilderLayout() {
           aria-label="Page builder menu"
         >
           <Drawer
-            // sx={{
-            //   width: drawerWidth,
-            //   flexShrink: 0,
-            //   '& .MuiDrawer-paper': {
-            //     width: drawerWidth,
-            //     boxSizing: 'border-box',
-            //   },
-            //   // background: theme.palette.grey[300]
-            // }}
-
-            //react react-spring
             sx={{
 
               width: drawerWidth,
               visibility: "visible",
               minHeight: "73px",
-              // position: pageDesignerLayoutContext.leftDrawer.isOpened
-              //   ? "relative"
-              //   : "absolute",
-
-              // display: {
-              //   xs: 'block',
-              //   sm: 'none'
-              // },
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, visibility: "visible" },
             }}
             variant="persistent"
             anchor="left"
             open={pageDesignerLayoutContext.leftDrawer.isOpened}
           >
-            <DrawerHeader
+            {children}
+            {/* <DrawerHeader
               sx={{
 
                 justifyContent: "space-between",
@@ -225,19 +166,19 @@ export default function PageBuilderLayout() {
               {pageDesignerLayoutContext.leftDrawer.slide === "PANEL" && (<PageBuilderLeftSlidesPanelSidebar></PageBuilderLeftSlidesPanelSidebar>)}
               {pageDesignerLayoutContext.leftDrawer.slide === "METADATA" && (<PageBuilderLeftSlidesPageDataSidebar></PageBuilderLeftSlidesPageDataSidebar>)}
 
-            </div>
+            </div> */}
           </Drawer>
         </Box>
 
-{/* Realtime removed */}
-        {/* <MeetingPanel
-          PaperProps={{ style: { width: drawerWidth } }}
-          variant="temporary"
-          open={adminLayoutContext.rightDrawer.isOpened}
-          onClose={onMeetingDrawerToggle}
-          anchor="right"
-        // location={props.location}
-        /> */}
+        <Box component="nav">
+          <MeetingPanel
+            PaperProps={{ style: { width: drawerWidth } }}
+            variant="temporary"
+            open={adminLayoutContext.rightDrawer.isOpened}
+            onClose={onMeetingDrawerToggle}
+            anchor="right"
+          />
+        </Box>
 
         <Box
           component="main"
@@ -249,17 +190,22 @@ export default function PageBuilderLayout() {
               : `calc(100vw)`,
           }}
         >
-          {/* <Main open={open} sx={{ p: 0 }}> */}
 
           <div
             ref={headerRef}
           >
+            {/* <WhoIsOnPageSockets>
+              <NotificationSockets>
+                <MeetingSockets> */}
             <Header
               isOpened={pageDesignerLayoutContext.leftDrawer.isOpened}
               onDrawerToggle={handleDrawerToggle}
               onMeetingDrawerToggle={onMeetingDrawerToggle}
               tabs={[]}
             />
+            {/* </MeetingSockets>
+              </NotificationSockets>
+            </WhoIsOnPageSockets> */}
           </div>
           <div style={{
             height: headerHeight ? `calc(100vh - ${headerHeight + 5}px)` : `0`,
@@ -268,8 +214,9 @@ export default function PageBuilderLayout() {
 
           }}>
 
-            {pageDesignerLayoutContext.leftDrawer.main === "SITE" && (<SitePreview />)}
-            {pageDesignerLayoutContext.leftDrawer.main === "METADATA" && (<MetaDataPreview />)}
+            {false && <SitePreview />}
+            {/* {pageDesignerLayoutContext.leftDrawer.main === "SITE" && (<SitePreview />)} */}
+            {/* {pageDesignerLayoutContext.leftDrawer.main === "METADATA" && (<MetaDataPreview />)} */}
 
           </div>
         </Box>
@@ -278,89 +225,3 @@ export default function PageBuilderLayout() {
   );
 }
 
-
-
-// <AppBar position="fixed" open={open}>
-//         <Toolbar>
-//           <IconButton
-//             color="inherit"
-//             aria-label="open drawer"
-//             onClick={handleDrawerOpen}
-//             edge="start"
-//             sx={{ mr: 2, ...(open && { display: 'none' }) }}
-//           >
-//             <MenuIcon />
-//           </IconButton>
-//           <Grid container spacing={1} alignItems="center">
-//             {/* <Grid sx={{
-//               // display: { sm: 'none', xs: 'block' } 
-//             }} item>
-//               <IconButton
-//                 color="inherit"
-//                 aria-label="open drawer"
-//                 onClick={onDrawerToggle}
-//                 edge="start"
-//               >
-//                 <MenuIcon fontSize="large" />
-//               </IconButton>
-//             </Grid>
-//             <Grid item xs /> */}
-
-//             <Grid item>
-//               <Tooltip title="Who is on the page">
-//                 <IconButton
-//                   color="inherit"
-//                   aria-label="who is on page"
-//                   edge="start"
-//                   style={{
-//                     borderRadius: "5px",
-//                   }}
-//                 // disableRipple
-//                 >
-//                   <WithAvatarGroup max={4} total={15} listOfIcons={listOfIcons} />
-//                 </IconButton>
-//               </Tooltip>
-
-//               <NotificationButton />
-//               {/* <IconButton
-//                 color="inherit"
-//                 variant="contained"
-//                 aria-label="open drawer"
-//                 onClick={onDrawerToggle}
-//                 edge="start"
-//                 style={{
-//                   marginRight: "20px",
-//                 }}
-//               >
-//                 <NotificationsIcon fontSize="large" />
-//               </IconButton> */}
-//               <Button
-//                 color="secondary"
-//                 variant="contained"
-//                 aria-label="meeting panel"
-//                 onClick={onMeetingDrawerToggle}
-//                 edge="start"
-//                 sx={{
-//                   my: 1,
-//                   color: "#fff"
-//                 }}
-//               >
-//                 {/* <Box sx={{ mx: 1 }}>
-//                   <GroupsIcon fontSize="large" />
-//                 </Box> */}
-
-//                 {/* <Typography color="inherit" variant="h6" component="h6"> */}
-//                 {/* Username Username */}
-//                 {/* Company Name */}
-//                 <strong>
-//                   Meetings
-//                 </strong>
-//                 {/* </Typography> */}
-//                 {/* <ChevronRightIcon /> */}
-//               </Button>
-
-//               {/* <Button variant="outlined" color="inherit">Start a Meeting</Button> */}
-//             </Grid>
-//           </Grid>
-//         </Toolbar>
-//       </AppBar>

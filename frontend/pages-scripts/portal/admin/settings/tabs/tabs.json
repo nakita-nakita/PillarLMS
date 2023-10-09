@@ -1,0 +1,12 @@
+{
+    "tabs": [
+        {
+            "link": "/portal/admin/settings/general/",
+            "name": "General"
+        },
+        {
+            "link": "/portal/admin/settings/website",
+            "name": "Website"
+        }
+    ]
+}

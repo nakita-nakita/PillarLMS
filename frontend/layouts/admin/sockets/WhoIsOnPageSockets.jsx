@@ -67,7 +67,7 @@ function WhoIsOnPageSockets({ children }) {
 
   }, [router.pathname]);
 
-  //Easier to put this one meeting function into this file because this file focuses on routing.
+  //Easier to put this one meeting function into this file because this file focuses on emiting per page change.
   React.useEffect(() => {
     // router updated instead of adminLayoutContext
     if (router.pathname !== lastRoute.pathname) {

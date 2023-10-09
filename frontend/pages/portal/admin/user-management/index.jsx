@@ -5,9 +5,9 @@ import React from 'react'
 
 // Mine
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import tabsJson from '@/pages-scripts/vc/admin/tabs.json';
-import InviteList from '@/pages-scripts/vc/admin/user-management/invite.list';
-import UserList from '@/pages-scripts/vc/admin/user-management/user.list';
+import tabsJson from '@/pages-scripts/portal/admin/tabs.json';
+import InviteList from '@/pages-scripts/portal/admin/user-management/invite.list';
+import UserList from '@/pages-scripts/portal/admin/user-management/user.list';
 import AdminLayout from '@/layouts/admin/layout';
 
 // MUI

@@ -1,6 +1,6 @@
 // Libraries
 import React, { useEffect } from 'react'
-import { SettingTabsProvider } from '@/pages-scripts/portal/admin/settings/setting-tabs.context';
+import { SettingTabsProvider } from '@/pages-scripts/portal/admin/settings/tabs/setting-tabs.context';
 import { getAdminLayoutInitGraphQL } from '../store/init.store';
 import { SnackbarProvider } from 'notistack';
 
@@ -123,22 +123,22 @@ export function AdminLayoutProvider({ children }) {
 
 
   return (
-    <SnackbarProvider>
-      <AdminLayoutContext.Provider value={{
-        leftDrawer, setLeftDrawer,
-        rightDrawer, setRightDrawer,
-        meetingPanel, setMeetingPanel,
-        panelMeetingDoc, setPanelMeetingDoc,
-        whoIsOnPage, setWhoIsOnPage,
-        notifications, setNotifications,
-        tabs, setTabs,
-        idChip, setIdChip,
-      }}>
+    <AdminLayoutContext.Provider value={{
+      leftDrawer, setLeftDrawer,
+      rightDrawer, setRightDrawer,
+      meetingPanel, setMeetingPanel,
+      panelMeetingDoc, setPanelMeetingDoc,
+      whoIsOnPage, setWhoIsOnPage,
+      notifications, setNotifications,
+      tabs, setTabs,
+      idChip, setIdChip,
+    }}>
+      <SnackbarProvider>
         <SettingTabsProvider>
           {children}
         </SettingTabsProvider>
-      </AdminLayoutContext.Provider>
-    </SnackbarProvider>
+      </SnackbarProvider>
+    </AdminLayoutContext.Provider>
   )
 }
 

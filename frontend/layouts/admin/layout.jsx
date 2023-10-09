@@ -8,10 +8,15 @@ import { useRouter } from 'next/router';
 import AdminLayoutPage from './layout/AdminLayoutPage';
 import { AdminLayoutProvider } from './layout/adminLayout.context';
 import { initSocket } from '@/utils/realtime/socket';
+import WebsiteSettingLayout from '../websiteSettingsLayout/layout';
+import PageBuilderLayout from '../pageBuilderLayout/layout';
 
 // MUI
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MuiAlert from '@mui/material/Alert';
+import WhoIsOnPageSockets from './sockets/WhoIsOnPageSockets';
+import NotificationSockets from './sockets/NotificationsSockets';
+import MeetingSockets from './sockets/MeetingSockets';
 
 // Icons
 
@@ -176,7 +181,9 @@ theme = {
 
 const drawerWidth = 350;
 
-export default function AdminLayout(props) {
+export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, ...props }) {
+
+  console.log('routes props', { isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, ...props })
   const router = useRouter();
 
   React.useEffect(() => {
@@ -186,12 +193,19 @@ export default function AdminLayout(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <SiteDesignerProvider> */}
       <AdminLayoutProvider >
-        {/* {children} */}
-        <AdminLayoutPage {...props} />
+        <WhoIsOnPageSockets>
+          <NotificationSockets>
+            <MeetingSockets>
+              {/* {isCourseBuilder && ()} */}
+              {isPageBuilder && (<PageBuilderLayout {...props} />)}
+              {isWebsiteSetting && (<WebsiteSettingLayout SideMenu={SideMenu} {...props} />)}
+              {!isWebsiteSetting && !isPageBuilder && (<AdminLayoutPage {...props} />)}
+
+            </MeetingSockets>
+          </NotificationSockets>
+        </WhoIsOnPageSockets>
       </AdminLayoutProvider>
-      {/* </SiteDesignerProvider> */}
     </ThemeProvider>
   );
 }

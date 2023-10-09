@@ -1,11 +1,11 @@
 {
     "tabs": [
         {
-            "link": "/vc/admin/user-management",
+            "link": "/portal/admin/user-management",
             "name": "User Management"
         },
         {
-            "link": "/vc/admin/settings/church/",
+            "link": "/portal/admin/settings/general/",
             "name": "Settings"
         }
     ]

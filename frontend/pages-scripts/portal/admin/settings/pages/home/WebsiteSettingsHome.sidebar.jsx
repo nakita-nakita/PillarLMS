@@ -1,0 +1,316 @@
+'use client'
+import * as React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import ListItemButton from '@mui/material/ListItemButton';
+import Badge from '@mui/material/Badge';
+import { useTheme } from '@mui/material/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from 'next/navigation';
+import WebsiteSettingLayoutContext from '@/layouts/websiteSettingsLayout/WebsiteSettingLayout.context';
+import SettingsBackButton from '../../components/BackButton/BackButton.component';
+import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import { realtimeLink } from '@/utils/realtime/link';
+import { Box } from '@mui/material';
+
+function WebsiteSettingsHomeSidebar() {
+  const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
+  const theme = useTheme();
+  const router = useRouter()
+
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+
+  const changeUrl = (href) => {
+    // router.push(href)
+    realtimeLink({
+      to: href,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      meetingId: panelMeetingDoc.id,
+      router,
+      userId: idChip.id,
+      setPanelMeetingDoc,
+
+    })
+  }
+
+  const circleStatus = {
+    borderRadius: "50px",
+    height: "15px",
+    width: "15px",
+  }
+
+  const circleStatusDangerStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.error.dark,
+  }
+
+  const circleStatusSuccessStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.success.dark,
+  }
+
+  const MenuStyle = {
+    "&:hover": {
+      backgroundColor: theme.palette.grey[200]
+    }
+  }
+
+  return (
+    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+      <SettingsBackButton
+        label={"Back to settings"}
+        href={"/portal/admin/settings/website"}
+        isPrimary
+      />
+      {/* <ListItemButton
+          onClick={() => changeUrl("/portal/admin/settings/website")}
+          sx={{
+            // backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+          }}
+        >
+  
+          <ListItem
+            sx={{
+              py: 1,
+              px: 2,
+            }}
+          >
+            <ListItemText>
+              <div style={{ display: "flex" }}>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}>
+  
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    color: theme.palette.grey[100],
+                    height: "35px",
+                  }}>
+                    <ArrowBackIcon sx={{ mr: 1 }} />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    flexDirection: "column",
+                    color: theme.palette.grey[300]
+                  }}>
+  
+                    <Typography color="inherit" variant="h6" component="h2"
+                      style={{
+                        lineHeight: 1.1,
+                        textDecoration: "underline",
+                      }}
+                    >
+                      Back to settings
+                    </Typography>
+                  </div>
+                </div>
+              </div>
+  
+  
+  
+            </ListItemText>
+          </ListItem>
+        </ListItemButton> */}
+
+
+      {/* <br /> */}
+      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/colors")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusDangerStyle}></div>
+          )}>
+          <ListItemAvatar>
+            <Avatar alt="Meta-data for page" src="\admin\icons\color-icon.png" />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Colors"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                  </Typography> */}
+                Pick your brand colors
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+      <Divider variant="inset" component="li" />
+      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/header")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+        <ListItemAvatar>
+          <Avatar alt="Meta-data for page" src="\admin\icons\header-icon.png" />
+        </ListItemAvatar>
+          <ListItemText
+            primary="Header"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                The top of the website
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+      <Divider variant="inset" component="li" />
+      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/footer")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+        <ListItemAvatar>
+          <Avatar alt="Meta-data for page" src="\admin\icons\footer-icon.png" />
+        </ListItemAvatar>
+          <ListItemText
+            primary="Footer"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                The bottom of the website
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+      <Divider variant="inset" component="li" />
+      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/browser-tabs")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="browser icon" src="\admin\icons\browser.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
+          <ListItemText
+            primary="Browser Tabs"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                Extra website styles
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+
+
+
+
+
+
+
+
+      <Divider variant="inset" component="li" />
+      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/link")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+          <ListItemAvatar>
+            <Avatar alt="Meta-data for page" src="\admin\icons\link-icon.png" />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Links"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                When people send links between each other
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+      {/* <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+          </ListItemAvatar>
+          <ListItemText
+            primary="Oui Oui"
+            secondary={
+              <React.Fragment>
+                <Typography
+                  sx={{ display: 'inline' }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                >
+                  Sandra Adams
+                </Typography>
+                {' — Do you have Paris recommendations? Have you ever…'}
+              </React.Fragment>
+            }
+          />
+        </ListItem> */}
+    </List>
+  );
+}
+
+export default WebsiteSettingsHomeSidebar

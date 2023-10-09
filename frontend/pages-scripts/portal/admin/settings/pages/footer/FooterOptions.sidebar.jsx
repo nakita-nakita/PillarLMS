@@ -1,0 +1,230 @@
+
+
+
+  'use client'
+
+import * as React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import ListItemButton from '@mui/material/ListItemButton';
+import Badge from '@mui/material/Badge';
+import { useTheme } from '@mui/material/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from 'next/navigation';
+import WebsiteSettingLayoutContext from '@/layouts/websiteSettingsLayout/WebsiteSettingLayout.context';
+import SettingsBackButton from '../../components/BackButton/BackButton.component';
+import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import { realtimeLink } from '@/utils/realtime/link';
+
+import FormGroup from '@mui/material/FormGroup';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Button from '@mui/material/Button';
+import NavLinks from '../../components/NavLinks/NavLinks.component';
+// import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
+import TopBar from '../../components/NavLinks/TopBar.component';
+import dynamic from 'next/dynamic';
+import { ListItemSecondaryAction } from '@mui/material';
+import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
+import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+import RealTimeRadioRow from '@/components/realtime/RadioRow/RadioRow.realtime';
+import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
+import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+
+// const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
+//   ssr: false,
+// });
+
+function WebsiteSettingsFooterSidebar() {
+  const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
+  const theme = useTheme();
+  const router = useRouter()
+
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+
+  const changeUrl = (href) => {
+    // router.push(href)
+    realtimeLink({
+      to: href,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      meetingId: panelMeetingDoc.id,
+      router,
+      userId: idChip.id,
+      setPanelMeetingDoc,
+
+    })
+  }
+
+  const circleStatus = {
+    borderRadius: "50px",
+    height: "15px",
+    width: "15px",
+    display: "inline-block",
+  }
+
+  const circleStatusDangerStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.error.dark,
+  }
+
+  const circleStatusSuccessStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.success.dark,
+  }
+
+  const MenuStyle = {
+    "&:hover": {
+      backgroundColor: theme.palette.grey[200]
+    }
+  }
+
+  return (
+    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+      <SettingsBackButton
+        label={"Main Menu"}
+        href={"/portal/admin/settings/website/settings"}
+      />
+
+      
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <HeaderRow label={"Select Footer"} />
+      <ListItem>
+        <div>
+
+          <p>Explore the marketplace to find your desired footer. Please note that available options might vary based on your header choice.</p>
+          <br />
+          <Button variant="contained" color="primary">
+            Choose Footer
+          </Button>
+          <br />
+
+        </div>
+      </ListItem>
+
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <HeaderRow label={"Select colors"} />
+      <RealTimeColorPickerRow label={"Main color"} />
+      <RealTimeColorPickerRow label={"Main text color"} />
+      <RealTimeColorPickerRow label={"Menu color"} />
+      <RealTimeColorPickerRow label={"Menu text color"} />
+      <RealTimeColorPickerRow label={"Social media icons color"} />
+      <RealTimeColorPickerRow label={"Sign In button color"} />
+      <RealTimeColorPickerRow label={"Sign In hover button color"} />
+      <RealTimeColorPickerRow label={"Admin Sign In button color"} />
+      <RealTimeColorPickerRow label={"Admin Sign In hover button color"} />
+
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <HeaderRow label={"Branding"} />
+      <RealTimeRadioRow id="radio" label="Text" />
+      <RealTimeRadioRow id="radio" label="Image" />
+      <RealTimeTextFieldRow label={"Brand Text"} />
+
+
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <TopBar />
+      <NavLinksWrapper />
+      <RealTimeResortLockedRow />
+
+
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <HeaderRow label={"Social Media Buttons"} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Twitter
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Facebook
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Instagram
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Whatsapp
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Telegram
+        </>
+      )} />
+
+
+
+
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+      <HeaderRow label={"Advance Settings"} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          <div style={circleStatusSuccessStyle}></div>
+          &nbsp;
+          <span>Status</span>
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Show Client Log in button
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Show Admin Log in button
+        </>
+      )} />
+      <RealTimeSwitchRow id="status" label={(
+        <>
+          Show Address
+        </>
+      )} />
+      <Divider component="li" style={{ borderTopWidth: "12px" }} />
+
+
+
+
+
+
+
+
+      <ListItem alignItems="flex-start">
+        <ListItemText
+          // primary="Advance Settings"
+          secondary={
+            <React.Fragment>
+              <br />
+              <Button variant="contained">Save</Button>
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+
+
+
+
+
+
+
+
+
+
+
+
+    </List >
+  );
+}
+
+export default WebsiteSettingsFooterSidebar

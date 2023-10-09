@@ -145,8 +145,40 @@ export default function Navigator(props) {
           </ListItemButton>
 
         </Box>
-        <br />
+        {/* <br /> */}
 
+        <ListItem
+          sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+        >
+          <ListItemText>
+            <Typography variant="body1" color="textSecondary">
+              <em>
+                <small>
+                  For Organization
+                </small>
+              </em>
+            </Typography>
+          </ListItemText>
+        </ListItem>
+        <ListItemButton onClick={() => changeUrl("/portal/dashboard/")}>
+
+          <ListItem
+            sx={{ py: 0, px: 3 }}
+          >
+            <ListItemText>
+              <Typography color="inherit" variant="h6" component="h2"
+                style={{
+                  // lineHeight: 1.1,
+                  color: theme.palette.grey[900]
+                }}
+              >
+                Dashboard
+              </Typography>
+
+
+            </ListItemText>
+          </ListItem>
+        </ListItemButton>
         <ListItemButton onClick={() => changeUrl("/portal/media-manager/")}>
 
           <ListItem
@@ -166,17 +198,13 @@ export default function Navigator(props) {
             </ListItemText>
           </ListItem>
         </ListItemButton>
-        <br />
+        {/* <br /> */}
 
 
-        <ListItemButton onClick={() => changeUrl("/portal/calendar")}>
+        {/* <ListItemButton onClick={() => changeUrl("/portal/calendar")}>
 
           <ListItem
             sx={{ py: 0, px: 3 }}
-
-          // secondaryAction={
-          //   <Alert severity="warning"><small><strong>Upgrade</strong></small><hr /><span>Virtual Plan</span></Alert>
-          // }
           >
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"
@@ -192,7 +220,7 @@ export default function Navigator(props) {
             </ListItemText>
           </ListItem>
         </ListItemButton>
-        <br />
+        <br /> */}
         <Box>
           {/* <ListItem sx={{ py: 0, px: 3 }}>
             <ListItemText>
@@ -211,6 +239,20 @@ export default function Navigator(props) {
 
             </ListItemText>
           </ListItem> */}
+
+          <ListItem
+            sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+          >
+            <ListItemText>
+              <Typography variant="body1" color="textSecondary">
+                <em>
+                  <small>
+                    For Content Creation
+                  </small>
+                </em>
+              </Typography>
+            </ListItemText>
+          </ListItem>
           <ListItemButton onClick={() => changeUrl("/portal/site/discussion/")}>
 
             <ListItem sx={{ py: 0, px: 3 }}>
@@ -222,6 +264,23 @@ export default function Navigator(props) {
                   }}
                 >
                   Website
+                </Typography>
+
+
+              </ListItemText>
+            </ListItem>
+          </ListItemButton>
+          <ListItemButton onClick={() => changeUrl("/portal/courses/discussion/")}>
+
+            <ListItem sx={{ py: 0, px: 3 }}>
+              <ListItemText>
+                <Typography color="inherit" variant="h6" component="h2"
+                  style={{
+                    // lineHeight: 1.1,
+                    color: theme.palette.grey[900]
+                  }}
+                >
+                  Courses
                 </Typography>
 
 
@@ -247,7 +306,7 @@ export default function Navigator(props) {
             </ListItem>
           </ListItemButton> */}
 
-          <br />
+          {/* <br /> */}
           {/* <ListItem sx={{ py: 0, px: 3 }}>
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h3"
@@ -330,6 +389,35 @@ export default function Navigator(props) {
               </ListItemText>
             </ListItem>
           </ListItemButton> */}
+          <ListItem
+            sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+          >
+            <ListItemText>
+              <Typography variant="body1" color="textSecondary">
+                <em>
+                  <small>
+                    For users
+                  </small>
+                </em>
+              </Typography>
+            </ListItemText>
+          </ListItem>
+          <ListItemButton onClick={() => changeUrl("/portal/analytics/")}>
+            <ListItem sx={{ py: 0, px: 3 }}>
+              <ListItemText>
+                <Typography color="inherit" variant="h6" component="h2"
+                  style={{
+                    // lineHeight: 1.1,
+                    color: theme.palette.grey[900]
+                  }}
+                >
+                  Analytics
+                </Typography>
+
+
+              </ListItemText>
+            </ListItem>
+          </ListItemButton>
           <ListItemButton onClick={() => changeUrl("/portal/admin/user-management/")}>
             <ListItem sx={{ py: 0, px: 3 }}>
               <ListItemText>

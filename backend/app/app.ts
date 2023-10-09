@@ -111,7 +111,7 @@ const makeApp = async function () {
         socket: socket,
         socketId: socket.id,
         userId,
-        email: user.data.dataValues.email,
+        email: user.data?.dataValues?.email,
         callByType: userProfile.data?.dataValues?.callByType as CallByTypeEnum,
         circleColor: userProfile.data?.dataValues?.circleColor,
         firstName: userProfile.data?.dataValues?.firstName,

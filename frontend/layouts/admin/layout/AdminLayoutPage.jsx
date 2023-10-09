@@ -35,42 +35,42 @@ export default function AdminLayoutPage(props) {
 
   return (
     <>
-      <WhoIsOnPageSockets>
-        <NotificationSockets>
-          <MeetingSockets>
-            <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-              <CssBaseline />
-              <Box component="nav">
-                <Navigator
-                  PaperProps={{ style: { width: drawerWidth } }}
-                  variant="temporary"
-                  open={adminLayoutContext.leftDrawer.isOpened}
-                  onClose={handleDrawerToggle}
-                />
-                <MeetingPanel
-                  PaperProps={{ style: { width: drawerWidth } }}
-                  variant="temporary"
-                  open={adminLayoutContext.rightDrawer.isOpened}
-                  onClose={onMeetingDrawerToggle}
-                  anchor="right"
-                />
-              </Box>
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Header
-                  onDrawerToggle={handleDrawerToggle}
-                  onMeetingDrawerToggle={onMeetingDrawerToggle}
-                  tabs={props?.pageContext?.tabs || props?.tabs || []}
-                  title={props?.pageContext?.title || props?.title || ""}
-                // pageContext={props.pageContext}
-                />
-                <Box component="main" sx={{ flex: 1, py: 3, px: 2, bgcolor: '#eaeff1', }}>
-                  {props.children}
-                </Box>
-              </Box>
-            </Box>
-          </MeetingSockets>
-        </NotificationSockets>
-      </WhoIsOnPageSockets>
+      {/* <NotificationSockets>
+        <MeetingSockets>
+          <WhoIsOnPageSockets> */}
+      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+        <CssBaseline />
+        <Box component="nav">
+          <Navigator
+            PaperProps={{ style: { width: drawerWidth } }}
+            variant="temporary"
+            open={adminLayoutContext.leftDrawer.isOpened}
+            onClose={handleDrawerToggle}
+          />
+          <MeetingPanel
+            PaperProps={{ style: { width: drawerWidth } }}
+            variant="temporary"
+            open={adminLayoutContext.rightDrawer.isOpened}
+            onClose={onMeetingDrawerToggle}
+            anchor="right"
+          />
+        </Box>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Header
+            onDrawerToggle={handleDrawerToggle}
+            onMeetingDrawerToggle={onMeetingDrawerToggle}
+            tabs={props?.pageContext?.tabs || props?.tabs || []}
+            title={props?.pageContext?.title || props?.title || ""}
+          // pageContext={props.pageContext}
+          />
+          <Box component="main" sx={{ flex: 1, py: 3, px: 2, bgcolor: '#eaeff1', }}>
+            {props.children}
+          </Box>
+        </Box>
+      </Box>
+      {/* </WhoIsOnPageSockets>
+        </MeetingSockets>
+      </NotificationSockets> */}
     </>
   );
 }

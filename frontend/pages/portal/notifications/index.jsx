@@ -18,7 +18,7 @@ import { setNotificationSeenGraphQL } from '@/components/notification/store/noti
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 
 const NotificationsPage = () => {
-  const { setNotifications } = React.useContext(AdminLayoutContext)
+  const { setNotifications, setTabs } = React.useContext(AdminLayoutContext)
 
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [nofis, setNofis] = React.useState([])
@@ -47,6 +47,10 @@ const NotificationsPage = () => {
   }
 
   React.useEffect(() => {
+    setTabs(prevState => ({
+      ...prevState,
+      tabs: [],
+    }))
     getNotifications()
     setNotificationSeenGraphQL().then(() => {
       

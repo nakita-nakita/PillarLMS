@@ -14,6 +14,10 @@ const checkTokenValid = async ({ token }) => {
     variables: { token }
   })
 
+  if (response.errors) {
+    return false
+  }
+
   console.log('!!!!', response.data?.foundationAuth_isTokenValid?.result)
   return response?.data?.foundationAuth_isTokenValid?.result ? true : false
 }
@@ -36,8 +40,9 @@ export async function middleware(req) {
   const isBuilderRoute = req.nextUrl.pathname.startsWith('/builder')
   const isAuthRoute = req.nextUrl.pathname.startsWith('/auth')
   const authToken = req.cookies.get("authToken")
-
+  
   if (isVcRoute || isClientRoute || isBuilderRoute) {
+    console.log('!!!!', origin, returnURL)
     if (authToken?.value) {
 
       /////////////////////////////////////////// THIS IS WHERE I LEFT OFF!!!!!

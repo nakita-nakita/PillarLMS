@@ -97,7 +97,10 @@ const DiscussionPage = () => {
         <>
           <Stack spacing={2} direction="row">
             <Button variant="contained" color="success" onClick={handleNewPost}>New</Button>
-            <FilterToggle onChange={(event, info) => handlePostFilter(event, info)} />
+
+            {siteDesignerDiscussion.posts.length !== 0 && (
+              <FilterToggle onChange={(event, info) => handlePostFilter(event, info)} />
+            )}
           </Stack>
           <br />
           <br />

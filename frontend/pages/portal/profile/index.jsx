@@ -30,7 +30,7 @@ import Box from '@mui/material/Box'
 
 function Page() {
   const theme = useTheme();
-  const { idChip, setIdChip } = React.useContext(AdminLayoutContext)
+  const { idChip, setIdChip, setTabs } = React.useContext(AdminLayoutContext)
 
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -56,6 +56,11 @@ function Page() {
   const [circleColor, setCircleColor] = useState("#000000")
 
   useEffect(() => {
+    setTabs(prevState => ({
+      ...prevState,
+      tabs: []
+    }))
+
     getProfileGraphQL().then(profileData => {
       setEmail(profileData.data.foundationUser_getOne.email)
 

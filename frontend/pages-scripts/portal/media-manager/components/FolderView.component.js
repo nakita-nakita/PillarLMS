@@ -94,7 +94,7 @@ const menuItem = {
 
 const FolderView = () => {
   const router = useRouter()
-  const { idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
+  const { idChip, panelMeetingDoc, setPanelMeetingDoc, setTabs } = useContext(AdminLayoutContext)
   const { mediaManager, setMediaManager } = useContext(MediaManagerContext)
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -106,6 +106,11 @@ const FolderView = () => {
   const [breadCrumbs, setBreadCrumbs] = useState([])
 
   useEffect(() => {
+    
+    setTabs(prevState => ({
+      ...prevState,
+      tabs: []
+    }))
     setMediaManager(prevState => ({
       ...prevState,
       selectedFolderId: null,
