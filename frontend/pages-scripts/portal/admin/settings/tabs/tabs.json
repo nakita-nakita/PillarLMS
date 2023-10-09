@@ -1,8 +1,8 @@
 {
     "tabs": [
         {
-            "link": "/portal/admin/settings/general/",
-            "name": "General"
+            "link": "/portal/admin/settings/organization/",
+            "name": "Organization"
         },
         {
             "link": "/portal/admin/settings/website",

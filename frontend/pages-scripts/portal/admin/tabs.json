@@ -5,7 +5,7 @@
             "name": "User Management"
         },
         {
-            "link": "/portal/admin/settings/general/",
+            "link": "/portal/admin/settings/organization/",
             "name": "Settings"
         }
     ]

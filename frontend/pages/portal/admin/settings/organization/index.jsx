@@ -44,8 +44,12 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { processGraphQLErrors } from '@/utils/graphql/processGraphQLErrors.func';
-import { List } from '@mui/material';
+import { List, ListItem } from '@mui/material';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+import RealTimeSocialMediaRow from '@/components/realtime/SocialMediaRow/socialMediaRow.realtime';
+import SocialMediaList from '@/pages-scripts/portal/admin/settings/organization/socialMediaList';
 
 const Page = () => {
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!This ran.')
@@ -168,70 +172,145 @@ const Page = () => {
           <br />
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <Paper elevation={3}>
 
             <List sx={{ p: 0 }}>
               <HeaderRow label="Logo" />
+              <ListItem>
+                <div>
+                  <br />
+                  <Stack spacing={2} direction="row">
+                    <Button
+                      variant="contained"
+                      component="label"
+                    >
+                      Upload File
+                      <input
+                        type="file"
+                        hidden
+                      />
+                    </Button>
+                    <Button>Clear</Button>
+                  </Stack>
+                  <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
+                    <img src={logoPreview && logoPreview.length !== 0 ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${logoPreview}` : "/no-image/8_Bit_Dinosaur_With_Laptop.png"} style={{ width: "150px" }} />
+                  </div>
+                </div>
+                <br />
+              </ListItem>
             </List>
-            <div className='admin-card'>
-              <Stack spacing={2} direction="row">
-                <Button
-                  variant="contained"
-                  component="label"
-                >
-                  Upload File
-                  <input
-                    type="file"
-                    hidden
-                  />
-                </Button>
-                <Button>Clear</Button>
-              </Stack>
-              {/* <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
+
+            {/* <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
               <img style={{ height: "150px", width: "150px" }} />
             </div> */}
-              <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
-                <img src={logoPreview && logoPreview.length !== 0 ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${logoPreview}` : "/no-image/8_Bit_Dinosaur_With_Laptop.png"} style={{ width: "150px" }} />
-              </div>
-
-              <br />
-              <Button variant="contained" color="primary" type="submit" disabled>Save</Button>
-            </div>
+            <List sx={{ p: 0 }}>
+              <RealTimeTextFieldRow label={"Organization Name"} />
+              <RealTimeSwitchRow label={"Apply to the top of the left menu?"} />
+              <ListItem>
+                <br />
+                <Button variant="contained" color="primary" type="submit" disabled>Save</Button>
+              </ListItem>
+            </List>
           </Paper>
           <br />
           <Paper elevation={3}>
             <List sx={{ p: 0 }}>
               <HeaderRow label="Address" />
             </List>
-            <div className='admin-card'>
+            <ListItem>
+              <p>
+                Please provide the organization's primary headquarters or official public address.
+              </p>
+            </ListItem>
+            <br />
+
+
+
+
+
+
+
+
+
+            {/* 
+
+    Recipient Name: (The person or company name to whom you are sending the package.)
+    Address Line 1: (Street address, P.O. box, company name, c/o)
+    Address Line 2: (Apartment, suite, unit, building, floor, etc.)
+    City / Locality: (Often referred to just as 'City'.)
+    State / Province / Region: (Depending on the country, this could be a state, province, prefecture, region, etc.)
+    Postal Code: (ZIP code in the U.S.)
+    Country: (It's crucial to have this especially for international shipping.)
+
+ */}
+            <RealTimeTextFieldRow label="Address line 1" />
+            <br />
+            <RealTimeTextFieldRow label="Address Line2 " />
+            <br />
+            <RealTimeTextFieldRow label="City / Locality" />
+            <br />
+            <RealTimeTextFieldRow label="State / Province / Region" />
+
+            <br />
+            <RealTimeTextFieldRow label="Postal Code" />
+            <ListItem>
+              <br />
+
+              <Button variant="contained" color="primary" type="submit" disabled>Save</Button>
+
+
+            </ListItem>
+
+
+            {/* <TextField
+                required
+                id="recipientName"
+                label="Recipient Name"
+                sx={{ width: "100%" }}
+                value={streetAddress}
+                onChange={event => setStreetAddress(event.target.value)}
+                error={streetAddressError.length}
+                helperText={streetAddressError}
+              />
+              <br />
+              <br />
+
+              <TextField
+                required
+                id="AddressLine1"
+                label="AddressLine 1"
+                sx={{ width: "100%" }}
+                value={streetAddress}
+                onChange={event => setStreetAddress(event.target.value)}
+                error={streetAddressError.length}
+                helperText={streetAddressError}
+              />
+              <br />
+              <br />
+
+              <TextField
+                required
+                id="Address Line 1"
+                label="Recipient Name"
+                sx={{ width: "100%" }}
+                value={streetAddress}
+                onChange={event => setStreetAddress(event.target.value)}
+                error={streetAddressError.length}
+                helperText={streetAddressError}
+              />
+              <br />
+              <br />
+
+
+
+
+
+
+
+
+
+
+
               <TextField
                 required
                 id="streetAddress"
@@ -294,124 +373,24 @@ const Page = () => {
                     error={stateError.length}
                     helperText={stateError}
                   />
-                </Grid>
-              </Grid>
+                </Grid> */}
+            {/* </Grid> */}
 
-              <br />
-              <Button variant="contained" color="primary" type="submit" disabled>Save</Button>
-            </div>
           </Paper>
           <br />
           <Paper elevation={3}>
             <List sx={{ p: 0 }}>
               <HeaderRow label="Social Links" />
+              <br />
+              <ListItem>
+                <Button variant="contained" color="primary">New</Button>
+
+              </ListItem>
             </List>
-            <div className='admin-card'>
-
-              <p>Fill in what social media you use.</p>
-              <br />
-
-              <FormControl fullWidth variant="standard">
-                <InputLabel htmlFor="standard-adornment-amount">Twitter</InputLabel>
-                <Input
-                  id="socialTwitter"
-                  value={socialTwitter}
-                  onChange={event => setSocialTwitter(event.target.value)}
-                  error={socialTwitterError.length}
-                  // helperText={socialTwitterError}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <TwitterIcon />
-                    </InputAdornment>
-                  }
-                />
-                {socialTwitterError && (
-                  <FormHelperText id="standard-weight-helper-text" sx={{ color: theme.palette.error.main }}>{socialTwitterError}</FormHelperText>
-                )}
-              </FormControl>
-              <br />
-              <br />
-
-              <FormControl fullWidth variant="standard">
-                <InputLabel htmlFor="standard-adornment-amount">Facebook</InputLabel>
-                <Input
-                  id="socialFacebook"
-                  value={socialFacebook}
-                  onChange={event => setSocialFacebook(event.target.value)}
-                  error={socialFacebookError.length}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <FacebookIcon />
-                    </InputAdornment>
-                  }
-                />
-                {socialFacebookError && (
-                  <FormHelperText id="standard-weight-helper-text" sx={{ color: theme.palette.error.main }}>{socialFacebookError}</FormHelperText>
-                )}
-              </FormControl>
-              <br />
-              <br />
-
-              <FormControl fullWidth variant="standard">
-                <InputLabel htmlFor="standard-adornment-amount">Instagram</InputLabel>
-                <Input
-                  id="socialInstagram"
-                  value={socialInstagram}
-                  onChange={event => setSocialInstagram(event.target.value)}
-                  error={socialInstagramError.length}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <InstagramIcon />
-                    </InputAdornment>
-                  }
-                />
-                {socialInstagramError && (
-                  <FormHelperText id="standard-weight-helper-text" sx={{ color: theme.palette.error.main }}>{socialInstagramError}</FormHelperText>
-                )}
-              </FormControl>
-              <br />
-              <br />
-              <FormControl fullWidth variant="standard">
-                <InputLabel htmlFor="standard-adornment-amount">WhatsApp</InputLabel>
-                <Input
-                  id="socialWhatsapp"
-                  value={socialWhatsapp}
-                  onChange={event => setSocialWhatsapp(event.target.value)}
-                  error={socialWhatsappError.length}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <WhatsAppIcon />
-                    </InputAdornment>
-                  }
-                />
-                {socialWhatsappError && (
-                  <FormHelperText id="standard-weight-helper-text" sx={{ color: theme.palette.error.main }}>{socialWhatsappError}</FormHelperText>
-                )}
-              </FormControl>
-              <br />
-              <br />
-              <FormControl fullWidth variant="standard">
-                <InputLabel htmlFor="standard-adornment-amount">Telegram</InputLabel>
-                <Input
-                  id="socialTelegram"
-                  value={socialTelegram}
-                  onChange={event => setSocialTelegram(event.target.value)}
-                  error={socialTelegramError.length}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <TelegramIcon />
-                    </InputAdornment>
-                  }
-                />
-                {socialTelegramError && (
-                  <FormHelperText id="standard-weight-helper-text" sx={{ color: theme.palette.error.main }}>{socialTelegramError}</FormHelperText>
-                )}
-              </FormControl>
-
-              <br />
-              <br />
-              <Button variant="contained" color="primary" type="submit">Save</Button>
-            </div>
+            <SocialMediaList />
+            {/* <List sx={{ p: 0 }}> */}
+            {/* <RealTimeSocialMediaRow /> */}
+            {/* </List> */}
           </Paper>
           {/* <br />
       <h2>Select Bible Version</h2>
