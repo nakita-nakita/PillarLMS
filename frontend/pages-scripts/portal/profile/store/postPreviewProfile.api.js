@@ -11,7 +11,6 @@ const postPreviewProfile = async (event) => {
   formData.append('file', file)
 
   const token = getUserToken()
-  console.log('token', token)
 
   const config = {
     headers: {
@@ -22,7 +21,6 @@ const postPreviewProfile = async (event) => {
 
   const response = await axios.post(userAvatarPreview, formData, config)
 
-  console.log('response.data', response.data)
   return response.data
 }
 
