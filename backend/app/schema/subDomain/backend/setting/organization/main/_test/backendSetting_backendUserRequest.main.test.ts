@@ -3,10 +3,11 @@ import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/em
 import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
 import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import makeBackendSettingChurchSql from "../backendSetting_church.sql";
+import makeBackendSettingChurchMain from "../backendSettingOrganization.main";
+
 jest.setTimeout(100000)
 
-describe("test backendSetting_church.sql.js", () => {
+describe("test backendSetting_church.main.js", () => {
   let d: d_sub;
 
   beforeAll(async () => {
@@ -25,9 +26,9 @@ describe("test backendSetting_church.sql.js", () => {
   }, 100000)
 
   test("updateOne: backendSetting_church can update record.", async () => {
-    const churchSql = makeBackendSettingChurchSql(d)
+    const churchMain = makeBackendSettingChurchMain(d)
 
-    const updateOne = await churchSql.updateOne({
+    const updateOne = await churchMain.updateOne({
       logo: "test",
       streetAddress: "123 fake st",
       suiteNumber: "C",
@@ -54,7 +55,7 @@ describe("test backendSetting_church.sql.js", () => {
   })
 
   test("getOne: backendSetting_church can get record.", async () => {
-    const backendUserRequestLogic = makeBackendSettingChurchSql(d)
+    const backendUserRequestLogic = makeBackendSettingChurchMain(d)
 
     const getOne = await backendUserRequestLogic.getOne()
 

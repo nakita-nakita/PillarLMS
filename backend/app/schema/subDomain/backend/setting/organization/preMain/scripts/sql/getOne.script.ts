@@ -1,15 +1,15 @@
 import { Model } from "sequelize";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import backendSetting_church from "../../../../../../../../models/subDomain/backend/setting/backendSetting_church.model";
+import backendSettingOrganization from "../../../../../../../../models/subDomain/backend/setting/backendSettingOrganization.model";
 
 export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
-  return async (): Promise<returningSuccessObj<Model<backendSetting_church> | null>> => {
+  return async (): Promise<returningSuccessObj<Model<backendSettingOrganization> | null>> => {
 
-    const data = await db.backendSetting_church.findOne({
+    const data = await db.backendSettingOrganization.findOne({
       transaction: subDomainTransaction,
     }).catch(error => errorHandler(error, loggers))
 

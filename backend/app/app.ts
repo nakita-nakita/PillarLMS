@@ -137,6 +137,7 @@ const makeApp = async function () {
     })
     
     socket.on('disconnect', function () {
+      console.log('DISCONNESSO!!! ');
       const lookUp = makeSocketLookUp(d)
 
       lookUp.removeBySocketId({

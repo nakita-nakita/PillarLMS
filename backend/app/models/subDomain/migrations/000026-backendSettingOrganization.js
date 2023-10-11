@@ -2,7 +2,7 @@
 const sequelize = require('sequelize');
 
 async function up({ context: queryInterface }) {
-  await queryInterface.createTable('backendSetting_church', {
+  await queryInterface.createTable('backendSettingOrganization', {
     id: {
       type: sequelize.UUID,
       defaultValue: sequelize.UUIDV4,
@@ -12,34 +12,49 @@ async function up({ context: queryInterface }) {
       type: sequelize.STRING,
       // type: sequelize.ENUM("ANYONE", "REQUEST_NO_PASSWORD", "REQUEST", "MANUAL"),
     },
-    streetAddress: {
+    name: {
       type: sequelize.STRING,
     },
-    suiteNumber: {
+    shouldApplyToTopNavMenu: {
+      type: sequelize.BOOLEAN,
+    },
+    addressLine1: {
       type: sequelize.STRING,
     },
-    zipCode: {
+    addressLine2: {
       type: sequelize.STRING,
     },
-    city: {
+    cityLocality: {
       type: sequelize.STRING,
     },
-    state: {
+    stateProvinceRegion: {
       type: sequelize.STRING,
     },
-    socialTwitter: {
+    postalCode: {
       type: sequelize.STRING,
     },
     socialFacebook: {
       type: sequelize.STRING,
     },
+    socialX: {
+      type: sequelize.STRING,
+    },
     socialInstagram: {
+      type: sequelize.STRING,
+    },
+    socialLinkedIn: {
+      type: sequelize.STRING,
+    },
+    socialYouTube: {
+      type: sequelize.STRING,
+    },
+    socialPinterest: {
       type: sequelize.STRING,
     },
     socialWhatsapp: {
       type: sequelize.STRING,
     },
-    socialTelegram: {
+    socialReddit: {
       type: sequelize.STRING,
     },
 

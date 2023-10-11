@@ -2,8 +2,8 @@ import { Model } from "sequelize";
 import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import backendSetting_church from "../../../../../../../../models/subDomain/backend/setting/backendSetting_church.model";
-import makeBackendSettingChurchSql from "../../../preMain/backendSetting_church.sql";
+import backendSetting_church from "../../../../../../../../models/subDomain/backend/setting/backendSettingOrganization.model";
+import makeBackendSettingChurchSql from "../../../preMain/backendSettingOrganization.sql";
 
 type input = {
   logo?: string,

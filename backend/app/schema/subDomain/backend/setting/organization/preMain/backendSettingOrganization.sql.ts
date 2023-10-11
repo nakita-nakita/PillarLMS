@@ -1,11 +1,11 @@
 import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
 import getOne from "./scripts/sql/getOne.script"
-import updateOne from "./scripts/sql/updateOne.script"
+import upsertOne from "./scripts/sql/upsertOne.script"
 
-export default function makeBackendSettingChurchSql(d: d_sub) {
+export default function makeBackendSettingOrganizationSql(d: d_sub) {
 
   return {
     getOne: getOne(d),
-    updateOne: updateOne(d),
+    upsertOne: upsertOne(d),
   }
 }

@@ -61,7 +61,9 @@
     "socket.io": "^3.1.2",
     "umzug": "^3.2.1",
     "uuid": "^9.0.0",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "y-quill": "^0.1.5",
+    "yjs": "^13.6.8"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.37",

@@ -46,13 +46,16 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import { processGraphQLErrors } from '@/utils/graphql/processGraphQLErrors.func';
 import { List, ListItem } from '@mui/material';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
-import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+// import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
 import RealTimeSocialMediaRow from '@/components/realtime/SocialMediaRow/socialMediaRow.realtime';
 import SocialMediaList from '@/pages-scripts/portal/admin/settings/organization/socialMediaList';
+import dynamic from 'next/dynamic';
+const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
+  ssr: false
+});
 
 const Page = () => {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!This ran.')
   const theme = useTheme()
 
   const { setTabs } = React.useContext(AdminLayoutContext)
@@ -204,7 +207,7 @@ const Page = () => {
               <img style={{ height: "150px", width: "150px" }} />
             </div> */}
             <List sx={{ p: 0 }}>
-              <RealTimeTextFieldRow label={"Organization Name"} />
+              <DynamicRealTimeTextField label={"Organization Name"} />
               <RealTimeSwitchRow label={"Apply to the top of the left menu?"} />
               <ListItem>
                 <br />
@@ -243,16 +246,16 @@ const Page = () => {
     Country: (It's crucial to have this especially for international shipping.)
 
  */}
-            <RealTimeTextFieldRow label="Address line 1" />
+            {/* <DynamicRealTimeTextField label="Address line 1" />
             <br />
-            <RealTimeTextFieldRow label="Address Line2 " />
+            <DynamicRealTimeTextField label="Address Line2 " />
             <br />
-            <RealTimeTextFieldRow label="City / Locality" />
+            <DynamicRealTimeTextField label="City / Locality" />
             <br />
-            <RealTimeTextFieldRow label="State / Province / Region" />
+            <DynamicRealTimeTextField label="State / Province / Region" />
 
             <br />
-            <RealTimeTextFieldRow label="Postal Code" />
+            <DynamicRealTimeTextField label="Postal Code" /> */}
             <ListItem>
               <br />
 

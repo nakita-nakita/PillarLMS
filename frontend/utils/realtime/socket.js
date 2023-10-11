@@ -1,6 +1,9 @@
+'use-client'
+
 import io from 'socket.io-client';
 
 let socket;
+const isBrowser = typeof window !== "undefined";
 
 function getCookieValue(cookieName) {
   let result = document.cookie.match(new RegExp(cookieName + '=([^;]+)'));
@@ -14,7 +17,8 @@ function initSocket() {
     socket = io(SOCKET_SERVER_URL, {
       query: {
         authToken,
-      }
+      },
+      transports: ['websocket'],
     });
   }
   return socket;

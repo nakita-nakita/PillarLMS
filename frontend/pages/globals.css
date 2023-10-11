@@ -132,3 +132,7 @@ a {
 .even-row:hover {
   background-color: lightgrey;
 }
+
+.ql-container {
+  overflow: inherit !important;
+}

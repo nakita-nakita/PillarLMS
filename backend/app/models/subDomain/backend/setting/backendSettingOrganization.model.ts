@@ -5,9 +5,9 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
   paranoid: true,
   timestamps: true,
   freezeTableName: true,
-  tableName: "backendSetting_church",
+  tableName: "backendSettingOrganization",
 })
-export default class backendSetting_church extends Model {
+export default class backendSettingOrganization extends Model {
 
   @Column({
     primaryKey: true,
@@ -24,32 +24,37 @@ export default class backendSetting_church extends Model {
   @Column({
     type: sequelize.STRING,
   })
-  streetAddress: string;
+  name: string;
+
+  @Column({
+    type: sequelize.BOOLEAN,
+  })
+  shouldApplyToTopNavMenu: string;
 
   @Column({
     type: sequelize.STRING,
   })
-  suiteNumber: string;
+  addressLine1: string;
 
   @Column({
     type: sequelize.STRING,
   })
-  zipCode: string;
+  addressLine2: string;
 
   @Column({
     type: sequelize.STRING,
   })
-  city: string;
+  cityLocality: string;
 
   @Column({
     type: sequelize.STRING,
   })
-  state: string;
+  stateProvinceRegion: string;
 
   @Column({
     type: sequelize.STRING,
   })
-  socialTwitter: string;
+  postalCode: string;
 
   @Column({
     type: sequelize.STRING,
@@ -59,7 +64,27 @@ export default class backendSetting_church extends Model {
   @Column({
     type: sequelize.STRING,
   })
+  socialX: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
   socialInstagram: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
+  socialLinkedIn: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
+  socialYouTube: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
+  socialPinterest: string;
 
   @Column({
     type: sequelize.STRING,
@@ -69,6 +94,6 @@ export default class backendSetting_church extends Model {
   @Column({
     type: sequelize.STRING,
   })
-  socialTelegram: string;
+  socialReddit: string;
 
 }

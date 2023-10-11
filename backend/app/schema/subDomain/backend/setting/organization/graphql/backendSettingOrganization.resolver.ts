@@ -3,7 +3,7 @@ import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/empty
 import graphqlError from "../../../../../utils/errorHandling/handers/graphql.errorhandler";
 import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { d_sub } from "../../../../../utils/types/dependencyInjection.types";
-import makeBackendSettingChurchMain from "../main/backendSetting_church.main";
+import makeBackendSettingChurchMain from "../main/backendSettingOrganization.main";
 
 const makeDObj = async (): Promise<d_sub> => {
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
