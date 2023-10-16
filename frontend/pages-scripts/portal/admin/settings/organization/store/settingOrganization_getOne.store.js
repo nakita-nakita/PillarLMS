@@ -7,6 +7,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
       query: `
       query($socketId: String!) {
         backendSettingOrganization_getOne(socketId: $socketId) {
+          id
           entity
           logo
           name {
@@ -18,7 +19,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
@@ -33,7 +34,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
@@ -48,7 +49,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
@@ -63,7 +64,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
@@ -78,7 +79,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
@@ -93,14 +94,136 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               userId
               username
               userColor
-              range{
+              range {
                 index
                 length
               }
             }
           }
+          socialX {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialReddit {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialYouTube {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialFacebook {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialLinkedIn {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialWhatsapp {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialInstagram {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          socialPinterest {
+            order
+            name
+            textValue
+            selections {
+              order
+              userId
+              username
+              userColor
+              range {
+                index
+                length
+              }
+            }
+          }
+          
         }
       }
+      
       `,
       variables: { socketId }
     })

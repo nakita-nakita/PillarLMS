@@ -31,7 +31,7 @@ export default function socketDisconnect_removeFromEntities(d: d_allDomain) {
     for (let i = 0; i < user.data.entities.length; i++) {
       const entity = singleton.data.sameDoc[user.data.entities[i]];
 
-      if (entity) {
+      if (entity && entity.removeSocket) {
         await entity.removeSocket({
           socketId: user.data.socketId,
         })

@@ -4,6 +4,7 @@ import { returningSuccessObj } from "../../../../../../../utils/types/returningO
 import backendSettingOrganization from "../../../../../../../../models/subDomain/backend/setting/backendSettingOrganization.model";
 
 type input = {
+  id: string,
   logo?: string,
   name?: string,
   shouldApplyToTopNavMenu?: boolean,

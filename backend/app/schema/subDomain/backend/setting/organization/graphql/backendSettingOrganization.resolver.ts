@@ -45,6 +45,7 @@ const settingRequestResolver = {
       const main = makeBackendSettingOrganizationMain(d)
 
       const response = await main.upsertOne({
+        id: args.id,
         logo: args.logo,
         name: args.name,
         shouldApplyToTopNavMenu: args.shouldApplyToTopNavMenu,

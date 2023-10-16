@@ -46,7 +46,7 @@ function SameDocEntity({ children }) {
 
     const shouldWeUnsubOldEntity = shouldWeUnsubOldEntityFunc({entity})
 
-    if (shouldWeUpdateEntity) {
+    if (shouldWeUnsubOldEntity) {
       socket.emit('server-samedoc-unsub-entity', { entity })
     }
 

@@ -7,6 +7,7 @@ import makeBackendSettingChurchSql from "../../../preMain/backendSettingOrganiza
 import makeBackendSettingOrganizationSql from "../../../preMain/backendSettingOrganization.sql";
 
 type input = {
+  id: string,
   logo?: string,
   name?: string,
   shouldApplyToTopNavMenu?: boolean,
@@ -37,6 +38,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     const backendUserRequestSql = makeBackendSettingOrganizationSql(d);
     
     const response = backendUserRequestSql.upsertOne({
+      id: args.id,
       logo: args.logo,
       name: args.name,
       shouldApplyToTopNavMenu: args.shouldApplyToTopNavMenu,

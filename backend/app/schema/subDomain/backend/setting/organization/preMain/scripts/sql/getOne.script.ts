@@ -11,7 +11,12 @@ export default function getOneById({ subDomainDb, errorHandler, subDomainTransac
 
     const data = await db.backendSettingOrganization.findOne({
       transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      order: [['createdAt', 'DESC']]
+
+
+    })
+    
+    // .catch(error => errorHandler(error, loggers))
 
     return {
       success: true,

@@ -197,7 +197,7 @@ export default function getOne(d: d_allDomain) {
       return {
         success: true,
         data: {
-          ...record.data,
+          ...record.data.dataValues,
           ...setEntity.data,
           entity,
         }
