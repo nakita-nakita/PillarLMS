@@ -9,7 +9,9 @@ function CourseDiscussionPage() {
 
 CourseDiscussionPage.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       {page}
     </AdminLayout>
   )

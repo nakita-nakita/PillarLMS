@@ -93,7 +93,9 @@ const NotificationsPage = () => {
 
 NotificationsPage.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       {page}
     </AdminLayout>
   )

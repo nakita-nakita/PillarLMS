@@ -1,11 +1,11 @@
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
+import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types"
 import getOne from "./scripts/main/getOne.script"
-import updateOne from "./scripts/main/updateOne.script"
+import upsertOne from "./scripts/main/upsertOne.script"
 
-export default function makeBackendSettingChurchMain(d: d_sub) {
+export default function makeBackendSettingOrganizationMain(d: d_allDomain) {
 
   return {
     getOne: getOne(d),
-    updateOne: updateOne(d),
+    upsertOne: upsertOne(d),
   }
 }

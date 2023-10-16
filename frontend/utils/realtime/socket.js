@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 
 let socket;
 const isBrowser = typeof window !== "undefined";
+let socketId;
 
 function getCookieValue(cookieName) {
   let result = document.cookie.match(new RegExp(cookieName + '=([^;]+)'));
@@ -24,4 +25,12 @@ function initSocket() {
   return socket;
 }
 
-export { initSocket };
+function getSocketId() {
+  return socketId
+}
+
+function setSocketId(id) {
+  socketId = id
+}
+
+export { initSocket, getSocketId, setSocketId };

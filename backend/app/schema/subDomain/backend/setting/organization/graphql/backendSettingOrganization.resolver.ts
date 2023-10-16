@@ -2,16 +2,18 @@ import { Sequelize } from "sequelize-typescript";
 import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
 import graphqlError from "../../../../../utils/errorHandling/handers/graphql.errorhandler";
 import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types";
-import makeBackendSettingChurchMain from "../main/backendSettingOrganization.main";
+import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
+import makeBackendSettingOrganizationMain from "../main/backendSettingOrganization.main";
+import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 
-const makeDObj = async (): Promise<d_sub> => {
+const makeDObj = async (): Promise<d_allDomain> => {
+  const domainDb: Sequelize = await emptyTestDomainDb();
   const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const subDomainTransaction = await subDomainDb.transaction();
+  // const subDomainTransaction = await subDomainDb.transaction();
 
   return {
+    domainDb,
     subDomainDb,
-    subDomainTransaction,
     loggers: [console],
     errorHandler: sequelizeErrorHandler,
   }
@@ -19,49 +21,52 @@ const makeDObj = async (): Promise<d_sub> => {
 
 const settingRequestResolver = {
   Query: {
-    backendSetting_church_getOne: async (parent, args, ctx) => {
+    backendSettingOrganization_getOne: async (parent, args, ctx) => {
 
       const d = await makeDObj()
-      const main = makeBackendSettingChurchMain(d)
+      const main = makeBackendSettingOrganizationMain(d)
 
-      const response = await main.getOne()
+      const response = await main.getOne({
+        socketId: args.socketId,
+      })
 
       if (response?.success) {
-        d.subDomainTransaction.commit()
-        return response.data?.dataValues
+        return response.data
 
       } else {
-        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
   },
   Mutation: {
-    backendSetting_church_updateOne: async (parent, args, ctx) => {
+    backendSettingOrganization_updateOne: async (parent, args, ctx) => {
 
       const d = await makeDObj()
-      const main = makeBackendSettingChurchMain(d)
+      const main = makeBackendSettingOrganizationMain(d)
 
-      const response = await main.updateOne({
+      const response = await main.upsertOne({
         logo: args.logo,
-        streetAddress: args.streetAddress,
-        suiteNumber: args.suiteNumber,
-        zipCode: args.zipCode,
-        city: args.city,
-        state: args.state,
-        socialTwitter: args.socialTwitter,
+        name: args.name,
+        shouldApplyToTopNavMenu: args.shouldApplyToTopNavMenu,
+        addressLine1: args.addressLine1,
+        addressLine2: args.addressLine2,
+        cityLocality: args.cityLocality,
+        stateProvinceRegion: args.stateProvinceRegion,
+        postalCode: args.postalCode,
         socialFacebook: args.socialFacebook,
+        socialX: args.socialX,
         socialInstagram: args.socialInstagram,
+        socialLinkedIn: args.socialLinkedIn,
+        socialYouTube: args.socialYouTube,
+        socialPinterest: args.socialPinterest,
         socialWhatsapp: args.socialWhatsapp,
-        socialTelegram: args.socialTelegram,
+        socialReddit: args.socialReddit,
       })
 
       if (response?.success) {
-        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

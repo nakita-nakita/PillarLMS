@@ -1,6 +1,6 @@
 // Libraries
 import React from 'react';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router';
 
 // import { globalHistory } from "@reach/router"
 
@@ -45,7 +45,6 @@ export default function Navigator(props) {
     })
   }
 
-
   const topHeader = {
     // py: '2px',
     // px: 3,
@@ -58,20 +57,28 @@ export default function Navigator(props) {
     // },
   };
 
-  const item = {
-    py: '2px',
-    px: 3,
-    color: 'rgba(255, 255, 255, 0.7)',
-    '&:hover, &:focus': {
-      bgcolor: 'rgba(255, 255, 255, 0.08)',
-    },
-  };
-
   const itemCategory = {
     boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
     py: 1.5,
     px: 3,
   };
+
+  const circleStatus = {
+    borderRadius: "50px",
+    height: "15px",
+    width: "15px",
+    display: "inline-block",
+  }
+
+  const circleStatusDangerStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.error.dark,
+  }
+
+  const circleStatusSuccessStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.success.dark,
+  }
 
   // React.useEffect(() => {
   //   setCategoriesData(categories())
@@ -112,43 +119,34 @@ export default function Navigator(props) {
 
         </ListItem>
 
-        <Box sx={{ ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "aliceblue" }}>
-          <ListItemButton onClick={() => changeUrl("/portal/profile")}>
 
-            <ListItem
-            // sx={{ py: 2, px: 3 }}
-            // // will replace secondary action with gear for user settings at a later date
-            // secondaryAction={
-            //   <Avatar
-            //     alt="Remy Sharp"
-            //     src="https://random.imagecdn.app/v1/image?width=56&height=56"
-            //     sx={{ width: 40, height: 40, mr: 1 }}
-            //   />
-            // }
-            >
-              <ListItemText>
-                <UserChip
-                  callByType={idChip.callByType}
-                  circleColor={idChip.circleColor}
-                  email={idChip.email}
-                  firstName={idChip.firstName}
-                  labelColor={idChip.labelColor}
-                  lastName={idChip.lastName}
-                  picturePreview={idChip.picture}
-                  username={idChip.username}
-                />
+        <ListItem
+          sx={{ py: 0, px: 0, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "aliceblue" }}
+          onClick={() => changeUrl("/portal/profile")}
+        >
+          <ListItemButton>
+            <ListItemText>
+              <UserChip
+                callByType={idChip.callByType}
+                circleColor={idChip.circleColor}
+                email={idChip.email}
+                firstName={idChip.firstName}
+                labelColor={idChip.labelColor}
+                lastName={idChip.lastName}
+                picturePreview={idChip.picture}
+                username={idChip.username}
+              />
 
 
 
-              </ListItemText>
-            </ListItem>
+            </ListItemText>
           </ListItemButton>
+        </ListItem>
 
-        </Box>
         {/* <br /> */}
 
         <ListItem
-          sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+          sx={{ pt: "26px", pb: "2px" }}
         >
           <ListItemText>
             <Typography variant="body1" color="textSecondary">
@@ -160,11 +158,20 @@ export default function Navigator(props) {
             </Typography>
           </ListItemText>
         </ListItem>
-        <ListItemButton onClick={() => changeUrl("/portal/dashboard/")}>
+        <ListItem
+          
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/dashboard') ? theme.palette.grey[300] : "initial",
+            }}
+          onClick={() => changeUrl("/portal/dashboard")}
+        >
+          <ListItemButton>
+            <ListItemIcon>
+              <img src="/admin/icons/dashboard.png" style={{ width: "50px", height: "50px" }} />
+            </ListItemIcon>
 
-          <ListItem
-            sx={{ py: 0, px: 3 }}
-          >
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"
                 style={{
@@ -177,13 +184,22 @@ export default function Navigator(props) {
 
 
             </ListItemText>
-          </ListItem>
-        </ListItemButton>
-        <ListItemButton onClick={() => changeUrl("/portal/media-manager/")}>
+          </ListItemButton>
+        </ListItem>
 
-          <ListItem
-            sx={{ py: 0, px: 3 }}
-          >
+        <ListItem
+          
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/media-manager') ? theme.palette.grey[300] : "initial",
+            }}
+          onClick={() => changeUrl("/portal/media-manager")}
+        >
+          <ListItemButton>
+            <ListItemIcon>
+              <img src="/admin/icons/media.png" style={{ width: "50px", height: "50px" }} />
+            </ListItemIcon>
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"
                 style={{
@@ -196,15 +212,20 @@ export default function Navigator(props) {
 
 
             </ListItemText>
-          </ListItem>
-        </ListItemButton>
+          </ListItemButton>
+        </ListItem>
         {/* <br /> */}
 
 
         {/* <ListItemButton onClick={() => changeUrl("/portal/calendar")}>
 
           <ListItem
-            sx={{ py: 0, px: 3 }}
+            
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}
           >
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"
@@ -222,7 +243,12 @@ export default function Navigator(props) {
         </ListItemButton>
         <br /> */}
         <Box>
-          {/* <ListItem sx={{ py: 0, px: 3 }}>
+          {/* <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h3"
                 style={{
@@ -241,7 +267,7 @@ export default function Navigator(props) {
           </ListItem> */}
 
           <ListItem
-            sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+            sx={{ pt: "26px", pb: "2px" }}
           >
             <ListItemText>
               <Typography variant="body1" color="textSecondary">
@@ -253,9 +279,24 @@ export default function Navigator(props) {
               </Typography>
             </ListItemText>
           </ListItem>
-          <ListItemButton onClick={() => changeUrl("/portal/site/discussion/")}>
 
-            <ListItem sx={{ py: 0, px: 3 }}>
+          <ListItem
+            
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/site') ? theme.palette.grey[300] : "initial",
+            }}
+            onClick={() => changeUrl("/portal/site/discussion")}
+            secondaryAction={
+              <div style={circleStatusSuccessStyle}></div>
+            }
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <img src="/admin/icons/website.png" style={{ width: "50px", height: "50px" }} />
+              </ListItemIcon>
+
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -268,11 +309,25 @@ export default function Navigator(props) {
 
 
               </ListItemText>
-            </ListItem>
-          </ListItemButton>
-          <ListItemButton onClick={() => changeUrl("/portal/courses/discussion/")}>
+            </ListItemButton>
+          </ListItem>
 
-            <ListItem sx={{ py: 0, px: 3 }}>
+          <ListItem
+            
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/courses') ? theme.palette.grey[300] : "initial",
+            }}
+            onClick={() => changeUrl("/portal/courses/discussion/")}
+            secondaryAction={
+              <div style={circleStatusSuccessStyle}></div>
+            }
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <img src="/admin/icons/school_stuff.png" style={{ width: "50px", height: "50px" }} />
+              </ListItemIcon>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -285,12 +340,17 @@ export default function Navigator(props) {
 
 
               </ListItemText>
-            </ListItem>
-          </ListItemButton>
+            </ListItemButton>
+          </ListItem>
           {/* <ListItemButton>
 
             <ListItem
-              sx={{ py: 0, px: 3 }}>
+              
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -307,7 +367,12 @@ export default function Navigator(props) {
           </ListItemButton> */}
 
           {/* <br /> */}
-          {/* <ListItem sx={{ py: 0, px: 3 }}>
+          {/* <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h3"
                 style={{
@@ -326,7 +391,12 @@ export default function Navigator(props) {
           </ListItem> */}
           {/* <ListItemButton>
 
-            <ListItem sx={{ py: 0, px: 3 }}>
+            <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -342,7 +412,12 @@ export default function Navigator(props) {
             </ListItem>
           </ListItemButton> */}
           {/* <ListItemButton>
-            <ListItem sx={{ py: 0, px: 3 }}>
+            <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -358,7 +433,12 @@ export default function Navigator(props) {
             </ListItem>
           </ListItemButton> */}
           {/* <ListItemButton>
-            <ListItem sx={{ py: 0, px: 3 }}>
+            <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -374,7 +454,12 @@ export default function Navigator(props) {
             </ListItem>
           </ListItemButton> */}
           {/* <ListItemButton>
-            <ListItem sx={{ py: 0, px: 3 }}>
+            <ListItem 
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
+            }}>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -390,7 +475,7 @@ export default function Navigator(props) {
             </ListItem>
           </ListItemButton> */}
           <ListItem
-            sx={{ pl: "40px", pt: "26px", pb: "2px" }}
+            sx={{ pt: "26px", pb: "2px" }}
           >
             <ListItemText>
               <Typography variant="body1" color="textSecondary">
@@ -402,8 +487,21 @@ export default function Navigator(props) {
               </Typography>
             </ListItemText>
           </ListItem>
-          <ListItemButton onClick={() => changeUrl("/portal/analytics/")}>
-            <ListItem sx={{ py: 0, px: 3 }}>
+
+          <ListItem
+            
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/analytics') ? theme.palette.grey[300] : "initial",
+            }}
+            onClick={() => changeUrl("/portal/analytics")}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <img src="/admin/icons/chart_trend.png" style={{ width: "50px", height: "50px" }} />
+              </ListItemIcon>
+
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -416,10 +514,20 @@ export default function Navigator(props) {
 
 
               </ListItemText>
-            </ListItem>
-          </ListItemButton>
-          <ListItemButton onClick={() => changeUrl("/portal/admin/user-management/")}>
-            <ListItem sx={{ py: 0, px: 3 }}>
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            sx={{
+              py: 0,
+              px: 0,
+              background: router.pathname.startsWith('/portal/admin') ? theme.palette.grey[300] : "initial",
+            }}
+            onClick={() => changeUrl("/portal/admin/user-management")}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <img src="/admin/icons/linux_admin.png" style={{ width: "50px", height: "50px" }} />
+              </ListItemIcon>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
                   style={{
@@ -432,8 +540,8 @@ export default function Navigator(props) {
 
 
               </ListItemText>
-            </ListItem>
-          </ListItemButton>
+            </ListItemButton>
+          </ListItem>
 
 
           <br />
@@ -442,7 +550,11 @@ export default function Navigator(props) {
           <ListItemButton>
 
             <ListItem
-              sx={{ py: 0, px: 3 }}
+              
+            sx={{
+              py: 0,
+              px: 0,
+            }}
             >
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"

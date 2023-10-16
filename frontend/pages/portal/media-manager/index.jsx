@@ -18,7 +18,9 @@ const MediaManagerPage = () => {
 
 MediaManagerPage.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       <MediaManagerProvider>
         {page}
       </MediaManagerProvider>

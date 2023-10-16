@@ -28,7 +28,11 @@ const PageTemplateBuilder = () => {
 
 PageTemplateBuilder.getLayout = function getLayout(page) {
   return (
-    <AdminLayout isWebsiteSetting SideMenu={<WebsiteSettingsHomeSidebar/>}>
+    <AdminLayout
+      hasNoEntity
+      isWebsiteSetting
+      SideMenu={<WebsiteSettingsHomeSidebar />}
+    >
       {page}
     </AdminLayout>
   )

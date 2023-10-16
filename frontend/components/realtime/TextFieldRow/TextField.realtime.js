@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { ListItem } from '@mui/material';
@@ -9,13 +9,18 @@ import { QuillBinding } from 'y-quill';
 import { initSocket } from '@/utils/realtime/socket';
 import QuillCursors from 'quill-cursors';
 import Quill from 'quill';
+import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 
 // Register the quill-cursors module
 Quill.register('modules/cursors', QuillCursors);
 
 
-function RealTimeTextField({ label, entity = "void", id = "void" }) {
+function RealTimeTextField(props) {
   const quillRef = useRef(null);
+  const { idChip, applyTextFieldSelectionBuffer } = useContext(AdminLayoutContext)
+
+  const [orderNumber, setOrderNumber] = useState(0)
+
   const quillModules = {
     cursors: true,
     toolbar: false,
@@ -38,46 +43,120 @@ function RealTimeTextField({ label, entity = "void", id = "void" }) {
     // }
   }
 
-  function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+  const applyOrder = ({ order }) => {
+    if (order > orderNumber) {
+      setOrderNumber(order)
     }
-    return color;
   }
 
-
   useEffect(() => {
+    if (!idChip.id) {
+      return;
+    }
+
     // Initialize Yjs document
     const ydoc = new Y.Doc();
+    let binding;
 
     // Initialize socket connection
     const socket = initSocket();
 
     if (quillRef.current) {
       const quill = quillRef.current.getEditor();
+      binding = new QuillBinding(ydoc.getText('quill'), quill);
+
+      //init loading
+      // console.log('loading selection', props, props.data, props.data.selections ||
+      //   "not here", props.data.textValue)
+
+      if (props.data?.order) {
+        applyOrder({
+          order: props.data.order
+        })
+      }
+
+      if (props.data?.textValue) {
+
+        // Decode base64 string back to a buffer
+        const decodedBuffer = Buffer.from(props.data.textValue, 'base64');
+
+        // Convert buffer to Uint8Array
+        const updateArray = new Uint8Array(decodedBuffer.buffer);
+
+        // Apply this to the Y.Doc
+        Y.applyUpdate(ydoc, updateArray);
+      }
+
+      // console.log('realtime props', props)
+      if (props.data?.selections) {
+        const cursors = quill.getModule('cursors');
+
+
+        for (let i = 0; i < props.data.selections.length; i++) {
+          const { userId, username, userColor, range, order } = props.data.selections[i];
+          if (idChip.id !== userId) {
+            
+            if (order) {
+              applyOrder({
+                order,
+              })
+            }
+            // Check if the cursor for this user already exists
+            if (!cursors.cursors[userId]) {
+              // Create a new cursor for the user
+              cursors.createCursor(userId, username, userColor);
+            }
+
+            // Move the user's cursor to the new position
+            cursors.moveCursor(userId, range)
+          }
+        }
+      }
+
+
+
+
+
+      //Buffer text field, then load text field
+
+
+      //Buffer selection, then load selection
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       // Create a binding between Quill and Yjs
-      const binding = new QuillBinding(ydoc.getText('quill'), quill);
 
       quill.on('text-change', (delta, oldDelta, source) => {
         if (source === 'user') {
-          const doc = Y.encodeStateAsUpdate(ydoc)
+          const updatedYdoc = Y.encodeStateAsUpdate(ydoc)
 
           // Yjs and Quill are already synced by the binding.
           // Emit the Yjs update to the server.
-          socket.emit('server-yjs-update', {
-            entity,
-            id,
-            doc,
+          socket.emit('server-samedoc-yjs-update', {
+            entity: props.entity,
+            name: props.data.name,
+            ydoc: updatedYdoc,
           });
         }
       });
       // Listen for Yjs updates from the server
-      socket.on('yjs-update', ({ entity, id, doc }) => {
+      socket.on('samedoc-yjs-update', (data) => {
         try {
-          Y.applyUpdate(ydoc, new Uint8Array(doc));
+          if (props.entity === data.entity && props.data.name === data.name) {
+            // console.log('samedoc-yjs-update', data)
+            Y.applyUpdate(ydoc, new Uint8Array(data.ydoc));
+          }
         } catch (error) {
           console.error('Error applying Y.js update:', error);
         }
@@ -85,53 +164,76 @@ function RealTimeTextField({ label, entity = "void", id = "void" }) {
 
 
 
-      quill.on('selection-change', (range, oldRange, source) => {
-        if (source === 'user' || source === "api") {
-          // Emit the selection change to the server
-          const cursorData = {
-            // userId: 'YOUR_LOCAL_USER_ID',  // Replace with a unique identifier for the local user
-            // userName: 'YOUR_LOCAL_USER_NAME', // Replace with the local user's name or username
-            // userColor: 'YOUR_PREFERRED_COLOR', // Replace with a color for the local user's cursor, e.g., 'red'
-            range
-          };
-          socket.emit('server-selection-change', cursorData);
-        }
-      });
-      // Listen for selection changes from other clients
-      socket.on('remote-selection-change', (cursorData) => {
-        console.info('remote-selection-change', cursorData)
-        const quill = quillRef.current.getEditor();
-        const cursors = quill.getModule('cursors');
+      applyTextFieldSelectionBuffer({
+        entity: props.entity,
+        name: props.data.name,
+        order: orderNumber,
+        cb: (update) => {
+          const quill = quillRef.current.getEditor();
+          const cursors = quill.getModule('cursors');
 
 
-        // Check if the cursor for this user already exists
-        if (!cursors.cursors[cursorData.userId]) {
-          // Create a new cursor for the user
-          cursors.createCursor(cursorData.userId, cursorData.username, getRandomColor());
+          // Check if the cursor for this user already exists
+          if (!cursors.cursors[update.userId]) {
+            // Create a new cursor for the user
+            cursors.createCursor(update.userId, update.username, update.userColor);
+          }
+
+          // Move the user's cursor to the new position
+          cursors.moveCursor(update.userId, update.range)
+
         }
 
-        // Move the user's cursor to the new position
-        cursors.moveCursor(cursorData.userId, cursorData.range)
+      }).then((order) => {
+        setOrderNumber(order)
+        quill.on('selection-change', (range, oldRange, source) => {
+          if (source === 'user' || source === "api") {
+            socket.emit('server-samedoc-selection-change', {
+              range,
+              entity: props.entity,
+              name: props.data.name,
+            });
+          }
+        });
+        // Listen for selection changes from other clients
+        socket.on('samedoc-selection-change', (data) => {
+
+          if (props.entity === data.entity && props.data.name === data.name) {
+            const quill = quillRef.current.getEditor();
+            const cursors = quill.getModule('cursors');
+
+
+            // Check if the cursor for this user already exists
+            if (!cursors.cursors[data.userId]) {
+              // Create a new cursor for the user
+              cursors.createCursor(data.userId, data.username, data.userColor);
+            }
+
+            // Move the user's cursor to the new position
+            cursors.moveCursor(data.userId, data.range)
+          }
+        })
       });
 
 
 
 
-
-
-      return () => {
-        binding.destroy();  // Clean up the binding
-        socket.off('yjs-update');
-        socket.off('remote-selection-change');
-      };
     }
-  }, []);
+
+
+    return () => {
+      binding.destroy();  // Clean up the binding
+      socket.off('samedoc-yjs-update');
+      socket.off('samedoc-selection-change');
+    };
+
+  }, [idChip]);
 
 
   return (
     <ListItem>
       <div style={{ width: "100%" }}>
-        <p>{label}</p>
+        <p>{props.label}</p>
         <ReactQuill ref={quillRef} theme="snow" modules={quillModules} style={{ width: "100%" }} />
       </div>
     </ListItem>

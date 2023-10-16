@@ -295,7 +295,9 @@ function Page() {
 
 Page.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       {page}
     </AdminLayout>
   )

@@ -1,13 +1,13 @@
 'use client'
 // Libraries
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // Mine
 // import { getSavedUser, user } from '../../components/admin/utils/user';
 import AdminLayoutPage from './layout/AdminLayoutPage';
 import { AdminLayoutProvider } from './layout/adminLayout.context';
-import { initSocket } from '@/utils/realtime/socket';
+import { initSocket, setSocketId } from '@/utils/realtime/socket';
 import WebsiteSettingLayout from '../websiteSettingsLayout/layout';
 import PageBuilderLayout from '../pageBuilderLayout/layout';
 
@@ -17,13 +17,10 @@ import MuiAlert from '@mui/material/Alert';
 import WhoIsOnPageSockets from './sockets/WhoIsOnPageSockets';
 import NotificationSockets from './sockets/NotificationsSockets';
 import MeetingSockets from './sockets/MeetingSockets';
+import SameDocBuffer from '@/components/realtime/_buffer/SameDocBuffer.context';
+import SameDocEntity from '@/components/realtime/_buffer/SameDocEntity.context';
 
 // Icons
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 
 let theme = createTheme({
   palette: {
@@ -181,31 +178,47 @@ theme = {
 
 const drawerWidth = 350;
 
-export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, ...props }) {
+export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, hasNoEntity, ...props }) {
 
-  console.log('routes props', { isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, ...props })
+  const [connected, setConnected] = useState(false)
   const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
 
-    initSocket()
+    let socket = initSocket()
+
+    socket.on('server-socket-id', ({ id }) => {
+      setSocketId(id)
+      setConnected(true)
+    })
+
+    return () => {
+      socket.off('server-socket-id')
+    }
   }, [])
 
   return (
     <ThemeProvider theme={theme}>
-      <AdminLayoutProvider >
-        <WhoIsOnPageSockets>
-          <NotificationSockets>
-            <MeetingSockets>
-              {/* {isCourseBuilder && ()} */}
-              {isPageBuilder && (<PageBuilderLayout {...props} />)}
-              {isWebsiteSetting && (<WebsiteSettingLayout SideMenu={SideMenu} {...props} />)}
-              {!isWebsiteSetting && !isPageBuilder && (<AdminLayoutPage {...props} />)}
+      {connected && (
 
-            </MeetingSockets>
-          </NotificationSockets>
-        </WhoIsOnPageSockets>
-      </AdminLayoutProvider>
+        <SameDocBuffer>
+          <SameDocEntity>
+            <AdminLayoutProvider hasNoEntity={hasNoEntity}>
+              <WhoIsOnPageSockets>
+                <NotificationSockets>
+                  <MeetingSockets>
+                    {/* {isCourseBuilder && ()} */}
+                    {isPageBuilder && (<PageBuilderLayout {...props} />)}
+                    {isWebsiteSetting && (<WebsiteSettingLayout SideMenu={SideMenu} {...props} />)}
+                    {!isWebsiteSetting && !isPageBuilder && (<AdminLayoutPage {...props} />)}
+
+                  </MeetingSockets>
+                </NotificationSockets>
+              </WhoIsOnPageSockets>
+            </AdminLayoutProvider>
+          </SameDocEntity>
+        </SameDocBuffer>
+      )}
     </ThemeProvider>
   );
 }

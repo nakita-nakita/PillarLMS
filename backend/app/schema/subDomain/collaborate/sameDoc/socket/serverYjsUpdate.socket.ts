@@ -4,6 +4,7 @@
 
 import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
 import makeSingleton from "../../_singleton/preMain/_singleton.ram-cache";
+import makeCollaborateSameDocTextField from "../preMain/collaborateSameDocTextField.cache";
 
 type input = {
   socket: any,
@@ -11,37 +12,22 @@ type input = {
 }
 
 export default ({ socket, d }: input) => {
-  socket.on('server-yjs-update', async ({
+  socket.on('server-samedoc-yjs-update', async ({
     entity,
-    id,
-    doc
+    name,
+    ydoc
   }) => {
 
+    
+    const sameDocTextField = makeCollaborateSameDocTextField(d)
 
-    let success = false;
-    const singletonFunc = makeSingleton(d)
+    sameDocTextField.updateYdocChange({
+      entity,
+      name,
+      ydoc,
+      socketId: socket.id,
 
-    const singleton = await singletonFunc.get()
-
-    if (!singleton.data?.socketLookUp) {
-      // init if doesn't exist.
-      singleton.data.socketLookUp = []
-    }
-
-    for (let i = 0; i < singleton.data.socketLookUp.length; i++) {
-      const lookup = singleton.data.socketLookUp[i];
-
-      //testing: any socket not mine... sameDoc not completed, yet.
-      if (lookup.socketId !== socket.id) {
-        lookup.socket.emit("yjs-update", {
-          entity,
-          id,
-          doc
-        })
-
-      }
-    }
-
+    })
   });
 }
 

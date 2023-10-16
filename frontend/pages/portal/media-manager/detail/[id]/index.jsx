@@ -14,7 +14,6 @@ import { getMediaManagerUserChipGraphQL } from '@/pages-scripts/portal/media-man
 import { getMediaManagerBreadCrumbsGraphQL } from '@/pages-scripts/portal/media-manager/store/mediaManager-breadCrumbs.store';
 import UserChip from '@/components/chip/user.chip';
 import MediaManagerProvider, { MediaManagerContext } from '@/pages-scripts/portal/media-manager/context/mediaManager.context';
-import RestoreFileModal from '@/pages-scripts/portal/media-manager/modals/restoreFile.modal';
 
 // MUI
 import Box from '@mui/material/Box'
@@ -22,6 +21,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
+import RestoreFileModal from '@/pages-scripts/portal/media-manager/modals/RestoreFile.modal';
 
 
 const MediaManager = () => {
@@ -271,7 +271,9 @@ const MediaManager = () => {
 
 MediaManager.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       <MediaManagerProvider>
         {page}
       </MediaManagerProvider>

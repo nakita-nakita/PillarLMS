@@ -26,6 +26,7 @@ import makeFoundationUserMain from "./schema/domain/foundation/user/main/foundat
 import makeFoundationUserProfileMain from "./schema/domain/foundation/user/main/foundationUserProfile.main";
 import { CallByTypeEnum } from "./schema/domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
 import socketInitScript from "./socket-init";
+import makeCollaborateSameDoc from "./schema/subDomain/collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -89,6 +90,7 @@ const makeApp = async function () {
     const authToken = socket.handshake.query.authToken;
     try {
 
+      //load user to socket
       const AuthFuncs = makeFoundationAuthFunc(d)
       const decodedToken = await AuthFuncs.getDataFromToken({ token: authToken });
 
@@ -119,11 +121,16 @@ const makeApp = async function () {
         lastName: userProfile.data?.dataValues?.lastName,
         picture: userProfile.data?.dataValues?.picture,
         username: userProfile.data?.dataValues?.username,
+        entities: [],
       })
       // Store userId in the socket object
       socket.userId = userId;
 
       console.log('Received and decoded authToken. UserID:', userId);
+      // send client their id
+      socket.emit('server-socket-id', {
+        id: socket.id
+      })
 
     } catch (error) {
       console.error('Error decoding authToken:', error);
@@ -136,11 +143,15 @@ const makeApp = async function () {
       d,
     })
     
-    socket.on('disconnect', function () {
-      console.log('DISCONNESSO!!! ');
+    socket.on('disconnect', async () => {
       const lookUp = makeSocketLookUp(d)
+      const sameDoc = makeCollaborateSameDoc(d)
 
-      lookUp.removeBySocketId({
+      await sameDoc.socketDisconnect_removeFromEntities({
+        socketId: socket.id,
+      })
+
+      await lookUp.removeBySocketId({
         socketId: socket.id,
       })
     });

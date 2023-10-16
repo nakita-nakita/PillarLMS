@@ -28,6 +28,12 @@ type input = {
   circleColor?: String
   labelColor?: String
 
+  //displayName - for  
+  displayName?: String,
+
+  //sameDoc - for unsubscribing when socket disconnects
+  entities?: any[],
+
   //meeting
   meetingId?: string,
 

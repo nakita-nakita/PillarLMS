@@ -10,7 +10,9 @@ function AnalyticsPage() {
 
 AnalyticsPage.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       {page}
     </AdminLayout>
   )

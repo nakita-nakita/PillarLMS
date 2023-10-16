@@ -10,7 +10,7 @@ import { realtimeLink } from '@/utils/realtime/link';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import MediaManagerProvider, { MediaManagerContext } from '@/pages-scripts/portal/media-manager/context/mediaManager.context';
 import { getMediaManagerTrashedPageGraphQL } from '@/pages-scripts/portal/media-manager/store/mediaManager-getTrashedPage.store';
-import RestoreFileModal from '@/pages-scripts/portal/media-manager/modals/restoreFile.modal';
+import RestoreFileModal from '@/pages-scripts/portal/media-manager/modals/RestoreFile.modal';
 
 // MUI
 import { styled, alpha } from '@mui/material/styles';
@@ -285,7 +285,9 @@ const MediaManager = () => {
 
 MediaManager.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       <MediaManagerProvider>
         {page}
       </MediaManagerProvider>

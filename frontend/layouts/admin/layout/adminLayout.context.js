@@ -1,12 +1,32 @@
 // Libraries
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SettingTabsProvider } from '@/pages-scripts/portal/admin/settings/tabs/setting-tabs.context';
 import { getAdminLayoutInitGraphQL } from '../store/init.store';
 import { SnackbarProvider } from 'notistack';
+import SameDocEntity, { SameDocEntityContext } from '@/components/realtime/_buffer/SameDocEntity.context';
+import SameDocBuffer, { SameDocBufferContext } from '@/components/realtime/_buffer/SameDocBuffer.context';
+import { useRouter } from 'next/router';
 
 export const AdminLayoutContext = React.createContext();
 
-export function AdminLayoutProvider({ children }) {
+export function AdminLayoutProvider({ hasNoEntity, children }) {
+  const router = useRouter();
+  const { applyTextFieldSelectionBuffer } = useContext(SameDocBufferContext)
+  const { updateEntity } = useContext(SameDocEntityContext)
+
+  const [lastRoute, setLastRoute] = useState(null)
+
+  useEffect(() => {
+    if (router.asPath !== lastRoute) {
+      if (hasNoEntity) {
+        updateEntity({
+          entity: null,
+        })
+      }
+      setLastRoute(router.asPath)
+    }
+
+  }, [hasNoEntity, router.asPath])
 
   const [leftDrawer, setLeftDrawer] = React.useState({
     isOpened: false,
@@ -97,7 +117,6 @@ export function AdminLayoutProvider({ children }) {
       const id = initAdminStore.data.backendUserBasicView_me;
       const notificationCount = initAdminStore.data.backendNotification_getUnseenNotificationCount
       const listOfNewNotification = initAdminStore.data.backendNotification_getFirstByCount
-      console.log("initAdminStore", initAdminStore, id)
 
       setIdChip(prevState => ({
         ...prevState,
@@ -132,6 +151,9 @@ export function AdminLayoutProvider({ children }) {
       notifications, setNotifications,
       tabs, setTabs,
       idChip, setIdChip,
+      // applyOrder,
+      updateEntity,
+      applyTextFieldSelectionBuffer,
     }}>
       <SnackbarProvider>
         <SettingTabsProvider>

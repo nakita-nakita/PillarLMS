@@ -51,6 +51,8 @@ import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtim
 import RealTimeSocialMediaRow from '@/components/realtime/SocialMediaRow/socialMediaRow.realtime';
 import SocialMediaList from '@/pages-scripts/portal/admin/settings/organization/socialMediaList';
 import dynamic from 'next/dynamic';
+import { getSettingOrganizationGraphQL } from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_getOne.store';
+import { getSocketId, initSocket, socketId } from '@/utils/realtime/socket';
 const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
   ssr: false
 });
@@ -58,36 +60,35 @@ const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/Tex
 const Page = () => {
   const theme = useTheme()
 
-  const { setTabs } = React.useContext(AdminLayoutContext)
+  const { setTabs, updateEntity } = React.useContext(AdminLayoutContext)
   const settingsTabsContext = React.useContext(SettingTabsContext)
 
   const [isLoaded, setIsLoaded] = useState(false)
 
   const [logoPreview, setLogoPreview] = useState("")
-  const [streetAddress, setStreetAddress] = useState("")
-  const [streetAddressError, setStreetAddressError] = useState("")
-  const [suiteNumber, setSuiteNumber] = useState("")
-  const [suiteNumberError, setSuiteNumberError] = useState("")
-  const [zipCode, setZipCode] = useState("")
-  const [zipCodeError, setZipCodeError] = useState("")
-  const [city, setCity] = useState("")
-  const [cityError, setCityError] = useState("")
-  const [state, setState] = useState("")
-  const [stateError, setStateError] = useState("")
-  const [socialTwitter, setSocialTwitter] = useState("")
-  const [socialTwitterError, setSocialTwitterError] = useState("")
-  const [socialFacebook, setSocialFacebook] = useState("")
-  const [socialFacebookError, setSocialFacebookError] = useState("")
-  const [socialInstagram, setSocialInstagram] = useState("")
-  const [socialInstagramError, setSocialInstagramError] = useState("")
-  const [socialWhatsapp, setSocialWhatsapp] = useState("")
-  const [socialWhatsappError, setSocialWhatsappError] = useState("")
-  const [socialTelegram, setSocialTelegram] = useState("")
-  const [socialTelegramError, setSocialTelegramError] = useState("")
 
 
+
+  // const [logo, setlogo] = useState()
+  // const [shouldApplyToTopNavMenu, setshouldApplyToTopNavMenu] = useState()
+  const [entity, setEntity] = useState()
+  const [name, setName] = useState()
+  const [addressLine1, setAddressLine1] = useState()
+  const [addressLine2, setAddressLine2] = useState()
+  const [cityLocality, setCityLocality] = useState()
+  const [stateProvinceRegion, setStateProvinceRegion] = useState()
+  const [postalCode, setPostalCode] = useState()
+  const [socialFacebook, setSocialFacebook] = useState()
+  const [socialX, setSocialX] = useState()
+  const [socialInstagram, setSocialInstagram] = useState()
+  const [socialLinkedIn, setSocialLinkedIn] = useState()
+  const [socialYouTube, setSocialYouTube] = useState()
+  const [socialPinterest, setSocialPinterest] = useState()
+  const [socialWhatsapp, setSocialWhatsapp] = useState()
+  const [socialReddit, setSocialReddit] = useState()
 
   React.useEffect(() => {
+    const socket = initSocket()
     setTabs(prevState => ({
       ...prevState,
       tabs: tabsJson.tabs,
@@ -100,53 +101,31 @@ const Page = () => {
       selectedValue: 0,
     }))
 
-    setIsLoaded(true)
-    // getSettingsChurchGraphQL().then(response => {
-    //   setStreetAddress(response?.data?.backendSetting_church_getOne?.streetAddress)
-    //   setSuiteNumber(response?.data?.backendSetting_church_getOne?.suiteNumber)
-    //   setZipCode(response?.data?.backendSetting_church_getOne?.zipCode)
-    //   setCity(response?.data?.backendSetting_church_getOne?.city)
-    //   setState(response?.data?.backendSetting_church_getOne?.state)
-    //   setSocialTwitter(response?.data?.backendSetting_church_getOne?.socialTwitter)
-    //   setSocialFacebook(response?.data?.backendSetting_church_getOne?.socialFacebook)
-    //   setSocialInstagram(response?.data?.backendSetting_church_getOne?.socialInstagram)
-    //   setSocialWhatsapp(response?.data?.backendSetting_church_getOne?.socialWhatsapp)
-    //   setSocialTelegram(response?.data?.backendSetting_church_getOne?.socialTelegram)
-    //   setIsLoaded(true)
-    // })
+    getSettingOrganizationGraphQL({
+      socketId: getSocketId(),
+    }).then(response => {
+      const org = response.data.backendSettingOrganization_getOne
+
+      updateEntity({
+        entity: org.entity
+      })
+
+      setEntity(org.entity)
+      setName(org.name)
+      setAddressLine1(org.addressLine1)
+      setAddressLine2(org.addressLine2)
+      setCityLocality(org.cityLocality)
+      setStateProvinceRegion(org.stateProvinceRegion)
+      setPostalCode(org.postalCode)
+
+      setIsLoaded(true)
+    })
 
   }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setStreetAddressError("")
-    setSuiteNumberError("")
-    setZipCodeError("")
-    setCityError("")
-    setStateError("")
-    setSocialTwitterError("")
-    setSocialFacebookError("")
-    setSocialInstagramError("")
-    setSocialWhatsappError("")
-    setSocialTelegramError("")
-
-    // postSettingsChurchGraphQL({
-    //   streetAddress,
-    //   suiteNumber,
-    //   zipCode,
-    //   city,
-    //   state,
-    //   socialTwitter,
-    //   socialFacebook,
-    //   socialInstagram,
-    //   socialWhatsapp,
-    //   socialTelegram,
-    // }).then(response => {
-
-    //   const result = processGraphQLErrors({ response })
-
-    //   console.log('response', response, result)
-    // })
+ 
   }
   return (
     <>
@@ -207,7 +186,7 @@ const Page = () => {
               <img style={{ height: "150px", width: "150px" }} />
             </div> */}
             <List sx={{ p: 0 }}>
-              <DynamicRealTimeTextField label={"Organization Name"} />
+              <DynamicRealTimeTextField label={"Organization Name"} data={name} entity={entity} />
               <RealTimeSwitchRow label={"Apply to the top of the left menu?"} />
               <ListItem>
                 <br />
@@ -246,16 +225,16 @@ const Page = () => {
     Country: (It's crucial to have this especially for international shipping.)
 
  */}
-            {/* <DynamicRealTimeTextField label="Address line 1" />
+            <DynamicRealTimeTextField label="Address line 1" data={addressLine1} entity={entity} />
             <br />
-            <DynamicRealTimeTextField label="Address Line2 " />
+            <DynamicRealTimeTextField label="Address Line2 " data={addressLine2} entity={entity} />
             <br />
-            <DynamicRealTimeTextField label="City / Locality" />
+            <DynamicRealTimeTextField label="City / Locality" data={cityLocality} entity={entity} />
             <br />
-            <DynamicRealTimeTextField label="State / Province / Region" />
+            <DynamicRealTimeTextField label="State / Province / Region" data={stateProvinceRegion} entity={entity} />
 
             <br />
-            <DynamicRealTimeTextField label="Postal Code" /> */}
+            <DynamicRealTimeTextField label="Postal Code" data={postalCode} entity={entity} />
             <ListItem>
               <br />
 

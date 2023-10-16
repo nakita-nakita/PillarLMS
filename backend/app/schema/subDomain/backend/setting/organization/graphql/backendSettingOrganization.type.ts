@@ -2,25 +2,31 @@ import gql from "graphql-tag"
 
 const applicationType = gql`
 
-  type BackendChurchType {
+  type BackendOrganizationType {
+    entity: String,
     logo: String,
-    streetAddress: String,
-    suiteNumber: String,
-    zipCode: String,
-    city: String,
-    state: String,
-    socialTwitter: String,
-    socialFacebook: String,
-    socialInstagram: String,
-    socialWhatsapp: String,
-    socialTelegram: String
+    name: RealTimeTextField,
+    shouldApplyToTopNavMenu: Boolean,
+    addressLine1: RealTimeTextField,
+    addressLine2: RealTimeTextField,
+    cityLocality: RealTimeTextField,
+    stateProvinceRegion: RealTimeTextField,
+    postalCode: RealTimeTextField,
+    socialFacebook: RealTimeTextField,
+    socialX: RealTimeTextField,
+    socialInstagram: RealTimeTextField,
+    socialLinkedIn: RealTimeTextField,
+    socialYouTube: RealTimeTextField,
+    socialPinterest: RealTimeTextField,
+    socialWhatsapp: RealTimeTextField,
+    socialReddit: RealTimeTextField,
   }
 
   type Query {
-    backendSetting_church_getOne: BackendChurchType
+    backendSettingOrganization_getOne(socketId: String): BackendOrganizationType
   }
   type Mutation {
-    backendSetting_church_updateOne(logo: String, streetAddress: String, suiteNumber: String, zipCode: String, city: String, state: String, socialTwitter: String, socialFacebook: String, socialInstagram: String, socialWhatsapp: String, socialTelegram: String): BackendChurchType
+    backendSettingOrganization_updateOne(logo: String, name: String, shouldApplyToTopNavMenu: Boolean, addressLine1: String addressLine2: String, cityLocality: String, stateProvinceRegion: String, postalCode: String, socialFacebook: String, socialX: String, socialInstagram: String, socialLinkedIn: String, socialYouTube: String, socialPinterest: String, socialWhatsapp: String, socialReddit: String): BackendOrganizationType
   }
 `
 

@@ -10,7 +10,9 @@ function DashboardPage() {
 
 DashboardPage.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
+    <AdminLayout
+      hasNoEntity
+    >
       {page}
     </AdminLayout>
   )
