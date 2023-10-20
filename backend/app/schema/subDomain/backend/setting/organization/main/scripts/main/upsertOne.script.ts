@@ -7,7 +7,7 @@ import makeBackendSettingChurchSql from "../../../preMain/backendSettingOrganiza
 import makeBackendSettingOrganizationSql from "../../../preMain/backendSettingOrganization.sql";
 
 type input = {
-  id: string,
+  id?: string,
   logo?: string,
   name?: string,
   shouldApplyToTopNavMenu?: boolean,

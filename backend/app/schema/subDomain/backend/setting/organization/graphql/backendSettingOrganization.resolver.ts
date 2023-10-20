@@ -21,12 +21,12 @@ const makeDObj = async (): Promise<d_allDomain> => {
 
 const settingRequestResolver = {
   Query: {
-    backendSettingOrganization_getOne: async (parent, args, ctx) => {
+    backendSettingOrganization_getOneRealTime: async (parent, args, ctx) => {
 
       const d = await makeDObj()
       const main = makeBackendSettingOrganizationMain(d)
 
-      const response = await main.getOne({
+      const response = await main.getOneRealTime({
         socketId: args.socketId,
       })
 
@@ -37,6 +37,22 @@ const settingRequestResolver = {
         return graphqlError(response)
       }
     },
+
+    backendSettingOrganization_getOne: async (parent, args, ctx) => {
+
+      const d = await makeDObj()
+      const main = makeBackendSettingOrganizationMain(d)
+
+      const response = await main.getOne()
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    
   },
   Mutation: {
     backendSettingOrganization_updateOne: async (parent, args, ctx) => {

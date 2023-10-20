@@ -23,7 +23,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Typography from '@mui/material/Typography';
 
 export default function Navigator(props) {
-  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc, leftDrawer } = React.useContext(AdminLayoutContext)
   const router = useRouter()
   const other = props;
   const theme = useTheme();
@@ -102,8 +102,14 @@ export default function Navigator(props) {
         <ListItem sx={{ ...itemCategory, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "#230f34" }}>
 
           <br />
-          <br />
-          <br />
+          {leftDrawer.shouldApplyToTopNavMenu && (
+            <div style={{textAlign: "center"}}>
+              <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${leftDrawer.logo}`} alt="Description of image" style={{width: "150px"}} />
+              <br />
+              <br />
+              <h2>{leftDrawer.name}</h2>
+            </div>
+          )}
           {/* <Alert severity="warning">
             <small>
               <strong>
@@ -159,12 +165,12 @@ export default function Navigator(props) {
           </ListItemText>
         </ListItem>
         <ListItem
-          
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/dashboard') ? theme.palette.grey[300] : "initial",
-            }}
+
+          sx={{
+            py: 0,
+            px: 0,
+            background: router.pathname.startsWith('/portal/dashboard') ? theme.palette.grey[300] : "initial",
+          }}
           onClick={() => changeUrl("/portal/dashboard")}
         >
           <ListItemButton>
@@ -188,17 +194,17 @@ export default function Navigator(props) {
         </ListItem>
 
         <ListItem
-          
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/media-manager') ? theme.palette.grey[300] : "initial",
-            }}
+
+          sx={{
+            py: 0,
+            px: 0,
+            background: router.pathname.startsWith('/portal/media-manager') ? theme.palette.grey[300] : "initial",
+          }}
           onClick={() => changeUrl("/portal/media-manager")}
         >
           <ListItemButton>
             <ListItemIcon>
-              <img src="/admin/icons/media.png" style={{ width: "50px", height: "50px" }} />
+              <img src="/admin/icons/icons8-hdd-100.png" style={{ width: "50px", height: "50px" }} />
             </ListItemIcon>
             <ListItemText>
               <Typography color="inherit" variant="h6" component="h2"
@@ -281,7 +287,7 @@ export default function Navigator(props) {
           </ListItem>
 
           <ListItem
-            
+
             sx={{
               py: 0,
               px: 0,
@@ -294,7 +300,7 @@ export default function Navigator(props) {
           >
             <ListItemButton>
               <ListItemIcon>
-                <img src="/admin/icons/website.png" style={{ width: "50px", height: "50px" }} />
+                <img src="/admin/icons/icons8-website-100.png" style={{ width: "50px", height: "50px" }} />
               </ListItemIcon>
 
               <ListItemText>
@@ -313,7 +319,7 @@ export default function Navigator(props) {
           </ListItem>
 
           <ListItem
-            
+
             sx={{
               py: 0,
               px: 0,
@@ -326,7 +332,7 @@ export default function Navigator(props) {
           >
             <ListItemButton>
               <ListItemIcon>
-                <img src="/admin/icons/school_stuff.png" style={{ width: "50px", height: "50px" }} />
+                <img src="/admin/icons/icons8-course-assign-100.png" style={{ width: "50px", height: "50px" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
@@ -489,7 +495,7 @@ export default function Navigator(props) {
           </ListItem>
 
           <ListItem
-            
+
             sx={{
               py: 0,
               px: 0,
@@ -499,7 +505,7 @@ export default function Navigator(props) {
           >
             <ListItemButton>
               <ListItemIcon>
-                <img src="/admin/icons/chart_trend.png" style={{ width: "50px", height: "50px" }} />
+                <img src="/admin/icons/icons8-analytics-100.png" style={{ width: "50px", height: "50px" }} />
               </ListItemIcon>
 
               <ListItemText>
@@ -526,7 +532,7 @@ export default function Navigator(props) {
           >
             <ListItemButton>
               <ListItemIcon>
-                <img src="/admin/icons/linux_admin.png" style={{ width: "50px", height: "50px" }} />
+                <img src="/admin/icons/icons8-user-shield-100.png" style={{ width: "50px", height: "50px" }} />
               </ListItemIcon>
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"
@@ -550,11 +556,11 @@ export default function Navigator(props) {
           <ListItemButton>
 
             <ListItem
-              
-            sx={{
-              py: 0,
-              px: 0,
-            }}
+
+              sx={{
+                py: 0,
+                px: 0,
+              }}
             >
               <ListItemText>
                 <Typography color="inherit" variant="h6" component="h2"

@@ -132,7 +132,7 @@ const Page = () => {
     getSettingOrganizationGraphQL({
       socketId: getSocketId(),
     }).then(response => {
-      const org = response.data.backendSettingOrganization_getOne
+      const org = response.data.backendSettingOrganization_getOneRealTime
 
       console.log('main data', org)
 

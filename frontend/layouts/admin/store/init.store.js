@@ -26,6 +26,13 @@ export const getAdminLayoutInitGraphQL = () => {
           createdAt
         }
         backendNotification_getUnseenNotificationCount
+
+        backendSettingOrganization_getOne {
+          id
+          logo
+          shouldApplyToTopNavMenu
+          name
+        }
       }
       `,
     })

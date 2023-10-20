@@ -4,6 +4,7 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 const backendSettingChurchSecurity = {
   Query: {
     // backendSetting_church_getOne: and(isAuthenticated, isAdmin),
+    backendSettingOrganization_getOneRealTime: isAuthenticated,
     backendSettingOrganization_getOne: isAuthenticated,
   },
   Mutation: {

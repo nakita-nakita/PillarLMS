@@ -31,6 +31,12 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
   const [leftDrawer, setLeftDrawer] = React.useState({
     isOpened: false,
     anchor: false,
+
+    // show branding
+    logo: null,
+    shouldApplyToTopNavMenu: null,
+    name: null,
+
   })
 
   const [rightDrawer, setRightDrawer] = React.useState({
@@ -117,6 +123,7 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
       const id = initAdminStore.data.backendUserBasicView_me;
       const notificationCount = initAdminStore.data.backendNotification_getUnseenNotificationCount
       const listOfNewNotification = initAdminStore.data.backendNotification_getFirstByCount
+      const showBranding = initAdminStore.data.backendSettingOrganization_getOne;
 
       setIdChip(prevState => ({
         ...prevState,
@@ -135,6 +142,13 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
         ...prevState,
         badgeCount: notificationCount,
         list: listOfNewNotification,
+      }))
+
+      setLeftDrawer(prevState => ({
+        ...prevState,
+        logo: showBranding.logo,
+        shouldApplyToTopNavMenu: showBranding.shouldApplyToTopNavMenu,
+        name: showBranding.name,
       }))
     })
 

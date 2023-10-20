@@ -6,7 +6,7 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
     const response = await callSubDomainApi({
       query: `
       query($socketId: String!) {
-        backendSettingOrganization_getOne(socketId: $socketId) {
+        backendSettingOrganization_getOneRealTime(socketId: $socketId) {
           id
           entity
           logo {
