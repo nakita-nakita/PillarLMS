@@ -34,6 +34,7 @@ const userType = gql`
     lastName: String
     picture: String
     username: String
+    displayName: String
   }
 
   input UserProfileInput {
@@ -84,17 +85,6 @@ const userType = gql`
     FULL_NAME
   }
   
-  type UserDisplay { 
-    id: ID!
-    email: String
-    firstName: String 
-    lastName: String 
-    username: String 
-    picture: String 
-    callByType: CallByTypeEnum 
-    circleColor: String 
-    labelColor: String
-  }
 
 
   type Query {

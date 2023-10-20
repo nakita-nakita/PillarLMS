@@ -7,6 +7,8 @@ import backendSettingOrganization from "../../../../../../../../models/subDomain
 import makeCollaborateSameDoc from "../../../../../../collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
 import RealTimeYDocAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeYDocAdapter";
 import { RealTimeAdapterPropertyValue } from "../../../../../../collaborate/sameDoc/preMain/scripts/SameDoc/set.script";
+import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeSwitchAdapter";
+import RealTimePictureSelectionAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimePictureSelectionAdapter";
 
 type input = {
   socketId: string;
@@ -52,14 +54,29 @@ export default function getOne(d: d_allDomain) {
       }
 
     } else {
-
+      //adapter for every realtime property
+      const logo: RealTimeAdapterPropertyValue = {
+        adapter: new RealTimePictureSelectionAdapter({
+          picture: record.data?.dataValues?.logo,
+          name: "logo"
+        }),
+        name: "logo"
+      }
       //adapter for every realtime property
       const name: RealTimeAdapterPropertyValue = {
         adapter: new RealTimeYDocAdapter({
-          initialText: record.data?.dataValues?.name || "test",
+          initialText: record.data?.dataValues?.name || "",
           name: "name"
         }),
         name: "name"
+      }
+
+      const shouldApplyToTopNavMenu: RealTimeAdapterPropertyValue = {
+        adapter: new RealTimeSwitchAdapter({
+          initialBoolean: record.data?.dataValues?.shouldApplyToTopNavMenu,
+          name: "shouldApplyToTopNavMenu"
+        }),
+        name: "shouldApplyToTopNavMenu"
       }
 
       const addressLine1: RealTimeAdapterPropertyValue = {
@@ -176,7 +193,9 @@ export default function getOne(d: d_allDomain) {
       const setEntity = await sameDoc.set({
         entity,
         properties: [
+          logo,
           name,
+          shouldApplyToTopNavMenu,
           addressLine1,
           addressLine2,
           cityLocality,

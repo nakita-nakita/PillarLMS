@@ -12,7 +12,7 @@ function SameDocBuffer({ children }) {
 
   // buffers
   const [realTimeTextFieldSelectionBuffer, setRealTimeTextFieldSelectionBuffer] = useState([])
-  // const [realTimeTextFieldOrderNumber, setRealTimeTextFieldOrderNumber] = useState(0)
+  const [realTimeTextSwitchBuffer, setRealTimeSwitchBuffer] = useState([])
 
   // clear buffer for each page change.
   useEffect(() => {
@@ -29,14 +29,23 @@ function SameDocBuffer({ children }) {
 
   }, [setRealTimeTextFieldSelectionBuffer, realTimeTextFieldSelectionBuffer]);
 
+  const handleSwitchUpdate = useCallback((data) => {
+    setRealTimeSwitchBuffer(prevBuffer => [...prevBuffer, data]);
+    // console.log('buffer update: selection: ', {data, realTimeTextFieldSelectionBuffer})
+
+  }, [realTimeTextSwitchBuffer, setRealTimeSwitchBuffer]);
+
   //get all buffers for the page duriation.
   useEffect(() => {
     const socket = initSocket();
 
     socket.on('samedoc-buffer-selection-change', handleSelectionUpdate);
+    
+    socket.on('samedoc-buffer-switch-change', handleSwitchUpdate)
 
     return () => {
       socket.off('samedoc-buffer-selection-change');
+      socket.off('samedoc-buffer-switch-change')
     }
 
   }, []);
@@ -60,10 +69,28 @@ function SameDocBuffer({ children }) {
     return highestOrderNumber;
   }
 
+  const applySwitchBuffer = async ({ entity, name, order, cb }) => {
+    let highestOrderNumber = order;
+    for (let i = 0; i < realTimeTextSwitchBuffer.length; i++) {
+      const switchBuffer = realTimeTextSwitchBuffer[i];
+      if (switchBuffer.entity === entity && switchBuffer.name === name && switchBuffer.order > order) {
+        
+        highestOrderNumber = switchBuffer.order > highestOrderNumber ? switchBuffer.order : highestOrderNumber;
+
+        if (cb) {
+          cb(switchBuffer)
+        }
+      }
+    }
+
+    return highestOrderNumber;
+  }
+
 
   return (
     <SameDocBufferContext.Provider value={{
       applyTextFieldSelectionBuffer,
+      applySwitchBuffer,
     }}>
       {children}
     </SameDocBufferContext.Provider>

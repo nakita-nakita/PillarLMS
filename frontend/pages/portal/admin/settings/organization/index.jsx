@@ -56,6 +56,9 @@ import { getSocketId, initSocket, socketId } from '@/utils/realtime/socket';
 import { postSettingOrganizationAddressGraphQL } from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_saveAddress.store';
 import { enqueueSnackbar } from 'notistack';
 import { postSettingOrganizationSocialsGraphQL } from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_saveSocials.store';
+import RealTimePictureRow from '@/components/realtime/PictureSelectRow/pictureSelection.realtime';
+import postPreviewBrandingApi from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_previewBranding.api';
+import postBrandingApi from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_saveBranding.api';
 const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
   ssr: false
 });
@@ -78,8 +81,13 @@ const Page = () => {
   const [id, setId] = useState()
 
   // name is realtime, name value is text, there should be an error trigger and a bottom message.
+  const [logo, setlogo] = useState()
+  const [logoValue, setlogoValue] = useState()
   const [name, setName] = useState()
   const [nameValue, setNameValue] = useState()
+  const [shouldApplyToTopNavMenu, setShouldApplyToTopNavMenu] = useState()
+  const [shouldApplyToTopNavMenuValue, setShouldApplyToTopNavMenuValue] = useState()
+
   const [addressLine1, setAddressLine1] = useState()
   const [addressLine1Value, setAddressLine1Value] = useState()
   const [addressLine2, setAddressLine2] = useState()
@@ -126,13 +134,17 @@ const Page = () => {
     }).then(response => {
       const org = response.data.backendSettingOrganization_getOne
 
+      console.log('main data', org)
+
       updateEntity({
         entity: org.entity
       })
 
       setId(org.id)
       setEntity(org.entity)
+      setlogo(org.logo)
       setName(org.name)
+      setShouldApplyToTopNavMenu(org.shouldApplyToTopNavMenu)
       setAddressLine1(org.addressLine1)
       setAddressLine2(org.addressLine2)
       setCityLocality(org.cityLocality)
@@ -187,7 +199,18 @@ const Page = () => {
       enqueueSnackbar("Socials Saved!")
     })
   }
-  
+
+  const handleBrandingSave = () => {
+    postBrandingApi({
+      id,
+      previewLogo: logoValue,
+      name: nameValue,
+      shouldApplyToTopNavMenu: shouldApplyToTopNavMenuValue,
+    }).then(() => {
+      enqueueSnackbar("Branding Saved!")
+    })
+  }
+
   return (
     <>
 
@@ -219,7 +242,7 @@ const Page = () => {
 
             <Paper elevation={3}>
 
-              <List sx={{ p: 0 }}>
+              {/* <List sx={{ p: 0 }}>
                 <HeaderRow label="Logo" />
                 <ListItem>
                   <div>
@@ -243,12 +266,40 @@ const Page = () => {
                   </div>
                   <br />
                 </ListItem>
-              </List>
+              </List> */}
 
               {/* <div style={{ display: "table", border: "5px solid black", padding: "3px", marginTop: "5px", marginBottom: "5px" }}>
               <img style={{ height: "150px", width: "150px" }} />
             </div> */}
               <List sx={{ p: 0 }}>
+                <HeaderRow label="Branding" />
+                <ListItem>
+                  <div>
+                    <br />
+                    <p>Logo</p>
+                  </div>
+                </ListItem>
+                <RealTimePictureRow
+                  entity={entity}
+                  data={logo}
+                  onFileSubmit={event => {
+                    return postPreviewBrandingApi({
+                      event,
+                      entity,
+                      name: logo.name,
+                    })
+                  }}
+
+                  onChange={picture => {
+                    console.log('picture', picture)
+                    setlogoValue(picture)
+
+                  }}
+
+
+
+                />
+                <br />
                 <DynamicRealTimeTextField
                   label={"Organization Name"}
                   data={name}
@@ -258,10 +309,26 @@ const Page = () => {
                     console.log('contents to be saved', text)
                   }}
                 />
-                <RealTimeSwitchRow label={"Apply to the top of the left menu?"} />
+                <br />
+                <RealTimeSwitchRow
+                  label={"Apply to the top of the left menu?"}
+                  data={shouldApplyToTopNavMenu}
+                  entity={entity}
+                  onChange={(value) => {
+                    setShouldApplyToTopNavMenuValue(value)
+                    console.log('contents to be saved: boolean: setShouldApplyToTopNavMenuValue:', value)
+
+                  }}
+                />
                 <ListItem>
                   <br />
-                  <Button variant="contained" color="primary" type="submit" disabled>Save</Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleBrandingSave}
+                  >
+                    Save
+                  </Button>
                 </ListItem>
               </List>
             </Paper>
@@ -577,18 +644,18 @@ const Page = () => {
                 <Button variant="contained" color="primary">New</Button>
 
               </ListItem> */}
-              
-              <ListItem>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={handleSocialSave}
-                >Save</Button>
+                <ListItem>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="button"
+                    onClick={handleSocialSave}
+                  >Save</Button>
 
 
-              </ListItem>
+                </ListItem>
               </List>
             </Paper>
             {/* <br />

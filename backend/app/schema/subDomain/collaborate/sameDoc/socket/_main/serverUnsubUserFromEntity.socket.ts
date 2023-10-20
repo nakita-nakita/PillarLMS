@@ -1,5 +1,5 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types";
-import makeCollaborateSameDoc from "../preMain/collaborateSameDoc.ram-cache";
+import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
+import makeCollaborateSameDoc from "../../preMain/collaborateSameDoc.ram-cache";
 
 type input = {
   socket: any,

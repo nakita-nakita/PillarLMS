@@ -9,7 +9,37 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
         backendSettingOrganization_getOne(socketId: $socketId) {
           id
           entity
-          logo
+          logo {
+            order
+            name
+            selection
+            currentSelection {
+              picture
+            }
+            uploads {
+              id
+              picture
+              user {
+                id
+                circleColor
+                labelColor
+                displayName
+                picture
+              }
+            }
+          }
+          shouldApplyToTopNavMenu {
+            order
+            name
+            booleanValue
+            user {
+              id
+              circleColor
+              labelColor
+              displayName
+              picture
+            }
+          }
           name {
             order
             name
@@ -220,7 +250,6 @@ export const getSettingOrganizationGraphQL = ({ socketId }) => {
               }
             }
           }
-          
         }
       }
       

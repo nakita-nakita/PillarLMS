@@ -10,6 +10,19 @@ const userType = gql`
     result: Boolean
   }
 
+  
+  type UserDisplay { 
+    id: ID!
+    email: String
+    firstName: String 
+    lastName: String 
+    username: String 
+    picture: String 
+    callByType: CallByTypeEnum 
+    circleColor: String 
+    labelColor: String
+    displayName: String
+  }
 
   type quillRange {
     index: Int!
@@ -31,5 +44,36 @@ const userType = gql`
     textValue: String,
     selections: [SelectionCursor]
   }
+
+  type RealTimeSwitch {
+    order: Int,
+    name: String,
+    booleanValue: Boolean,
+    user: UserDisplay
+  }
+
+  type RealTimeColorPicker {
+    order: Int,
+    name: String,
+    color: String,
+    user: UserDisplay
+  }
+
+  type SelectionType {
+    id: String
+    picture: String
+    user: UserDisplay
+    createdAt: String
+  }
+
+  type RealTimePictureSelection {
+    order: Int
+    name: String
+    selection: String
+    currentSelection: SelectionType
+    uploads: [SelectionType]
+  }
+
+
 `;
 export default userType;

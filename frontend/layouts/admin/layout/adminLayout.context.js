@@ -11,7 +11,7 @@ export const AdminLayoutContext = React.createContext();
 
 export function AdminLayoutProvider({ hasNoEntity, children }) {
   const router = useRouter();
-  const { applyTextFieldSelectionBuffer } = useContext(SameDocBufferContext)
+  const { applyTextFieldSelectionBuffer, applySwitchBuffer } = useContext(SameDocBufferContext)
   const { updateEntity } = useContext(SameDocEntityContext)
 
   const [lastRoute, setLastRoute] = useState(null)
@@ -154,6 +154,7 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
       // applyOrder,
       updateEntity,
       applyTextFieldSelectionBuffer,
+      applySwitchBuffer,
     }}>
       <SnackbarProvider>
         <SettingTabsProvider>

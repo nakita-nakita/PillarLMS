@@ -22,7 +22,7 @@ function avatarInitials(name) {
   return undefined
 }
 
-export default function UserChip({ email, firstName, lastName, username, callByType, picturePreview, labelColor, circleColor }) {
+export default function UserChip({ email, firstName, lastName, username, callByType, picturePreview, labelColor, circleColor, displayName }) {
   const theme = useTheme()
 
   const [display, setDisplay] = useState('')
@@ -36,31 +36,36 @@ export default function UserChip({ email, firstName, lastName, username, callByT
   }
 
   useEffect(() => {
-    let fullname = "";
-    if (firstName && lastName) {
-      fullname = firstName + " " + lastName
-    }
+    if (!displayName) {
 
-    switch (callByType) {
-      case "EMAIL":
-        setDisplay(email)
-        break;
-      case "USERNAME":
-        setDisplay(username)
-        break;
-      case "FIRST_NAME":
-        setDisplay(firstName)
-        break;
-      case "LAST_NAME":
-        setDisplay(lastName)
-        break;
-      case "FULL_NAME":
-        setDisplay(fullname)
-        break;
-      default:
-        setDisplay(email)
+      let fullname = "";
+      if (firstName && lastName) {
+        fullname = firstName + " " + lastName
+      }
+
+      switch (callByType) {
+        case "EMAIL":
+          setDisplay(email)
+          break;
+        case "USERNAME":
+          setDisplay(username)
+          break;
+        case "FIRST_NAME":
+          setDisplay(firstName)
+          break;
+        case "LAST_NAME":
+          setDisplay(lastName)
+          break;
+        case "FULL_NAME":
+          setDisplay(fullname)
+          break;
+        default:
+          setDisplay(email)
+      }
+    } else {
+      setDisplay(displayName)
     }
-  }, [email, firstName, lastName, username, callByType])
+  }, [email, firstName, lastName, username, callByType, displayName])
 
   return (
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>

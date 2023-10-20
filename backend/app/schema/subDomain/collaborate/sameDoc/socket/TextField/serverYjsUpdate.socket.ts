@@ -2,9 +2,9 @@
 
 
 
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
-import makeSingleton from "../../_singleton/preMain/_singleton.ram-cache";
-import makeCollaborateSameDocTextField from "../preMain/collaborateSameDocTextField.cache";
+import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types"
+import makeSingleton from "../../../_singleton/preMain/_singleton.ram-cache";
+import makeCollaborateSameDocTextField from "../../preMain/collaborateSameDocTextField.cache";
 
 type input = {
   socket: any,

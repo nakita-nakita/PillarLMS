@@ -5,6 +5,9 @@ import makeMeeting from "../../../../_singleton/preMain/meetings.ram-cache";
 import { meetingType } from "../../../../_singleton/preMain/scripts/meetings/meeting.types";
 import _ from "lodash"
 import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
+import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
+import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
+import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
 
 type input = {
   entity: string,
@@ -13,7 +16,7 @@ type input = {
 
 export default function getByPropertyName(d: d_allDomain) {
 
-  return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter>> => {
+  return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimeColorAdapter | RealTimePictureSelectionAdapter>> => {
 
     const singletonFunc = makeSingleton(d)
 

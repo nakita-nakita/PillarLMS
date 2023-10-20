@@ -7,16 +7,18 @@ import _ from "lodash"
 import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
 import { EntityDocument, SameDoc } from "../../../forUsage/types/RealTimeEntity";
+import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
+import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
-  adapter: RealTimeYDocAdapter
+  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter
 }
 
 type input = {
   socketId: string
   entity: string,
-  properties: RealTimeAdapterPropertyValue[]
+  properties: any[]
 }
 
 export default function set(d: d_allDomain) {

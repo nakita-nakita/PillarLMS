@@ -55,7 +55,8 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       socialX: args.socialX,
       socialYouTube: args.socialYouTube,
       stateProvinceRegion: args.stateProvinceRegion,
-    }).catch(error => errorHandler(error, loggers))
+    })
+    // .catch(error => errorHandler(error, loggers))
 
     return response
   }

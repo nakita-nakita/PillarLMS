@@ -32,7 +32,8 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
     const [instance, created] = await db.backendSettingOrganization.upsert(args, {
       returning: true,
       transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+    })
+    // .catch(error => errorHandler(error, loggers))
 
     // `created` is a boolean indicating whether a new instance was created
     // `instance` is the model instance itself

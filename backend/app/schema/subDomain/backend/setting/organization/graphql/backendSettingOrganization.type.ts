@@ -5,9 +5,9 @@ const applicationType = gql`
   type BackendOrganizationType {
     id: String
     entity: String,
-    logo: String,
+    logo: RealTimePictureSelection,
     name: RealTimeTextField,
-    shouldApplyToTopNavMenu: Boolean,
+    shouldApplyToTopNavMenu: RealTimeSwitch,
     addressLine1: RealTimeTextField,
     addressLine2: RealTimeTextField,
     cityLocality: RealTimeTextField,

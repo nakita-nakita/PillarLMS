@@ -29,7 +29,7 @@ export default class backendSettingOrganization extends Model {
   @Column({
     type: sequelize.BOOLEAN,
   })
-  shouldApplyToTopNavMenu: string;
+  shouldApplyToTopNavMenu: boolean;
 
   @Column({
     type: sequelize.STRING,
