@@ -1,17 +1,20 @@
 import { Model } from "sequelize";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import backendSetting_colors from "../../../../../../../../models/subDomain/backend/setting/backendSetting_colors.model";
+import backendSettingColors from "../../../../../../../../models/subDomain/backend/setting/backendSettingColors.model";
 
-export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
 
   const db = subDomainDb.models;
 
-  return async (): Promise<returningSuccessObj<Model<backendSetting_colors> | null>>  => {
+  return async (): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
 
-    const data = await db.backendSetting_colors.findOne({
+    const data = await db.backendSettingColors.findOne({
       transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      order: [['createdAt', 'DESC']]
+    })
+    
+    // .catch(error => errorHandler(error, loggers))
 
     return {
       success: true,
@@ -19,5 +22,3 @@ export default function getOne({ subDomainDb, errorHandler, subDomainTransaction
     }
   }
 }
-
-

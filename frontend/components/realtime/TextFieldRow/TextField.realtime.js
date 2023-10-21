@@ -15,7 +15,7 @@ import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 Quill.register('modules/cursors', QuillCursors);
 
 
-function RealTimeTextField({ onTextUpdate , ...props}) {
+function RealTimeTextField({ onTextUpdate, ...props }) {
   const quillRef = useRef(null);
   const { idChip, applyTextFieldSelectionBuffer } = useContext(AdminLayoutContext)
 
@@ -99,7 +99,7 @@ function RealTimeTextField({ onTextUpdate , ...props}) {
         for (let i = 0; i < props.data.selections.length; i++) {
           const { userId, username, userColor, range, order } = props.data.selections[i];
           if (idChip.id !== userId) {
-            
+
             if (order) {
               applyOrder({
                 order,
@@ -175,60 +175,62 @@ function RealTimeTextField({ onTextUpdate , ...props}) {
       });
 
 
+      if (props?.data) {
 
-      applyTextFieldSelectionBuffer({
-        entity: props.entity,
-        name: props.data.name,
-        order: orderNumber,
-        cb: (update) => {
-          const quill = quillRef.current.getEditor();
-          const cursors = quill.getModule('cursors');
-
-
-          // Check if the cursor for this user already exists
-          if (!cursors.cursors[update.userId]) {
-            // Create a new cursor for the user
-            cursors.createCursor(update.userId, update.username, update.userColor);
-          }
-
-          // Move the user's cursor to the new position
-          cursors.moveCursor(update.userId, update.range)
-
-        }
-
-      }).then((order) => {
-        setOrderNumber(order)
-        quill.on('selection-change', (range, oldRange, source) => {
-          if (source === 'user' || source === "api") {
-            socket.emit('server-samedoc-selection-change', {
-              range,
-              entity: props.entity,
-              name: props.data.name,
-            });
-          }
-        });
-        // Listen for selection changes from other clients
-        socket.on('samedoc-selection-change', (data) => {
-
-          if (props.entity === data.entity && props.data.name === data.name) {
+        applyTextFieldSelectionBuffer({
+          entity: props.entity,
+          name: props.data.name,
+          order: orderNumber,
+          cb: (update) => {
             const quill = quillRef.current.getEditor();
             const cursors = quill.getModule('cursors');
 
 
             // Check if the cursor for this user already exists
-            if (!cursors.cursors[data.userId]) {
+            if (!cursors.cursors[update.userId]) {
               // Create a new cursor for the user
-              cursors.createCursor(data.userId, data.username, data.userColor);
+              cursors.createCursor(update.userId, update.username, update.userColor);
             }
 
             // Move the user's cursor to the new position
-            cursors.moveCursor(data.userId, data.range)
+            cursors.moveCursor(update.userId, update.range)
+
           }
-        })
-      });
+
+        }).then((order) => {
+          setOrderNumber(order)
+          quill.on('selection-change', (range, oldRange, source) => {
+            if (source === 'user' || source === "api") {
+              socket.emit('server-samedoc-selection-change', {
+                range,
+                entity: props.entity,
+                name: props.data.name,
+              });
+            }
+          });
+          // Listen for selection changes from other clients
+          socket.on('samedoc-selection-change', (data) => {
+
+            if (props.entity === data.entity && props.data.name === data.name) {
+              const quill = quillRef.current.getEditor();
+              const cursors = quill.getModule('cursors');
+
+
+              // Check if the cursor for this user already exists
+              if (!cursors.cursors[data.userId]) {
+                // Create a new cursor for the user
+                cursors.createCursor(data.userId, data.username, data.userColor);
+              }
+
+              // Move the user's cursor to the new position
+              cursors.moveCursor(data.userId, data.range)
+            }
+          })
+        });
 
 
 
+      }
 
     }
 

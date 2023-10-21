@@ -1,22 +1,16 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import makeBackendSettingLinksSql from "../../../preMain/backendSetting_links.sql";
-import backendSetting_links from "../../../../../../../../models/subDomain/backend/setting/backendSetting_links.model";
+import backendSettingLink from "../../../../../../../../models/subDomain/backend/setting/backendSettingLink.model";
+import makeBackendSettingLinkSql from "../../../preMain/backendSettingLink.sql";
 
-export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  return async (): Promise<returningSuccessObj<Model<backendSetting_links> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
-    const lookUpSql = makeBackendSettingLinksSql(d);
+export default function getOne(d: d_allDomain) {
+  return async (): Promise<returningSuccessObj<Model<backendSettingLink> | null>> => {
 
-    const response = await lookUpSql.getOne().catch(error => errorHandler(error, loggers))
+    const sql = makeBackendSettingLinkSql(d);
+
+    const response = sql.getOne().catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

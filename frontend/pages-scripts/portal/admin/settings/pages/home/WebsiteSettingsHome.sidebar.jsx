@@ -134,7 +134,9 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusDangerStyle}></div>
           )}>
           <ListItemAvatar>
-            <Avatar alt="Meta-data for page" src="\admin\icons\color-icon.png" />
+            <Box width={35} height={35}>
+              <img alt="browser icon" src="\admin\icons\icons8-colors-64.png" width="100%" height="100%" />
+            </Box>
           </ListItemAvatar>
           <ListItemText
             primary="Colors"
@@ -163,7 +165,11 @@ function WebsiteSettingsHomeSidebar() {
           )}
         >
         <ListItemAvatar>
-          <Avatar alt="Meta-data for page" src="\admin\icons\header-icon.png" />
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="browser icon" src="\admin\icons\icons8-header-100.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
         </ListItemAvatar>
           <ListItemText
             primary="Header"
@@ -194,7 +200,9 @@ function WebsiteSettingsHomeSidebar() {
           )}
         >
         <ListItemAvatar>
-          <Avatar alt="Meta-data for page" src="\admin\icons\footer-icon.png" />
+          <Box width={35} height={35}>
+            <img alt="browser icon" src="\admin\icons\icons8-footer-100.png" width="100%" height="100%" />
+          </Box>
         </ListItemAvatar>
           <ListItemText
             primary="Footer"
@@ -224,11 +232,11 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-          <ListItemAvatar>
-            <Box width={35} height={35}>
-              <img alt="browser icon" src="\admin\icons\browser.png" width="100%" height="100%" />
-            </Box>
-          </ListItemAvatar>
+        <ListItemAvatar>
+          <Box width={35} height={35}>
+            <img alt="browser icon" src="\admin\icons\icons8-tab-48.png" width="100%" height="100%" />
+          </Box>
+        </ListItemAvatar>
           <ListItemText
             primary="Browser Tabs"
             secondary={
@@ -265,9 +273,11 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-          <ListItemAvatar>
-            <Avatar alt="Meta-data for page" src="\admin\icons\link-icon.png" />
-          </ListItemAvatar>
+        <ListItemAvatar>
+          <Box width={35} height={35}>
+            <img alt="browser icon" src="\admin\icons\icons8-links-64.png" width="100%" height="100%" />
+          </Box>
+        </ListItemAvatar>
           <ListItemText
             primary="Links"
             secondary={

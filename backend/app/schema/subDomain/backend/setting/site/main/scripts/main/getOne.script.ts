@@ -1,22 +1,16 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import makeBackendSettingSiteSql from "../../../preMain/backendSetting_site.sql";
-import backendSetting_site from "../../../../../../../../models/subDomain/backend/setting/backendSetting_site.model";
+import backendSettingSite from "../../../../../../../../models/subDomain/backend/setting/backendSettingSite.model";
+import makeBackendSettingSiteSql from "../../../preMain/backendSettingSite.sql";
 
-export default function getOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  return async (): Promise<returningSuccessObj<Model<backendSetting_site> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
-    const siteSql = makeBackendSettingSiteSql(d);
+export default function getOne(d: d_allDomain) {
+  return async (): Promise<returningSuccessObj<Model<backendSettingSite> | null>> => {
 
-    const response = await siteSql.getOne().catch(error => errorHandler(error, loggers))
+    const sql = makeBackendSettingSiteSql(d);
+
+    const response = sql.getOne().catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }
