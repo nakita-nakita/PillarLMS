@@ -77,6 +77,7 @@ function RealTimePictureSelectionRow({ data, entity, onChange, onFileSubmit }) {
     if (data?.currentSelection?.picture) {
       console.log('data?.currentSelection?.picture', data?.currentSelection?.picture)
       setCurrentSelection(data.currentSelection)
+      setTabValue("CURRENT_IMAGE")
     }
 
     setUploads(data.uploads)

@@ -48,7 +48,7 @@ export default function InsideWebsiteSettingLayout({ SideMenu, children, ...prop
   const [open, setOpen] = React.useState(false);
   const adminLayoutContext = React.useContext(AdminLayoutContext)
   const webSettingLayoutContext = React.useContext(WebsiteSettingLayoutContext)
-  console.log('webSettingLayoutContext'.webSettingLayoutContext)
+  console.log('webSettingLayoutContext', webSettingLayoutContext)
   const [headerHeight, setHeaderHeight] = React.useState()
 
   React.useEffect(() => {

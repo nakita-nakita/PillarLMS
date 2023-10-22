@@ -35,6 +35,10 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
 
     if (data?.booleanValue === true || data?.booleanValue === false) {
       setSwitchValue(data.booleanValue)
+      if (onChange) {
+        onChange(data.booleanValue)
+      }
+
     }
 
     if (data?.user) {
@@ -44,13 +48,10 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
     const socket = initSocket()
 
     if (data) {
+      socket.on("samedoc-switch-change", result => {
+        console.log('"samedoc-switch-change"', result, entity, data)
 
-      applySwitchBuffer({
-        entity,
-        name: data.name,
-        order: orderNumber,
-        cb: (result) => {
-          console.log('ran once!!!!!!!!!!!!!!!!! test good!!!!!!!', result)
+        if (result?.entity === entity && result?.name === data.name) {
           if (result?.user) {
             setUser(result.user)
           }
@@ -67,31 +68,55 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
           }
 
         }
-      }).then((highestOrderNumber) => {
-        console.log('highestOrderNumber', highestOrderNumber)
-        socket.on("samedoc-switch-change", result => {
-
-          if (result?.entity === entity && result?.name === data.name) {
-            if (result?.user) {
-              setUser(result.user)
-            }
-
-            if (result?.booleanValue === true || result?.booleanValue === false) {
-              setSwitchValue(result.booleanValue)
-              if (onChange) {
-                onChange(result.booleanValue)
-              }
-            }
-
-            if (result?.order) {
-              applyOrder(result.order)
-            }
-
-          }
-        })
       })
     }
-    
+    //   applySwitchBuffer({
+    //     entity,
+    //     name: data.name,
+    //     order: orderNumber,
+    //     cb: (result) => {
+    //       console.log('ran once!!!!!!!!!!!!!!!!! test good!!!!!!!', result)
+    //       if (result?.user) {
+    //         setUser(result.user)
+    //       }
+
+    //       if (result?.booleanValue === true || result?.booleanValue === false) {
+    //         setSwitchValue(result.booleanValue)
+    //         if (onChange) {
+    //           onChange(result.booleanValue)
+    //         }
+    //       }
+
+    //       if (result?.order) {
+    //         applyOrder(result.order)
+    //       }
+
+    //     }
+    //   }).then((highestOrderNumber) => {
+    //     console.log('highestOrderNumber', highestOrderNumber)
+    //     socket.on("samedoc-switch-change", result => {
+
+    //       if (result?.entity === entity && result?.name === data.name) {
+    //         if (result?.user) {
+    //           setUser(result.user)
+    //         }
+
+    //         if (result?.booleanValue === true || result?.booleanValue === false) {
+    //           setSwitchValue(result.booleanValue)
+    //           if (onChange) {
+    //             onChange(result.booleanValue)
+    //           }
+    //         }
+
+    //         if (result?.order) {
+    //           applyOrder(result.order)
+    //         }
+
+    //       }
+    //     })
+    //   })
+    // }
+
     return () => {
       socket.off("samedoc-switch-change")
     }
@@ -104,6 +129,11 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
 
     const socket = initSocket();
 
+    console.log('server-samedoc-switch-change', {
+      entity,
+      name: data.name,
+      booleanValue: newValue,
+    })
     socket.emit('server-samedoc-switch-change', {
       entity,
       name: data.name,

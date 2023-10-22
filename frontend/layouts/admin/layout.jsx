@@ -178,7 +178,15 @@ theme = {
 
 const drawerWidth = 350;
 
-export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageBuilder, SideMenu, hasNoEntity, ...props }) {
+export default function AdminLayout({
+  isCourseBuilder,
+  isWebsiteSetting,
+  isPageBuilder,
+  SideMenu,
+  hasNoEntity,
+  PageContext,
+  ...props
+}) {
 
   const [connected, setConnected] = useState(false)
   const router = useRouter();
@@ -197,6 +205,16 @@ export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageB
     }
   }, [])
 
+  const RenderLayouts = () => {
+    return (
+      <>
+        {isPageBuilder && (<PageBuilderLayout {...props} />)}
+        {isWebsiteSetting && (<WebsiteSettingLayout SideMenu={SideMenu} {...props} />)}
+        {!isWebsiteSetting && !isPageBuilder && (<AdminLayoutPage {...props} />)}
+      </>
+    )
+  }
+
   return (
     <ThemeProvider theme={theme}>
       {connected && (
@@ -208,10 +226,8 @@ export default function AdminLayout({ isCourseBuilder, isWebsiteSetting, isPageB
                 <NotificationSockets>
                   <MeetingSockets>
                     {/* {isCourseBuilder && ()} */}
-                    {isPageBuilder && (<PageBuilderLayout {...props} />)}
-                    {isWebsiteSetting && (<WebsiteSettingLayout SideMenu={SideMenu} {...props} />)}
-                    {!isWebsiteSetting && !isPageBuilder && (<AdminLayoutPage {...props} />)}
-
+                    {!PageContext && <RenderLayouts />}
+                    {PageContext && <PageContext><RenderLayouts /></PageContext>}
                   </MeetingSockets>
                 </NotificationSockets>
               </WhoIsOnPageSockets>

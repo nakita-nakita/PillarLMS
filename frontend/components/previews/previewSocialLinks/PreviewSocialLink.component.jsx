@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-function PreviewSocialLink() {
+function PreviewSocialLink({ titleValue, descriptionValue, imageValue }) {
   return (
-    <Box 
+    <Box
       p={2}
       bgcolor="white"
       display="flex"
@@ -23,14 +23,14 @@ function PreviewSocialLink() {
         <Box p={1} bgcolor="grey.100" borderRadius={3} alignSelf="flex-end">
           Sure! Check this out:
           <Box mt={1} border={1} borderColor="grey.400" borderRadius={2}>
-            <img 
-              src="https://via.placeholder.com/150" 
-              alt="Preview" 
+            <img
+              src={imageValue ? `${process.env.NEXT_PUBLIC_WEB_API_URL}${imageValue}` : "https://via.placeholder.com/150"}
+              alt="Preview"
               style={{ width: '100%', borderTopLeftRadius: '2px', borderTopRightRadius: '2px' }}
             />
             <Box p={1}>
-              <strong>Title of the Link</strong>
-              <p>Short description of the link...</p>
+              <strong>{titleValue || "Title of the Link"}</strong>
+              <p>{descriptionValue || "Short description of the link..."}</p>
             </Box>
           </Box>
         </Box>

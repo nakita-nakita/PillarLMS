@@ -41,8 +41,16 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
-import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
-
+// import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+import { SettingLinkContext } from './context/SettingLink.context';
+import dynamic from 'next/dynamic';
+import { getSocketId } from '@/utils/realtime/socket';
+import RealTimePictureSelectionRow from '@/components/realtime/PictureSelectRow/pictureSelection.realtime';
+import postSettingLinkPreviewApi from './store/settingLink_previewImage.api';
+import postSettingLinkApi from './store/settingLink_saveImage.api';
+const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
+  ssr: false
+});
 
 const TabBox = styled(Paper)(({ theme }) => ({
   position: "relative",
@@ -87,7 +95,25 @@ const TabBox = styled(Paper)(({ theme }) => ({
 
 
 function WebsiteSettingsLinkSidebar() {
-  const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
+  const {
+    isLoaded,
+    entity,
+    id,
+    title,
+    titleValue,
+    setTitleValue,
+    description,
+    descriptionValue,
+    setDescriptionValue,
+    image,
+    imageValue,
+    setImageValue,
+    currentImage,
+    isReady,
+    isReadyValue,
+    setIsReadyValue,
+  } = React.useContext(SettingLinkContext)
+
   const theme = useTheme();
   const router = useRouter()
 
@@ -129,72 +155,149 @@ function WebsiteSettingsLinkSidebar() {
     }
   }
 
+  const handleSave = (event) => {
+    postSettingLinkApi({
+      id,
+      descriptionValue,
+      imageValue,
+      isReadyValue,
+      titleValue
+    })
+  }
+
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
-      <SettingsBackButton
-        label={"Main Menu"}
-        href={"/portal/admin/settings/website/settings"}
-      />
-
-
-
-
-
-
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-      <HeaderRow label={"Social Link Data"} />
-      <RealTimeTextFieldRow label={"title"} />
-      <RealTimeTextFieldRow label={"description"} />
-
-      <ListItem alignItems="flex-start">
-        <div>
-
-          <br />
-          <p>Picture</p>
-          <Stack direction="row" spacing={2}>
-            <Button variant="contained" component="label" color="secondary">
-              Upload
-              <input hidden accept="image/*" multiple type="file" />
-            </Button>
-            <Button>
-              Clear
-            </Button>
-          </Stack>
-          <br />
-        </div>
-      </ListItem>
-
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-      <HeaderRow label={"Advance Settings"} />
-      <RealTimeSwitchRow id="status" label={(
+    <>
+      {isLoaded && (
         <>
-          <div style={circleStatusSuccessStyle}></div>
-          &nbsp;
-          <span>Status</span>
+          <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+            <SettingsBackButton
+              label={"Main Menu"}
+              href={"/portal/admin/settings/website/settings"}
+            />
+
+
+
+
+
+
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <HeaderRow label={"Social Link Data"} />
+            <DynamicRealTimeTextField
+              label={"Title"}
+              data={title}
+              entity={entity}
+
+              onTextUpdate={(text) => {
+                setTitleValue(text)
+              }}
+
+            />
+            <DynamicRealTimeTextField
+              label={"Description"}
+              data={description}
+              entity={entity}
+              onTextUpdate={(text) => {
+                setDescriptionValue(text)
+              }}
+            />
+
+            <br />
+            <ListItem>
+              <div>
+                <p>
+                  Image
+                </p>
+              </div>
+            </ListItem>
+
+
+
+            <RealTimePictureSelectionRow
+              entity={entity}
+              data={image}
+              onFileSubmit={event => {
+                return postSettingLinkPreviewApi({
+                  event,
+                  entity,
+                  name: image.name,
+                  socketId: getSocketId(),
+                })
+              }}
+
+              onChange={picture => {
+                if (picture === undefined) {
+                  picture = currentImage
+                }
+
+                setImageValue(picture)
+              }}
+            />
+            {/* <ListItem alignItems="flex-start">
+              <div>
+
+                <br />
+                <p>Picture</p>
+                <Stack direction="row" spacing={2}>
+                  <Button variant="contained" component="label" color="secondary">
+                    Upload
+                    <input hidden accept="image/*" multiple type="file" />
+                  </Button>
+                  <Button>
+                    Clear
+                  </Button>
+                </Stack>
+                <br />
+              </div>
+            </ListItem> */}
+
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <HeaderRow label={"Status"} />
+            <RealTimeSwitchRow
+              label={(
+                <>
+                  <div style={isReadyValue ? circleStatusSuccessStyle : circleStatusDangerStyle}></div>
+                  &nbsp;
+                  <span>Ready?</span>
+                </>
+              )}
+              // label, data, entity, onChange
+              data={isReady}
+              entity={entity}
+              onChange={(value) => {
+                setIsReadyValue(value)
+                console.log('contents to be saved', value)
+              }}
+            />
+
+
+
+
+
+
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                // primary="Advance Settings"
+                secondary={
+                  <React.Fragment>
+                    <br />
+                    <Button
+                      variant="contained"
+                      onClick={handleSave}
+                    >
+                      Save
+                    </Button>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          </List>
         </>
-      )} />
-
-
-
-
-
-
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          // primary="Advance Settings"
-          secondary={
-            <React.Fragment>
-              <br />
-              <Button variant="contained">Save</Button>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-    </List>
+      )}
+    </>
   );
 }
 
