@@ -48,7 +48,6 @@ import { List, ListItem } from '@mui/material';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 // import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import RealTimeSocialMediaRow from '@/components/realtime/SocialMediaRow/socialMediaRow.realtime';
 import SocialMediaList from '@/pages-scripts/portal/admin/settings/organization/socialMediaList';
 import dynamic from 'next/dynamic';
 import { getSettingOrganizationGraphQL } from '@/pages-scripts/portal/admin/settings/organization/store/settingOrganization_getOne.store';

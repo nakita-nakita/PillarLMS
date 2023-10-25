@@ -2,6 +2,7 @@ import { Model } from "sequelize";
 import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingColors from "../../../../../../../../models/subDomain/backend/setting/backendSettingColors.model";
+import { v4 as uuidv4 } from "uuid"
 
 type input = {
   id?: string
@@ -95,6 +96,7 @@ type input = {
   color9Dark2?: string
   color9Dark3?: string
   color9Dark4?: string
+  isReady?: boolean
 }
 
 export default function upsertOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
@@ -102,6 +104,10 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
     
+    if (!args.id) {
+      args.id = uuidv4();
+    }
+
     // Use upsert instead of separate create or update
     const [instance, created] = await db.backendSettingColors.upsert(args, {
       returning: true,

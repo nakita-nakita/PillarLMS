@@ -9,10 +9,11 @@ import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-ca
 import { EntityDocument, SameDoc } from "../../../forUsage/types/RealTimeEntity";
 import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
 import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
+import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
-  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter
+  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter
 }
 
 type input = {

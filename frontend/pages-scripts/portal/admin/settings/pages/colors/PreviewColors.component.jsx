@@ -1,87 +1,152 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Grid, Paper, Button, Typography } from '@mui/material';
-import chroma from 'chroma-js';
+import ColorPaletteComponent from '@/components/global/ColorPalette/ColorPalette.component';
+import { SettingColorsContext } from './context/SettingColors.context';
 
-const boxStyles = {
-  width: "120px",
-  height: "120px",
-  mr: "5px",
-}
 
 const PreviewColors = () => {
-  const colors = ["#003049", "#d62828", "#f77f00", "#fcbf49", "#eae2b7"];
+  const {
+    isLoaded,
+    color1,
+    color1Dark1,
+    color1Dark2,
+    color1Dark3,
+    color1Dark4,
+    color1Light1,
+    color1Light2,
+    color1Light3,
+    color1Light4,
+    color2,
+    color2Dark1,
+    color2Dark2,
+    color2Dark3,
+    color2Dark4,
+    color2Light1,
+    color2Light2,
+    color2Light3,
+    color2Light4,
+    color3,
+    color3Dark1,
+    color3Dark2,
+    color3Dark3,
+    color3Dark4,
+    color3Light1,
+    color3Light2,
+    color3Light3,
+    color3Light4,
+    color4,
+    color4Dark1,
+    color4Dark2,
+    color4Dark3,
+    color4Dark4,
+    color4Light1,
+    color4Light2,
+    color4Light3,
+    color4Light4,
+    color5,
+    color5Dark1,
+    color5Dark2,
+    color5Dark3,
+    color5Dark4,
+    color5Light1,
+    color5Light2,
+    color5Light3,
+    color5Light4,
+    color6,
+    color6Dark1,
+    color6Dark2,
+    color6Dark3,
+    color6Dark4,
+    color6Light1,
+    color6Light2,
+    color6Light3,
+    color6Light4,
+    color7,
+    color7Dark1,
+    color7Dark2,
+    color7Dark3,
+    color7Dark4,
+    color7Light1,
+    color7Light2,
+    color7Light3,
+    color7Light4,
 
-  // Generate 10 shades from light to dark for each color
-  const generateShades = (baseColor) => {
-    return chroma.scale([chroma(baseColor).brighten(3), baseColor, chroma(baseColor).darken(3)]).colors(10);
-  }
-
-  const grayShades = chroma.scale(["#f7f7f7", "#444444"]).colors(10);
-  const blackShades = ["#000000", "#222222", "#444444"];
-  const whiteShades = ["#ffffff", "#f7f7f7", "#efefef"];
+  } = useContext(SettingColorsContext)
 
   return (
-    <Box sx={{ flexGrow: 1, width: "100%", maxWidth: "900px", m: "auto", p: 2, minHeight: "350px" }}>
-      <br />
-      <Paper elevation={3} sx={{ p: 2 }}>
-        <br />
-        <Grid container spacing={2}>
-          {colors.map(color => (
-            <Grid item xs={2} key={color} sx={{ ...boxStyles, backgroundColor: color }} />
-          ))}
-        </Grid>
-      </Paper>
-
-      {colors.map((color, idx) => (
-        <Box key={idx} mt={3}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="body1">{`Color ${idx + 1} shaded.`}</Typography>
-            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-              {generateShades(color).map(shade => (
-                <Box key={shade} sx={{ width: "35px", height: "35px", backgroundColor: shade, border: "1px solid black" }} />
-              ))}
-            </Box>
-          </Paper>
-        </Box>
-      ))}
-
-      {/* Displaying gray shades */}
-      <Box mt={3}>
-        <Paper elevation={3} sx={{ p: 2 }}>
-          <Typography variant="body1">Gray Shades</Typography>
-          <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-            {grayShades.map(gray => (
-              <Box key={gray} sx={{ width: "35px", height: "35px", backgroundColor: gray, border: "1px solid black" }} />
-            ))}
+    <>
+      {isLoaded && (
+        <>
+          <Box sx={{ flexGrow: 1, width: "100%", maxWidth: "900px", m: "auto", p: 2, minHeight: "350px" }}>
+            <ColorPaletteComponent
+              color1={color1}
+              color1Dark1={color1Dark1}
+              color1Dark2={color1Dark2}
+              color1Dark3={color1Dark3}
+              color1Dark4={color1Dark4}
+              color1Light1={color1Light1}
+              color1Light2={color1Light2}
+              color1Light3={color1Light3}
+              color1Light4={color1Light4}
+              color2={color2}
+              color2Dark1={color2Dark1}
+              color2Dark2={color2Dark2}
+              color2Dark3={color2Dark3}
+              color2Dark4={color2Dark4}
+              color2Light1={color2Light1}
+              color2Light2={color2Light2}
+              color2Light3={color2Light3}
+              color2Light4={color2Light4}
+              color3={color3}
+              color3Dark1={color3Dark1}
+              color3Dark2={color3Dark2}
+              color3Dark3={color3Dark3}
+              color3Dark4={color3Dark4}
+              color3Light1={color3Light1}
+              color3Light2={color3Light2}
+              color3Light3={color3Light3}
+              color3Light4={color3Light4}
+              color4={color4}
+              color4Dark1={color4Dark1}
+              color4Dark2={color4Dark2}
+              color4Dark3={color4Dark3}
+              color4Dark4={color4Dark4}
+              color4Light1={color4Light1}
+              color4Light2={color4Light2}
+              color4Light3={color4Light3}
+              color4Light4={color4Light4}
+              color5={color5}
+              color5Dark1={color5Dark1}
+              color5Dark2={color5Dark2}
+              color5Dark3={color5Dark3}
+              color5Dark4={color5Dark4}
+              color5Light1={color5Light1}
+              color5Light2={color5Light2}
+              color5Light3={color5Light3}
+              color5Light4={color5Light4}
+              color6={color6}
+              color6Dark1={color6Dark1}
+              color6Dark2={color6Dark2}
+              color6Dark3={color6Dark3}
+              color6Dark4={color6Dark4}
+              color6Light1={color6Light1}
+              color6Light2={color6Light2}
+              color6Light3={color6Light3}
+              color6Light4={color6Light4}
+              color7={color7}
+              color7Dark1={color7Dark1}
+              color7Dark2={color7Dark2}
+              color7Dark3={color7Dark3}
+              color7Dark4={color7Dark4}
+              color7Light1={color7Light1}
+              color7Light2={color7Light2}
+              color7Light3={color7Light3}
+              color7Light4={color7Light4}
+            />
           </Box>
-        </Paper>
-      </Box>
-
-      {/* Displaying black shades */}
-      <Box mt={3}>
-        <Paper elevation={3} sx={{ p: 2 }}>
-          <Typography variant="body1">Black Shades</Typography>
-          <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-            {blackShades.map(black => (
-              <Box key={black} sx={{ width: "35px", height: "35px", backgroundColor: black, border: "1px solid black" }} />
-            ))}
-          </Box>
-        </Paper>
-      </Box>
-
-      {/* Displaying white shades */}
-      <Box mt={3}>
-        <Paper elevation={3} sx={{ p: 2 }}>
-          <Typography variant="body1">White Shades</Typography>
-          <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-            {whiteShades.map(white => (
-              <Box key={white} sx={{ width: "35px", height: "35px", backgroundColor: white, border: "1px solid black" }} />
-            ))}
-          </Box>
-        </Paper>
-      </Box>
-
-    </Box>
+        </>
+      )}
+    </>
   )
 }
 

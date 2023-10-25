@@ -1,41 +1,50 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import { MuiColorInput } from 'mui-color-input'
+import UserChip from '@/components/chip/user.chip';
 
-function RealTimeColorPickerRow({ id, label }) {
+function RealTimeColorPickerRow({ label, onChange, color, setColor, user }) {
+
+  // useEffect(() => {
+
+  // }, [])
+
+
+  const handleColorChange = newValue => {
+    if (newValue && setColor) {
+      setColor(newValue)
+    }
+  }
+
   return (
     <ListItem>
       <Box display="flex" alignItems="center" width="100%">
 
         {/* Blue Box Component */}
-        <Box 
-            width={24} 
-            height={24} 
-            bgcolor="blue" 
-            borderRadius={"5px"} 
-            mr={1} 
+
+        <MuiColorInput
+          value={color}
+          onChange={handleColorChange}
+          sx={{ mr: 1 }}
         />
 
-        {/* Middle Text Box: It will grow and shrink as required */}
-        <Box
-          display="flex"
-          alignItems="center"
-          flexGrow={1}
-          overflow="hidden"
-          style={{
-            display: '-webkit-box',
-            WebkitLineClamp: 5,
-            WebkitBoxOrient: 'vertical'
-          }}
-        >
-          {label}
-        </Box>
-
         {/* Chip Component */}
-        <Chip label="YourChipLabel" />
+        {user && <UserChip
+          callByType={user.callByType}
+          circleColor={user.circleColor}
+          displayName={user.displayName}
+          email={user.email}
+          firstName={user.firstName}
+          labelColor={user.labelColor}
+          lastName={user.lastName}
+          picturePreview={user.picture}
+          username={user.username}
+        />}
+        {/* <Chip label="YourChipLabel" /> */}
 
       </Box>
     </ListItem>

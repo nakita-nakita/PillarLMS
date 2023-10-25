@@ -87,18 +87,13 @@ type input = {
   color9Dark2?: string
   color9Dark3?: string
   color9Dark4?: string
+  isReady?: boolean
 }
 
 
-export default function upsertOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_allDomain) {
+export default function upsertOne(d: d_allDomain) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const sql = makeBackendSettingColorsSql(d);
 
     const response = sql.upsertOne({
@@ -184,6 +179,7 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
       color9Dark2: args.color9Dark2,
       color9Dark3: args.color9Dark3,
       color9Dark4: args.color9Dark4,
+      isReady: args.isReady,
     })
     // .catch(error => errorHandler(error, loggers))
 

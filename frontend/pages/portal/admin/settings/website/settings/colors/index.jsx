@@ -10,6 +10,7 @@ import WebsiteSettingsHomeSidebar from '@/pages-scripts/portal/admin/settings/pa
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import WebsiteSettingsColorsSidebar from '@/pages-scripts/portal/admin/settings/pages/colors/ColorsOptions.sidebar';
 import PreviewColors from '@/pages-scripts/portal/admin/settings/pages/colors/PreviewColors.component';
+import SettingColorsProvider from '@/pages-scripts/portal/admin/settings/pages/colors/context/SettingColors.context';
 
 const PageTemplateBuilder = () => {
   const { setTabs } = React.useContext(AdminLayoutContext)
@@ -30,7 +31,11 @@ const PageTemplateBuilder = () => {
 
 PageTemplateBuilder.getLayout = function getLayout(page) {
   return (
-    <AdminLayout isWebsiteSetting SideMenu={<WebsiteSettingsColorsSidebar/>}>
+    <AdminLayout
+      isWebsiteSetting
+      SideMenu={<WebsiteSettingsColorsSidebar />}
+      PageContext={SettingColorsProvider}
+    >
       {page}
     </AdminLayout>
   )

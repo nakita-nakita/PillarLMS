@@ -57,6 +57,14 @@ const userType = gql`
     name: String,
     color: String,
     user: UserDisplay
+    colorLight1: String,
+    colorLight2: String,
+    colorLight3: String,
+    colorLight4: String,
+    colorDark1: String,
+    colorDark2: String,
+    colorDark3: String,
+    colorDark4: String, 
   }
 
   type SelectionType {

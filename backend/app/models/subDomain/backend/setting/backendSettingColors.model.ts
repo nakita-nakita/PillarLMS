@@ -71,7 +71,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 2
@@ -135,7 +135,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 3
@@ -200,7 +200,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 4
@@ -267,7 +267,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 5
@@ -344,7 +344,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 6
@@ -411,7 +411,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 7
@@ -475,7 +475,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 8
@@ -539,7 +539,7 @@ export default class backendSettingColors extends Model {
 
 
 
-  
+
 
   /////////////////////////////////////////////////////////////////////////
   // color 9
@@ -592,4 +592,10 @@ export default class backendSettingColors extends Model {
     type: sequelize.STRING,
   })
   color9Dark4: string;
+
+
+  @Column({
+    type: sequelize.BOOLEAN,
+  })
+  isReady: boolean;
 }

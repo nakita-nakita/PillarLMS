@@ -27,6 +27,13 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
   }
 
   useEffect(() => {
+    if (onChange && (switchValue === false || switchValue === true)) {
+      console.log('chaning!', switchValue)
+      onChange(switchValue)
+    }
+  }, [switchValue])
+
+  useEffect(() => {
     if (data?.order) {
       applyOrder({
         order: data.order
@@ -35,9 +42,7 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
 
     if (data?.booleanValue === true || data?.booleanValue === false) {
       setSwitchValue(data.booleanValue)
-      if (onChange) {
-        onChange(data.booleanValue)
-      }
+      
 
     }
 
@@ -58,9 +63,6 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
 
           if (result?.booleanValue === true || result?.booleanValue === false) {
             setSwitchValue(result.booleanValue)
-            if (onChange) {
-              onChange(result.booleanValue)
-            }
           }
 
           if (result?.order) {
@@ -140,9 +142,9 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
       booleanValue: newValue,
     })
 
-    if (onChange) {
-      onChange(newValue)
-    }
+    // if (onChange) {
+    //   onChange(newValue)
+    // }
 
   }
 

@@ -8,26 +8,21 @@ type input = {
 }
 
 export default function doesEntityExist(d: d_allDomain) {
-
   return async (args: input): Promise<returningSuccessObj<EntityDocument>> => {
-
-    const singletonFunc = makeSingleton(d)
-
-    const singleton = await singletonFunc.get()
+    const singletonFunc = makeSingleton(d);
+    const singleton = await singletonFunc.get();
 
     if (!singleton.data?.sameDoc) {
       // init if doesn't exist.
-      singleton.data.sameDoc = {}
+      singleton.data.sameDoc = {};
     }
 
-
-    // const mapCount =singleton.data.sameDoc[args.entity];
+    const entityData = singleton.data.sameDoc[args.entity];
+    const hasProperties = entityData && typeof entityData === 'object' && Object.keys(entityData).length > 0;
 
     return {
       success: true,
-      result: singleton.data.sameDoc[args.entity],
-    }
+      result: hasProperties,
+    };
   }
 }
-
-
