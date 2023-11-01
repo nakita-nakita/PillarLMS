@@ -8,6 +8,7 @@ import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter"
 import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
+import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
 
 type input = {
   entity: string,
@@ -16,7 +17,7 @@ type input = {
 
 export default function getByPropertyName(d: d_allDomain) {
 
-  return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimeColorAdapter | RealTimePictureSelectionAdapter>> => {
+  return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimeColorAdapter | RealTimePictureSelectionAdapter | RealTimeFaviconSelectionAdapter>> => {
 
     const singletonFunc = makeSingleton(d)
 

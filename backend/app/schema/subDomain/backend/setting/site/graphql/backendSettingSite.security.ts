@@ -3,12 +3,12 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 
 const backendSettingSiteSecurity = {
   Query: {
-    // backendSetting_site_getOne: and(isAuthenticated, isAdmin),
-    backendSetting_site_getOne: isAuthenticated,
+    // backendSettingSite_getOneRealTime: and(isAuthenticated, isAdmin),
+    backendSettingSite_getOneRealTime: isAuthenticated,
   },
   Mutation: {
-    // backendSetting_site_updateOne: and(isAuthenticated, isAdmin),
-    backendSetting_site_updateOne: isAuthenticated,
+    // backendSettingSite_upsertOne: and(isAuthenticated, isAdmin),
+    backendSettingSite_upsertOne: isAuthenticated,
   }
 }
 

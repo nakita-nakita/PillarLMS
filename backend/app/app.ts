@@ -62,6 +62,8 @@ const makeApp = async function () {
 
   app.use(cors(corsOptions));
 
+  // create resource directory
+  app.use('/resources', express.static('public'));
 
   // parse requests of content-type - application/json
   app.use(bodyParser.json());
@@ -142,7 +144,7 @@ const makeApp = async function () {
       socket,
       d,
     })
-    
+
     socket.on('disconnect', async () => {
       const lookUp = makeSocketLookUp(d)
       const sameDoc = makeCollaborateSameDoc(d)

@@ -10,10 +10,11 @@ import { EntityDocument, SameDoc } from "../../../forUsage/types/RealTimeEntity"
 import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
 import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
+import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
-  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter
+  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter | RealTimeFaviconSelectionAdapter
 }
 
 type input = {

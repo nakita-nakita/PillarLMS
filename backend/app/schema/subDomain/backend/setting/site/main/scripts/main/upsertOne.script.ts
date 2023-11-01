@@ -23,8 +23,8 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
     }
     const sql = makeBackendSettingSiteSql(d);
     
-    const response = sql.upsertOne({
-      id: args.id,
+    const response = await sql.upsertOne({
+      id: args.id || undefined,
       isReady: args.isReady,
       favicon: args.favicon,
       tab: args.tab,

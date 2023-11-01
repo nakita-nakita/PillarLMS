@@ -1,4 +1,5 @@
 'use client'
+
 import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -41,8 +42,17 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+// import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
 import StarIcon from '@mui/icons-material/Star';
+import { SettingSiteContext } from './context/SettingSite.context';
+import dynamic from 'next/dynamic';
+import RealTimeFaviconSelectionRow from '@/components/realtime/FaviconSelectRow/faviconSelection.realtime';
+import postSettingSitePreviewApi from './store/settingSite_previewFavicon.api';
+import { getSocketId } from '@/utils/realtime/socket';
+import { postSettingSiteGraphQL } from './store/settingSite_upsertOne.store';
+const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
+  ssr: false
+});
 
 
 const TabBox = styled(Paper)(({ theme }) => ({
@@ -94,6 +104,19 @@ function WebsiteSettingsBrowserTabSidebar() {
 
   const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
 
+  const {
+    isLoaded, setLoaded,
+    id, setId,
+    entity, setEntity,
+    favicon, setFavicon,
+    faviconValue, setFaviconValue,
+    tab, setTab,
+    tabValue, setTabValue,
+    isReady, setIsReady,
+    isReadyValue, setIsReadyValue,
+    modals, setModals,
+  } = React.useContext(SettingSiteContext)
+
   const changeUrl = (href) => {
     // router.push(href)
     realtimeLink({
@@ -124,71 +147,123 @@ function WebsiteSettingsBrowserTabSidebar() {
     backgroundColor: theme.palette.success.dark,
   }
 
-  const MenuStyle = {
-    "&:hover": {
-      backgroundColor: theme.palette.grey[200]
-    }
+  const handleSaved = () => {
+    postSettingSiteGraphQL({
+      id,
+      favicon: faviconValue,
+      tab: tabValue,
+      isReady: isReadyValue,
+    })
   }
 
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
-      <SettingsBackButton
-        label={"Main Menu"}
-        href={"/portal/admin/settings/website/settings"}
-      />
-
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-      <HeaderRow label={"Browser Tab Options"} />
-      <br />
-      <RealTimeTextFieldRow label={"Right side of tab"} />
-      
-      <ListItem alignItems="flex-start">
-        <div>
-
-          <br />
-          <p>Favicon</p>
-          <Stack direction="row" spacing={2}>
-            <Button variant="contained" component="label" color="primary">
-              Select
-              <input hidden accept="image/*" multiple type="file" />
-            </Button>
-            <Button variant="contained" component="label" color="secondary">
-              Upload
-              <input hidden accept="image/*" multiple type="file" />
-            </Button>
-          </Stack>
-          <br />
-        <StarIcon />
-          
-        </div>
-      </ListItem>
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-      <HeaderRow label={"Advance Settings"} />
-      <RealTimeSwitchRow id="status" label={(
+    <>
+      {isLoaded && (
         <>
-          <div style={circleStatusSuccessStyle}></div>
-          &nbsp;
-          <span>Status</span>
+          <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+            <SettingsBackButton
+              label={"Main Menu"}
+              href={"/portal/admin/settings/website/settings"}
+            />
+
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <HeaderRow label={"Browser Tab Options"} />
+            <br />
+            <DynamicRealTimeTextField
+              label={"Enter a brief identifier for your organization."}
+              entity={entity}
+              data={tab}
+              onTextUpdate={(text) => {
+                setTabValue(text)
+              }}
+            />
+            <ListItem>
+              <div>
+                <br />
+                <p>Favicon</p>
+              </div>
+            </ListItem>
+
+            <RealTimeFaviconSelectionRow
+              entity={entity}
+              data={favicon}
+              onFileSubmit={event => {
+                return postSettingSitePreviewApi({
+                  event,
+                  entity,
+                  name: favicon?.name,
+                  socketId: getSocketId(),
+                })
+              }}
+              onChange={faviconUpdate => {
+                if (faviconUpdate === undefined) {
+                  faviconUpdate = favicon.currentSelection
+                }
+
+                setFaviconValue(faviconUpdate)
+              }}
+            />
+            {/* <ListItem alignItems="flex-start">
+              <div>
+
+                <br />
+                <p>Favicon</p>
+                <Stack direction="row" spacing={2}>
+                  <Button variant="contained" component="label" color="primary">
+                    Select
+                    <input hidden accept="image/*" multiple type="file" />
+                  </Button>
+                  <Button variant="contained" component="label" color="secondary">
+                    Upload
+                    <input hidden accept="image/*" multiple type="file" />
+                  </Button>
+                </Stack>
+                <br />
+                <StarIcon />
+
+              </div>
+            </ListItem> */}
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <HeaderRow label={"Status"} />
+            <RealTimeSwitchRow id="status" label={(
+              <>
+                <div style={isReadyValue ? circleStatusSuccessStyle : circleStatusDangerStyle}></div>
+                &nbsp;
+                <span>Ready?</span>
+              </>
+            )}
+              data={isReady}
+              entity={entity}
+              onChange={(value) => {
+                setIsReadyValue(value)
+              }}
+            />
+
+
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+
+            <ListItem alignItems="flex-start">
+              <ListItemText
+                // primary="Advance Settings"
+                secondary={
+                  <React.Fragment>
+                    <br />
+                    <Button 
+                    variant="contained"
+                    onClick={handleSaved}
+                    >
+                      Save
+                      </Button>
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          </List>
         </>
-      )} />
-
-
-      <Divider component="li" style={{ borderTopWidth: "5px" }} />
-
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          // primary="Advance Settings"
-          secondary={
-            <React.Fragment>
-              <br />
-              <Button variant="contained">Save</Button>
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-    </List>
+      )}
+    </>
   );
 }
 

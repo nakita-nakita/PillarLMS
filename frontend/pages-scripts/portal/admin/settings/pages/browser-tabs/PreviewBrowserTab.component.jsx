@@ -36,6 +36,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import PreviewChromeTab from '@/components/previews/ChromeTab/PreviewChromeTab.component';
+import { SettingSiteContext } from './context/SettingSite.context';
 
 const Item = styled(Paper)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -117,11 +118,23 @@ const columns = [
 function PreviewBrowserTabs() {
   const theme = useTheme()
   const router = useRouter()
-  const [isLoaded, setIsLoaded] = React.useState(true)
   const [name, setName] = React.useState("")
   const [description, setDescription] = React.useState("")
   const [rows, setRows] = React.useState([]);
   const [isCreateCourseModalOpen, setIsCreateCourseModalOpen] = React.useState(false)
+
+  const {
+    isLoaded, setLoaded,
+    id, setId,
+    entity, setEntity,
+    favicon, setFavicon,
+    faviconValue, setFaviconValue,
+    tab, setTab,
+    tabValue, setTabValue,
+    isReady, setIsReady,
+    isReadyValue, setIsReadyValue,
+    modals, setModals,
+  } = React.useContext(SettingSiteContext)
 
   const changeUrl = (href) => {
 
@@ -204,7 +217,7 @@ function PreviewBrowserTabs() {
         //   p: 3,
         // }}>
           
-          <PreviewChromeTab title="Your site" faviconUrl="void" />
+          <PreviewChromeTab favicon={faviconValue} rightTab={tabValue} faviconUrl="void" />
         // </Paper>
       )}
     </Box>

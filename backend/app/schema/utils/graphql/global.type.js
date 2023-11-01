@@ -82,6 +82,21 @@ const userType = gql`
     uploads: [SelectionType]
   }
 
+  type FaviconSelectionType {
+    id: String
+    favicon: String
+    user: UserDisplay
+    createdAt: String
+  }
+
+  type RealTimeFaviconSelection {
+    order: Int
+    name: String
+    selection: String
+    currentSelection: FaviconSelectionType
+    uploads: [FaviconSelectionType]
+  }
+
 
 `;
 export default userType;

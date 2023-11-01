@@ -10,23 +10,30 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import StarIcon from '@mui/icons-material/Star';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-function PreviewChromeTab({ title, faviconUrl, url = "Your organization" }) {
+function PreviewChromeTab({ rightTab, favicon, leftTab }) {
+  console.log('favicon', favicon)
   return (
     <Paper elevation={3} style={{ borderRadius: '8px 8px 0 0', background: '#e9ecef' }}>
       {/* Tab Header */}
       <Box display="flex" alignItems="center" padding="4px" bgcolor="#d5d9df" borderRadius="8px 8px 0 0" width="300px">
-        
+
         {/* Favicon */}
         <Box bgcolor="white" padding="4px" borderRadius="4px" marginRight="8px">
-          {/* <img src={faviconUrl} alt="favicon" width="16" height="16" /> */}
-          
-        <StarIcon />
+          {favicon && (
+            <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${favicon}`} alt="favicon" width="16" height="16" />
+          )}
+
+          {!favicon && (
+            <InsertDriveFileIcon />
+          )}
+
         </Box>
 
         {/* Tab Title */}
         <Box fontSize="14px" color="#5a5d61" fontWeight="500" flexGrow={1} overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">
-          Home - {url}
+          {leftTab || "Home"} - {rightTab || "brief identifier"}
         </Box>
 
         {/* Close Tab Icon */}
