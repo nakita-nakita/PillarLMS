@@ -13,10 +13,10 @@ function avatarInitials(name) {
   const nameArray = name.split(' ')
 
   if (nameArray[1]) {
-    return `${nameArray[0][0]}${nameArray[1][0]}`
+    return `${nameArray[0][0].toUpperCase()}${nameArray[nameArray.length - 1][0].toUpperCase()}`
   }
   if (nameArray[0]) {
-    return `${nameArray[0][0]}`
+    return `${nameArray[0][0].toUpperCase()}`
   }
 
   return undefined
