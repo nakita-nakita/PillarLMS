@@ -1,3 +1,5 @@
+// need to abstract this down one layer so the same security functions can be used throughout socket/controller/graphql system.
+
 const { rule } = require("graphql-shield");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");

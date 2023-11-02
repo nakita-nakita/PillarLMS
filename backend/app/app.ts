@@ -15,7 +15,6 @@ import cors from "cors"
 import subDomainInitScript from "./subDomain-init";
 import domainInitScript from "./domain-init";
 import multer from 'multer'
-import uploadControllers from "./uploader/uploadControllers.app";
 import makeFoundationAuthFunc from "./schema/domain/foundation/auth/preMain/foundationAuth.func";
 import emptyTestDomainDb from "./models/domain/_test/emptyTestDb";
 import sequelizeErrorHandler from "./schema/utils/errorHandling/handers/sequelize.errorHandler";
@@ -165,8 +164,6 @@ const makeApp = async function () {
     res.redirect("./domain/playground");
   });
 
-  //temp, will be moved to domain-init and subDomain-init soon.
-  await uploadControllers({ app })
 
   return server
 }

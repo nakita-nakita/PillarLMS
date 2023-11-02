@@ -46,3 +46,6 @@ app/_scratch_paper/*
 
 #Don't upload the upload folder content
 uploads/*
+
+# dist should be generated on server for testing, never in code base.
+dist
