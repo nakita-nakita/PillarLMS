@@ -116,7 +116,6 @@ const makeApp = async function () {
       // Store userId in the socket object
       socket.userId = userId;
 
-      console.log('Received and decoded authToken. UserID:', userId);
       // send client their id
       socket.emit('server-socket-id', {
         id: socket.id

@@ -216,7 +216,7 @@ export default function getOneRealTime(d: dependencies) {
       return {
         success: true,
         data: {
-          ...record.data.dataValues,
+          ...record.data?.dataValues,
           ...setEntity.data,
           entity,
         }

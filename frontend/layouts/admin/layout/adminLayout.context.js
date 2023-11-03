@@ -144,12 +144,15 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
         list: listOfNewNotification,
       }))
 
-      setLeftDrawer(prevState => ({
-        ...prevState,
-        logo: showBranding.logo,
-        shouldApplyToTopNavMenu: showBranding.shouldApplyToTopNavMenu,
-        name: showBranding.name,
-      }))
+      if (showBranding) {
+        setLeftDrawer(prevState => ({
+          ...prevState,
+          logo: showBranding.logo,
+          shouldApplyToTopNavMenu: showBranding.shouldApplyToTopNavMenu,
+          name: showBranding.name,
+        }))
+      }
+      
     })
 
   }, [])

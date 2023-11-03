@@ -3,6 +3,8 @@
 const { rule } = require("graphql-shield");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
+const { makeDObj } = require("../schema/utils/dependencies/makeDependency");
+// const { makeDObj } = require("../schema/utils/dependencies/makeDependency.js");
 // const findSecret = require("../schema/domain/foundation/auth/preMain/scripts/func/findSecret.private.js");
 // const db = require("../models/subDomain");
 // const makeToDoLogic = require("../schema/app/toDo/toDo.logic")
@@ -25,6 +27,8 @@ const getClaim = (ctx) => {
       if (ctx.user) {
         return resolve(ctx.user)
       }
+
+      ctx.d = await makeDObj()
 
       let token = ctx.headers["Authorization"] || ctx.headers["authorization"];
 
@@ -50,19 +54,18 @@ const getClaim = (ctx) => {
 };
 
 const isPublic = rule()(async (parent, args, ctx, info) => {
-  return new Promise((resolve, reject) => {
+  ctx.d = await makeDObj()
 
-    resolve(true)
-  })
+  return true
 })
 
 const hasPermissions = (permissionArray) => {
 
   return rule()(async (parent, args, ctx, info) => {
-    return new Promise((resolve, reject) => {
 
-      resolve(true)
-    })
+    ctx.d = await makeDObj()
+
+    return true
   })
 }
 

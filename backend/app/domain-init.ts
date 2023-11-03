@@ -110,9 +110,6 @@ const domainInitScript = async ({app,}) => {
     graphqlHTTP({
       schema: schemaWithPermissions,
       graphiql: true,
-      context: {
-        d: await makeDObj(),
-      },
     })
   );
 

@@ -264,7 +264,7 @@ function RealTimeFaviconSelectionRow({ data, entity, onChange, onFileSubmit }) {
         {/* Tabs Content View */}
         <Box flex="1" display="flex" alignItems="center" justifyContent="center" p={2} bgcolor={theme.palette.grey[200]}>
           {tabValue === "NO_FAVICON" && <InsertDriveFileIcon />}
-          {tabValue === "CURRENT_FAVICON" && currentSelection && <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${currentSelection.favicon}`} alt="Current Image Placeholder" style={{ width: isMobile ? '100%' : 'auto', maxHeight: '100%' }} />}
+          {tabValue === "CURRENT_FAVICON" && currentSelection && <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${currentSelection.favicon}`} alt="Current Image Placeholder" style={{ width: "16px", height: "16px" }} />}
 
           {uploads.length > 0 && uploads.map((upload, i) => {
 

@@ -198,7 +198,7 @@ function WebsiteSettingsBrowserTabSidebar() {
               }}
               onChange={faviconUpdate => {
                 if (faviconUpdate === undefined) {
-                  faviconUpdate = favicon.currentSelection
+                  faviconUpdate = favicon.currentSelection.favicon
                 }
 
                 setFaviconValue(faviconUpdate)
