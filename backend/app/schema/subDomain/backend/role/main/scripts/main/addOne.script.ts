@@ -1,25 +1,18 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendRoleSql from "../../../preMain/backendRole.sql";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   name: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRole> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleSql = makeBackendRoleSql(d);
     const roleValidation = makeBackendRoleValidation(d);
 
@@ -43,7 +36,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
 
     const isNameTaken = await roleValidation.isNameTaken({
       name: args.name
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (isNameTaken.result) {
       return endMainFromError({
@@ -58,7 +51,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
 
     const response = await roleSql.addOne({
       name: args.name,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

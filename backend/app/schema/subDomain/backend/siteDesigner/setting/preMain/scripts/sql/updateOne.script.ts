@@ -1,16 +1,16 @@
 import { Model } from "sequelize";
 import backendSiteDesignerSetting from "../../../../../../../../models/subDomain/backend/siteDesigner/setting/backendSiteDesignerSetting.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { 
   canAllRead: boolean
   canAllUpdate: boolean
  }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function updateOne(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerSetting> | null>> => {
 
@@ -19,8 +19,8 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       {
         where: {},
         returning: true,
-        transaction: subDomainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.subDomainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

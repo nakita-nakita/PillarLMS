@@ -1,27 +1,20 @@
 import { Model } from "sequelize";
 import foundationUserProfile from "../../../../../../../models/domain/foundation/user/foundationUserProfile.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeFoundationUserProfileSql from "../../../preMain/foundationUserProfile.sql";
 import makeFoundationUserValidation from "../../../preMain/foundationUser.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { id: string }
 
-export default function getOneById({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function getOneById(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<foundationUserProfile> | null>> => {
 
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
     const foundationUserProfileSql = makeFoundationUserProfileSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);
 

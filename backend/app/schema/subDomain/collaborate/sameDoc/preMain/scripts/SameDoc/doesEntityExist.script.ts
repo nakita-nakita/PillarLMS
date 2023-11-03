@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
 import { EntityDocument } from "../../../forUsage/types/RealTimeEntity";
@@ -7,7 +7,7 @@ type input = {
   entity: string
 }
 
-export default function doesEntityExist(d: d_allDomain) {
+export default function doesEntityExist(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<EntityDocument>> => {
     const singletonFunc = makeSingleton(d);
     const singleton = await singletonFunc.get();

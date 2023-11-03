@@ -1,13 +1,13 @@
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 import areIdsValid from "./scripts/validation/areIdsValid.script"
 import isIdValid from "./scripts/validation/isIdValid.script"
 import isNicknameTaken from "./scripts/validation/isNicknameTaken.script"
 
-export default function makeBackendSiteDesignerPageValidation(dbSub: d_sub) {
+export default function makeBackendSiteDesignerPageValidation(d: dependencies) {
 
   return {
-    areIdsValid: areIdsValid(dbSub),
-    isIdValid: isIdValid(dbSub),
-    isNicknameTaken: isNicknameTaken(dbSub),
+    areIdsValid: areIdsValid(d),
+    isIdValid: isIdValid(d),
+    isNicknameTaken: isNicknameTaken(d),
   }
 }

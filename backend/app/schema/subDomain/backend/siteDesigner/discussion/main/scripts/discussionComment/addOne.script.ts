@@ -1,10 +1,10 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSiteDesignerDiscussionCommentSql from "../../../preMain/backendSiteDesignerDiscussionComment.sql";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
 import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   post: string
@@ -12,15 +12,9 @@ type input = {
   discussionId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionComment> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentSql(d);
 
     //////////////////////////////////////
@@ -84,7 +78,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
       post: args.post,
       discussionId: args.discussionId,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

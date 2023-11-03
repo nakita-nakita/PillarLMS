@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendPermissionSql from "../../../preMain/backendPermission.sql";
 import makeBackendPermissionValidation from "../../../preMain/backendPermission.validation";
 import backendPermission from "../../../../../../../models/subDomain/backend/permission/backendPermission.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   name: string
 }
 
-export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addMany(d: dependencies) {
   return async (permissionArray: input[]): Promise<returningSuccessObj<Model<backendPermission>[] | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const permissionSql = makeBackendPermissionSql(d);
     const permissionValidation = makeBackendPermissionValidation(d);
 
@@ -65,7 +58,7 @@ export default function addMany({ subDomainDb, errorHandler, subDomainTransactio
 
     const areNamesTaken = await permissionValidation.areNamesTaken({
       nameArray: names,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (areNamesTaken.result) {
       return endMainFromError({
@@ -80,7 +73,7 @@ export default function addMany({ subDomainDb, errorHandler, subDomainTransactio
 
     const response = await permissionSql.addMany({
       permissionNamesArray: permissionArray,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

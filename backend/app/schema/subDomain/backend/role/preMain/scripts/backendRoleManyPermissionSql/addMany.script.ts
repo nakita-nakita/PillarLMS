@@ -1,22 +1,22 @@
 import { Model } from "sequelize";
 import backendRoleManyPermission from "../../../../../../../models/subDomain/backend/role/backendRoleManyPermission.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   roleId: string
   permissionId: string
 }
 
-export default function addManyPermissions({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function addManyPermissions(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input[]): Promise<returningSuccessObj<Model<backendRoleManyPermission>>> => {
 
     const data = await db.backendRoleManyPermission.bulkCreate(args, {
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

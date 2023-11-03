@@ -1,13 +1,13 @@
 import { Model } from "sequelize";
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { id: string, name: string }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function updateOne(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async ({ id, name }: input): Promise<returningSuccessObj<Model<backendRole> | null>> => {
 
@@ -16,8 +16,8 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       {
         where: { id, },
         returning: true,
-        transaction: subDomainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.subDomainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

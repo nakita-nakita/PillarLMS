@@ -1,4 +1,4 @@
-import { d_allDomain, d_sub } from "../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../utils/dependencies/type/dependencyInjection.types";
 import makeBackendUserMain from "./main/backendUser.main";
 import makeBackendUserBasicViewMain from "./main/backendUserBasicView.main";
 import makeBackendUserManyPermissionMain from "./main/backendUserManyPermission.main";
@@ -8,7 +8,7 @@ import makeBackendUserValidation from "./preMain/backendUser.validation";
 
 
 
-export default function makeBackendUserEntity(d: d_allDomain) {
+export default function makeBackendUserEntity(d: dependencies) {
   const userMain = makeBackendUserMain(d)
   const userBasicViewMain = makeBackendUserBasicViewMain(d)
   const userManyPermissionMain = makeBackendUserManyPermissionMain(d)

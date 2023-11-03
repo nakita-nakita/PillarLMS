@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
-import backendPermission from "../../../../models/subDomain/backend/permission/backendPermission.model";
-import { returningSuccessObj } from "../../types/returningObjs.types";
+import backendPermission from "../../../models/subDomain/backend/permission/backendPermission.model";
+import { returningSuccessObj } from "../types/returningObjs.types";
 
 // add stack-trace later when expanding to winston or something... 
 export default function graphqlError(error: returningSuccessObj<any>, loggers?: typeof console[] | any[]) {

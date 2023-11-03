@@ -1,8 +1,8 @@
 import { FindAndCountOptions, Op } from "sequelize";
 import backendSiteDesigner_page from "../../../../../../../../models/subDomain/backend/siteDesigner/page/backendSiteDesigner_page.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../../utils/types/sequelize.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   q?: string
@@ -10,9 +10,9 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getManyWithPagination(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesigner_page>>> => {
     if (!args) {
@@ -40,7 +40,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
     };
 
     if (q) {
@@ -55,7 +55,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     }
 
 
-    let data: findAndCountAll<backendSiteDesigner_page> = await db.backendSiteDesigner_page.findAndCountAll(search).catch(error => errorHandler(error, loggers)).catch(error => errorHandler(error, loggers))
+    let data: findAndCountAll<backendSiteDesigner_page> = await db.backendSiteDesigner_page.findAndCountAll(search).catch(error => d.errorHandler(error, d.loggers)).catch(error => d.errorHandler(error, d.loggers))
     data.page = page + 1;
     data.pageSize = pageSize;
     data.pageCount = Math.ceil(

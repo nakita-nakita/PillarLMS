@@ -2,23 +2,16 @@ import { Model } from "sequelize";
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendMediaManagerFileSql from "../../../preMain/backendMediaManagerFile.sql";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   folderId?: string
 }
 
-export default function getMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getMany(d: dependencies) {
   return async (args?: input): Promise<returningSuccessObj<Model<backendMediaManagerFile>[] | null>> => {
-
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
 
     const fileSql = makeBackendMediaManagerFileSql(d);
 
@@ -45,7 +38,7 @@ export default function getMany({ subDomainDb, errorHandler, subDomainTransactio
 
     const response = await fileSql.getMany({
       folderId: args.folderId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

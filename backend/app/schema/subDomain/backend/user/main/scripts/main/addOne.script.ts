@@ -5,14 +5,13 @@ import backendUser from "../../../../../../../models/subDomain/backend/user/back
 import makeFoundationUserSql from "../../../../../../domain/foundation/user/preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../../../../domain/foundation/user/preMain/foundationUser.validation";
 import makeFoundationUserProfileSql from "../../../../../../domain/foundation/user/preMain/foundationUserProfile.sql";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendUserSql from "../../../preMain/backendUser.sql";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
 import addFirst from "./addFirst.private";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 // export type dataResponse = {
 export type addOneBackendUserResponse = {
@@ -30,7 +29,7 @@ type input = {
   isAdmin?: boolean
 }
 
-export default function addOne(d: d_allDomain) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<addOneBackendUserResponse>> => {
 
     const { errorHandler, loggers } = d

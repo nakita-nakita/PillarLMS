@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
 import { EntityDocument } from "../../../forUsage/types/RealTimeEntity";
@@ -11,7 +11,7 @@ type input = {
   data: any,
 }
 
-export default function broadcast(d: d_allDomain) {
+export default function broadcast(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<EntityDocument>> => {
 

@@ -1,40 +1,20 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
 import makeBackendMediaManagerFileSql from "../backendMediaManagerFile.sql";
-import { Model } from "sequelize";
 import makeBackendUserMain from "../../../user/main/backendUser.main";
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 import { addOneBackendUserResponse } from "../../../user/main/scripts/main/addOne.script";
-import makeBackendMediaManagerFolderSql from "../backendMediaManagerFolder.sql";
 import makeBackendMediaManagerFileValidation from "../backendMediaManagerFile.validation";
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
 jest.setTimeout(100000)
 
 describe("test backendMediaManagerFile.validation.js", () => {
-  let d: d_allDomain;
+  let d: dependencies;
   let firstFileRecordId: string;
   let secondFileRecordId: string;
   let user1: addOneBackendUserResponse
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    
+    d = await makeDTestObj()
 
     const backendUser = makeBackendUserMain(d)
 

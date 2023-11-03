@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import backendMediaManagerFolder from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFolder.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
@@ -13,9 +13,9 @@ type output = {
   order: number
 }
 
-export default function getBreadCrumb({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getBreadCrumb(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<output[]>> => {
 
@@ -29,9 +29,9 @@ export default function getBreadCrumb({ subDomainDb, errorHandler, subDomainTran
 
       let result: Model<backendMediaManagerFolder> = await db.backendMediaManagerFolder.findOne({
         where: {id: parentId},
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
         paranoid: false
-      }).catch(error => errorHandler(error, loggers))
+      }).catch(error => d.errorHandler(error, d.loggers))
   
       data.push({
         id: result.dataValues.id,

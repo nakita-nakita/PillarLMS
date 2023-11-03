@@ -1,12 +1,11 @@
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import makeFoundationUserSql from "../../../preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../preMain/foundationUser.validation";
 import { isStringValidEmail } from "../../../../../../utils/stringHelpers/checkEmail";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   email: string
@@ -14,15 +13,9 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function addOne({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
     const foundationUserSql = makeFoundationUserSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);
 
@@ -50,7 +43,7 @@ export default function addOne({ domainDb, errorHandler, domainTransaction, logg
 
     const isEmailTaken = await foundationUserValidation.isEmailTaken({
       email: args.email,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (isEmailTaken.result) {
       return endMainFromError({
@@ -68,7 +61,7 @@ export default function addOne({ domainDb, errorHandler, domainTransaction, logg
 
     const isPasswordValid: returningSuccessObj<null> = await foundationUserValidation.isPasswordValid({
       password: args.password,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isPasswordValid.result) {
       return endMainFromError({
@@ -85,7 +78,7 @@ export default function addOne({ domainDb, errorHandler, domainTransaction, logg
       email: args.email,
       password: args.password,
       isDeactivated: args.isDeactivated,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

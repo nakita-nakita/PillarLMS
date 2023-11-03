@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingLink from "../../../../../../../../models/subDomain/backend/setting/backendSettingLink.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
@@ -11,17 +11,16 @@ type input = {
   isReady?: boolean
 }
 
-export default function upsertOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function upsertOne(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingLink> | null>> => {
     
     // Use upsert instead of separate create or update
     const [instance, created] = await db.backendSettingLink.upsert(args, {
       returning: true,
-      transaction: subDomainTransaction,
-    })
-    // .catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     // `created` is a boolean indicating whether a new instance was created
     // `instance` is the model instance itself

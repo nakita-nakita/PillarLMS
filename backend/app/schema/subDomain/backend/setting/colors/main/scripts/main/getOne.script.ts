@@ -1,11 +1,11 @@
 import { Model } from "sequelize";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingColors from "../../../../../../../../models/subDomain/backend/setting/backendSettingColors.model";
 import makeBackendSettingColorsSql from "../../../preMain/backendSettingColors.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 
-export default function getOne(d: d_allDomain) {
+export default function getOne(d: dependencies) {
   return async (): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
 
     const sql = makeBackendSettingColorsSql(d);

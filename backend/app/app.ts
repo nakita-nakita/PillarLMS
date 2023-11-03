@@ -16,16 +16,14 @@ import subDomainInitScript from "./subDomain-init";
 import domainInitScript from "./domain-init";
 import multer from 'multer'
 import makeFoundationAuthFunc from "./schema/domain/foundation/auth/preMain/foundationAuth.func";
-import emptyTestDomainDb from "./models/domain/_test/emptyTestDb";
-import sequelizeErrorHandler from "./schema/utils/errorHandling/handers/sequelize.errorHandler";
-import emptyTestSubdomainDb from "./models/subDomain/_test/emptyTestDb";
-import { d_allDomain } from "./schema/utils/types/dependencyInjection.types";
 import makeSocketLookUp from "./schema/subDomain/collaborate/_singleton/preMain/socketLookUp.ram-cache";
 import makeFoundationUserMain from "./schema/domain/foundation/user/main/foundationUser.main";
 import makeFoundationUserProfileMain from "./schema/domain/foundation/user/main/foundationUserProfile.main";
 import { CallByTypeEnum } from "./schema/domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
 import socketInitScript from "./socket-init";
 import makeCollaborateSameDoc from "./schema/subDomain/collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
+import { dependencies } from "./schema/utils/dependencies/type/dependencyInjection.types";
+import { makeDObj } from "./schema/utils/dependencies/makeDependency";
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -76,16 +74,7 @@ const makeApp = async function () {
   await domainInitScript({ app })
   await subDomainInitScript({ app })
 
-
-  const domainDb = await emptyTestDomainDb()
-  const subDomainDb = await emptyTestSubdomainDb()
-
-  const d: d_allDomain = {
-    domainDb,
-    subDomainDb,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler,
-  }
+  const d: dependencies = await makeDObj()
 
   io.on('connection', async (socket) => {
     const authToken = socket.handshake.query.authToken;

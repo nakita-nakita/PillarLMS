@@ -1,13 +1,13 @@
 import sequelize from "sequelize"
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types"
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   discussionId: string
 }
 
-export default function getTotalVote({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function getTotalVote(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<number | null>> => {
 
@@ -16,8 +16,8 @@ export default function getTotalVote({ subDomainDb, errorHandler, subDomainTrans
         [sequelize.fn('sum', sequelize.col('vote')), 'voteTotal']
       ],
       where,
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

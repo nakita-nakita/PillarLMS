@@ -1,22 +1,8 @@
-import { Sequelize } from "sequelize-typescript";
 import uploaderAuth from "../../../../../uploader/auth/isAuthenticated"
 import { mediaManagerUpload } from "./upload.rules"
-import { d_sub } from "../../../../utils/types/dependencyInjection.types";
-import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import makeBackendMediaManagerFileMain from "../main/backendMediaManagerFile.main";
+import { makeDObj } from "../../../../utils/dependencies/makeDependency";
 
-const makeDObj = async (): Promise<d_sub> => {
-  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const subDomainTransaction = await subDomainDb.transaction();
-
-  return {
-    subDomainDb,
-    subDomainTransaction,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler
-  }
-}
 
 export default ({ app }) => {
 

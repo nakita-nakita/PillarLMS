@@ -1,8 +1,8 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingColors from "../../../../../../../../models/subDomain/backend/setting/backendSettingColors.model";
 import { v4 as uuidv4 } from "uuid"
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
@@ -99,8 +99,8 @@ type input = {
   isReady?: boolean
 }
 
-export default function upsertOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function upsertOne(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
     
@@ -111,9 +111,8 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
     // Use upsert instead of separate create or update
     const [instance, created] = await db.backendSettingColors.upsert(args, {
       returning: true,
-      transaction: subDomainTransaction,
-    })
-    // .catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     // `created` is a boolean indicating whether a new instance was created
     // `instance` is the model instance itself

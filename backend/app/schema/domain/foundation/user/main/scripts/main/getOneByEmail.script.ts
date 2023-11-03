@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeFoundationUserSql from "../../../preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../preMain/foundationUser.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   email: string
 }
 
-export default function getOneByEmail({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function getOneByEmail(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
     const foundationUserSql = makeFoundationUserSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);
 
@@ -52,7 +45,7 @@ export default function getOneByEmail({ domainDb, errorHandler, domainTransactio
 
     const response = await foundationUserSql.getOneByEmail({
       email: args.email,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

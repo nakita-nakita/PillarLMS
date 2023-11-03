@@ -1,16 +1,13 @@
 import { makeExecutableSchema } from "@graphql-tools/schema"
 import glob from "glob"
-import emptyTestDomainDb from "./models/domain/_test/emptyTestDb"
-import domainDb from "./models/domain/_test/emptyTestDb"
 import { graphqlHTTP } from "express-graphql"
 import { applyMiddleware } from "graphql-middleware"
 import { shield } from "graphql-shield"
 import expressPlayground from "graphql-playground-middleware-express"
+import { makeDObj } from "./schema/utils/dependencies/makeDependency"
 
 const domainInitScript = async ({app,}) => {
-  const domainDb = await emptyTestDomainDb();
-
-
+  const d = await makeDObj();
 
   //////////////////////////////////////
   // Load image uploader controlers
@@ -113,6 +110,9 @@ const domainInitScript = async ({app,}) => {
     graphqlHTTP({
       schema: schemaWithPermissions,
       graphiql: true,
+      context: {
+        d: await makeDObj(),
+      },
     })
   );
 

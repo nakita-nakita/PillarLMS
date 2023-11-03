@@ -1,9 +1,9 @@
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
 import makeCollaborateSameDoc from "../../preMain/collaborateSameDoc.ram-cache";
 
 type input = {
   socket: any,
-  d: d_allDomain
+  d: dependencies
 }
 
 export default ({ socket, d }: input) => {

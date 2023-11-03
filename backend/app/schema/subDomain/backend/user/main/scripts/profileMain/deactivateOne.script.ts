@@ -1,16 +1,15 @@
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeFoundationUserSql from "../../../../../../domain/foundation/user/preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../../../../domain/foundation/user/preMain/foundationUser.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function deactivateOne(d: d_domain) {
+export default function deactivateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
     const userSql = makeFoundationUserSql(d)

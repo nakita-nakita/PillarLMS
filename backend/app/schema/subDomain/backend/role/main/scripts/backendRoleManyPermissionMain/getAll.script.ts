@@ -1,27 +1,20 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendRoleManyPermissionSql from "../../../preMain/backendRoleManyPermission.sql";
 import backendRoleManyPermission from "../../../../../../../models/subDomain/backend/role/backendRoleManyPermission.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   roleId: string
 }
 
-export default function getAll({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getAll(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRoleManyPermission>[] | null>> => {
     const { roleId } = args
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
     const roleValidation = makeBackendRoleValidation(d);
 
@@ -63,7 +56,7 @@ export default function getAll({ subDomainDb, errorHandler, subDomainTransaction
 
     const response = await roleManyPermissionSql.getAll({
       roleId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

@@ -1,50 +1,30 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
-import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
-import graphqlError from "../../../../utils/errorHandling/handers/graphql.errorhandler"
-import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_domain } from "../../../../utils/types/dependencyInjection.types";
+import graphqlError from "../../../../utils/graphql/grarphql.errorhandler";
 import makeFoundationUserProfileMain from "../main/foundationUserProfile.main";
 
 
 
-const makeDObj = async (): Promise<d_domain> => {
-  const domainDb: Sequelize = await emptyTestDomainDb();
-  const domainTransaction = await domainDb.transaction();
-
-  return {
-    domainDb,
-    domainTransaction,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler,
-  }
-}
 
 
 const backend_authResolver = {
   Query: {
     foundationUserProfile_getOne: async (parent, args, ctx) => {
-      const d = await makeDObj()
-      const main = makeFoundationUserProfileMain(d)
+      const main = makeFoundationUserProfileMain(ctx.d)
 
       const response = await main.getOneById({
         id: ctx.user.id,
       })
 
       if (response?.success) {
-        d.domainTransaction.commit()
         return response.data
 
       } else {
-        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },
   },
   Mutation: {
     foundationUserProfile_updateOne: async (parent, args, ctx) => {
-      const d = await makeDObj()
-      const main = makeFoundationUserProfileMain(d)
+      const main = makeFoundationUserProfileMain(ctx.d)
 
       const response = await main.upsertOne({
         id: ctx.user.id,
@@ -58,11 +38,9 @@ const backend_authResolver = {
       })
 
       if (response?.success) {
-        d.domainTransaction.commit()
         return response.data
 
       } else {
-        d.domainTransaction.rollback()
         return graphqlError(response)
       }
     },

@@ -1,33 +1,23 @@
-import { Sequelize } from "sequelize-typescript"
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb"
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler"
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
 import makeBackendRoleManyPermissionSql from "../backendRoleManyPermission.sql"
 import makeBackendPermissionSql from "../../../permission/preMain/backendPermission.sql"
 import makeBackendRoleManyPermissionValidation from "../backendRoleManyPermission.validation"
 import makeBackendRoleSql from "../backendRole.sql"
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 jest.setTimeout(100000)
 
 describe("test backendRoleManyPermission.validation.js", () => {
-  let d: d_sub
+  let d: dependencies
   let recordId: string
   let roleId: string
   let permissionId: string
   // let recordName: string
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      subDomainTransaction,
-      loggers: [
-        console,
-        // throwIt,
-      ]
-    };
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const roleSql = makeBackendRoleSql(d)
     const permissionSql = makeBackendPermissionSql(d)
@@ -117,6 +107,7 @@ describe("test backendRoleManyPermission.validation.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })

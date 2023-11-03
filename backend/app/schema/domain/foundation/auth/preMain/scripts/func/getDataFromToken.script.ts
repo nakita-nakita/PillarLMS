@@ -1,14 +1,14 @@
-import { d_domain, d_sub } from "../../../../../../utils/types/dependencyInjection.types"
 import jwt from "jsonwebtoken"
 import findSecret from "./findSecret.private"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type input = {
   token: string
   secret?: string
 }
 
-export default function getDataFromToken({ errorHandler, loggers, }: d_domain) {
+export default function getDataFromToken({ errorHandler, loggers, }: dependencies) {
   return async ({ token, secret }: input): Promise<returningSuccessObj<any | null>> => {
 
     let data = null

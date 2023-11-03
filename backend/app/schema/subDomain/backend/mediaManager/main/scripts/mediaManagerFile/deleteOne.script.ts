@@ -1,6 +1,6 @@
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendMediaManagerFileSql from "../../../preMain/backendMediaManagerFile.sql";
 
@@ -9,15 +9,9 @@ type input = {
   deletedBy: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function deleteOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<number>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const fileSql = makeBackendMediaManagerFileSql(d);
 
     //////////////////////////////////////
@@ -68,7 +62,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
     const response = await fileSql.deleteOne({
       id: args.id,
       deletedBy: args.deletedBy
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

@@ -1,12 +1,10 @@
 import { Model } from "sequelize";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesignerDiscussion.sql";
-import makeBackendSiteDesignerDiscussionValidation from "../../../preMain/backendSiteDesignerDiscussion.validation";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string,
@@ -15,15 +13,9 @@ type input = {
   userId?: string,
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function updateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussion> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d);
 
     //////////////////////////////////////
@@ -88,7 +80,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       title: args.title,
       post: args.post,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

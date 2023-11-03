@@ -1,29 +1,18 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import makeBackendRoleMain from "../../../../role/main/backendRole.main";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
 // import makeBackendRoleMain from "../../backendRole.main";
 jest.setTimeout(100000)
 
 describe("test backendSiteDesigner_pageTemplate.main.js with bad data.", () => {
-  let d: d_sub
+  let d: dependencies
   let recordId: string
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      subDomainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const roleMain = makeBackendRoleMain(d)
 
@@ -105,6 +94,7 @@ describe("test backendSiteDesigner_pageTemplate.main.js with bad data.", () => {
   })
 
   afterAll(async () => {
-    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })

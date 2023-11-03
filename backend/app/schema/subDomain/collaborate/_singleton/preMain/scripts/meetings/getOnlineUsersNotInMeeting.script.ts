@@ -1,17 +1,17 @@
 import _ from "lodash";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
 import { socketLookUpType } from "../socketLookUp/socketRecord.types";
 import makeGetMeetingById from "./getMeetingById.script";
 import makeGetUsersForMeeting from "./getUsersForMeeting.script";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   meetingId: string,
 }
 
-export default function getOnlineUsersNotInMeeting(d: d_allDomain) {
+export default function getOnlineUsersNotInMeeting(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<socketLookUpType[]>> => {
 
     const singletonFunc = makeSingleton(d)

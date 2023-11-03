@@ -1,25 +1,19 @@
 import { Model } from "sequelize";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSiteDesignerDiscussionVoteSql from "../../../preMain/backendSiteDesignerDiscussionVote.sql";
 import backendSiteDesignerDiscussionVote from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionVote.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string
   discussionId: string
 }
 
-export default function getMyVote({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getMyVote(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionVote> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const discussionVoteSql = makeBackendSiteDesignerDiscussionVoteSql(d)
 
     //////////////////////////////////////
@@ -69,7 +63,7 @@ export default function getMyVote({ subDomainDb, errorHandler, subDomainTransact
     const response = await discussionVoteSql.getMyVote({
       discussionId: args.discussionId,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

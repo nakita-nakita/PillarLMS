@@ -1,28 +1,18 @@
-import { Model } from "sequelize";
-import backendUserManyRole from "../../../../../../../models/subDomain/backend/user/backendUserManyRole.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendUserManyRoleSql from "../../../preMain/backendUserManyRole.sql";
 import makeBackendRoleEntity from "../../../../role";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string
   roleId: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function deleteOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<number | null>> => {
-
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
 
     const userManyRoleSql = makeBackendUserManyRoleSql(d)
     const userValidation = makeBackendUserValidation(d)
@@ -52,7 +42,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     const isUserIdValid = await userValidation.isIdValid({
       id: args.userId
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isUserIdValid.result) {
       return endMainFromError({
@@ -81,7 +71,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     // const isRoleIdValid = await roleEntity.isIdValid({
     //   id: args.userId
-    // }).catch(error => errorHandler(error, loggers))
+    // }).catch(error => d.errorHandler(error, d.loggers))
 
     // if (!isRoleIdValid.result) {
     //   return endMainFromError({
@@ -97,7 +87,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
     const response = await userManyRoleSql.deleteOne({
       roleId: args.roleId,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

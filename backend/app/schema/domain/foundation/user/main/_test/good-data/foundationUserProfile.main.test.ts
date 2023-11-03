@@ -1,30 +1,20 @@
 import { v4 as uuidv4 } from "uuid"
-import { Sequelize } from "sequelize-typescript"
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import makeFoundationUserProfileMain from "../../foundationUserProfile.main"
 import { CallByTypeEnum } from "../../../preMain/scripts/foundationUserProfileSql/upsertOne.script"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency"
 jest.setTimeout(100000)
 
 describe("test foundationUserProfile.main.js", () => {
-  let d: d_domain
+  let d: dependencies
   let recordId: string
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
+
   }, 100000)
 
   test("upsertOne: foundationUserProfile can add record.", async () => {
@@ -87,7 +77,8 @@ describe("test foundationUserProfile.main.js", () => {
     })
 
   afterAll(async () => {
-    await d.domainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })
 

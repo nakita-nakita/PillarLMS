@@ -1,6 +1,6 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
+import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
 import makeCollaborateSameDoc from "../../collaborateSameDoc.ram-cache";
 
 
@@ -11,16 +11,16 @@ type input = {
   socketId: string
 }
 
-export default function updateYdocChange(d: d_allDomain) {
+export default function updateYdocChange(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
     const sameDocEntity = makeCollaborateSameDoc(d)
 
-    const prop = await sameDocEntity.getByPropertyName({
+    const prop = (await sameDocEntity.getByPropertyName({
       entity: args.entity,
       name: args.name,
-    })
+    })).data as RealTimeYDocAdapter
 
     const data = {
       order: undefined,
@@ -30,7 +30,7 @@ export default function updateYdocChange(d: d_allDomain) {
     }
 
     try {
-      data.order = await prop.data.applyYdocUpdate(args.ydoc)
+      data.order = await prop.applyYdocUpdate(args.ydoc)
     }
     catch (ex) {
       return {

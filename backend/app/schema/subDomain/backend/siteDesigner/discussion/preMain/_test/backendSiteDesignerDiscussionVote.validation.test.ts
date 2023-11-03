@@ -1,40 +1,23 @@
-import { Sequelize } from "sequelize-typescript"
 import { v4 as uuidv4 } from "uuid"
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb"
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger"
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types"
 import makeBackendUserSql from "../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesignerDiscussionSql from "../backendSiteDesignerDiscussion.sql"
 import makeBackendSiteDesignerDiscussionVoteSql from "../backendSiteDesignerDiscussionVote.sql"
 import { backendSiteDesignerDiscussionVoteEnum } from "../scripts/discussionVoteSql/_utils.private"
 import makeBackendSiteDesignerDiscussionVoteValidation from "../backendSiteDesignerDiscussionVote.validation"
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 jest.setTimeout(100000)
 
 describe("test backendSiteDesignerDiscussionVote.validation.js", () => {
-  let d: d_allDomain
+  let d: dependencies
   let recordId: string
 
   beforeAll(async () => {
     const uuid = uuidv4()
 
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userSql = makeBackendUserSql(d)
 

@@ -1,18 +1,16 @@
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain, d_domain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import { Model } from "sequelize";
-// import makeFoundationUserSql from "../../../../../../domain/foundation/user/preMain/foundationUser.sql";
 import makeBackendUserSql from "../../../preMain/backendUser.sql"
 import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getOneById(d: d_allDomain) {
+export default function getOneById(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUser>>> => {
 
     const { errorHandler, loggers } = d

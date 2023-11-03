@@ -1,4 +1,3 @@
-import { d_domain } from "../../../../utils/types/dependencyInjection.types"
 import makeFoundationUserValidation from "../preMain/foundationUser.validation"
 
 import addMany from "./scripts/main/addMany.script"
@@ -8,8 +7,9 @@ import getOneById from "./scripts/main/getOneById.script"
 import getOneByEmail from "./scripts/main/getOneByEmail.script"
 import reactivateOne from "./scripts/main/reactivateOne.script"
 import updateOne from "./scripts/main/updateOne.script"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 
-export default function makeFoundationUserMain(d: d_domain) {
+export default function makeFoundationUserMain(d: dependencies) {
   const validators = makeFoundationUserValidation(d)
 
   return {

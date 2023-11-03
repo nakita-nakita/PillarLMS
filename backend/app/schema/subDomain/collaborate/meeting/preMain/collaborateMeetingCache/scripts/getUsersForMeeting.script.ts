@@ -1,14 +1,14 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeMeeting from "../../../../_singleton/preMain/meetings.ram-cache";
 import _ from "lodash"
 import { socketLookUpType } from "../../../../_singleton/preMain/scripts/socketLookUp/socketRecord.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getUsersForMeeting(d: d_allDomain) {
+export default function getUsersForMeeting(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<socketLookUpType[]>> => {
 

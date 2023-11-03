@@ -1,28 +1,20 @@
 import { Model } from "sequelize";
 import backendUserManyRole from "../../../../../../../models/subDomain/backend/user/backendUserManyRole.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendUserManyRoleSql from "../../../preMain/backendUserManyRole.sql";
 import makeBackendRoleEntity from "../../../../role";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string
   roleId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyRole> | null>> => {
-
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
 
     const userManyRoleSql = makeBackendUserManyRoleSql(d)
     const userValidation = makeBackendUserValidation(d)
@@ -52,7 +44,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
 
     const isUserIdValid = await userValidation.isIdValid({
       id: args.userId
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isUserIdValid.result) {
       return endMainFromError({
@@ -81,7 +73,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
 
     // const isRoleIdValid = await roleEntity.isIdValid({
     //   id: args.userId
-    // }).catch(error => errorHandler(error, loggers))
+    // }).catch(error => d.errorHandler(error, d.loggers))
 
     // if (!isRoleIdValid.result) {
     //   return endMainFromError({
@@ -97,7 +89,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
     const response = await userManyRoleSql.addOne({
       roleId: args.roleId,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

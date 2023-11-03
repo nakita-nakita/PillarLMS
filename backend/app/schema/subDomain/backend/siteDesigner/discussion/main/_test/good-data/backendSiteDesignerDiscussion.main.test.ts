@@ -1,43 +1,24 @@
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
-// import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeBackendSiteDesignerDiscussionMain from "../../backendSiteDesignerDiscussion.main"
 import backendUser from "../../../../../../../../models/subDomain/backend/user/backendUser.model";
 import { Model } from "sequelize";
-import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
-import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
-import throwIt from "../../../../../../../utils/errorHandling/loggers/throwIt.logger";
 import makeBackendUserSql from "../../../../../user/preMain/backendUser.sql";
 import { backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum } from "../../../preMain/scripts/discussionSql/getManyWithPagination.script";
+import { makeDTestObj } from "../../../../../../../utils/dependencies/makeTestDependency";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 jest.setTimeout(100000)
 
 describe("test backendSiteDesignerDiscussion.main.js", () => {
-  let d: d_allDomain;
+  let d: dependencies;
   let recordId: string;
   let user: Model<backendUser>;
 
   beforeAll(async () => {
     const uuid = uuidv4()
 
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-    
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userMain = makeBackendUserSql(d)
 
@@ -118,8 +99,8 @@ describe("test backendSiteDesignerDiscussion.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.domainTransaction.rollback();
-    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })
 

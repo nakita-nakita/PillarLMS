@@ -1,15 +1,14 @@
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import makeFoundationAuthFunc from "../../../preMain/foundationAuth.func"
 
 type input = {
   token: string
 }
 
-export default function isTokenValid(d: d_domain) {
+export default function isTokenValid(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
-     console.log('checking token!!!!!!!!!!!!!!')
     const authFunc = makeFoundationAuthFunc(d)
 
     //////////////////////////////////////
@@ -20,7 +19,6 @@ export default function isTokenValid(d: d_domain) {
     return {
       success: true,
       result: token?.data?.userId ? true : false
-
     }
   }
 }

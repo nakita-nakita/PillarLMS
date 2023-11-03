@@ -1,5 +1,5 @@
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import makeSetList from "../../../../../../../utils/engine/setList.engine";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 
 type input = {
@@ -7,23 +7,23 @@ type input = {
   userId: string
 }
 
-export default function setList({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function setList(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (setArray: input[]): Promise<returningSuccessObj<null>> => {
 
-    const setListEngine = makeSetList({ errorHandler, loggers, })
+    const setListEngine = makeSetList({ errorHandler: d.errorHandler, loggers: d.loggers, })
 
 
     const response = await setListEngine({
       setArray,
       dbEntity: db.backendSiteDesignerSetting_readAccess,
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
       currentDbArray: await db.backendSiteDesignerSetting_readAccess.findAll({
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
       })
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

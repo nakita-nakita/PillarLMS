@@ -1,20 +1,19 @@
 import { Model } from "sequelize";
 import backendUserManyPermission from "../../../../../../../models/subDomain/backend/user/backendUserManyPermission.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendUserManyPermissionSql from "../../../preMain/backendUserManyPermission.sql";
 import makeBackendPermissionEntity from "../../../../permission";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string
   permissionId: string
 }
 
-export default function addOne(d: d_sub) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyPermission> | null>> => {
 
     const userManyPermissionSql = makeBackendUserManyPermissionSql(d)

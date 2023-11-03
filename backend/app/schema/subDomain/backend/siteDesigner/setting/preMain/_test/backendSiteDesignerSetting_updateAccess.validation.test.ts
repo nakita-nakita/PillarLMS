@@ -1,46 +1,23 @@
 import { Model } from "sequelize";
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 import makeBackendSiteDesignerSettingUpdateAccessValidation from "../backendSiteDesignerSetting_updateAccess.validation";
 import makeBackendUserSql from "../../../../user/preMain/backendUser.sql";
-
-//models
-// import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
-
-//utils
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import makeBackendSiteDesignerSettingUpdateAccessSql from "../backendSiteDesignerSetting_updateAccess.sql";
 import backendSiteDesignerSetting_updateAccess from "../../../../../../../models/subDomain/backend/siteDesigner/setting/backendSiteDesignerSetting_updateAccess.model";
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb";
-
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 describe("test backenSiteDesignerSetting_updateAccess.validation.js", () => {
-  let d: d_allDomain
+  let d: dependencies
 
   let list: Model<backendSiteDesignerSetting_updateAccess>[];
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        // throwIt,
-      ]
-    };
-
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userSql = makeBackendUserSql(d)
 

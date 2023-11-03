@@ -1,4 +1,3 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types";
 import broadcast from "./scripts/SameDoc/broadcast.script";
 import doesEntityExist from "./scripts/SameDoc/doesEntityExist.script";
 import getByEntity from "./scripts/SameDoc/getByEntity.script";
@@ -7,8 +6,9 @@ import set from "./scripts/SameDoc/set.script";
 import userDisconnectsFromEntity from "./scripts/SameDoc/userDisconnectsFromEntity.script";
 import socketDisconnect_removeFromEntities from "./scripts/SameDoc/socketDisconnect_removeFromEntities.script";
 import userConnectsToEntity from "./scripts/SameDoc/userConnectsToEntity.script";
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types";
 
-export default function makeCollaborateSameDoc(d: d_allDomain) {
+export default function makeCollaborateSameDoc(d: dependencies) {
   return {
     doesEntityExist: doesEntityExist(d),
     getByEntity: getByEntity(d),

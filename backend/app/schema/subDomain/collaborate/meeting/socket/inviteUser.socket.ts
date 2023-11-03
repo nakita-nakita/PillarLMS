@@ -1,11 +1,11 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types";
 import makeBackendNotificationMain from "../../../backend/notification/main/backendNotification.main";
 import { notificationIconEnum, notificationTypeEnum } from "../../../backend/notification/preMain/scripts/sql/addOne.script";
 import makeMeeting from "../../_singleton/preMain/meetings.ram-cache";
 
 type input = {
   socket: any,
-  d: d_allDomain
+  d: dependencies
 }
 
 export default ({ socket, d }: input) => {

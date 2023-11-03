@@ -1,10 +1,8 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSetting_church from "../../../../../../../../models/subDomain/backend/setting/backendSettingOrganization.model";
-import makeBackendSettingChurchSql from "../../../preMain/backendSettingOrganization.sql";
 import makeBackendSettingOrganizationSql from "../../../preMain/backendSettingOrganization.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string,
@@ -26,15 +24,9 @@ type input = {
   socialReddit?: string,
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_allDomain) {
+export default function updateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSetting_church> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const backendUserRequestSql = makeBackendSettingOrganizationSql(d);
     
     const response = backendUserRequestSql.upsertOne({
@@ -55,8 +47,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       socialX: args.socialX,
       socialYouTube: args.socialYouTube,
       stateProvinceRegion: args.stateProvinceRegion,
-    })
-    // .catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

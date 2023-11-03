@@ -1,16 +1,16 @@
 import { Model } from "sequelize";
 import backendRoleManyPermission from "../../../../../../../models/subDomain/backend/role/backendRoleManyPermission.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   roleId: string
   permissionId: string
 }
 
-export default function addOnePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function addOnePermission(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async ({ roleId, permissionId, }: input): Promise<returningSuccessObj<Model<backendRoleManyPermission> | null>> => {
 
@@ -18,8 +18,8 @@ export default function addOnePermission({ subDomainDb, errorHandler, subDomainT
       roleId,
       permissionId
     }, {
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

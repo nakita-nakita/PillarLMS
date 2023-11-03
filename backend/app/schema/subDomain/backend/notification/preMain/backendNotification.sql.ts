@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import addOne from "./scripts/sql/addOne.script"
 import deleteOne from "./scripts/sql/deleteOne.script"
 import getFirstByCount from "./scripts/sql/getFirstByCount.script"
@@ -10,7 +10,7 @@ import hasBeenSeen from "./scripts/sql/hasBeenSeen.script"
 import hasBeenSeenById from "./scripts/sql/hasBeenSeenById.script"
 import updateOne from "./scripts/sql/updateOne.script"
 
-export default function makeBackendNotificationSql(d: d_sub) {
+export default function makeBackendNotificationSql(d: dependencies) {
 
   return {
     addOne: addOne(d),

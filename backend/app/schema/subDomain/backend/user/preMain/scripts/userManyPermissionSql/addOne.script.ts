@@ -1,5 +1,5 @@
 import backendUserManyPermission from "../../../../../../../models/subDomain/backend/user/backendUserManyPermission.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = {
@@ -7,17 +7,17 @@ type input = {
   permissionId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function addOne(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<backendUserManyPermission | null>> => {
 
     const data = await db.backendUserManyPermission.create(
       args,
       {
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
       }
-    ).catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

@@ -1,16 +1,14 @@
-import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
-import { Model } from "sequelize";
 import makeCollaborateSamePageCache from "../../../preMain/collaborateWhoIsOnPage.cache";
 import { SamePageObject } from "../../../preMain/scripts/collaborateWhoIsOnPageCache/getAllUsersFromPage.script";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   url: string,
 }
 
-export default function getAllUsersFromPage(d: d_allDomain) {
+export default function getAllUsersFromPage(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<SamePageObject>> => {
 
     const { errorHandler, loggers } = d
@@ -34,9 +32,7 @@ export default function getAllUsersFromPage(d: d_allDomain) {
 
     const response = await samePage.getAllUsersFromPage({
       url: args.url,
-    })
-    
-    //.catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

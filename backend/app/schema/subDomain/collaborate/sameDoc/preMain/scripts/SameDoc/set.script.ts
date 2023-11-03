@@ -1,8 +1,5 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
-import makeMeeting from "../../../../_singleton/preMain/meetings.ram-cache";
-import { meetingType } from "../../../../_singleton/preMain/scripts/meetings/meeting.types";
 import _ from "lodash"
 import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
@@ -11,6 +8,7 @@ import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdap
 import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
@@ -23,7 +21,7 @@ type input = {
   properties: any[]
 }
 
-export default function set(d: d_allDomain) {
+export default function set(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<EntityDocument>> => {
 

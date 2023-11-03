@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
@@ -11,7 +11,7 @@ type input = {
   socketId: string,
 }
 
-export default function start(d: d_allDomain) {
+export default function start(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<meetingType>> => {
 

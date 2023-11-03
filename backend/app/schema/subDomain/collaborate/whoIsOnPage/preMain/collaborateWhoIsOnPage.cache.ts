@@ -1,7 +1,7 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import getAllUsersFromPage from "./scripts/collaborateWhoIsOnPageCache/getAllUsersFromPage.script"
 
-export default function makeCollaborateWhoIsOnPageCache(d: d_allDomain) {
+export default function makeCollaborateWhoIsOnPageCache(d: dependencies) {
   return {
     getAllUsersFromPage: getAllUsersFromPage(d),
   }

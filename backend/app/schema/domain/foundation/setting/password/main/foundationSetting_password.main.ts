@@ -1,8 +1,8 @@
-import { d_domain } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 import getOne from "./scripts/main/getOne.script"
 import updateOne from "./scripts/main/updateOne.script"
 
-export default function makeFoundationSettingPasswordMain(d: d_domain) {
+export default function makeFoundationSettingPasswordMain(d: dependencies) {
 
   return {
     getOne: getOne(d),

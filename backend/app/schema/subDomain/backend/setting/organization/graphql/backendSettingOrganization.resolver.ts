@@ -1,30 +1,11 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import graphqlError from "../../../../../utils/errorHandling/handers/graphql.errorhandler";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
+import graphqlError from "../../../../../utils/graphql/grarphql.errorhandler";
 import makeBackendSettingOrganizationMain from "../main/backendSettingOrganization.main";
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
-
-const makeDObj = async (): Promise<d_allDomain> => {
-  const domainDb: Sequelize = await emptyTestDomainDb();
-  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  // const subDomainTransaction = await subDomainDb.transaction();
-
-  return {
-    domainDb,
-    subDomainDb,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler,
-  }
-}
 
 const settingRequestResolver = {
   Query: {
     backendSettingOrganization_getOneRealTime: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingOrganizationMain(d)
+      const main = makeBackendSettingOrganizationMain(ctx.d)
 
       const response = await main.getOneRealTime({
         socketId: args.socketId,
@@ -40,8 +21,7 @@ const settingRequestResolver = {
 
     backendSettingOrganization_getOne: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingOrganizationMain(d)
+      const main = makeBackendSettingOrganizationMain(ctx.d)
 
       const response = await main.getOne()
 
@@ -57,8 +37,7 @@ const settingRequestResolver = {
   Mutation: {
     backendSettingOrganization_updateOne: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingOrganizationMain(d)
+      const main = makeBackendSettingOrganizationMain(ctx.d)
 
       const response = await main.upsertOne({
         id: args.id,

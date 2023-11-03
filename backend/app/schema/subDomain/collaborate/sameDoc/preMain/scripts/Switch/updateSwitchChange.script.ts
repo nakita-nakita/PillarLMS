@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
 import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
@@ -12,7 +12,7 @@ type input = {
 }
 
 
-export default function updateSwitchChange(d: d_allDomain) {
+export default function updateSwitchChange(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

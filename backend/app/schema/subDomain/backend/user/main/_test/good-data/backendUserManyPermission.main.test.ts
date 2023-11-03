@@ -1,42 +1,24 @@
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 import { Model } from "sequelize";
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
 import backendPermission from "../../../../../../../models/subDomain/backend/permission/backendPermission.model";
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
 import makeBackendUserMain from "../../backendUser.main";
 import makeBackendPermissionMain from "../../../../permission/main/backendPermission.main";
 import { addOneBackendUserResponse } from "../../scripts/main/addOne.script";
 import makeBackendUserManyPermissionMain from "../../backendUserManyPermission.main";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 describe("test backendUserManyPermission.main.js", () => {
-  let d: d_allDomain
-  let ds: d_sub
+  let d: dependencies
   let user: addOneBackendUserResponse
   let permission: Model<backendPermission>
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const backendUserMain = makeBackendUserMain(d)
     const backendPermissionMain = makeBackendPermissionMain(d)

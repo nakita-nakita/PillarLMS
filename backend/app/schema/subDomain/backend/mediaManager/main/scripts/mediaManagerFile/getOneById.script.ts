@@ -1,24 +1,18 @@
 import { Model } from "sequelize";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendMediaManagerFileSql from "../../../preMain/backendMediaManagerFile.sql";
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getOneById(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendMediaManagerFile> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const fileSql = makeBackendMediaManagerFileSql(d);
 
     //////////////////////////////////////
@@ -49,7 +43,7 @@ export default function getOneById({ subDomainDb, errorHandler, subDomainTransac
 
     const response = await fileSql.getOneById({
       id: args.id,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

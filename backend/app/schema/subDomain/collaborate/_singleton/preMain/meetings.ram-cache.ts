@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import changeLeader from "./scripts/meetings/changeLeader.script"
 import changeName from "./scripts/meetings/changeName.script"
 import end from "./scripts/meetings/end.script"
@@ -14,7 +14,7 @@ import requestUrlChange from "./scripts/meetings/requestUrlChange.script"
 import start from "./scripts/meetings/start.script"
 import urlChange from "./scripts/meetings/urlChange.script"
 
-export default function makeMeeting(d: d_allDomain) {
+export default function makeMeeting(d: dependencies) {
   return {
     changeLeader: changeLeader(d),
     changeName: changeName(d),

@@ -1,15 +1,15 @@
 import { Model } from "sequelize";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string,
   count?: number
 }
 
-export default function getFirstByCount({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function getFirstByCount(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async ({ userId, count }: input): Promise<returningSuccessObj<Model<backendNotification>[]>> => {
 
@@ -19,8 +19,8 @@ export default function getFirstByCount({ subDomainDb, errorHandler, subDomainTr
       },
       limit: count || 3, 
       order: [['createdAt', 'DESC']],
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

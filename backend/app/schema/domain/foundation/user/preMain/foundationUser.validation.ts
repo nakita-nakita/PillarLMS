@@ -1,4 +1,4 @@
-import { d_domain } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import areEmailsTaken from "./scripts/validation/areEmailsTaken.script"
 import areIdsValid from "./scripts/validation/areIdsValid.script"
 import arePasswordsValid from "./scripts/validation/arePasswordsValid.script"
@@ -8,7 +8,7 @@ import isIdValid from "./scripts/validation/isIdValid.script"
 import isPasswordCorrect from "./scripts/validation/isPasswordCorrect.script"
 import isPasswordValid from "./scripts/validation/isPasswordValid.script"
 
-export default function makeFoundationUserValidation(d: d_domain) {
+export default function makeFoundationUserValidation(d: dependencies) {
   return {
     areEmailsTaken: areEmailsTaken(d),
     areIdsValid: areIdsValid(d),

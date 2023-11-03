@@ -1,39 +1,20 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
 import makeBackendNotificationMain from "../backendNotification.main";
 import { v4 as uuidv4 } from "uuid"
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
-import makeBackendUserMain from "../../../user/main/backendUser.main";
 import { notificationIconEnum, notificationTypeEnum } from "../../preMain/scripts/sql/addOne.script";
 import makeBackendUserSql from "../../../user/preMain/backendUser.sql";
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
 jest.setTimeout(100000)
 
 
 describe("test backendNotification.main.js", () => {
-  let d: d_allDomain
+  let d: dependencies
   let recordId: string
   let userId: string
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    
+    d = await makeDTestObj()
 
     const backendUserSql = makeBackendUserSql(d)
 

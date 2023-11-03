@@ -1,10 +1,10 @@
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
 import makeCollaborateSameDocFaviconSelection from "../../preMain/collaborateSameDocFaviconSelection.ram-cache";
 import makeCollaborateSameDocPictureSelection from "../../preMain/collaborateSameDocPictureSelection.ram-cache";
 
 type input = {
   socket: any,
-  d: d_allDomain
+  d: dependencies,
 }
 
 export default ({ socket, d }: input) => {

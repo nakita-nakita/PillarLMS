@@ -1,16 +1,16 @@
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = { password: string }
 
-export default function isPasswordValid({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function isPasswordValid(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
     const { password } = args;
 
-    const findOne = await db.foundationSetting_password.findOne().catch(errorHandler)
+    const findOne = await db.foundationSetting_password.findOne().catch(error => d.errorHandler(error, d.loggers))
     const passwordRules = findOne.dataValues;
 
     if (password.length < passwordRules.passwordLength) {

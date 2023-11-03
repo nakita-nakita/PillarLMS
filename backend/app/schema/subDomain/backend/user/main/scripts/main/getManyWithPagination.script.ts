@@ -1,6 +1,5 @@
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../utils/types/sequelize.types";
 import makeBackendUserSql from "../../../preMain/backendUser.sql";
@@ -11,7 +10,7 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination(d: d_allDomain) {
+export default function getManyWithPagination(d: dependencies) {
   return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendRole> | null>> => {
 
     const { errorHandler, loggers } = d

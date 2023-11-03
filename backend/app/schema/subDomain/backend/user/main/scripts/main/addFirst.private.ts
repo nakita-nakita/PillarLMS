@@ -2,10 +2,9 @@ import { Model } from "sequelize";
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
 import makeFoundationUserSql from "../../../../../../domain/foundation/user/preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../../../../domain/foundation/user/preMain/foundationUser.validation";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendUserSql from "../../../preMain/backendUser.sql";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type dataResponse = {
   id: string
@@ -21,17 +20,9 @@ type input = {
   isAdmin: boolean
 }
 
-export default function addFirst({ subDomainDb, domainDb, errorHandler, subDomainTransaction, domainTransaction, loggers }: d_allDomain) {
+export default function addFirst(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<dataResponse>> => {
 
-    const d: d_allDomain = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers,
-    }
 
     const foundationUserSql = makeFoundationUserSql(d)
     const foundationUserValidation = makeFoundationUserValidation(d)

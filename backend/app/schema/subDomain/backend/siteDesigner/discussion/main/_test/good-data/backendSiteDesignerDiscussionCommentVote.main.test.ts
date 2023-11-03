@@ -1,24 +1,20 @@
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesignerDiscussionMain from "../../backendSiteDesignerDiscussion.main"
 import makeBackendSiteDesignerDiscussionCommentVoteMain from "../../backendSiteDesignerDiscussionCommentVote.main"
 import backendUser from "../../../../../../../../models/subDomain/backend/user/backendUser.model";
 import { Model } from "sequelize";
-import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
-import throwIt from "../../../../../../../utils/errorHandling/loggers/throwIt.logger";
 import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
 import makeBackendSiteDesignerDiscussionCommentMain from "../../backendSiteDesignerDiscussionComment.main";
 import { backendSiteDesignerDiscussionVoteEnum } from "../../../preMain/scripts/discussionVoteSql/_utils.private";
+import { makeDTestObj } from "../../../../../../../utils/dependencies/makeTestDependency";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 jest.setTimeout(100000)
 
 
 describe("test backendSiteDesignerDiscussionCommentVote.main.js", () => {
-  let d: d_allDomain;
+  let d: dependencies;
   let user: Model<backendUser>;
   let discussion: Model<backendSiteDesignerDiscussion>
   let comment: Model<backendSiteDesignerDiscussionComment>
@@ -26,23 +22,9 @@ describe("test backendSiteDesignerDiscussionCommentVote.main.js", () => {
   beforeAll(async () => {
     const uuid = uuidv4()
 
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userSql = makeBackendUserSql(d)
     const discussionMain = makeBackendSiteDesignerDiscussionMain(d)

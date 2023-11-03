@@ -1,12 +1,12 @@
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = {
   userId: string
 }
 
-export default function getUnseenNotificationCount({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function getUnseenNotificationCount(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async ({ userId }: input): Promise<returningSuccessObj<number>> => {
 
@@ -16,10 +16,8 @@ export default function getUnseenNotificationCount({ subDomainDb, errorHandler, 
         hasBeenSeen: false,
         deletedAt: null,
       },
-      transaction: subDomainTransaction,
-    })
-    
-    // .catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

@@ -1,12 +1,12 @@
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import Cookies from 'js-cookie'
+import { dependencies } from '../../../../../../utils/dependencies/type/dependencyInjection.types'
 // import redisClient from "../../../../../../../reddis"
 
 type input = {
   cookie: string
 }
 
-export default function lookupCookieTokenGet({ errorHandler, loggers, }: d_domain) {
+export default function lookupCookieTokenGet({ errorHandler, loggers, }: dependencies) {
   return async ({ cookie }: input) => {
 
     //create list soon

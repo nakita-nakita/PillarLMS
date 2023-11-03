@@ -1,28 +1,16 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import makeBackendSiteDesignerSettingSql from "../backendSiteDesignerSetting.sql";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 
 describe("test backendSiteDesignerSetting.sql.js", () => {
-  let d: d_sub;
+  let d: dependencies;
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      subDomainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+
   }, 100000)
 
   test("updateOne & getOne: can update and get record.", async () => {

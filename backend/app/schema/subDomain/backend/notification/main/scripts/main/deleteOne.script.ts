@@ -1,6 +1,6 @@
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import {  d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendNotificationSql from "../../../preMain/backendNotification.sql";
 import makeBackendNotificationValidation from "../../../preMain/backendNotification.validation";
@@ -9,15 +9,9 @@ type input = {
   id: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function deleteOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<number | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const backendNotificationSql = makeBackendNotificationSql(d);
     const backendNotificationValidation = makeBackendNotificationValidation(d);
 
@@ -45,7 +39,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     const isIdValid = await backendNotificationValidation.isIdValid({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isIdValid.result) {
       return endMainFromError({
@@ -60,7 +54,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     const response = await backendNotificationSql.deleteOne({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

@@ -1,8 +1,8 @@
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 import getOne from "./scripts/sql/getOne.script"
 import upsertOne from "./scripts/sql/upsertOne.script"
 
-export default function makeBackendSettingColorsSql(d: d_allDomain) {
+export default function makeBackendSettingColorsSql(d: dependencies) {
 
   return {
     getOne: getOne(d),

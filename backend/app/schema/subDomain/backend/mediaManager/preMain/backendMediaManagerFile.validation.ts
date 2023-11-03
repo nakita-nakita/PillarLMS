@@ -1,7 +1,7 @@
-import { d_sub } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import isIdValid from "./scripts/fileValidation/isIdValid.script"
 
-export default function makeBackendMediaManagerFileValidation(d: d_sub) {
+export default function makeBackendMediaManagerFileValidation(d: dependencies) {
   return {
     isIdValid: isIdValid(d),
   }

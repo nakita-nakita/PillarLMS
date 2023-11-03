@@ -1,17 +1,17 @@
 import { Model } from "sequelize"
 import bcrypt from "bcryptjs"
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type input = {
   email: string
   password: string
 }
 
-export default function addMany({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function addMany(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (argsArray: input[]): Promise<returningSuccessObj<Model<foundationUser>[] | null>> => {
 
@@ -21,9 +21,9 @@ export default function addMany({ domainDb, errorHandler, domainTransaction, log
     }))
 
     const data = await db.foundationUser.bulkCreate(savingArray, {
-      transaction: domainTransaction,
+      transaction: d.domainTransaction,
       returning: true,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

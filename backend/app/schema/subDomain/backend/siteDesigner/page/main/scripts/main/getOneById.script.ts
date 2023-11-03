@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import backendSiteDesigner_page from "../../../../../../../../models/subDomain/backend/siteDesigner/page/backendSiteDesigner_page.model";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSiteDesignerPageSql from "../../../preMain/backendSiteDesigner_page.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getOneById(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesigner_page> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const pageSql = makeBackendSiteDesignerPageSql(d);
 
     //////////////////////////////////////
@@ -51,7 +44,7 @@ export default function getOneById({ subDomainDb, errorHandler, subDomainTransac
 
     const response = await pageSql.getOneById({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

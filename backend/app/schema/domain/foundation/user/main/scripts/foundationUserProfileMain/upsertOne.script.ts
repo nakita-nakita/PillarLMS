@@ -1,13 +1,11 @@
 import { Model } from "sequelize";
 import foundationUserProfile from "../../../../../../../models/domain/foundation/user/foundationUserProfile.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeFoundationUserValidation from "../../../preMain/foundationUser.validation";
 import makeFoundationUserProfileSql from "../../../preMain/foundationUserProfile.sql";
 import { CallByTypeEnum } from "../../../preMain/scripts/foundationUserProfileSql/upsertOne.script";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string,
@@ -20,18 +18,12 @@ type input = {
   labelColor?: string,
 }
 
-export default function upsertOne({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function upsertOne(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<foundationUserProfile> | null>> => {
 
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
     const foundationUserProfileSql = makeFoundationUserProfileSql(d)
     // const foundationUserValidation = makeFoundationUserValidation(d)
 
@@ -87,7 +79,7 @@ export default function upsertOne({ domainDb, errorHandler, domainTransaction, l
         id,
         ...args,
       }
-    ).catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

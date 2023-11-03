@@ -5,22 +5,40 @@ import glob from "glob"
 let subDomainDb;
 
 const config = {
-  HOST: process.env.POSTGRES_HOST,
-  USER: process.env.POSTGRES_USER,
-  PASSWORD: process.env.POSTGRES_PASSWORD,
+  HOST: process.env.POSTGRES_SUBDOMAIN_HOST,
+  USER: process.env.POSTGRES_SUBDOMAIN_USER,
+  PASSWORD: process.env.POSTGRES_SUBDOMAIN_PASSWORD,
   DB: process.env.POSTGRES_SUBDOMAIN_DB,
   dialect: "postgres",
   pool: {
-    max: parseInt(process.env.POSTGRES_POOL_MAX),
-    min: parseInt(process.env.POSTGRES_POOL_MIN),
-    acquire: parseInt(process.env.POSTGRES_POOL_ACQUIRE),
-    idle: parseInt(process.env.POSTGRES_POOL_IDLE)
+    max: parseInt(process.env.POSTGRES_SUBDOMAIN_POOL_MAX),
+    min: parseInt(process.env.POSTGRES_SUBDOMAIN_POOL_MIN),
+    // acquire: parseInt(process.env.POSTGRES_POOL_ACQUIRE),
+    idle: parseInt(process.env.POSTGRES_SUBDOMAIN_POOL_IDLE)
   }
 }
 
-export default async function emptyTestSubdomainDb(): Promise<Sequelize> {
-  // option?: { newDb?: boolean }
+const handleExit = () => {
+  if (subDomainDb) {
+    // Close the Sequelize connection before exiting
+    subDomainDb.close()
+      .then(() => {
+        console.log("Sequelize connection closed.");
+        process.exit(0); // Exit the application
+      })
+      .catch((err) => {
+        console.error("Error while closing Sequelize connection:", err);
+        process.exit(1); // Exit with an error code
+      });
+  } else {
+    process.exit(0); // Exit the application if there's no database connection
+  }
+};
 
+// Listen for the 'SIGINT' signal to gracefully exit
+process.on("SIGINT", handleExit);
+
+export default async function connectToSubDomainDb(): Promise<Sequelize> {
 
   if (subDomainDb) {
     return subDomainDb
@@ -28,11 +46,11 @@ export default async function emptyTestSubdomainDb(): Promise<Sequelize> {
 
   // Grad all files to build database
   let dbResolvers = [
-    ...glob.sync(`${__dirname}/../backend/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../backend/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../backend/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../backend/*/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../backend/*/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*/*.model.ts`),
   ];
 
   let dbModels = dbResolvers.map(dbFilePath => {
@@ -47,13 +65,13 @@ export default async function emptyTestSubdomainDb(): Promise<Sequelize> {
       host: config.HOST,
       dialect: "postgres",
       // operatorsAliases: false,
-
       pool: {
         max: config.pool.max,
         min: config.pool.min,
-        acquire: config.pool.acquire,
+        // acquire: config.pool.acquire,
         idle: config.pool.idle
-      }
+      },
+      logging: false, // Disable Sequelize's logging to the console
     }
   );
   emptyTestDb.addModels(dbModels);
@@ -79,22 +97,6 @@ export default async function emptyTestSubdomainDb(): Promise<Sequelize> {
     context: emptyTestDb.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize: emptyTestDb, modelName: 'SequelizeData' }),
     logger: console,
-    // storage: "sequelize",
-    // storageOptions: {
-    //   sequelize: emptyTestDb.models.sequelize,
-    //   modelName: 'SequelizeData' // Or whatever you want to name the seeder storage table
-    // },
-    // storage: new SequelizeStorage({ sequelize: emptyTestDb }),
-
-    // migrations: {
-    //   params: [
-    //     emptyTestDb.getQueryInterface(),
-    //     emptyTestDb.models.sequelize.constructor,
-    //     // emptyTestDb.const
-    //   ],
-    //   path: "./app/models/subDomain/seeders/emptyDb", // path to folder containing seeds
-    //   pattern: /\.js$/
-    // },
   });
 
   await seeder.up()

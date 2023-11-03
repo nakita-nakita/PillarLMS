@@ -1,30 +1,19 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_domain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
 import makeFoundationAuthFunc from "../foundationAuth.func";
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 
 describe("test backendRole.func.js", () => {
-  let d: d_domain
+  let d: dependencies
   let token: any
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
+
   }, 100000)
 
   test("signinToken: works.", async () => {
@@ -43,13 +32,14 @@ describe("test backendRole.func.js", () => {
     const checkedToken = await authFunc.getDataFromToken({
       token: token.data,
     })
-    
+
     expect(checkedToken.success).toEqual(true)
     expect(checkedToken.data.userId).toEqual("userId")
   })
 
   afterAll(async () => {
-    await d.domainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })
 

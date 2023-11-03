@@ -20,8 +20,7 @@
     "authentication",
     "postgresql"
   ],
-  "author": "bezkoder",
-  "license": "ISC",
+  "author": "Michael Hunt",
   "dependencies": {
     "@graphql-tools/schema": "^8.2.0",
     "@types/redis": "^4.0.11",
@@ -57,7 +56,6 @@
     "pg-hstore": "^2.3.3",
     "quill": "^1.3.7",
     "quill-delta": "^5.0.0",
-    "redis": "^4.6.8",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.25.7",
     "socket.io": "^3.1.2",

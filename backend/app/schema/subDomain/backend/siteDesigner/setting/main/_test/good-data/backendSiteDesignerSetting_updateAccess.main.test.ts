@@ -1,17 +1,14 @@
 import { Model } from "sequelize";
 import { v4 as uuidv4 } from "uuid"
-import { Sequelize } from "sequelize-typescript";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
-import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
 import backendUser from "../../../../../../../../models/subDomain/backend/user/backendUser.model";
-import { d_allDomain } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../../../user/preMain/backendUser.sql";
 import makeBackendSiteDesignerSettingUpdateAccessMain from "../../backendSiteDesignerSetting_updateAccess.main";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 describe("test backendSiteDesignerSetting_updateAccess.sql.js", () => {
-  let d: d_allDomain;
+  let d: dependencies;
 
   let user1: Model<backendUser>
   let user2: Model<backendUser>
@@ -20,23 +17,10 @@ describe("test backendSiteDesignerSetting_updateAccess.sql.js", () => {
   let user5: Model<backendUser>
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      domainDb,
-      subDomainTransaction,
-      domainTransaction,
-      loggers: [
-        console,
-        // throwIt,
-      ]
-    };
-
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userSql = makeBackendUserSql(d)
 

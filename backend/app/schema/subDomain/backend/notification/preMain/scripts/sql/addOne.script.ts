@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 export enum notificationIconEnum {
   DISCUSSION = "DISCUSSION",
@@ -41,8 +41,8 @@ type input = {
 
 // type: sequelize.ENUM("SYSTEM", "DISCUSSION"),
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  const db = subDomainDb.models;
+export default function addOne(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendNotification>>> => {
 
@@ -57,10 +57,10 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
     const data = await db.backendNotification.create(
       obj,
       {
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
         returning: true,
       }
-    ).catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

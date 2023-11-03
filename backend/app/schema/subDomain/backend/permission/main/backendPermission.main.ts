@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import addMany from "./scripts/main/addMany.script"
 import addOne from "./scripts/main/addOne.script"
 import deleteOne from "./scripts/main/deleteOne.script"
@@ -6,7 +6,7 @@ import getManyWithPagination from "./scripts/main/getManyWithPagination.script"
 import getOneById from "./scripts/main/getOneById.script"
 import updateOne from "./scripts/main/updateOne.script"
 
-export default function makeBackendPermissionMain(d: d_sub) {
+export default function makeBackendPermissionMain(d: dependencies) {
 
   return {
     addMany: addMany(d),

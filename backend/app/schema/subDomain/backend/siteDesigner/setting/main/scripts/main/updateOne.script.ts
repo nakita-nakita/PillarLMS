@@ -1,34 +1,22 @@
 import { Model } from "sequelize";
 import makeBackendSiteDesignerSettingSql from "../../../preMain/backendSiteDesignerSetting.sql";
-
-//models
 import backendSiteDesignerSetting from "../../../../../../../../models/subDomain/backend/siteDesigner/setting/backendSiteDesignerSetting.model";
-
-//utils
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   canAllRead: boolean
   canAllUpdate: boolean
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function updateOne(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerSetting> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
-
     const settingSql = makeBackendSiteDesignerSettingSql(d)
 
-    const setting = await settingSql.updateOne(args).catch(error => errorHandler(error, loggers))
+    const setting = await settingSql.updateOne(args).catch(error => d.errorHandler(error, d.loggers))
 
     return setting
   }

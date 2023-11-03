@@ -1,30 +1,9 @@
-import { Sequelize } from "sequelize-typescript";
 import uploaderAuth from "../../../../../uploader/auth/isAuthenticated"
-import { d_allDomain, d_domain, d_sub } from "../../../../utils/types/dependencyInjection.types";
-import emptyTestSubdomainDb from "../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { profileUpload } from "./profile-upload.rules";
-import makeBackendUserProfileMain from "../main/backendUserProfile.main";
-import emptyTestDomainDb from "../../../../../models/domain/_test/emptyTestDb";
 import makeWhoIsOnPage from "../../../collaborate/_singleton/preMain/whoIsOnPage.ram-cache";
 import makeFoundationUserProfileMain from "../../../../domain/foundation/user/main/foundationUserProfile.main";
+import { makeDObj } from "../../../../utils/dependencies/makeDependency";
 
-const makeDObj = async (): Promise<d_allDomain> => {
-
-  const domainDb: Sequelize = await emptyTestDomainDb();
-  const domainTransaction = await domainDb.transaction();
-  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const subDomainTransaction = await subDomainDb.transaction();
-
-  return {
-    domainDb,
-    domainTransaction,
-    subDomainDb,
-    subDomainTransaction,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler
-  }
-}
 
 export default ({ app }) => {
 

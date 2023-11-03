@@ -1,4 +1,3 @@
-import { d_allDomain } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeCollaborateSameDoc from "../../../../../../collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
 import RealTimeYDocAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeYDocAdapter";
@@ -7,12 +6,13 @@ import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsag
 import RealTimePictureSelectionAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimePictureSelectionAdapter";
 import makeBackendSettingSiteSql from "../../../preMain/backendSettingSite.sql";
 import RealTimeFaviconSelectionAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeFaviconSelectionAdapter";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   socketId: string;
 }
 
-export default function getOneRealTime(d: d_allDomain) {
+export default function getOneRealTime(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<any>> => {
 
     const entity = 'backendSettingSite'

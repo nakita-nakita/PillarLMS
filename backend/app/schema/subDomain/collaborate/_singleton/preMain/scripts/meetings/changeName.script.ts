@@ -1,7 +1,5 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSingleton from "../../_singleton.ram-cache";
-import makeSocketLookUp from "../../socketLookUp.ram-cache";
 import makeGetMeetingById from "./getMeetingById.script";
 import { meetingType } from "./meeting.types";
 
@@ -10,7 +8,7 @@ type input = {
   name: string,
 }
 
-export default function changeName(d: d_allDomain) {
+export default function changeName(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<meetingType>> => {
 

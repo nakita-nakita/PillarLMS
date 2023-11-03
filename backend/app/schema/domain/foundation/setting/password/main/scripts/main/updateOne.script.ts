@@ -1,9 +1,8 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import foundationSetting_password from "../../../../../../../../models/domain/foundation/setting/foundationSetting_password.model";
-import { d_domain } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeFoundationSettingPasswordSql from "../../../preMain/foundationSetting_password.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   passwordLength?: number
@@ -13,7 +12,7 @@ type input = {
   shouldHaveSymbol?: boolean
 }
 
-export default function updateOne(d: d_domain) {
+export default function updateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationSetting_password> | null>> => {
 
     const passwordSql = makeFoundationSettingPasswordSql(d)

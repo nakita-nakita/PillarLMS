@@ -1,16 +1,14 @@
 import _ from "lodash";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSingleton from "../../_singleton.ram-cache";
-import makeSocketLookUp from "../../socketLookUp.ram-cache";
 import makeGetMeetingById from "./getMeetingById.script";
 import { socketLookUpType } from "../socketLookUp/socketRecord.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   meetingId: string,
 }
 
-export default function getUsersForMeeting(d: d_allDomain) {
+export default function getUsersForMeeting(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<socketLookUpType[]>> => {
 

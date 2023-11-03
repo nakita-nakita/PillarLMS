@@ -1,7 +1,6 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
-import makeSocketLookUp from "../../socketLookUp.ram-cache";
 import { meetingType } from "./meeting.types";
 import { v4 as uuidv4 } from "uuid"
 
@@ -9,7 +8,7 @@ type input = {
   meetingId: string
 }
 
-export default function getMeetingById(d: d_allDomain) {
+export default function getMeetingById(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<meetingType>> => {
 

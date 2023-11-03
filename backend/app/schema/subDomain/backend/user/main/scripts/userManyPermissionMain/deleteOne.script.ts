@@ -1,29 +1,18 @@
-import { Model } from "sequelize";
-import backendUserManyPermission from "../../../../../../../models/subDomain/backend/user/backendUserManyPermission.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeBackendPermissionMain from "../../../../permission/main/backendPermission.main";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendUserManyPermissionSql from "../../../preMain/backendUserManyPermission.sql";
 import makeBackendPermissionEntity from "../../../../permission";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   userId: string
   permissionId: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function deleteOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<number>> => {
-
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
 
     const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
     const userValidation = makeBackendUserValidation(d)
@@ -53,7 +42,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     const isUserIdValid = await userValidation.isIdValid({
       id: args.userId
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isUserIdValid.result) {
       return endMainFromError({
@@ -82,7 +71,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
 
     // const isPermissionIdValid = await permissionEntity.isIdValid({
     //   id: args.userId
-    // }).catch(error => errorHandler(error, loggers))
+    // }).catch(error => d.errorHandler(error, d.loggers))
 
     // if (!isPermissionIdValid.result) {
     //   return endMainFromError({
@@ -98,7 +87,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
     const response = await userManyPermissionSql.deleteOne({
       permissionId: args.permissionId,
       userId: args.userId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

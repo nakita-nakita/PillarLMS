@@ -1,14 +1,12 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendRoleManyPermissionSql from "../../../preMain/backendRoleManyPermission.sql";
-import makeBackendRoleManyPermissionValidation from "../../../preMain/backendRoleManyPermission.validation";
 import stringHelpers from "../../../../../../utils/stringHelpers";
 import backendRoleManyPermission from "../../../../../../../models/subDomain/backend/role/backendRoleManyPermission.model";
 import makeBackendPermissionEntity from "../../../../permission";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
@@ -16,15 +14,9 @@ type input = {
   roleId: string
 }
 
-export default function setList({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function setList(d: dependencies) {
   return async (args: input[]): Promise<returningSuccessObj<Model<backendRoleManyPermission>[] | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
     const roleValidation = makeBackendRoleValidation(d);
     const { permissionEntity } = makeBackendPermissionEntity(d);
@@ -89,7 +81,7 @@ export default function setList({ subDomainDb, errorHandler, subDomainTransactio
     // Sql
     // ===================================    
 
-    const response = await roleManyPermissionSql.setList(args).catch(error => errorHandler(error, loggers))
+    const response = await roleManyPermissionSql.setList(args).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

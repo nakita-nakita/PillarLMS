@@ -1,32 +1,21 @@
 import { Model } from "sequelize";
 import makeBackendSiteDesignerSettingReadAccessSql from "../../../preMain/backendSiteDesignerSetting_readAccess.sql";
 import makeBackendSiteDesignerSettingReadAccessValidation from "../../../preMain/backendSiteDesignerSetting_readAccess.validation";
-
-//models
 import backendSiteDesignerSetting_readAccess from "../../../../../../../../models/subDomain/backend/siteDesigner/setting/backendSiteDesignerSetting_readAccess.model";
-
-//utils
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import stringHelpers from "../../../../../../../utils/stringHelpers"
 import endGraphQLMainDefault from "../../../../../../../utils/graphql/endMainFromError.func";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
   userId: string
 }
 
-export default function setList({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function setList(d: dependencies) {
 
   return async (args: input[]): Promise<returningSuccessObj<Model<backendSiteDesignerSetting_readAccess> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const readAccessSql = makeBackendSiteDesignerSettingReadAccessSql(d)
     const readAccessValidation = makeBackendSiteDesignerSettingReadAccessValidation(d)
 
@@ -76,7 +65,7 @@ export default function setList({ subDomainDb, errorHandler, subDomainTransactio
     // Sql
     // ===================================
 
-    const setting = await readAccessSql.setList(args).catch(error => errorHandler(error, loggers))
+    const setting = await readAccessSql.setList(args).catch(error => d.errorHandler(error, d.loggers))
 
     return setting
   }

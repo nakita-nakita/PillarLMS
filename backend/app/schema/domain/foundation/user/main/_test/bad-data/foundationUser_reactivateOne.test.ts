@@ -1,29 +1,16 @@
-import { Model } from "sequelize";
-import { Sequelize } from "sequelize-typescript";
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import makeFoundationUserMain from "../../foundationUser.main";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 
 describe("test foundationUser.main.js with bad data.", () => {
-  let d: d_domain
+  let d: dependencies
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+
   }, 100000)
 
   test("foundationUser_reactivateOne_error0001: works", async () => {

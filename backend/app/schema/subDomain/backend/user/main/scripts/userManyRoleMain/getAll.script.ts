@@ -1,19 +1,17 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
-import makeFoundationUserValidation from "../../../../../../domain/foundation/user/preMain/foundationUser.validation";
 import makeBackendUserManyRoleSql from "../../../preMain/backendUserManyRole.sql";
 import backendUserManyRole from "../../../../../../../models/subDomain/backend/user/backendUserManyRole.model";
 import makeBackendUserValidation from "../../../preMain/backendUser.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getAll(d: d_allDomain) {
+export default function getAll(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyRole>[]>> => {
 
     const { errorHandler, loggers } = d

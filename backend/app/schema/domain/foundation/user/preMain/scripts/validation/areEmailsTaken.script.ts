@@ -1,10 +1,10 @@
 import { Op } from "sequelize";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
-export default function areEmailsTaken({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function areEmailsTaken(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (emailArray: string[]): Promise<returningSuccessObj<null>> => {
 
@@ -14,8 +14,8 @@ export default function areEmailsTaken({ domainDb, errorHandler, domainTransacti
           [Op.in]: emailArray
         }
       },
-      transaction: domainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.domainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

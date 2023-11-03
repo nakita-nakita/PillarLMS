@@ -1,9 +1,9 @@
 import makeFoundationUserEntity from "../../../../../../domain/foundation/user"
 import makeBackendUserEntity from "../../../../../../subDomain/backend/user"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
 import getRandomColor from "../../../../../../utils/helpers/getRandomColor"
 import stringHelpers from "../../../../../../utils/stringHelpers"
-import { d_allDomain, d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import makeFoundationAuthFunc from "../../../preMain/foundationAuth.func"
 
@@ -18,7 +18,7 @@ type input = {
   username?: string,
 }
 
-export default function signup(d: d_allDomain) {
+export default function signup(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<returningTokenObj>> => {
 
     const { domainDb, errorHandler, domainTransaction, loggers } = d
@@ -52,7 +52,7 @@ export default function signup(d: d_allDomain) {
 
     const isEmailTaken = await userMain.isEmailTaken({
       email: args.email,
-    }).catch(errorHandler)
+    }).catch(error => errorHandler(error, loggers))
 
     if (isEmailTaken.result) {
       return endMainFromError({

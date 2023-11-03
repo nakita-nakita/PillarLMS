@@ -1,14 +1,14 @@
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
-export default function canUserSignUp({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function canUserSignUp(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<null>> => {
 
     const settingRequest = await db.backendSetting_backendUserRequest.findOne({
-      transaction: subDomainTransaction
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     switch (settingRequest.type) {
       case "MANUAL":

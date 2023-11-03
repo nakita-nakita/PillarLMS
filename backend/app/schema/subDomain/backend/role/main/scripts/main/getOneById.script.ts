@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendRoleSql from "../../../preMain/backendRole.sql";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getOneById(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRole> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const backendRoleSql = makeBackendRoleSql(d);
     const backendRoleValidation = makeBackendRoleValidation(d);
 
@@ -52,7 +45,7 @@ export default function getOneById({ subDomainDb, errorHandler, subDomainTransac
 
     const response = await backendRoleSql.getOneById({
       id: args.id,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

@@ -1,8 +1,8 @@
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 import getOne from "./scripts/sql/getOne.script"
 import upsertOne from "./scripts/sql/upsertOne.script"
 
-export default function makeBackendSettingLinkSql(d: d_sub) {
+export default function makeBackendSettingLinkSql(d: dependencies) {
 
   return {
     getOne: getOne(d),

@@ -1,8 +1,6 @@
-import { Model } from "sequelize";
-import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSiteDesignerDiscussionCommentVoteSql from "../../../preMain/backendSiteDesignerDiscussionCommentVote.sql";
 
@@ -10,15 +8,9 @@ type input = {
   commentId: string
 }
 
-export default function getTotalVote({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getTotalVote(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<number | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const commentVoteSql = makeBackendSiteDesignerDiscussionCommentVoteSql(d)
 
     //////////////////////////////////////
@@ -49,7 +41,7 @@ export default function getTotalVote({ subDomainDb, errorHandler, subDomainTrans
 
     const response = await commentVoteSql.getTotalVote({
       commentId: args.commentId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

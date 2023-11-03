@@ -1,26 +1,20 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendNotificationSql from "../../../preMain/backendNotification.sql";
 import makeBackendNotificationValidation from "../../../preMain/backendNotification.validation";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 
 type input = {
   userId: string
 }
 
-export default function getUnseenNotificationCount({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getUnseenNotificationCount(d: dependencies) {
 	return async (args: input): Promise<returningSuccessObj<Model<backendNotification>[] | null>> => {
 
-		const d = {
-			subDomainDb,
-			errorHandler,
-			subDomainTransaction,
-			loggers,
-		}
 		const backendNotificationSql = makeBackendNotificationSql(d);
 		const backendNotificationValidation = makeBackendNotificationValidation(d);
 
@@ -47,7 +41,7 @@ export default function getUnseenNotificationCount({ subDomainDb, errorHandler, 
 
 		const response = await backendNotificationSql.getUnseenNotificationCount({
       userId: args.userId,
-		}).catch(error => errorHandler(error, loggers))
+		}).catch(error => d.errorHandler(error, d.loggers))
 
 		return response
 	}

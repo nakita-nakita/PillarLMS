@@ -1,53 +1,23 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../user/preMain/backendUser.sql";
 import makeBackendNotificationSql from "../backendNotification.sql";
 import { v4 as uuidv4 } from "uuid"
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 import { notificationIconEnum, notificationTypeEnum } from "../scripts/sql/addOne.script";
-import backendNotification from "../../../../../../models/subDomain/backend/notification/backendNotification.model";
-import { Model } from "sequelize";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency";
 // import makeBackendNotificationSql from "../backendNotification.sql"
 jest.setTimeout(100000)
 
 
 describe("test backendNotification.sql.js", () => {
-  let d: d_allDomain
+  let d: dependencies
   let recordId: string
   let userId: string
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
+    
+    d = await makeDTestObj()
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
-
-    const backendUserSql = makeBackendUserSql({
-      errorHandler: sequelizeErrorHandler,
-      subDomainDb,
-      subDomainTransaction,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    })
+    const backendUserSql = makeBackendUserSql(d)
 
     let uuid = uuidv4();
 

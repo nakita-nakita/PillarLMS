@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import addOne from "./scripts/folderSql/addOne.script"
 import deleteOne from "./scripts/folderSql/deleteOne.script"
 import getAllChildFolders from "./scripts/folderSql/getAllChildFolders.script"
@@ -8,7 +8,7 @@ import getOneById from "./scripts/folderSql/getOneById.script"
 import restoreTrashed from "./scripts/folderSql/restoreTrashed.script"
 import updateOne from "./scripts/folderSql/updateOne.script"
 
-export default function makeBackendMediaManagerFolderSql(d: d_sub) {
+export default function makeBackendMediaManagerFolderSql(d: dependencies) {
 
   return {
     addOne: addOne(d),

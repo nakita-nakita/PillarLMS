@@ -1,35 +1,19 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../backendUser.sql"
 import { v4 as uuidv4 } from "uuid"
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
-
 describe("test backendUser.sql.js", () => {
-  let d: d_allDomain
+  let d: dependencies
   let recordId = uuidv4()
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
   }, 100000)
 
   test("addOne: backendUsers can add record.", async () => {

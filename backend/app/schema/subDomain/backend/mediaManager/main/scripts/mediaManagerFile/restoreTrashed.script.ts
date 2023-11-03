@@ -1,27 +1,21 @@
 import { Model } from "sequelize";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendMediaManagerFileSql from "../../../preMain/backendMediaManagerFile.sql";
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
 import makeBackendMediaManagerFolderSql from "../../../preMain/backendMediaManagerFolder.sql";
 import makeBackendMediaManagerFileValidation from "../../../preMain/backendMediaManagerFile.validation";
 import makeBackendMediaManagerFolderValidation from "../../../preMain/backendMediaManagerFolder.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function restoreTrashed({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function restoreTrashed(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendMediaManagerFile> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const fileSql = makeBackendMediaManagerFileSql(d);
     const folderValidation = makeBackendMediaManagerFolderValidation(d);
     const folderSql = makeBackendMediaManagerFolderSql(d);
@@ -56,7 +50,7 @@ export default function restoreTrashed({ subDomainDb, errorHandler, subDomainTra
     
     const response = await fileSql.restoreTrashed({
       id: args.id,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
     
     const file = await fileSql.getOneById({
       id: args.id

@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 
@@ -6,7 +6,7 @@ type input = {
   userId: string
 }
 
-export default function broadcastForNotification(d: d_allDomain) {
+export default function broadcastForNotification(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

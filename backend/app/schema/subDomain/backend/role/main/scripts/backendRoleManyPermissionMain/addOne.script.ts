@@ -1,7 +1,5 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendRoleManyPermissionSql from "../../../preMain/backendRoleManyPermission.sql";
 import makeBackendRoleManyPermissionValidation from "../../../preMain/backendRoleManyPermission.validation";
@@ -9,22 +7,17 @@ import backendRoleManyPermission from "../../../../../../../models/subDomain/bac
 import stringHelpers from "../../../../../../utils/stringHelpers";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
 import makeBackendPermissionEntity from "../../../../permission";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   permissionId: string
   roleId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRoleManyPermission> | null>> => {
     const { roleId, permissionId } = args
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
     const roleManyPermissionValidation = makeBackendRoleManyPermissionValidation(d);
     const roleValidation = makeBackendRoleValidation(d);
@@ -110,7 +103,7 @@ export default function addOne({ subDomainDb, errorHandler, subDomainTransaction
     const response = await roleManyPermissionSql.addOne({
       permissionId,
       roleId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

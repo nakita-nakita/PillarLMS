@@ -1,28 +1,18 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeFoundationUserValidation from "../../../../../../domain/foundation/user/preMain/foundationUser.validation";
 import makeBackendUserManyPermissionSql from "../../../preMain/backendUserManyPermission.sql";
 import backendUserManyPermission from "../../../../../../../models/subDomain/backend/user/backendUserManyPermission.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function getAll({ subDomainDb, domainDb, errorHandler, subDomainTransaction, domainTransaction, loggers }: d_allDomain) {
+export default function getAll(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendUserManyPermission>[]>> => {
-
-    const d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler,
-      loggers,
-    }
 
     const userManyPermissionSql = makeBackendUserManyPermissionSql(d)
     const userValidation = makeFoundationUserValidation(d)
@@ -51,7 +41,7 @@ export default function getAll({ subDomainDb, domainDb, errorHandler, subDomainT
 
     // const isUserIdValid = await userValidation.isIdValid({
     //   id: args.id,
-    // }).catch(error => errorHandler(error, loggers))
+    // }).catch(error => d.errorHandler(error, d.loggers))
 
     // if (!isUserIdValid.result) {
     //   return endMainFromError({
@@ -66,7 +56,7 @@ export default function getAll({ subDomainDb, domainDb, errorHandler, subDomainT
 
     const response = await userManyPermissionSql.getAll({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

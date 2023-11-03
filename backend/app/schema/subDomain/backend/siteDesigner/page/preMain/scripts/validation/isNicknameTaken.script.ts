@@ -1,17 +1,17 @@
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { nickname: string }
 
-export default function isNicknameTaken({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function isNicknameTaken(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (where: input) => {
 
     const data: number = await db.backendSiteDesigner_page.count({
       where,
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
 
     return {

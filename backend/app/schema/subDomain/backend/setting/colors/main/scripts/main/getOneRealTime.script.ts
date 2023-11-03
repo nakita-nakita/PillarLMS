@@ -1,16 +1,16 @@
-import { d_allDomain } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeCollaborateSameDoc from "../../../../../../collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
 import { RealTimeAdapterPropertyValue } from "../../../../../../collaborate/sameDoc/preMain/scripts/SameDoc/set.script";
 import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeSwitchAdapter";
 import makeBackendSettingColorsSql from "../../../preMain/backendSettingColors.sql";
 import RealTimeColorAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeColorPickerAdapter";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   socketId: string;
 }
 
-export default function getOneRealTime(d: d_allDomain) {
+export default function getOneRealTime(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<any>> => {
 
     const entity = 'backendSettingColors'

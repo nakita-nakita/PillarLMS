@@ -1,8 +1,8 @@
 import { Model } from "sequelize"
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import bcrypt from "bcryptjs"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type input = {
   email: string
@@ -10,8 +10,8 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function addOne({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
-  const db = domainDb.models
+export default function addOne(d: dependencies) {
+  const db = d.domainDb.models
 
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
@@ -20,10 +20,10 @@ export default function addOne({ domainDb, errorHandler, domainTransaction, logg
     const data = await db.foundationUser.create(
       args,
       {
-        transaction: domainTransaction,
+        transaction: d.domainTransaction,
         returning: true,
       }
-    ).catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

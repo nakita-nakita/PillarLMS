@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = {
@@ -6,9 +6,9 @@ type input = {
   deletedBy: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function deleteOne(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async ({ id, deletedBy }: input): Promise<returningSuccessObj<number | null>> => {
 
@@ -16,16 +16,16 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
       where: {
         id,
       },
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     // show who deleted the record.
     await db.backendMediaManagerFolder.update(
       { deletedBy, },
       {
         where: { id, },
-        transaction: subDomainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.subDomainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

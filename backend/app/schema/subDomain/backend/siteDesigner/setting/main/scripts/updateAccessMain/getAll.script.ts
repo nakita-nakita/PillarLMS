@@ -1,24 +1,13 @@
 import { Model } from "sequelize";
 import makeBackendSiteDesignerSettingUpdateAccessSql from "../../../preMain/backendSiteDesignerSetting_updateAccess.sql";
-
-//models
 import backendSiteDesignerSetting_updateAccess from "../../../../../../../../models/subDomain/backend/siteDesigner/setting/backendSiteDesignerSetting_updateAccess.model";
-
-//utils
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
-export default function getAll({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getAll(d: dependencies) {
 
   return async (): Promise<returningSuccessObj<Model<backendSiteDesignerSetting_updateAccess>[]>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
 
     const updateAccessSql = makeBackendSiteDesignerSettingUpdateAccessSql(d)
 
@@ -26,7 +15,7 @@ export default function getAll({ subDomainDb, errorHandler, subDomainTransaction
     // Sql
     // ===================================
     
-    const setting = await updateAccessSql.getAll().catch(error => errorHandler(error, loggers))
+    const setting = await updateAccessSql.getAll().catch(error => d.errorHandler(error, d.loggers))
 
     return setting
   }

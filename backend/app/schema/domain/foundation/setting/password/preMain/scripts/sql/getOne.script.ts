@@ -1,9 +1,9 @@
 import { Model } from "sequelize";
 import foundationSetting_password from "../../../../../../../../models/domain/foundation/setting/foundationSetting_password.model";
-import { d_domain } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
-export default function getOneById({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function getOneById({ domainDb, errorHandler, domainTransaction, loggers, }: dependencies) {
 
   const db = domainDb.models;
 

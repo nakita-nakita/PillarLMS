@@ -1,8 +1,8 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import { socketLookUpType } from "./socketRecord.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import { CallByTypeEnum } from "../../../../../../domain/foundation/user/preMain/scripts/foundationUserProfileSql/upsertOne.script";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
 
@@ -39,7 +39,7 @@ type input = {
 
 }
 
-export default function updateBySocketId(d: d_allDomain) {
+export default function updateBySocketId(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<socketLookUpType>> => {
 

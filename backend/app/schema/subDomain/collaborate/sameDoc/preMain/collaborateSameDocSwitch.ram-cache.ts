@@ -1,7 +1,7 @@
-import { d_allDomain } from "../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types";
 import updateSwitchChange from "./scripts/Switch/updateSwitchChange.script";
 
-export default function makeCollaborateSameDocSwitch(d: d_allDomain) {
+export default function makeCollaborateSameDocSwitch(d: dependencies) {
   return {
     updateSwitchChange: updateSwitchChange(d)
   }

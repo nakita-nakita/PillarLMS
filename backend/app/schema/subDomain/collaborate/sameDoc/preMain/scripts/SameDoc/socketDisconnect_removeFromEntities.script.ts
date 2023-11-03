@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
@@ -8,7 +8,7 @@ type input = {
   socketId: string,
 }
 
-export default function socketDisconnect_removeFromEntities(d: d_allDomain) {
+export default function socketDisconnect_removeFromEntities(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<EntityDocument>> => {
 

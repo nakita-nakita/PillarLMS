@@ -1,8 +1,6 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
 import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
-import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
 import makeCollaborateSameDoc from "../../collaborateSameDoc.ram-cache";
 
 type input = {
@@ -13,7 +11,7 @@ type input = {
 }
 
 
-export default function updateSelectionChange(d: d_allDomain) {
+export default function updateSelectionChange(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

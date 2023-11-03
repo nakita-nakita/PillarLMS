@@ -1,6 +1,5 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_allDomain, d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendNotificationSql from "../../../preMain/backendNotification.sql";
 import makeBackendNotificationValidation from "../../../preMain/backendNotification.validation";
@@ -8,6 +7,7 @@ import { notificationAction } from "../../../preMain/scripts/sql/addOne.script";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
 import makeBoardcasters from "../../../../../collaborate/_singleton/preMain/broadcasters.ram-cache";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 
 type input = {
@@ -18,7 +18,7 @@ type input = {
 	userId: string
 }
 
-export default function addOne(d: d_allDomain) {
+export default function addOne(d: dependencies) {
 	return async (args: input): Promise<returningSuccessObj<Model<backendNotification> | null>> => {
 
 		const backendNotificationSql = makeBackendNotificationSql(d);

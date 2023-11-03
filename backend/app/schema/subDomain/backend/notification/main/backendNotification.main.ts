@@ -1,4 +1,3 @@
-import { d_allDomain, d_sub } from "../../../../utils/types/dependencyInjection.types"
 import makeBackendNotificationValidation from "../preMain/backendNotification.validation"
 import getManyWithPagination from "./scripts/main/getManyWithPagination.script"
 import getOneById from "./scripts/main/getOneById.script"
@@ -10,10 +9,11 @@ import hasBeenClick from "./scripts/main/hasBeenClick.script"
 import hasBeenSeen from "./scripts/main/hasBeenSeen.script"
 import updateOne from "./scripts/main/updateOne.script"
 import hasBeenSeenById from "./scripts/main/hasBeenSeenById.script"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 
 
 
-export default function makeBackendNotificationMain(d: d_allDomain) {
+export default function makeBackendNotificationMain(d: dependencies) {
   const validators = makeBackendNotificationValidation(d)
 
   return {

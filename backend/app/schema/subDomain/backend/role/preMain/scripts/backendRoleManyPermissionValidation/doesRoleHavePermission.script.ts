@@ -1,10 +1,10 @@
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { permissionId: string, roleId: string, }
 
-export default function doesRoleHavePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function doesRoleHavePermission(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async ({ permissionId, roleId, }: input) => {
 
@@ -13,8 +13,8 @@ export default function doesRoleHavePermission({ subDomainDb, errorHandler, subD
         permissionId,
         roleId
       },
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

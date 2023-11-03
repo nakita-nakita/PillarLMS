@@ -1,8 +1,8 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSamepage from "../../../../_singleton/preMain/whoIsOnPage.ram-cache";
 import { socketLookUpType } from "../../../../_singleton/preMain/scripts/socketLookUp/socketRecord.types";
 import _ from "lodash"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 export type SamePageObject = {
   total: number
@@ -13,7 +13,7 @@ type input = {
   url: string
 }
 
-export default function getAllUsersFromPage(d: d_allDomain) {
+export default function getAllUsersFromPage(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<SamePageObject>> => {
 

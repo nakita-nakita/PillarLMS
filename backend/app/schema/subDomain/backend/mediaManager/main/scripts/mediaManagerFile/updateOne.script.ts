@@ -1,10 +1,10 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
 import makeBackendMediaManagerFileSql from "../../../preMain/backendMediaManagerFile.sql";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { 
   id: string, 
@@ -14,15 +14,9 @@ type input = {
   folderId?: string,
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function updateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendMediaManagerFile> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const fileSql = makeBackendMediaManagerFileSql(d);
 
     //////////////////////////////////////
@@ -71,7 +65,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
       systemFileName: args.systemFileName,
       url: args.url,
       userFileName: args.userFileName,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

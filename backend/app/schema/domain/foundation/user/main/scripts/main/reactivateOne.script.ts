@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeFoundationUserSql from "../../../preMain/foundationUser.sql";
 import makeFoundationUserValidation from "../../../preMain/foundationUser.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function reactivateOne({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function reactivateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<foundationUser> | null>> => {
 
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
     const foundationUserSql = makeFoundationUserSql(d);
     const foundationUserValidation = makeFoundationUserValidation(d);
 
@@ -48,7 +41,7 @@ export default function reactivateOne({ domainDb, errorHandler, domainTransactio
 
     const isIdValid = await foundationUserValidation.isIdValid({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isIdValid.result) {
       return endMainFromError({
@@ -63,7 +56,7 @@ export default function reactivateOne({ domainDb, errorHandler, domainTransactio
 
     const response = await foundationUserSql.deactivateOne({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

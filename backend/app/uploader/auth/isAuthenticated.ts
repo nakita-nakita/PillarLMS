@@ -1,20 +1,6 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestDomainDb from "../../models/domain/_test/emptyTestDb";
 import makeFoundationAuthFunc from "../../schema/domain/foundation/auth/preMain/foundationAuth.func";
-import sequelizeErrorHandler from "../../schema/utils/errorHandling/handers/sequelize.errorHandler";
-import { d_domain } from "../../schema/utils/types/dependencyInjection.types";
+import { makeDObj } from "../../schema/utils/dependencies/makeDependency";
 
-const makeDomainDObj = async (): Promise<d_domain> => {
-  const domainDb: Sequelize = await emptyTestDomainDb();
-  const domainTransaction = await domainDb.transaction();
-
-  return {
-    domainDb,
-    domainTransaction,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler,
-  }
-}
 
 const isAuthenticated = async (req, res, next) => {
   const bearerToken = req.get("Authorization") || req.get("authorization");
@@ -27,7 +13,7 @@ const isAuthenticated = async (req, res, next) => {
     })
   }
 
-  const d = await makeDomainDObj()
+  const d = await makeDObj()
   const authFunc = makeFoundationAuthFunc(d)
   let userId;
 

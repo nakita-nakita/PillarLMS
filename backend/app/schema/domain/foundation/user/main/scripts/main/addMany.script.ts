@@ -1,12 +1,11 @@
 import { Model } from "sequelize"
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
 import stringHelpers from "../../../../../../utils/stringHelpers"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import makeFoundationUserSql from "../../../preMain/foundationUser.sql"
 import makeFoundationUserValidation from "../../../preMain/foundationUser.validation"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type input = {
   email: string
@@ -14,15 +13,8 @@ type input = {
   isDeactivated?: boolean
 }
 
-export default function addMany({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function addMany(d: dependencies) {
   return async (foundationUserArray: input[]): Promise<returningSuccessObj<Model<foundationUser>[] | null>> => {
-
-    const d = {
-      domainDb,
-      errorHandler,
-      domainTransaction,
-      loggers,
-    }
 
     const foundationUserSql = makeFoundationUserSql(d)
     const foundationUserValidation = makeFoundationUserValidation(d)
@@ -65,7 +57,7 @@ export default function addMany({ domainDb, errorHandler, domainTransaction, log
       })
     }
 
-    const isEmailTaken = await foundationUserValidation.areEmailsTaken(emails).catch(error => errorHandler(error, loggers))
+    const isEmailTaken = await foundationUserValidation.areEmailsTaken(emails).catch(error => d.errorHandler(error, d.loggers))
 
     if (isEmailTaken.result) {
       return endMainFromError({
@@ -83,7 +75,7 @@ export default function addMany({ domainDb, errorHandler, domainTransaction, log
       })
     }
 
-    const arePasswordsValid: returningSuccessObj<null> = await foundationUserValidation.arePasswordsValid(foundationUserArray).catch(error => errorHandler(error, loggers))
+    const arePasswordsValid: returningSuccessObj<null> = await foundationUserValidation.arePasswordsValid(foundationUserArray).catch(error => d.errorHandler(error, d.loggers))
 
     if (!arePasswordsValid.result) {
       return endMainFromError({
@@ -96,7 +88,7 @@ export default function addMany({ domainDb, errorHandler, domainTransaction, log
     // Sql
     // ===================================    
 
-    const response = await foundationUserSql.addMany(foundationUserArray).catch(error => errorHandler(error, loggers))
+    const response = await foundationUserSql.addMany(foundationUserArray).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

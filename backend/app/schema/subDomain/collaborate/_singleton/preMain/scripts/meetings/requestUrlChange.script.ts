@@ -1,9 +1,7 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
 import makeGetMeetingById from "./getMeetingById.script";
-import { meetingType } from "./meeting.types";
 
 type input = {
   socketId: string,
@@ -11,7 +9,7 @@ type input = {
   url: string,
 }
 
-export default function requestUrlChange(d: d_allDomain) {
+export default function requestUrlChange(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

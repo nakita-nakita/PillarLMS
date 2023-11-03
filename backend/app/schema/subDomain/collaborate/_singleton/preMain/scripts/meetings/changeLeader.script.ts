@@ -1,10 +1,7 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
-import { socketLookUpType } from "../socketLookUp/socketRecord.types";
 import makeGetMeetingById from "./getMeetingById.script";
-import { meetingType } from "./meeting.types";
 
 type input = {
   socketId: string,
@@ -13,7 +10,7 @@ type input = {
   newLeaderUserId: string,
 }
 
-export default function changeLeader(d: d_allDomain) {
+export default function changeLeader(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

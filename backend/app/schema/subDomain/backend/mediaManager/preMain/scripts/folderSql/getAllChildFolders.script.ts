@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import backendMediaManagerFolder from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFolder.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
@@ -13,16 +13,16 @@ type output = {
   order: number
 }
 
-export default function getAllChildFolders({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getAllChildFolders(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   async function fetchChildFolders(folderId: string, depth: number = 0): Promise<output[]> {
     const childFolders: Model<backendMediaManagerFolder>[] = await db.backendMediaManagerFolder.findAll({
       where: { folderId },
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
       paranoid: false
-    }).catch(error => errorHandler(error, loggers));
+    }).catch(error => d.errorHandler(error, d.loggers));
 
     let results: output[] = [];
     

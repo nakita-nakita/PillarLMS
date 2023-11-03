@@ -2,13 +2,12 @@
 
 
 
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types"
-import makeSingleton from "../../../_singleton/preMain/_singleton.ram-cache";
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types";
 import makeCollaborateSameDocTextField from "../../preMain/collaborateSameDocTextField.cache";
 
 type input = {
   socket: any,
-  d: d_allDomain
+  d: dependencies
 }
 
 export default ({ socket, d }: input) => {

@@ -1,6 +1,7 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
+import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
 import makeCollaborateSameDoc from "../../collaborateSameDoc.ram-cache";
 
 type input = {
@@ -11,7 +12,7 @@ type input = {
 }
 
 
-export default function updateSelectionChange(d: d_allDomain) {
+export default function updateSelectionChange(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
@@ -32,17 +33,17 @@ export default function updateSelectionChange(d: d_allDomain) {
       entity: args.entity,
     }
 
-    const prop = await sameDocEntity.getByPropertyName({
+    const prop = (await sameDocEntity.getByPropertyName({
       entity: args.entity,
       name: args.name,
-    })
+    })).data as RealTimeYDocAdapter
 
 
-    if (prop.data) {
+    if (prop) {
       if (args.range) {
-        selectionCursor.order = await prop.data.addOrUpdateSelection(selectionCursor)
+        selectionCursor.order = await prop.addOrUpdateSelection(selectionCursor)
       } else {
-        selectionCursor.order = await prop.data.removeSelection(user.data.userId)
+        selectionCursor.order = await prop.removeSelection(user.data.userId)
       }
     }
 

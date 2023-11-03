@@ -1,8 +1,8 @@
 import { FindAndCountOptions, Op } from "sequelize";
 import backendPermission from "../../../../../../../models/subDomain/backend/permission/backendPermission.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import { findAndCountAll } from "../../../../../../utils/types/sequelize.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   q?: string
@@ -12,9 +12,9 @@ type input = {
   userId?: string
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getManyWithPagination(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<backendPermission>>> => {
     let { q, page, pageSize, userId, roleId } = args
@@ -37,7 +37,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
     };
 
     if (roleId) {
@@ -72,7 +72,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     }
 
 
-    let data: findAndCountAll<backendPermission> = await db.backendPermission.findAndCountAll(search).catch(error => errorHandler(error, loggers))
+    let data: findAndCountAll<backendPermission> = await db.backendPermission.findAndCountAll(search).catch(error => d.errorHandler(error, d.loggers))
     data.page = page + 1;
     data.pageSize = pageSize;
     data.pageCount = Math.ceil(

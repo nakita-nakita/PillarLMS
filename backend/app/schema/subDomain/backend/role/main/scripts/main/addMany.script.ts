@@ -1,26 +1,19 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendRoleSql from "../../../preMain/backendRole.sql";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   name: string
 }
 
-export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function addMany(d: dependencies) {
   return async (roleArray: input[]): Promise<returningSuccessObj<Model<backendRole>[] | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleSql = makeBackendRoleSql(d);
     const roleValidation = makeBackendRoleValidation(d);
 
@@ -65,7 +58,7 @@ export default function addMany({ subDomainDb, errorHandler, subDomainTransactio
 
     const areNamesTaken = await roleValidation.areNamesTaken({
       nameArray: names,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (areNamesTaken.result) {
       return endMainFromError({
@@ -80,7 +73,7 @@ export default function addMany({ subDomainDb, errorHandler, subDomainTransactio
 
     const response = await roleSql.addMany({
       roleNamesArray: roleArray,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

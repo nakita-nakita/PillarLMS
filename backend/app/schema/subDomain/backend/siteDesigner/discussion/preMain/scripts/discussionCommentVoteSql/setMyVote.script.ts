@@ -1,9 +1,9 @@
 import sequelize from "sequelize";
 import { Model } from "sequelize";
 import backendSiteDesignerDiscussionCommentVote from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionCommentVote.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { backendSiteDesignerDiscussionVoteEnum, convertVoteToNumber } from "../discussionVoteSql/_utils.private";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   commentId: string
@@ -11,9 +11,9 @@ type input = {
   vote: backendSiteDesignerDiscussionVoteEnum
 }
 
-export default function setMyVote({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function setMyVote(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async ({ commentId, userId, vote }: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussionCommentVote> | null>> => {
 
@@ -25,9 +25,9 @@ export default function setMyVote({ subDomainDb, errorHandler, subDomainTransact
         commentId,
         userId,
       },
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
 
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (record) {
       data = await db.backendSiteDesignerDiscussionCommentVote.update(
@@ -38,9 +38,9 @@ export default function setMyVote({ subDomainDb, errorHandler, subDomainTransact
             userId,
           },
           returning: true,
-          transaction: subDomainTransaction,
+          transaction: d.subDomainTransaction,
         }
-      ).catch(error => errorHandler(error, loggers))
+      ).catch(error => d.errorHandler(error, d.loggers))
 
       data = data[0] !== 0 ? data[1][0] : null
 
@@ -51,8 +51,8 @@ export default function setMyVote({ subDomainDb, errorHandler, subDomainTransact
         userId,
         vote: voteNumber
       }, {
-        transaction: subDomainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.subDomainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
     }
 
     return {

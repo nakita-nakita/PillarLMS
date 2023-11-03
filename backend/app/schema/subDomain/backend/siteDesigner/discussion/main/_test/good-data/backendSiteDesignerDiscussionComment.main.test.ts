@@ -1,21 +1,17 @@
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeBackendUserSql from "../../../../../user/preMain/backendUser.sql"
 import makeBackendSiteDesignerDiscussionMain from "../../backendSiteDesignerDiscussion.main"
 import makeBackendSiteDesignerDiscussionCommentMain from "../../backendSiteDesignerDiscussionComment.main"
 import backendUser from "../../../../../../../../models/subDomain/backend/user/backendUser.model";
 import { Model } from "sequelize";
-import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
-import throwIt from "../../../../../../../utils/errorHandling/loggers/throwIt.logger";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 
 describe("test backendSiteDesignerDiscussionComment.main.js", () => {
-  let d: d_allDomain;
+  let d: dependencies;
   let recordId: string;
   let user: Model<backendUser>;
   let discussion: Model<backendSiteDesignerDiscussion>
@@ -23,23 +19,9 @@ describe("test backendSiteDesignerDiscussionComment.main.js", () => {
   beforeAll(async () => {
     const uuid = uuidv4()
 
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const userSql = makeBackendUserSql(d)
 

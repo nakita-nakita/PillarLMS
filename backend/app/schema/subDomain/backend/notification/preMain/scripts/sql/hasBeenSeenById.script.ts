@@ -1,14 +1,14 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import backendNotification from "../../../../../../../models/subDomain/backend/notification/backendNotification.model";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
 }
 
-export default function hasBeenSeenById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function hasBeenSeenById(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async ({ id }: input): Promise<returningSuccessObj<Model<backendNotification>>> => {
 
@@ -21,11 +21,9 @@ export default function hasBeenSeenById({ subDomainDb, errorHandler, subDomainTr
           id,
         },
         returning: true,
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
       }
-    )
-    
-    // .catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

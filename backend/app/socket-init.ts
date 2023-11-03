@@ -1,9 +1,9 @@
 import glob from "glob"
-import { d_allDomain } from "./schema/utils/types/dependencyInjection.types"
+import { dependencies } from "./schema/utils/dependencies/type/dependencyInjection.types"
 
 type input = {
     socket: any,
-    d: d_allDomain
+    d: dependencies
 }
 
 const socketInitScript = async ({ socket, d}: input) => {

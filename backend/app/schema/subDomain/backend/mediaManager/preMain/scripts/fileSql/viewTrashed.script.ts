@@ -1,13 +1,13 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
 import { Op } from "sequelize";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 
-export default function viewTrashed({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function viewTrashed(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<Model<backendMediaManagerFile>[]>> => {
 
@@ -22,8 +22,8 @@ export default function viewTrashed({ subDomainDb, errorHandler, subDomainTransa
         },
       },
       paranoid: false,
-      transaction: subDomainTransaction
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

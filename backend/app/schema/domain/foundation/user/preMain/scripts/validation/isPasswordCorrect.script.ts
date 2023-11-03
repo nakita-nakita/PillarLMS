@@ -1,12 +1,12 @@
 import bcrypt from "bcryptjs"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { password: string, encryptedPassword: string }
 
-export default function isPasswordCorrect({ domainDb, errorHandler, domainTransaction, loggers }: d_domain) {
+export default function isPasswordCorrect(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

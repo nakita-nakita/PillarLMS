@@ -1,30 +1,23 @@
 import { Model } from "sequelize";
 import backendRoleManyPermission from "../../../../../../../models/subDomain/backend/role/backendRoleManyPermission.model";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeBackendPermissionEntity from "../../../../permission";
 import makeBackendRoleValidation from "../../../preMain/backendRole.validation";
 import makeBackendRoleManyPermissionSql from "../../../preMain/backendRoleManyPermission.sql";
 import makeBackendRoleManyPermissionValidation from "../../../preMain/backendRoleManyPermission.validation";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   permissionId: string
   roleId: string
 }
 
-export default function deleteOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function deleteOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendRoleManyPermission> | null>> => {
     const { roleId, permissionId } = args
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const roleManyPermissionSql = makeBackendRoleManyPermissionSql(d);
     const roleManyPermissionValidation = makeBackendRoleManyPermissionValidation(d);
     const roleValidation = makeBackendRoleValidation(d);
@@ -110,7 +103,7 @@ export default function deleteOne({ subDomainDb, errorHandler, subDomainTransact
     const response = await roleManyPermissionSql.deleteOne({
       permissionId,
       roleId,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

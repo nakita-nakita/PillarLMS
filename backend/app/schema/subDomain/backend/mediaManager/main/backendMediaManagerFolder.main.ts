@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types"
 import addOne from "./scripts/meidaManagerFolder/addOne.script"
 import deleteOne from "./scripts/meidaManagerFolder/deleteOne.script"
 import getBreadCrumb from "./scripts/meidaManagerFolder/getBreadCrumb.script"
@@ -6,7 +6,7 @@ import getMany from "./scripts/meidaManagerFolder/getMany.script"
 import getOneById from "./scripts/meidaManagerFolder/getOneById.script"
 import updateOne from "./scripts/meidaManagerFolder/updateOne.script"
 
-export default function makeBackendMediaManagerFolderMain(d: d_sub) {
+export default function makeBackendMediaManagerFolderMain(d: dependencies) {
 
   return {
     addOne: addOne(d),

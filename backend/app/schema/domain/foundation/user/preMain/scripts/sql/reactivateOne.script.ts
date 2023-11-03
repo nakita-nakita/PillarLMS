@@ -1,12 +1,12 @@
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = { id: string }
 
-export default function reactivate({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function reactivate(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<foundationUser | null>> => {
 
@@ -17,8 +17,8 @@ export default function reactivate({ domainDb, errorHandler, domainTransaction, 
       {
         where,
         returning: true,
-        transaction: domainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.domainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

@@ -1,11 +1,11 @@
-import { d_sub } from "../../../../../utils/types/dependencyInjection.types"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 import getAll from "./scripts/readAccessMain/getAll.script"
 import setList from "./scripts/readAccessMain/setList.script"
 
-export default function makeBackendSiteDesignerSettingReadAccessMain(dbSub: d_sub) {
+export default function makeBackendSiteDesignerSettingReadAccessMain(d: dependencies) {
 
   return {
-    getAll: getAll(dbSub),
-    setList: setList(dbSub),
+    getAll: getAll(d),
+    setList: setList(d),
   }
 }

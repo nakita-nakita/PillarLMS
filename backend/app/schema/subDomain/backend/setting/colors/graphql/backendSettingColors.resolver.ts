@@ -1,64 +1,34 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import graphqlError from "../../../../../utils/errorHandling/handers/graphql.errorhandler";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../utils/types/dependencyInjection.types";
+import graphqlError from "../../../../../utils/graphql/grarphql.errorhandler";
 import makeBackendSettingColorsMain from "../main/backendSettingColors.main";
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
 
-const makeDObj = async (): Promise<d_allDomain> => {
-  const domainDb = await emptyTestDomainDb();
-  const domainTransaction = await domainDb.transaction();
-  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const subDomainTransaction = await subDomainDb.transaction();
-
-  return {
-    domainDb,
-    domainTransaction,
-    subDomainDb,
-    subDomainTransaction,
-    errorHandler: sequelizeErrorHandler,
-    loggers: [console],
-  }
-}
 
 const backendSettingColorsGqlResolver = {
   Query: {
     backendSettingColors_getOne: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingColorsMain(d)
+      const main = makeBackendSettingColorsMain(ctx.d)
 
       const response = await main.getOne()
 
       if (response?.success) {
-        d.domainTransaction.commit()
-        d.subDomainTransaction.commit()
         return response.data?.dataValues
 
       } else {
-        d.domainTransaction.rollback()
-        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
     backendSettingColors_getOneRealTime: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingColorsMain(d)
+      const main = makeBackendSettingColorsMain(ctx.d)
 
       const response = await main.getOneRealTime({
         socketId: args.socketId
       })
 
       if (response?.success) {
-        d.domainTransaction.commit()
-        d.subDomainTransaction.commit()
         return response.data
 
       } else {
-        d.domainTransaction.rollback()
-        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },
@@ -66,8 +36,7 @@ const backendSettingColorsGqlResolver = {
   Mutation: {
     backendSettingColors_upsertOne: async (parent, args, ctx) => {
 
-      const d = await makeDObj()
-      const main = makeBackendSettingColorsMain(d)
+      const main = makeBackendSettingColorsMain(ctx.d)
 
       const response = await main.upsertOne({
         id: args.id,
@@ -138,13 +107,9 @@ const backendSettingColorsGqlResolver = {
       })
 
       if (response?.success) {
-        d.domainTransaction.commit()
-        d.subDomainTransaction.commit()
         return response.data.dataValues
 
       } else {
-        d.domainTransaction.rollback()
-        d.subDomainTransaction.rollback()
         return graphqlError(response)
       }
     },

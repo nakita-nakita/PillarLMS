@@ -1,16 +1,15 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import backendMediaManagerFile from "../../../../../../../models/subDomain/backend/mediaManager/backendMediaManagerFile.model";
-import { Op } from "sequelize";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   folderId?: string
 }
 
-export default function getMany({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getMany(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendMediaManagerFile>[]>> => {
 
@@ -19,8 +18,8 @@ export default function getMany({ subDomainDb, errorHandler, subDomainTransactio
         folderId: args.folderId || null,
         deletedAt: null,
       },
-      transaction: subDomainTransaction
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

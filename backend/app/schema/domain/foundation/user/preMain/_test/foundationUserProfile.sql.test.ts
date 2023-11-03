@@ -1,30 +1,18 @@
 import { v4 as uuidv4 } from "uuid"
-import { Sequelize } from "sequelize-typescript"
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb"
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler"
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger"
-import { d_domain } from "../../../../../utils/types/dependencyInjection.types"
 import makeFoundationUserProfileSql from "../foundationUserProfile.sql"
 import { CallByTypeEnum } from "../scripts/foundationUserProfileSql/upsertOne.script"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency"
 jest.setTimeout(100000)
 
 describe("test foundationUserProfile.sql.js", () => {
-  let d: d_domain
+  let d: dependencies
   let recordId: string
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
+    
+    d = await makeDTestObj()
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
   }, 100000)
 
   test("upsertOne: foundationUserProfile can add record.", async () => {

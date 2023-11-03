@@ -1,33 +1,18 @@
-import { Sequelize } from "sequelize-typescript";
-import emptyTestSubdomainDb from "../../../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../../utils/errorHandling/loggers/throwIt.logger";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import makeBackendSettingLinkMain from "../../backendSettingLink.main"
-import emptyTestDomainDb from "../../../../../../../../models/domain/_test/emptyTestDb";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { makeDTestObj } from "../../../../../../../utils/dependencies/makeTestDependency";
 jest.setTimeout(100000)
 
 
 describe("test backendSettingLink.main.js", () => {
-  let d: d_allDomain
+  let d: dependencies
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
 
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
+
   }, 100000)
 
   test("upsertOne: can edit record.", async () => {
@@ -60,7 +45,8 @@ describe("test backendSettingLink.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })
 

@@ -1,7 +1,7 @@
 import { FindAndCountOptions, Op } from "sequelize";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import { findAndCountAll } from "../../../../../../utils/types/sequelize.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type multiDatabaseUserSearch = {
   id?: string,
@@ -20,9 +20,9 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ subDomainDb, domainDb, errorHandler, domainTransaction, subDomainTransaction, loggers, }: d_allDomain) {
+export default function getManyWithPagination(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<multiDatabaseUserSearch>>> => {
     let { q, page, pageSize } = args
@@ -45,7 +45,7 @@ export default function getManyWithPagination({ subDomainDb, domainDb, errorHand
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
     };
 
     if (q) {
@@ -86,12 +86,12 @@ export default function getManyWithPagination({ subDomainDb, domainDb, errorHand
 
 
     let data = await sequelize.query(qry, {
-      domain: domainDb.getDatabaseName(),
-      subDomain: subDomainDb.getDatabaseName(),
+      domain: d.domainDb.getDatabaseName(),
+      subDomain: d.subDomainDb.getDatabaseName(),
       where: search.where.toString(),
       limit: search.limit.toString(),
       offset: search.offset.toString(),
-    }, { raw: true }).catch(error => errorHandler(error, loggers))
+    }, { raw: true }).catch(error => d.errorHandler(error, d.loggers))
 
     data.page = page + 1;
     data.pageSize = pageSize;

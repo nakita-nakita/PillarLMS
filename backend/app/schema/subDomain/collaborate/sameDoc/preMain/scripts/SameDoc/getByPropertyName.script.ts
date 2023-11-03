@@ -1,21 +1,19 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
-import makeMeeting from "../../../../_singleton/preMain/meetings.ram-cache";
-import { meetingType } from "../../../../_singleton/preMain/scripts/meetings/meeting.types";
 import _ from "lodash"
 import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
 import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
 import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   entity: string,
   name: string,
 }
 
-export default function getByPropertyName(d: d_allDomain) {
+export default function getByPropertyName(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimeColorAdapter | RealTimePictureSelectionAdapter | RealTimeFaviconSelectionAdapter>> => {
 

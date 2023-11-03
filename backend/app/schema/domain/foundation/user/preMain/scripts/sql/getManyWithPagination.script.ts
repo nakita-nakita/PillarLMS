@@ -1,8 +1,8 @@
 import { FindAndCountOptions, Op } from "sequelize";
 import foundationUser from "../../../../../../../models/domain/foundation/user/foundationUser.model";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
 import { findAndCountAll } from "../../../../../../utils/types/sequelize.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   q?: string
@@ -12,9 +12,9 @@ type input = {
   userId?: string
 }
 
-export default function getManyWithPagination({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function getManyWithPagination(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<foundationUser>>> => {
     let { q, page, pageSize, userId, roleId } = args
@@ -37,7 +37,7 @@ export default function getManyWithPagination({ domainDb, errorHandler, domainTr
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction: domainTransaction,
+      transaction: d.domainTransaction,
     };
 
     if (q) {
@@ -51,7 +51,7 @@ export default function getManyWithPagination({ domainDb, errorHandler, domainTr
       }
     }
 
-    let data: findAndCountAll<foundationUser> = await db.foundationUser.findAndCountAll(search).catch(error => errorHandler(error, loggers))
+    let data: findAndCountAll<foundationUser> = await db.foundationUser.findAndCountAll(search).catch(error => d.errorHandler(error, d.loggers))
     data.page = page + 1;
     data.pageSize = pageSize;
     data.pageCount = Math.ceil(

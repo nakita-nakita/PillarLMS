@@ -1,30 +1,16 @@
-import bcrypt from "bcryptjs"
-import { v4 as uuidv4 } from "uuid"
-import { Sequelize } from "sequelize-typescript"
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb"
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler"
-import throwIt from "../../../../../utils/errorHandling/loggers/throwIt.logger"
-import { d_domain } from "../../../../../utils/types/dependencyInjection.types"
 import makeFoundationUserSql from "../foundationUser.sql"
+import { makeDTestObj } from "../../../../../utils/dependencies/makeTestDependency"
+import { dependencies } from "../../../../../utils/dependencies/type/dependencyInjection.types"
 jest.setTimeout(100000)
 
 describe("test foundationUser.logic.js", () => {
-  let d: d_domain
+  let d: dependencies
   let recordId: string
 
   beforeAll(async () => {
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const domainTransaction = await domainDb.transaction();
+    
+    d = await makeDTestObj()
 
-    d = {
-      errorHandler: sequelizeErrorHandler,
-      domainDb,
-      domainTransaction,
-      loggers: [
-        console,
-        // throwIt,
-      ]
-    };
   }, 100000)
 
   test("getManyWithPagination: db foundationUsers no user seed for empty database.", async () => {

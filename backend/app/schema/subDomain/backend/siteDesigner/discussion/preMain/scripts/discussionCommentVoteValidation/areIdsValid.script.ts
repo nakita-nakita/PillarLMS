@@ -1,12 +1,12 @@
 import { Op } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { 
   idArray: string[] 
 }
 
-export default function areIdsValid({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function areIdsValid(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async ({ idArray }: input) => {
 
@@ -16,8 +16,8 @@ export default function areIdsValid({ subDomainDb, errorHandler, subDomainTransa
           [Op.in]: idArray
         }
       },
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

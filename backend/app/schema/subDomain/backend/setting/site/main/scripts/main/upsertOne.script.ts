@@ -1,9 +1,8 @@
 import { Model } from "sequelize";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingSite from "../../../../../../../../models/subDomain/backend/setting/backendSettingSite.model";
 import makeBackendSettingSiteSql from "../../../preMain/backendSettingSite.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
@@ -12,15 +11,9 @@ type input = {
   isReady: boolean
 }
 
-export default function upsertOne({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_allDomain) {
+export default function upsertOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingSite> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const sql = makeBackendSettingSiteSql(d);
     
     const response = await sql.upsertOne({
@@ -28,8 +21,7 @@ export default function upsertOne({ subDomainDb, errorHandler, subDomainTransact
       isReady: args.isReady,
       favicon: args.favicon,
       tab: args.tab,
-    })
-    // .catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

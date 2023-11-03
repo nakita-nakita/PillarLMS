@@ -1,4 +1,4 @@
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 
 type input = {
@@ -6,15 +6,15 @@ type input = {
   permissionId: string
 }
 
-export default function doesUserHavePermission({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function doesUserHavePermission(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<null>> => {
 
     const data: number = await db.backendUserManyPermission.count({
       where,
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

@@ -1,10 +1,9 @@
 import _ from "lodash";
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
-import { socketLookUpType } from "../socketLookUp/socketRecord.types";
 import makeBoardcasters from "../../broadcasters.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   socketId: string
@@ -14,7 +13,7 @@ type input = {
   oldPathname?: string, // without params
 }
 
-export default function changeUrlForUser(d: d_allDomain) {
+export default function changeUrlForUser(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<null>> => {
 

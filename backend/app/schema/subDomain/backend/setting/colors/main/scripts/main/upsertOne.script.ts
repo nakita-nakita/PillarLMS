@@ -1,8 +1,8 @@
 import { Model } from "sequelize";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeBackendSettingColorsSql from "../../../preMain/backendSettingColors.sql";
 import backendSettingColors from "../../../../../../../../models/subDomain/backend/setting/backendSettingColors.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id?: string
@@ -91,7 +91,7 @@ type input = {
 }
 
 
-export default function upsertOne(d: d_allDomain) {
+export default function upsertOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendSettingColors> | null>> => {
 
     const sql = makeBackendSettingColorsSql(d);

@@ -1,16 +1,14 @@
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
 import makeFoundationUserEntity from "../../../../../../domain/foundation/user"
-import { sendEmail } from "../../../../../../utils/third-parties/sendgrid/sendEmail"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
 import { isStringValidEmail } from "../../../../../../utils/stringHelpers/checkEmail"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type input = {
   email: string
 }
 
-export default function forgotPassword(d: d_domain) {
+export default function forgotPassword(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<null>> => {
 
     const { domainDb, errorHandler, domainTransaction, loggers } = d

@@ -1,20 +1,18 @@
 import { Model } from "sequelize";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import backendSettingLink from "../../../../../../../../models/subDomain/backend/setting/backendSettingLink.model";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
-export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
+export default function getOneById(d: dependencies) {
 
-  const db = subDomainDb.models;
+  const db = d.subDomainDb.models;
 
   return async (): Promise<returningSuccessObj<Model<backendSettingLink> | null>> => {
 
     const data = await db.backendSettingLink.findOne({
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
       order: [['createdAt', 'DESC']]
-    })
-    
-    // .catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

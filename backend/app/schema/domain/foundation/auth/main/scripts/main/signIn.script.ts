@@ -1,10 +1,9 @@
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types"
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types"
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler"
 import makeFoundationUserEntity from "../../../../../../domain/foundation/user"
 import makeFoundationAuthFunc from "../../../preMain/foundationAuth.func"
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func"
 import { isStringValidEmail } from "../../../../../../utils/stringHelpers/checkEmail"
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types"
 
 type returningTokenObj = {
   token: string
@@ -15,7 +14,7 @@ type input = {
   password: string,
 }
 
-export default function signIn(d: d_domain) {
+export default function signIn(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<returningTokenObj>> => {
     // if production, early return
     if (process.env.NODE_ENV === "production") {

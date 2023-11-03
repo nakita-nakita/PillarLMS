@@ -1,13 +1,10 @@
-import { Model } from "sequelize";
-import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
 import stringHelpers from "../../../../../../../utils/stringHelpers";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../../utils/types/sequelize.types";
 import backendSiteDesignerDiscussionComment from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussionComment.model";
 import makeBackendSiteDesignerDiscussionCommentSql from "../../../preMain/backendSiteDesignerDiscussionComment.sql";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   discussionId: string
@@ -16,15 +13,9 @@ type input = {
   pageSize?: number
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getManyWithPagination(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesignerDiscussionComment>>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler: sequelizeErrorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const discussionCommentSql = makeBackendSiteDesignerDiscussionCommentSql(d)
 
     //////////////////////////////////////
@@ -41,7 +32,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     const isIdStringFromUuid = stringHelpers.isStringValidUuid({
       str: args.discussionId
     })
-    
+
     if (!isIdStringFromUuid.result) {
       return endMainFromError({
         hint: "Datapoint 'discussionId' is not UUID format.",
@@ -59,7 +50,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
       page: args.page,
       pageSize: args.pageSize,
       q: args.q,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }

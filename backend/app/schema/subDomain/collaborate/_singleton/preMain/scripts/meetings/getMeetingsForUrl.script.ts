@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import { meetingType } from "./meeting.types";
@@ -7,7 +7,7 @@ type input = {
   url: string
 }
 
-export default function getMeetingsForUrl(d: d_allDomain) {
+export default function getMeetingsForUrl(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<meetingType[]>> => {
 

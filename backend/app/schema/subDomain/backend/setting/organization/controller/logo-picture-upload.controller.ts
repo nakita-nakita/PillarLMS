@@ -1,31 +1,11 @@
-import { Sequelize } from "sequelize-typescript";
-import { d_allDomain } from "../../../../../utils/types/dependencyInjection.types";
-import emptyTestDomainDb from "../../../../../../models/domain/_test/emptyTestDb";
-import emptyTestSubdomainDb from "../../../../../../models/subDomain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import uploaderAuth from "../../../../../../uploader/auth/isAuthenticated";
 import makeBackendSettingOrganizationMain from "../main/backendSettingOrganization.main";
 import path from "path";
 import fs from 'fs-extra'
 import util from 'util';
 import { previewLogoUpload } from "./preview-logo-upload.rules";
+import { makeDObj } from "../../../../../utils/dependencies/makeDependency";
 
-const makeDObj = async (): Promise<d_allDomain> => {
-
-  const domainDb: Sequelize = await emptyTestDomainDb();
-  const domainTransaction = await domainDb.transaction();
-  const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-  const subDomainTransaction = await subDomainDb.transaction();
-
-  return {
-    domainDb,
-    domainTransaction,
-    subDomainDb,
-    subDomainTransaction,
-    loggers: [console],
-    errorHandler: sequelizeErrorHandler,
-  }
-}
 
 export default ({ app }) => {
 
@@ -86,9 +66,6 @@ export default ({ app }) => {
       name: req.body.name,
       shouldApplyToTopNavMenu: req.body.shouldApplyToTopNavMenu,
     })
-
-    d.domainTransaction.commit()
-    d.subDomainTransaction.commit()
 
     return res.status(200).json({
       success: true,

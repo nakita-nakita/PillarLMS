@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   title: string
@@ -9,18 +9,18 @@ type input = {
   userId: string
 }
 
-export default function addOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  const db = subDomainDb.models;
+export default function addOne(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussion> | null>> => {
 
     const data = await db.backendSiteDesignerDiscussion.create(
       args,
       {
-        transaction: subDomainTransaction,
+        transaction: d.subDomainTransaction,
         returning: true,
       }
-    ).catch(error => errorHandler(error, loggers))
+    ).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

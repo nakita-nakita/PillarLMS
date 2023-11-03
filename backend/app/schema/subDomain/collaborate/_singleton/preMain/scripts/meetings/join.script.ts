@@ -1,4 +1,4 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../_singleton.ram-cache";
 import makeSocketLookUp from "../../socketLookUp.ram-cache";
@@ -10,7 +10,7 @@ type input = {
   meetingId: string,
 }
 
-export default function join(d: d_allDomain) {
+export default function join(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<meetingType>> => {
 

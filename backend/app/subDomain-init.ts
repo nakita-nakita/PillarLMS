@@ -1,17 +1,16 @@
 import { makeExecutableSchema } from "@graphql-tools/schema"
 import glob from "glob"
-import emptyTestSubDomainDb from "./models/subDomain/_test/emptyTestDb"
-import subDomainDb from "./models/subDomain/_test/emptyTestDb"
 import { graphqlHTTP } from "express-graphql"
 import { applyMiddleware } from "graphql-middleware"
 import { shield } from "graphql-shield"
 import expressPlayground from "graphql-playground-middleware-express"
+import { makeDObj } from "./schema/utils/dependencies/makeDependency"
 
 const subDomainInitScript = async ({ app, }) => {
   //////////////////////////////////////
   // Force database migrations if new database.
   // ===================================
-  const subDomainDb = await emptyTestSubDomainDb();
+  const d = await makeDObj();
 
 
 
@@ -128,6 +127,9 @@ const subDomainInitScript = async ({ app, }) => {
     graphqlHTTP({
       schema: schemaWithPermissions,
       graphiql: true,
+      context: {
+        d: await makeDObj(),
+      },
     })
   );
 

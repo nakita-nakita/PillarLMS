@@ -1,9 +1,9 @@
 import sequelize from "sequelize";
 import { FindAndCountOptions, Op } from "sequelize";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../../utils/types/sequelize.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 export enum backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum {
   // HOT = "HOT",
@@ -17,8 +17,8 @@ type input = {
   type: backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function getManyWithPagination(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesignerDiscussion>>> => {
     let { type, page, pageSize } = args
@@ -41,7 +41,7 @@ export default function getManyWithPagination({ subDomainDb, errorHandler, subDo
     let search: FindAndCountOptions = {
       offset: page * pageSize,
       limit: pageSize,
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
       order: [['createdAt', 'ASC']],
       attributes: [
         ...Object.keys(db.backendSiteDesignerDiscussion.rawAttributes),

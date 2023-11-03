@@ -1,7 +1,7 @@
-import { d_allDomain } from "../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../utils/dependencies/type/dependencyInjection.types";
 import makeBackendAuthMain from "./main/foundationAuth.main";
 
-export default function makeFoundationUserEntity(d: d_allDomain) {
+export default function makeFoundationUserEntity(d: dependencies) {
   const authMain = makeBackendAuthMain(d)
 
 

@@ -1,15 +1,15 @@
 import { Model } from "sequelize";
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { sequelize } from "../../../../../../../../models/domain";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { 
   id: string 
 }
 
-export default function getOneById({ subDomainDb, errorHandler, subDomainTransaction, loggers, }: d_sub) {
-  const db = subDomainDb.models;
+export default function getOneById(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (where: input): Promise<returningSuccessObj<Model<backendSiteDesignerDiscussion> | null>> => {
 
@@ -21,8 +21,8 @@ export default function getOneById({ subDomainDb, errorHandler, subDomainTransac
         [sequelize.fn('COALESCE', sequelize.literal('(SELECT SUM("backendSiteDesignerDiscussionVote"."vote") FROM "backendSiteDesignerDiscussionVote" WHERE "backendSiteDesignerDiscussionVote"."discussionId" = "backendSiteDesignerDiscussion"."id")'), 0), 'voteTotal'],
         [sequelize.fn('COALESCE', sequelize.literal('(SELECT COUNT("backendSiteDesignerDiscussionComment"."id") FROM "backendSiteDesignerDiscussionComment" WHERE "backendSiteDesignerDiscussionComment"."discussionId" = "backendSiteDesignerDiscussion"."id" AND "backendSiteDesignerDiscussionComment"."deletedAt" IS NULL) '), 0), 'commentsCount']
       ],
-      transaction: subDomainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.subDomainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

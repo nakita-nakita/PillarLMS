@@ -1,12 +1,12 @@
 import { Op } from "sequelize";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { idArray: string[] }
 
-export default function areIdsValid({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function areIdsValid(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async ({ idArray }: input): Promise<returningSuccessObj<null>> => {
 
@@ -16,8 +16,8 @@ export default function areIdsValid({ domainDb, errorHandler, domainTransaction,
           [Op.in]: idArray
         }
       },
-      transaction: domainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.domainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

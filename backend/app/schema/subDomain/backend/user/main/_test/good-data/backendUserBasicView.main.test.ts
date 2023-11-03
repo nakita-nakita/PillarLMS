@@ -1,46 +1,24 @@
-import { Sequelize } from "sequelize-typescript";
 import { v4 as uuidv4 } from "uuid"
 import { Model } from "sequelize";
-import { d_allDomain, d_domain } from "../../../../../../utils/types/dependencyInjection.types";
-import emptyTestDomainDb from "../../../../../../../models/domain/_test/emptyTestDb";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import throwIt from "../../../../../../utils/errorHandling/loggers/throwIt.logger";
 import makeBackendUserMain from "../../backendUser.main";
-import makeBackendRoleMain from "../../../../role/main/backendRole.main";
-import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
 import backendRole from "../../../../../../../models/subDomain/backend/role/backendRole.model";
-import emptyTestSubdomainDb from "../../../../../../../models/subDomain/_test/emptyTestDb";
-import makeBackendUserManyRoleMain from "../../backendUserManyRole.main";
 import { addOneBackendUserResponse } from "../../scripts/main/addOne.script";
 import makeBackendUserBasicViewMain from "../../backendUserBasicView.main";
-
-
+import { makeDTestObj } from "../../../../../../utils/dependencies/makeTestDependency";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 jest.setTimeout(100000)
 
 
 describe("test backendUserManyRole.main.js", () => {
-  let d: d_allDomain
-  let dd: d_domain
+  let d: dependencies
   let user: addOneBackendUserResponse
   let role: Model<backendRole>
 
   beforeAll(async () => {
-    const subDomainDb: Sequelize = await emptyTestSubdomainDb();
-    const domainDb: Sequelize = await emptyTestDomainDb();
-    const subDomainTransaction = await subDomainDb.transaction();
-    const domainTransaction = await domainDb.transaction();
-
-    d = {
-      domainDb,
-      domainTransaction,
-      subDomainDb,
-      subDomainTransaction,
-      errorHandler: sequelizeErrorHandler,
-      loggers: [
-        console,
-        throwIt,
-      ]
-    };
+    
+    d = await makeDTestObj()
+    d.domainTransaction = await d.domainDb.transaction()
+    d.subDomainTransaction = await d.subDomainDb.transaction()
 
     const backendUserMain = makeBackendUserMain(d)
 
@@ -69,7 +47,7 @@ describe("test backendUserManyRole.main.js", () => {
   })
 
   afterAll(async () => {
-    await d.subDomainTransaction.rollback();
-    await d.domainTransaction.rollback();
+    await d.domainTransaction.rollback()
+    await d.subDomainTransaction.rollback()
   })
 })

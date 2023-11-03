@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 import foundationUserProfile from "../../../../../../../models/domain/foundation/user/foundationUserProfile.model";
-import { d_domain } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 export enum CallByTypeEnum {
   EMAIL = "EMAIL",
@@ -22,27 +22,27 @@ type input = {
   labelColor?: string,
 }
 
-export default function upsertOne({ domainDb, errorHandler, domainTransaction, loggers, }: d_domain) {
+export default function upsertOne(d: dependencies) {
 
-  const db = domainDb.models;
+  const db = d.domainDb.models;
 
   return async ({ id, ...args }: input): Promise<returningSuccessObj<Model<foundationUserProfile> | null>> => {
 
     //count for 1
     const doesUserHaveAProfile = await db.foundationUserProfile.count({
       where: { id, },
-      transaction: domainTransaction,
-    }).catch(error => errorHandler(error, loggers))
+      transaction: d.domainTransaction,
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     //if not count, add instead
     if (!doesUserHaveAProfile) {
       const newData = await db.foundationUserProfile.create(
         { id, ...args },
         {
-          transaction: domainTransaction,
+          transaction: d.domainTransaction,
           returning: true,
         }
-      ).catch(error => errorHandler(error, loggers))
+      ).catch(error => d.errorHandler(error, d.loggers))
 
       return {
         success: true,
@@ -55,8 +55,8 @@ export default function upsertOne({ domainDb, errorHandler, domainTransaction, l
       {
         where: { id, },
         returning: true,
-        transaction: domainTransaction,
-      }).catch(error => errorHandler(error, loggers))
+        transaction: d.domainTransaction,
+      }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

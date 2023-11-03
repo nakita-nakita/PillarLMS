@@ -1,5 +1,4 @@
 import { Model } from "sequelize";
-import { d_allDomain, d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import makeSocketLookUp from "../../../../../../collaborate/_singleton/preMain/socketLookUp.ram-cache";
 import makeBackendSettingOrganizationSql from "../../../preMain/backendSettingOrganization.sql";
@@ -9,12 +8,13 @@ import RealTimeYDocAdapter from "../../../../../../collaborate/sameDoc/forUsage/
 import { RealTimeAdapterPropertyValue } from "../../../../../../collaborate/sameDoc/preMain/scripts/SameDoc/set.script";
 import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeSwitchAdapter";
 import RealTimePictureSelectionAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimePictureSelectionAdapter";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   socketId: string;
 }
 
-export default function getOneRealTime(d: d_allDomain) {
+export default function getOneRealTime(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<any>> => {
 
     const entity = 'backendSettingOrganization'

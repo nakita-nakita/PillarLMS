@@ -1,10 +1,10 @@
-import { d_allDomain } from "../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeMeeting from "../../../../_singleton/preMain/meetings.ram-cache";
 import { meetingType } from "../../../../_singleton/preMain/scripts/meetings/meeting.types";
 import _ from "lodash"
 
-export default function getAllMeetings(d: d_allDomain) {
+export default function getAllMeetings(d: dependencies) {
 
   return async (): Promise<returningSuccessObj<meetingType[]>> => {
 

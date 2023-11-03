@@ -1,27 +1,20 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
-import sequelizeErrorHandler from "../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
 import endMainFromError from "../../../../../../utils/graphql/endMainFromError.func";
 import makeBackendPermissionSql from "../../../preMain/backendPermission.sql";
 import makeBackendPermissionValidation from "../../../preMain/backendPermission.validation";
 import backendPermission from "../../../../../../../models/subDomain/backend/permission/backendPermission.model";
 import stringHelpers from "../../../../../../utils/stringHelpers";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string
   name: string
 }
 
-export default function updateOne({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function updateOne(d: dependencies) {
   return async (args: input): Promise<returningSuccessObj<Model<backendPermission> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const backendPermissionSql = makeBackendPermissionSql(d);
     const backendPermissionValidation = makeBackendPermissionValidation(d);
 
@@ -49,7 +42,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
 
     const isIdValid = await backendPermissionValidation.isIdValid({
       id: args.id
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (!isIdValid.result) {
       return endMainFromError({
@@ -74,7 +67,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
 
     const isNameTaken = await backendPermissionValidation.isNameTaken({
       name: args.name
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     if (isNameTaken.result) {
       return endMainFromError({
@@ -90,7 +83,7 @@ export default function updateOne({ subDomainDb, errorHandler, subDomainTransact
     const response = await backendPermissionSql.updateOne({
       id: args.id,
       name: args.name,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return response
   }

@@ -1,22 +1,22 @@
 import { Model } from "sequelize";
 import backendUser from "../../../../../../../models/subDomain/backend/user/backendUser.model";
-import { d_sub } from "../../../../../../utils/types/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
+import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = {
   id: string,
   isAdmin: boolean,
 }
 
-export default function addMany({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
-  const db = subDomainDb.models;
+export default function addMany(d: dependencies) {
+  const db = d.subDomainDb.models;
 
   return async (args: input[]): Promise<returningSuccessObj<Model<backendUser>[] | null>> => {
 
     const data = await db.backendUser.bulkCreate(args, {
-      transaction: subDomainTransaction,
+      transaction: d.subDomainTransaction,
       returning: true,
-    }).catch(error => errorHandler(error, loggers))
+    }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
       success: true,

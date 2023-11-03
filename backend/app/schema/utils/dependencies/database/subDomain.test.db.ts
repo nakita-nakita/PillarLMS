@@ -2,37 +2,35 @@ import { Sequelize } from "sequelize-typescript"
 import { Umzug, SequelizeStorage } from "umzug"
 import glob from "glob"
 
-let domainDb;
+let subDomainDb;
 
 const config = {
-  HOST: process.env.POSTGRES_HOST,
-  USER: process.env.POSTGRES_USER,
-  PASSWORD: process.env.POSTGRES_PASSWORD,
-  DB: process.env.POSTGRES_DOMAIN_DB,
+  HOST: process.env.POSTGRES_SUBDOMAIN_TEST_HOST,
+  USER: process.env.POSTGRES_SUBDOMAIN_TEST_USER,
+  PASSWORD: process.env.POSTGRES_SUBDOMAIN_TEST_PASSWORD,
+  DB: process.env.POSTGRES_SUBDOMAIN_TEST_DB,
   dialect: "postgres",
   pool: {
-    max: parseInt(process.env.POSTGRES_POOL_MAX),
-    min: parseInt(process.env.POSTGRES_POOL_MIN),
-    acquire: parseInt(process.env.POSTGRES_POOL_ACQUIRE),
-    idle: parseInt(process.env.POSTGRES_POOL_IDLE)
+    max: parseInt(process.env.POSTGRES_SUBDOMAIN_TEST_POOL_MAX),
+    min: parseInt(process.env.POSTGRES_SUBDOMAIN_TEST_POOL_MIN),
+    // acquire: parseInt(process.env.POSTGRES_TEST_POOL_ACQUIRE),
+    idle: parseInt(process.env.POSTGRES_SUBDOMAIN_TEST_POOL_IDLE)
   }
 }
 
-export default async function emptyTestDomainDb(): Promise<Sequelize> {
-  // option?: { newDb?: boolean }
+export default async function connectToSubDomainTestDb(): Promise<Sequelize> {
 
-
-  if (domainDb) {
-    return domainDb
+  if (subDomainDb) {
+    return subDomainDb
   }
 
   // Grad all files to build database
   let dbResolvers = [
-    ...glob.sync(`${__dirname}/../foundation/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../foundation/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../foundation/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../foundation/*/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../foundation/*/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*/*.model.ts`),
   ];
 
   let dbModels = dbResolvers.map(dbFilePath => {
@@ -51,7 +49,7 @@ export default async function emptyTestDomainDb(): Promise<Sequelize> {
       pool: {
         max: config.pool.max,
         min: config.pool.min,
-        acquire: config.pool.acquire,
+        // acquire: config.pool.acquire,
         idle: config.pool.idle
       }
     }
@@ -60,7 +58,7 @@ export default async function emptyTestDomainDb(): Promise<Sequelize> {
 
   // migration file implementation for basic database.
   const umzug = new Umzug({
-    migrations: { glob: 'app/models/domain/migrations/*.js' },
+    migrations: { glob: 'app/models/subDomain/migrations/*.js' },
     context: emptyTestDb.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize: emptyTestDb }),
     logger: console,
@@ -75,7 +73,7 @@ export default async function emptyTestDomainDb(): Promise<Sequelize> {
   //https://stackoverflow.com/questions/71730361/how-to-programatically-run-sequelize-seeders
 
   var seeder = new Umzug({
-    migrations: { glob: 'app/models/domain/seeders/emptyDb/*.js' },
+    migrations: { glob: 'app/models/subDomain/seeders/emptyDb/*.js' },
     context: emptyTestDb.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize: emptyTestDb, modelName: 'SequelizeData' }),
     logger: console,
@@ -83,6 +81,6 @@ export default async function emptyTestDomainDb(): Promise<Sequelize> {
 
   await seeder.up()
 
-  domainDb = emptyTestDb;
-  return domainDb
+  subDomainDb = emptyTestDb;
+  return subDomainDb
 }

@@ -1,6 +1,5 @@
 import backendSiteDesignerDiscussion from "../../../../../../../../models/subDomain/backend/siteDesigner/discussion/backendSiteDesignerDiscussion.model";
-import sequelizeErrorHandler from "../../../../../../../utils/errorHandling/handers/sequelize.errorHandler";
-import { d_sub } from "../../../../../../../utils/types/dependencyInjection.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { findAndCountAll } from "../../../../../../../utils/types/sequelize.types";
 import makeBackendSiteDesignerDiscussionSql from "../../../preMain/backendSiteDesignerDiscussion.sql";
@@ -12,22 +11,16 @@ type input = {
   type: backendSiteDesignerDiscussion_getManyWithPaginationTypeEnum
 }
 
-export default function getManyWithPagination({ subDomainDb, errorHandler, subDomainTransaction, loggers }: d_sub) {
+export default function getManyWithPagination(d: dependencies) {
   return async (args?: input): Promise<returningSuccessObj<findAndCountAll<backendSiteDesignerDiscussion> | null>> => {
 
-    const d = {
-      subDomainDb,
-      errorHandler,
-      subDomainTransaction,
-      loggers,
-    }
     const discussionSql = makeBackendSiteDesignerDiscussionSql(d)
 
     //////////////////////////////////////
     // Sql
     // ===================================
 
-    const response = await discussionSql.getManyWithPagination(args).catch(error => errorHandler(error, loggers))
+    const response = await discussionSql.getManyWithPagination(args).catch(error => d.errorHandler(error, d.loggers))
 
     return response;
   }
