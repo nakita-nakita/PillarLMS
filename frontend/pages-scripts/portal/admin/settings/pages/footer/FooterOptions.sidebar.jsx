@@ -1,9 +1,9 @@
 
 
 
-  'use client'
+'use client'
 
-import * as React from 'react';
+import React, { useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -40,17 +40,19 @@ import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.r
 import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
 import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+import SelectFooterModal from './modals/SelectFooter.modal';
+import { SettingFooterContext } from './context/SettingFooter.context';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
 // });
 
 function WebsiteSettingsFooterSidebar() {
-  const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
+  const { isSelectionModalOpened, setIsSelectionModalOpened } = useContext(SettingFooterContext)
+
   const theme = useTheme();
   const router = useRouter()
-
-  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
 
   const changeUrl = (href) => {
     // router.push(href)
@@ -88,6 +90,10 @@ function WebsiteSettingsFooterSidebar() {
     }
   }
 
+  const handleHeaderSelectionModal = () => {
+    setIsSelectionModalOpened(true)
+  }
+
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
       <SettingsBackButton
@@ -95,7 +101,7 @@ function WebsiteSettingsFooterSidebar() {
         href={"/portal/admin/settings/website/settings"}
       />
 
-      
+
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <HeaderRow label={"Select Footer"} />
       <ListItem>
@@ -103,7 +109,12 @@ function WebsiteSettingsFooterSidebar() {
 
           <p>Explore the marketplace to find your desired footer. Please note that available options might vary based on your header choice.</p>
           <br />
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleHeaderSelectionModal}
+          >
+
             Choose Footer
           </Button>
           <br />
@@ -132,7 +143,7 @@ function WebsiteSettingsFooterSidebar() {
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <TopBar />
-      <NavLinksWrapper />
+      {/* <NavLinksWrapper /> */}
       <RealTimeResortLockedRow />
 
 
@@ -214,6 +225,13 @@ function WebsiteSettingsFooterSidebar() {
 
 
 
+
+
+      <SelectFooterModal
+        modalHeader={"Select Footer"}
+        isOpened={isSelectionModalOpened}
+        onClose={() => setIsSelectionModalOpened(false)}
+      />
 
 
 

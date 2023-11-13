@@ -3,7 +3,7 @@ import DeviceEmulator from '@/components/previews/DeviceEmulators/DeviceEmulator
 
 function PreviewHeader() {
   return (
-    <DeviceEmulator src={"/preview/website/setting/header"} />
+    <DeviceEmulator src={"/portal/previewer/header"} />
   )
 }
 

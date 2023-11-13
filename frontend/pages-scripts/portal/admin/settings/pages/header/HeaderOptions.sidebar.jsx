@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react';
+import React, { useContext, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -15,7 +15,6 @@ import Badge from '@mui/material/Badge';
 import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/navigation';
-import WebsiteSettingLayoutContext from '@/layouts/websiteSettingsLayout/WebsiteSettingLayout.context';
 import SettingsBackButton from '../../components/BackButton/BackButton.component';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { realtimeLink } from '@/utils/realtime/link';
@@ -25,7 +24,7 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
-import NavLinks from '../../components/NavLinks/NavLinks.component';
+// import NavLinks from '../../components/NavLinks/NavLinks.component';
 // import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
 import TopBar from '../../components/NavLinks/TopBar.component';
 import dynamic from 'next/dynamic';
@@ -37,30 +36,19 @@ import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.r
 import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
+import { SettingHeaderContext } from './context/SettingHeader.context';
+import SelectHeaderModal from './modals/SelectHeader.modal';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
 // });
 
 function WebsiteSettingsHeaderSidebar() {
-  const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
   const theme = useTheme();
   const router = useRouter()
 
-  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
-
-  const changeUrl = (href) => {
-    // router.push(href)
-    realtimeLink({
-      to: href,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      meetingId: panelMeetingDoc.id,
-      router,
-      userId: idChip.id,
-      setPanelMeetingDoc,
-
-    })
-  }
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
+  const { isSelectionModalOpened, setIsSelectionModalOpened } = useContext(SettingHeaderContext)
 
   const circleStatus = {
     borderRadius: "50px",
@@ -85,6 +73,10 @@ function WebsiteSettingsHeaderSidebar() {
     }
   }
 
+  const handleHeaderSelectionModal = () => {
+    setIsSelectionModalOpened(true)
+  }
+
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
       <SettingsBackButton
@@ -92,7 +84,7 @@ function WebsiteSettingsHeaderSidebar() {
         href={"/portal/admin/settings/website/settings"}
       />
 
-      
+
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <HeaderRow label={"Select Header"} />
       <ListItem>
@@ -100,7 +92,11 @@ function WebsiteSettingsHeaderSidebar() {
 
           <p>Explore the marketplace to find your desired header. Please note that available options might vary based on your header choice.</p>
           <br />
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleHeaderSelectionModal}
+          >
             Choose Header
           </Button>
           <br />
@@ -131,7 +127,7 @@ function WebsiteSettingsHeaderSidebar() {
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <TopBar />
-      <NavLinksWrapper />
+      {/* <NavLinksWrapper /> */}
       <RealTimeResortLockedRow />
 
 
@@ -208,7 +204,11 @@ function WebsiteSettingsHeaderSidebar() {
 
 
 
-
+      <SelectHeaderModal
+        modalHeader={"Select Header"}
+        isOpened={isSelectionModalOpened}
+        onClose={() => setIsSelectionModalOpened(false)}
+      />
 
 
 

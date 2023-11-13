@@ -13,6 +13,7 @@ import PreviewColors from '@/pages-scripts/portal/admin/settings/pages/colors/Pr
 import WebsiteSettingsFooterSidebar from '@/pages-scripts/portal/admin/settings/pages/footer/FooterOptions.sidebar';
 import PreviewFooter from '@/pages-scripts/portal/admin/settings/pages/footer/PreviewFooter.component';
 import { LinksProvider } from '@/pages-scripts/portal/admin/settings/components/NavLinks/LinkContext';
+import SettingFooterProvider from '@/pages-scripts/portal/admin/settings/pages/footer/context/SettingFooter.context';
 
 const PageTemplateBuilder = () => {
   const { setTabs } = React.useContext(AdminLayoutContext)
@@ -33,11 +34,12 @@ const PageTemplateBuilder = () => {
 
 PageTemplateBuilder.getLayout = function getLayout(page) {
   return (
-    <AdminLayout isWebsiteSetting SideMenu={
-      <LinksProvider>
+    <AdminLayout
+      isWebsiteSetting
+      PageContext={SettingFooterProvider}
+      SideMenu={
         <WebsiteSettingsFooterSidebar />
-      </LinksProvider>
-    }>
+      }>
       {page}
     </AdminLayout>
   )

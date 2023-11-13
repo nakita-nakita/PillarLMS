@@ -1,0 +1,46 @@
+import React, { useContext } from 'react';
+import { Modal, Box, Typography, Button } from '@mui/material';
+import InformationModal from '@/components/modals/Information.modal';
+import DiamondModal from '@/components/modals/Diamond.modal';
+import BuiltInHeaderSideMenu from '../components/BuiltInSideMenu';
+import { SettingFooterContext } from '../context/SettingFooter.context';
+import BuiltInHeaderDisplay from '../components/BuiltInFooterDisplay';
+
+const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
+  const { builtInData, setBuiltInData, builtInMenuData, setBuiltInMenuData, } = useContext(SettingFooterContext)
+
+  const handleSelect = (favicon) => {
+    if (onSelect) {
+      onSelect(favicon)
+    }
+
+    if (onClose) {
+      onClose()
+    }
+  }
+
+  return (
+    <DiamondModal
+      isOpened={isOpened}
+      onClose={onClose}
+      modalHeader={"Select Footer"}
+      //   isOpened={open}
+      //   onClose={onClose}
+      //   header="Select Color Palette."
+      //   disableSubmit
+      builtInSidemenuComponent={<BuiltInHeaderSideMenu
+        builtInSites={builtInMenuData}
+
+      // primaryText={"primary"}
+      // secondaryText={"secondary"}
+
+      />}
+      builtInDisplayComponent={<BuiltInHeaderDisplay 
+      />}
+    >
+
+    </DiamondModal>
+  );
+};
+
+export default SelectFooterModal;
