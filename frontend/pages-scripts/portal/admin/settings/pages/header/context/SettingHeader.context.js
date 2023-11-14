@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { getSocketId } from '@/utils/realtime/socket';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import { getSettingHeaderBuiltInGraphQL } from '../store/settingHeaderBuiltIn_getMany.store';
 
 export const SettingHeaderContext = React.createContext();
 
@@ -67,7 +68,7 @@ export function SettingHeaderProvider({ children }) {
 
         for (let x = 0; x < components.length; x++) {
           const component = components[x];
-          
+
           returnArray.push(component)
         }
       }
@@ -105,81 +106,24 @@ export function SettingHeaderProvider({ children }) {
 
 
   useEffect(() => {
+    getSettingHeaderBuiltInGraphQL().then(response => {
+      const data = response.data.backendSettingHeaderBuiltIn_getMany
+      setBuiltInData(data)
 
-    const data = [
-      {
-        id: 1,
-        webAssetImport: "built-in/headers/simpleHeader",
+      const menuData = createMenuData([...data])
+      setBuiltInMenuData(menuData)
 
-        description: "This standout header effortlessly pairs a distinctive logo with customizable links, presenting a user-friendly design. The versatile dark background adds a touch of elegance, creating a memorable visual impression. Stylish social media icons provide a contemporary touch. For mobile users, the header adapts seamlessly, revealing a clean menu button for effortless navigation. Essentially, this header offers a visually appealing and easily adaptable introduction to your website, allowing users to tailor their experience.",
+      const flatten = flattenMenuData(menuData)
 
-        author: "built-in",
-        authorLink: null,
+      // setBuiltInDataFlat
+      setBuiltInDataFlat(flatten)      
+    })
 
-        name: "Simple Header",
-        category: "Plain Headers",
-        theme: "Default",
-
-      },
-      {
-        id: 2,
-        webAssetImport: "built-in/headers/dropDownMenu",
-
-        description: "This dynamic navigation bar seamlessly integrates a prominent logo with customizable links, offering a user-friendly and visually engaging design. The stylish dark background exudes a touch of sophistication, leaving a lasting visual impression. Social media icons, contributing a modern flair, are elegantly incorporated. The header seamlessly adapts for mobile users, revealing a clean menu button for effortless navigation. In essence, this navigation bar provides an interactive and adaptable introduction to your website, empowering users to customize their browsing experience.",
-
-        author: "built-in",
-        authorLink: null,
-
-        name: "Drop Down Menu",
-        category: "Plain Headers",
-        theme: "Default",
-
-      },
-      {
-        id: 3,
-        webAssetImport: "built-in/headers/eventWithSimpleHeader",
-
-        description: `This versatile web interface seamlessly combines an essential notification bar and a stylish navigation component, ensuring a user-friendly and engaging experience. The attention-grabbing notification bar, highlighted in a vibrant yellow hue, delivers important messages with clarity. The cohesive design integrates modern social media icons, providing a contemporary touch. The navigation bar is thoughtfully responsive, adjusting effortlessly for mobile users. In essence, this interface presents a harmonious blend of functionality and aesthetics, making it an ideal choice for a dynamic and visually appealing website.`,
-
-        author: "built-in",
-        authorLink: null,
-
-        name: "Notification With Simple Header",
-        category: "Top Notification",
-        theme: "Default",
-      },
-      {
-        id: 4,
-        webAssetImport: "built-in/headers/eventWithDropDownMenu",
-
-        description: `This versatile web interface seamlessly combines an essential notification bar and a stylish navigation component, ensuring a user-friendly and engaging experience. The attention-grabbing notification bar, delivers important messages with clarity. The cohesive design integrates modern social media icons, providing a contemporary touch. The navigation bar is thoughtfully responsive, adjusting effortlessly for mobile users. With dropdown menus for streamlined navigation, this interface presents a harmonious blend of functionality and aesthetics, making it an ideal choice for a dynamic and visually appealing website.`,
-
-        author: "built-in",
-        authorLink: null,
-
-        name: "Notification With Drop Down Menu",
-        category: "Top Notification",
-        theme: "Default",
-
-      },
-    ]
-
-    setBuiltInData(data)
-
-    const menuData = createMenuData([...data])
-    setBuiltInMenuData(menuData)
-    
-    const flatten = flattenMenuData(menuData)
-    
-    // setBuiltInDataFlat
-    setBuiltInDataFlat(flatten)
-    console.log('flatten', flatten)
-    
   }, [])
 
   useEffect(() => {
     if (builtInMenuData[0]) {
-      
+
       selectComponent({
         id: builtInMenuDataFlat[0].id
       })
