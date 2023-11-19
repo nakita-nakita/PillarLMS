@@ -7,12 +7,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Checkbox from '@mui/material/Checkbox';
 import { useTheme } from '@mui/material';
-import { SettingFooterContext } from '../context/SettingFooter.context';
+import { SettingHeaderContext } from '../context/SettingHeader.context';
 
 const RenderSiteSideMenuSelection = ({ site, onComponentSelect }) => {
   const theme = useTheme();
   
-  const { selectComponent, builtInDataSelected } = useContext(SettingFooterContext)
+  const { selectComponent, builtInDataSelected } = useContext(SettingHeaderContext)
   
   console.log('site', site.id, builtInDataSelected)
   const [open, setOpen] = useState(true);

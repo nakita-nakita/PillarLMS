@@ -5,6 +5,7 @@ import { SettingFooterContext } from '../context/SettingFooter.context';
 import DeviceEmulator from '@/components/previews/DeviceEmulators/DeviceEmulators.component';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import DiamondDeviceEmulator from '@/components/previews/DeviceEmulators/DiamondDeviceEmulators';
 
 const BuiltInFooterDisplay = () => {
   const { builtInDataSelected, selectComponent, getNextComponent, getPreviousComponent } = useContext(SettingFooterContext);
@@ -45,9 +46,9 @@ const BuiltInFooterDisplay = () => {
 
   return (
     <div>
-      <SelectionHeader header={builtInDataSelected.name} subheader={builtInDataSelected.author} 
-      onLeftButtonClick={handleLeftClick}
-      onRightButtonClick={handleRightClick}
+      <SelectionHeader header={builtInDataSelected.name} subheader={builtInDataSelected.author}
+        onLeftButtonClick={handleLeftClick}
+        onRightButtonClick={handleRightClick}
       />
 
       {/* Show a Component (Background Color Div) */}
@@ -55,10 +56,12 @@ const BuiltInFooterDisplay = () => {
         <Typography>Show a Component</Typography>
       </Box> */}
 
-      <DeviceEmulator
-        src={`/portal/previewer/component?webAssetImport=${builtInDataSelected.webAssetImport}`}
-      />
-      {/* <iframe
+      <div className='p-4'>
+
+        <DiamondDeviceEmulator
+          src={`/portal/previewer/component?webAssetImport=${builtInDataSelected.webAssetImport}`}
+        />
+        {/* <iframe
         ref={iframeRef}
         src={`/portal/previewer/component?webAssetImport=${builtInDataSelected.webAssetImport}`}
         width="100%"
@@ -71,46 +74,53 @@ const BuiltInFooterDisplay = () => {
         }}
       /> */}
 
-      {/* Details */}
-      <br />
-      <div style={{padding: "20px"}}>
-        <Stack spacing={2} direction="row">
-          {/* <Button variant="contained" color="secondary">
+        {/* Details */}
+        <br />
+        <div style={{ padding: "20px" }}>
+          <Stack spacing={2} direction="row">
+            {/* <Button variant="contained" color="secondary">
             Select
           </Button> */}
-          <Button variant="contained" color="primary">
-            Select and Close
-          </Button>
-        </Stack>
-        <br />
-        <Typography variant="body1">
-          <strong>Description:</strong>
+            <Button variant="contained" color="primary">
+              Select and Close
+            </Button>
+          </Stack>
           <br />
-          {builtInDataSelected?.description}
-        </Typography>
-        <br />
-        <Typography variant="body1">
-          <strong>Author:</strong> {builtInDataSelected?.author}
-        </Typography>
-        {builtInDataSelected?.authorLink && (
           <Typography variant="body1">
-            <strong>Author Link:</strong> {builtInDataSelected.authorLink}
+            <strong>Description:</strong>
+            <br />
+            {builtInDataSelected?.description}
           </Typography>
-        )}
-        <br />
-        <Typography variant="body1">
-          <strong>Name:</strong> {builtInDataSelected?.name}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Category:</strong> {builtInDataSelected?.category}
-        </Typography>
-        <Typography variant="body1">
-          <strong>Theme:</strong> {builtInDataSelected?.theme}
-        </Typography>
-        <br />
-        <br />
-        <br />
+          <br />
+          <Typography variant="body1">
+            <strong>Author:</strong> {builtInDataSelected?.author}
+          </Typography>
+          {builtInDataSelected?.authorLink && (
+            <Typography variant="body1">
+              <strong>Author Link:</strong> {builtInDataSelected.authorLink}
+            </Typography>
+          )}
+          <br />
+          <Typography variant="body1">
+            <strong>Name:</strong> {builtInDataSelected?.name}
+          </Typography>
+          {builtInDataSelected?.category && (
 
+            <Typography variant="body1">
+              <strong>Category:</strong> {builtInDataSelected.category}
+            </Typography>
+          )}
+          {builtInDataSelected?.theme && (
+
+            <Typography variant="body1">
+              <strong>Theme:</strong> {builtInDataSelected.theme}
+            </Typography>
+          )}
+          <br />
+          <br />
+          <br />
+
+        </div>
       </div>
     </div>
   );

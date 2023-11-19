@@ -18,64 +18,64 @@ export function SettingFooterProvider({ children }) {
 
   const [builtInData, setBuiltInData] = useState([])
   const [builtInDataSelected, setBuiltInDataSelected] = useState({})
-  const [builtInMenuData, setBuiltInMenuData] = useState([])
-  const [builtInMenuDataFlat, setBuiltInDataFlat] = useState([])
+  // const [builtInMenuData, setBuiltInMenuData] = useState([])
+  // const [builtInMenuDataFlat, setBuiltInDataFlat] = useState([])
 
-  const createMenuData = (data) => {
-    const transformedData = [];
+  // const createMenuData = (data) => {
+  //   const transformedData = [];
 
-    // Create a map to group components by theme and category
-    const componentMap = new Map();
+  //   // Create a map to group components by theme and category
+  //   const componentMap = new Map();
 
-    data.forEach((component) => {
-      const { theme, category, ...rest } = component;
-      const themeKey = theme || 'Default';
-      const categoryKey = category || 'Uncategorized';
+  //   data.forEach((component) => {
+  //     const { theme, category, ...rest } = component;
+  //     const themeKey = theme || 'Default';
+  //     const categoryKey = category || 'Uncategorized';
 
-      if (!componentMap.has(themeKey)) {
-        componentMap.set(themeKey, new Map());
-      }
+  //     if (!componentMap.has(themeKey)) {
+  //       componentMap.set(themeKey, new Map());
+  //     }
 
-      if (!componentMap.get(themeKey).has(categoryKey)) {
-        componentMap.get(themeKey).set(categoryKey, []);
-      }
+  //     if (!componentMap.get(themeKey).has(categoryKey)) {
+  //       componentMap.get(themeKey).set(categoryKey, []);
+  //     }
 
-      componentMap.get(themeKey).get(categoryKey).push({ ...rest });
-    });
+  //     componentMap.get(themeKey).get(categoryKey).push({ ...rest });
+  //   });
 
-    // Convert the map to the desired array structure
-    componentMap.forEach((categories, theme) => {
-      const themeObject = { label: theme, category: [] };
+  //   // Convert the map to the desired array structure
+  //   componentMap.forEach((categories, theme) => {
+  //     const themeObject = { label: theme, category: [] };
 
-      categories.forEach((components, category) => {
-        const categoryObject = { label: category, components: [...components] };
-        themeObject.category.push(categoryObject);
-      });
+  //     categories.forEach((components, category) => {
+  //       const categoryObject = { label: category, components: [...components] };
+  //       themeObject.category.push(categoryObject);
+  //     });
 
-      transformedData.push(themeObject);
-    });
+  //     transformedData.push(themeObject);
+  //   });
 
-    return transformedData;
-  }
+  //   return transformedData;
+  // }
 
-  const flattenMenuData = (data) => {
-    let returnArray = []
+  // const flattenMenuData = (data) => {
+  //   let returnArray = []
 
-    for (let i = 0; i < data.length; i++) {
-      const { category } = data[i]
-      for (let y = 0; y < category.length; y++) {
-        const { components } = category[y];
+  //   for (let i = 0; i < data.length; i++) {
+  //     const { category } = data[i]
+  //     for (let y = 0; y < category.length; y++) {
+  //       const { components } = category[y];
 
-        for (let x = 0; x < components.length; x++) {
-          const component = components[x];
+  //       for (let x = 0; x < components.length; x++) {
+  //         const component = components[x];
           
-          returnArray.push(component)
-        }
-      }
-    }
+  //         returnArray.push(component)
+  //       }
+  //     }
+  //   }
 
-    return returnArray
-  }
+  //   return returnArray
+  // }
 
   const selectComponent = ({ id }) => {
     const data = builtInData.filter((component) => component.id === id)[0];
@@ -84,23 +84,23 @@ export function SettingFooterProvider({ children }) {
   }
 
   const getNextComponent = () => {
-    const index = builtInMenuDataFlat.findIndex((component) => component.id === builtInDataSelected.id);
+    const index = builtInData.findIndex((component) => component.id === builtInDataSelected.id);
 
-    if (index !== -1 && index < builtInMenuDataFlat.length - 1) {
-      return builtInMenuDataFlat[index + 1];
+    if (index !== -1 && index < builtInData.length - 1) {
+      return builtInData[index + 1];
     }
 
-    return builtInMenuDataFlat[0];
+    return builtInData[0];
   };
 
   const getPreviousComponent = () => {
-    const index = builtInMenuDataFlat.findIndex((component) => component.id === builtInDataSelected.id);
+    const index = builtInData.findIndex((component) => component.id === builtInDataSelected.id);
 
     if (index !== -1 && index > 0) {
-      return builtInMenuDataFlat[index - 1];
+      return builtInData[index - 1];
     }
 
-    return builtInMenuDataFlat[builtInMenuDataFlat.length - 1]; // Return the last component if the component with the given ID is not found or if it's the first component
+    return builtInData[builtInData.length - 1]; // Return the last component if the component with the given ID is not found or if it's the first component
   };
 
 
@@ -111,26 +111,26 @@ export function SettingFooterProvider({ children }) {
       
       setBuiltInData(data)
       
-      const menuData = createMenuData([...data])
-      setBuiltInMenuData(menuData)
+      // const menuData = createMenuData([...data])
+      // setBuiltInMenuData(menuData)
       
-      const flatten = flattenMenuData(menuData)
+      // const flatten = flattenMenuData(menuData)
       
-      // setBuiltInDataFlat
-      setBuiltInDataFlat(flatten)
+      // // setBuiltInDataFlat
+      // setBuiltInDataFlat(flatten)
 
     })    
   }, [])
 
   useEffect(() => {
-    if (builtInMenuData[0]) {
+    if (builtInData[0]) {
       
       selectComponent({
-        id: builtInMenuDataFlat[0].id
+        id: builtInData[0].id
       })
 
     }
-  }, [builtInMenuData])
+  }, [builtInData])
 
 
   // useEffect(() => {
@@ -164,8 +164,8 @@ export function SettingFooterProvider({ children }) {
       isSelectionModalOpened, setIsSelectionModalOpened,
       builtInData, setBuiltInData,
       builtInDataSelected, setBuiltInDataSelected,
-      builtInMenuData, setBuiltInMenuData,
-      builtInMenuDataFlat, setBuiltInDataFlat,
+      // builtInMenuData, setBuiltInMenuData,
+      // builtInMenuDataFlat, setBuiltInDataFlat,
 
       selectComponent,
       getNextComponent,

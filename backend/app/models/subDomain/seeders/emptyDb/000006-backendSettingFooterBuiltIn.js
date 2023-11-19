@@ -4,17 +4,15 @@ async function up({ context: queryInterface }) {
   await queryInterface.bulkInsert('backendSettingFooterBuiltIn', [
     {
       id: uuidv4(),
-      webAssetImport: "built-in/footers/simpleFooter",
+      webAssetImport: "built-in/footers/lite/Entry",
       menuJsonB: JSON.stringify({test: "test"}),
 
-      description: "This modern footer design blends a clean layout with essential elements—logo, social links, and quick navigation. It ensures a polished and engaging online presence, perfect for streamlined user experience on your website.",
+      description: `Lite offers a minimalist approach, providing a clean and simple footer for your web application. Streamline your interface with a sleek design that focuses on essential elements. Perfect for a modern and uncluttered user experience, Lite adds a touch of elegance to your website's bottom section, ensuring a seamless and stylish presentation.`,
 
       author: "built-in",
       authorLink: null,
 
-      name: "Simple Footer",
-      category: "Plain Footer",
-      theme: "Default",
+      name: "Lite",
 
       //standard
       createdAt: new Date(),
@@ -22,17 +20,15 @@ async function up({ context: queryInterface }) {
     },
     {
       id: uuidv4(),
-      webAssetImport: "built-in/footers/listFooter",
+      webAssetImport: "built-in/footers/smallBusiness/Entry",
       menuJsonB: JSON.stringify({test: "test"}),
 
-      description: "This footer combines a sleek design with essential elements for a polished online presence. Featuring your logo, social links, and quick navigation, it ensures a user-friendly experience. The clean layout also includes a resources section, neatly organized with categories and subcategories. Perfect for a modern and organized website.",
+      description: `Small Business is a feature-rich footer tailored for businesses seeking a professional online presence. With a striking blue header inviting users to get in touch, it seamlessly integrates essential contact information, social media links, and example links. The resource section offers a categorized collection of links, making it an ideal choice for small businesses looking to provide a comprehensive and visually appealing footer.`,
 
       author: "built-in",
       authorLink: null,
 
-      name: "List Footer",
-      category: "Plain Footer",
-      theme: "Default",
+      name: "Small Business",
 
       //standard
       createdAt: new Date(),
@@ -40,35 +36,15 @@ async function up({ context: queryInterface }) {
     },
     {
       id: uuidv4(),
-      webAssetImport: "built-in/footers/ctaSimpleFooter",
+      webAssetImport: "built-in/footers/linkCollection/Entry",
       menuJsonB: JSON.stringify({test: "test"}),
 
-      description: `This footer design seamlessly integrates a vibrant call-to-action section with a captivating "Contact Us Today" message, encouraging users to reach out for assistance. Complemented by a dynamic blue background and a clear "Get in Touch" button, this section is both visually appealing and functional. The overall footer maintains a clean and organized layout, featuring your logo, social media links, company information, and quick navigation links. It's a balanced combination of engagement and functionality, making it an excellent choice for an impactful website footer.`,
+      description: `"Link Collection is your curated set of organized resources. Explore various categories and discover valuable subtopics with ease. Whether you're navigating through different subjects or finding specific information, Link Collection simplifies the process. It's your go-to hub for accessing a range of helpful links presented in a user-friendly format."`,
 
       author: "built-in",
       authorLink: null,
 
-      name: "CTA With Simple Footer",
-      category: "Call to action",
-      theme: "Default",
-
-      //standard
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: uuidv4(),
-      webAssetImport: "built-in/footers/ctaListFooter",
-      menuJsonB: JSON.stringify({test: "test"}),
-
-      description: `This footer design seamlessly integrates a vibrant call-to-action section, inviting users to "Contact Us Today" with a clear and concise message. The blue-themed section is visually striking, complemented by a button for easy engagement. The overall footer maintains a clean and organized layout, featuring your logo, social media links, company information, quick navigation links, and a resourceful section with categorized subtopics. It offers a perfect blend of engagement and functionality, making it an ideal choice for a modern and impactful website footer.`,
-
-      author: "built-in",
-      authorLink: null,
-
-      name: "CTA With List Footer",
-      category: "Call to action",
-      theme: "Default",
+      name: "Link Collection",
 
       //standard
       createdAt: new Date(),
@@ -81,16 +57,13 @@ async function down({ context: queryInterface }) {
   await queryInterface.bulkDelete('backendSettingFooterBuiltIn', {
     [Op.or]: [
       {
-        webAssetImport: "built-in/footers/simpleFooter",
+        webAssetImport: "built-in/footers/smallBusiness/Entry",
       },
       {
-        webAssetImport: "built-in/footers/listFooter",
+        webAssetImport: "built-in/footers/links/Entry",
       },
       {
-        webAssetImport: "built-in/footers/ctaSimpleFooter",
-      },
-      {
-        webAssetImport: "built-in/footers/ctaListFooter",
+        webAssetImport: "built-in/footers/lite/Entry",
       },
     ]
   });

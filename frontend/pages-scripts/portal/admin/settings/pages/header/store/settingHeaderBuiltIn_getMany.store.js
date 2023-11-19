@@ -14,8 +14,6 @@ export const getSettingHeaderBuiltInGraphQL = () => {
           author
           authorLink
           name
-          category
-          theme
         }
       }
       `,

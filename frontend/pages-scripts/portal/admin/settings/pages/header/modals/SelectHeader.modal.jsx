@@ -7,7 +7,7 @@ import { SettingHeaderContext } from '../context/SettingHeader.context';
 import BuiltInHeaderDisplay from '../components/BuiltInHeaderDisplay';
 
 const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
-  const { builtInData, setBuiltInData, builtInMenuData, setBuiltInMenuData, } = useContext(SettingHeaderContext)
+  const { builtInData } = useContext(SettingHeaderContext)
 
   const handleSelect = (favicon) => {
     if (onSelect) {
@@ -29,13 +29,13 @@ const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
       //   header="Select Color Palette."
       //   disableSubmit
       builtInSidemenuComponent={<BuiltInHeaderSideMenu
-        builtInSites={builtInMenuData}
+        builtInSites={builtInData}
 
       // primaryText={"primary"}
       // secondaryText={"secondary"}
 
       />}
-      builtInDisplayComponent={<BuiltInHeaderDisplay 
+      builtInDisplayComponent={<BuiltInHeaderDisplay
       />}
     >
 

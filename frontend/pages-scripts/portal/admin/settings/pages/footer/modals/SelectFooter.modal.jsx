@@ -29,7 +29,7 @@ const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
       //   header="Select Color Palette."
       //   disableSubmit
       builtInSidemenuComponent={<BuiltInHeaderSideMenu
-        builtInSites={builtInMenuData}
+        builtInSites={builtInData}
 
       // primaryText={"primary"}
       // secondaryText={"secondary"}

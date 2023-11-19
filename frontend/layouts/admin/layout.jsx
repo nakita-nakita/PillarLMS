@@ -40,6 +40,16 @@ let theme = createTheme({
       // main: '#009be5',
       dark: '#908D7D',
     },
+    night: {
+      light: '#E6E6E6',  // Light gray
+      main: '#333333',   // Dark gray
+      dark: '#000000',   // Black
+    },
+    day: {
+      light: '#FFFFFF',  // White
+      main: '#FFFFFF',   // White
+      dark: '#FFFFFF',   // White
+    },
   },
   typography: {
     h5: {

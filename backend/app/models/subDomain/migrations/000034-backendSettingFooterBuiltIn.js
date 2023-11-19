@@ -32,12 +32,6 @@ async function up({ context: queryInterface }) {
     name: {
       type: sequelize.STRING,
     },
-    category: {
-      type: sequelize.STRING,
-    },
-    theme: {
-      type: sequelize.STRING,
-    },
 
     //standard
     createdAt: {

@@ -14,8 +14,6 @@ export const getSettingFooterBuiltInGraphQL = () => {
           author
           authorLink
           name
-          category
-          theme
         }
       }
       `,

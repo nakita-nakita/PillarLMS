@@ -26,8 +26,6 @@ const backendSettingHeaderGraphQLType = gql`
     author: String,
     authorLink: String,
     name: String,
-    category: String,
-    theme: String,
   }
 
   type Query {

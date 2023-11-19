@@ -84,10 +84,46 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
             m: 0,
           }}
         >
-          <Tab label="Built-in" />
-          <Tab label="Library" />
-          <Tab label="Favorites" />
-          <Tab label="New" />
+          <Tab
+            label="Built-in"
+            sx={{
+              color: theme.palette.grey[200],
+              minWidth: 'auto',
+              '&.Mui-selected': {
+                color: theme.palette.common.white,
+              },
+            }}
+          />
+          <Tab
+            label="Library"
+            sx={{
+              color: theme.palette.grey[200],
+              minWidth: 'auto',
+              '&.Mui-selected': {
+                color: theme.palette.common.white,
+              },
+            }}
+          />
+          <Tab
+            label="Favorites"
+            sx={{
+              color: theme.palette.grey[200],
+              minWidth: 'auto',
+              '&.Mui-selected': {
+                color: theme.palette.common.white,
+              },
+            }}
+          />
+          <Tab
+            label="New"
+            sx={{
+              color: theme.palette.grey[200],
+              minWidth: 'auto',
+              '&.Mui-selected': {
+                color: theme.palette.common.white,
+              },
+            }}
+          />
         </Tabs>
 
         {/* Row 3: Left and Right Columns */}
@@ -98,7 +134,7 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
           <Grid container spacing={2}>
             {/* Left column for selection */}
             <Grid item xs={3} sx={{
-              height: "calc(100vh - 112px)",
+              height: "calc(100vh - 96px)",
             }}>
 
               {/* Left Column */}
@@ -122,7 +158,9 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
             {/* Right column for the main display */}
             <Grid item xs={9} sx={{
               overflowY: 'auto',
-              height: "calc(100vh - 112px)",
+              height: "calc(100vh - 96px)",
+              borderLeft: `1px solid ${theme.palette.grey[400]}`,
+              padding: "0 !important",
             }}>
 
               {/* Right Column */}

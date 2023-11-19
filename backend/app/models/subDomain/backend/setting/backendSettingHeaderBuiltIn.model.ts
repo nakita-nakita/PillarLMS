@@ -49,14 +49,4 @@ export default class backendSettingHeaderBuiltIn extends Model {
   })
   name: string;
 
-  @Column({
-    type: sequelize.STRING,
-  })
-  category: string;
-
-  @Column({
-    type: sequelize.STRING,
-  })
-  theme: string;
-
 }
