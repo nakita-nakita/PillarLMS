@@ -242,16 +242,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor1 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor1Light1(chroma(color).brighten(1).hex());
-      setColor1Light2(chroma(color).brighten(0.75).hex());
-      setColor1Light3(chroma(color).brighten(0.5).hex());
-      setColor1Light4(chroma(color).brighten(0.25).hex());
+      setColor1Light1(chroma(color).brighten(2).hex());
+      setColor1Light2(chroma(color).brighten(1.5).hex());
+      setColor1Light3(chroma(color).brighten(1).hex());
+      setColor1Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor1Dark1(chroma(color).darken(0.25).hex());
-      setColor1Dark2(chroma(color).darken(0.5).hex());
-      setColor1Dark3(chroma(color).darken(0.75).hex());
-      setColor1Dark4(chroma(color).darken(1).hex());
+      setColor1Dark1(chroma(color).darken(0.5).hex());
+      setColor1Dark2(chroma(color).darken(2).hex());
+      setColor1Dark3(chroma(color).darken(1.5).hex());
+      setColor1Dark4(chroma(color).darken(2).hex());
 
 
       // set Color
@@ -275,16 +275,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor2 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor2Light1(chroma(color).brighten(1).hex());
-      setColor2Light2(chroma(color).brighten(0.75).hex());
-      setColor2Light3(chroma(color).brighten(0.5).hex());
-      setColor2Light4(chroma(color).brighten(0.25).hex());
+      setColor2Light1(chroma(color).brighten(2).hex());
+      setColor2Light2(chroma(color).brighten(1.5).hex());
+      setColor2Light3(chroma(color).brighten(1).hex());
+      setColor2Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor2Dark1(chroma(color).darken(0.25).hex());
-      setColor2Dark2(chroma(color).darken(0.5).hex());
-      setColor2Dark3(chroma(color).darken(0.75).hex());
-      setColor2Dark4(chroma(color).darken(1).hex());
+      setColor2Dark1(chroma(color).darken(0.5).hex());
+      setColor2Dark2(chroma(color).darken(1).hex());
+      setColor2Dark3(chroma(color).darken(1.5).hex());
+      setColor2Dark4(chroma(color).darken(2).hex());
 
 
       // set Color
@@ -308,16 +308,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor3 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor3Light1(chroma(color).brighten(1).hex());
-      setColor3Light2(chroma(color).brighten(0.75).hex());
-      setColor3Light3(chroma(color).brighten(0.5).hex());
-      setColor3Light4(chroma(color).brighten(0.25).hex());
+      setColor3Light1(chroma(color).brighten(2).hex());
+      setColor3Light2(chroma(color).brighten(1.5).hex());
+      setColor3Light3(chroma(color).brighten(1).hex());
+      setColor3Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor3Dark1(chroma(color).darken(0.25).hex());
-      setColor3Dark2(chroma(color).darken(0.5).hex());
-      setColor3Dark3(chroma(color).darken(0.75).hex());
-      setColor3Dark4(chroma(color).darken(1).hex());
+      setColor3Dark1(chroma(color).darken(0.5).hex());
+      setColor3Dark2(chroma(color).darken(1).hex());
+      setColor3Dark3(chroma(color).darken(1.5).hex());
+      setColor3Dark4(chroma(color).darken(2).hex());
 
 
       // set Color
@@ -341,16 +341,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor4 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor4Light1(chroma(color).brighten(1).hex());
-      setColor4Light2(chroma(color).brighten(0.75).hex());
-      setColor4Light3(chroma(color).brighten(0.5).hex());
-      setColor4Light4(chroma(color).brighten(0.25).hex());
+      setColor4Light1(chroma(color).brighten(2).hex());
+      setColor4Light2(chroma(color).brighten(1.5).hex());
+      setColor4Light3(chroma(color).brighten(1).hex());
+      setColor4Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor4Dark1(chroma(color).darken(0.25).hex());
-      setColor4Dark2(chroma(color).darken(0.5).hex());
-      setColor4Dark3(chroma(color).darken(0.75).hex());
-      setColor4Dark4(chroma(color).darken(1).hex());
+      setColor4Dark1(chroma(color).darken(0.5).hex());
+      setColor4Dark2(chroma(color).darken(1).hex());
+      setColor4Dark3(chroma(color).darken(1.5).hex());
+      setColor4Dark4(chroma(color).darken(2).hex());
 
 
       // set Color
@@ -374,16 +374,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor5 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor5Light1(chroma(color).brighten(1).hex());
-      setColor5Light2(chroma(color).brighten(0.75).hex());
-      setColor5Light3(chroma(color).brighten(0.5).hex());
-      setColor5Light4(chroma(color).brighten(0.25).hex());
+      setColor5Light1(chroma(color).brighten(2).hex());
+      setColor5Light2(chroma(color).brighten(1.5).hex());
+      setColor5Light3(chroma(color).brighten(1).hex());
+      setColor5Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor5Dark1(chroma(color).darken(0.25).hex());
-      setColor5Dark2(chroma(color).darken(0.5).hex());
-      setColor5Dark3(chroma(color).darken(0.75).hex());
-      setColor5Dark4(chroma(color).darken(1).hex());
+      setColor5Dark1(chroma(color).darken(0.5).hex());
+      setColor5Dark2(chroma(color).darken(1).hex());
+      setColor5Dark3(chroma(color).darken(1.5).hex());
+      setColor5Dark4(chroma(color).darken(2).hex());
 
 
       // set Color
@@ -407,16 +407,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor6 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor6Light1(chroma(color).brighten(1).hex());
-      setColor6Light2(chroma(color).brighten(0.75).hex());
-      setColor6Light3(chroma(color).brighten(0.5).hex());
-      setColor6Light4(chroma(color).brighten(0.25).hex());
+      setColor6Light1(chroma(color).brighten(2).hex());
+      setColor6Light2(chroma(color).brighten(1.5).hex());
+      setColor6Light3(chroma(color).brighten(1).hex());
+      setColor6Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor6Dark1(chroma(color).darken(0.25).hex());
-      setColor6Dark2(chroma(color).darken(0.5).hex());
-      setColor6Dark3(chroma(color).darken(0.75).hex());
-      setColor6Dark4(chroma(color).darken(1).hex());
+      setColor6Dark1(chroma(color).darken(0.5).hex());
+      setColor6Dark2(chroma(color).darken(1).hex());
+      setColor6Dark3(chroma(color).darken(1.5).hex());
+      setColor6Dark4(chroma(color).darken(2).hex());
 
       // set Color
       setColor6(color)
@@ -439,16 +439,16 @@ export function SettingColorsProvider({ children }) {
   const updateColor7 = (color, user) => {
     if (color) {
       // get 4 shades light from color
-      setColor7Light1(chroma(color).brighten(1).hex());
-      setColor7Light2(chroma(color).brighten(0.75).hex());
-      setColor7Light3(chroma(color).brighten(0.5).hex());
-      setColor7Light4(chroma(color).brighten(0.25).hex());
+      setColor7Light1(chroma(color).brighten(2).hex());
+      setColor7Light2(chroma(color).brighten(1.5).hex());
+      setColor7Light3(chroma(color).brighten(1).hex());
+      setColor7Light4(chroma(color).brighten(0.5).hex());
 
       // get 4 shades dark from color
-      setColor7Dark1(chroma(color).darken(0.25).hex());
-      setColor7Dark2(chroma(color).darken(0.5).hex());
-      setColor7Dark3(chroma(color).darken(0.75).hex());
-      setColor7Dark4(chroma(color).darken(1).hex());
+      setColor7Dark1(chroma(color).darken(0.5).hex());
+      setColor7Dark2(chroma(color).darken(1).hex());
+      setColor7Dark3(chroma(color).darken(1.5).hex());
+      setColor7Dark4(chroma(color).darken(2).hex());
 
       // set Color
       setColor7(color)

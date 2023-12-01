@@ -68,14 +68,14 @@ class RealTimeColorAdapter {
     this.user = socketLookUp
     this.color = color
 
-    this.colorLight1 = chroma(color).brighten(1).hex()
-    this.colorLight2 = chroma(color).brighten(0.75).hex()
-    this.colorLight3 = chroma(color).brighten(0.5).hex()
-    this.colorLight4 = chroma(color).brighten(0.25).hex()
-    this.colorDark1 = chroma(color).darken(0.25).hex()
-    this.colorDark2 = chroma(color).darken(0.5).hex()
-    this.colorDark3 = chroma(color).darken(0.75).hex()
-    this.colorDark4 = chroma(color).darken(1).hex()
+    this.colorLight1 = chroma(color).brighten(2).hex()
+    this.colorLight2 = chroma(color).brighten(1.5).hex()
+    this.colorLight3 = chroma(color).brighten(1).hex()
+    this.colorLight4 = chroma(color).brighten(0.5).hex()
+    this.colorDark1 = chroma(color).darken(0.5).hex()
+    this.colorDark2 = chroma(color).darken(1).hex()
+    this.colorDark3 = chroma(color).darken(1.2).hex()
+    this.colorDark4 = chroma(color).darken(2).hex()
 
     this.order = ++this.orderCounter;
 
