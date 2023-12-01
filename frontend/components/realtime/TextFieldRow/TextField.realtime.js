@@ -15,7 +15,7 @@ import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 Quill.register('modules/cursors', QuillCursors);
 
 
-function RealTimeTextField({ onTextUpdate, ...props }) {
+function RealTimeTextField({ onTextUpdate, onChangeByUser, ...props }) {
   const quillRef = useRef(null);
   const { idChip, applyTextFieldSelectionBuffer } = useContext(AdminLayoutContext)
 
@@ -89,6 +89,10 @@ function RealTimeTextField({ onTextUpdate, ...props }) {
         if (onTextUpdate) {
           onTextUpdate(quill.getText().replace(/\n/g, ""))
         }
+
+        if (onChangeByUser) {
+          onChangeByUser(quill.getText().replace(/\n/g, ""))
+        }
       }
 
       // console.log('realtime props', props)
@@ -153,8 +157,19 @@ function RealTimeTextField({ onTextUpdate, ...props }) {
             ydoc: updatedYdoc,
           });
 
+          socket.emit('server-samedoc-textfield-readable-text-update', {
+            entity: props.entity,
+            name: props.data.name,
+            readableTextValue: quill.getText().replace(/\n/g, ""),
+          })
+
+
           if (onTextUpdate) {
             onTextUpdate(quill.getText().replace(/\n/g, ""))
+          }
+
+          if (onChangeByUser) {
+            onChangeByUser(quill.getText().replace(/\n/g, ""))
           }
         }
       });

@@ -1,9 +1,19 @@
-import React from 'react'
-import DeviceEmulator from '@/components/previews/DeviceEmulators/DeviceEmulators.component';
+import React, { useContext } from 'react'
+import DiamondDeviceEmulator from '@/components/previews/DeviceEmulators/DiamondDeviceEmulators';
+import { SettingHeaderContext } from './context/SettingHeader.context';
 
 function PreviewHeader() {
+  const {
+    isLoaded,
+    setIsDarkMode,
+  } = useContext(SettingHeaderContext)
+
   return (
-    <DeviceEmulator src={"/portal/previewer/header"} />
+    <>
+      {isLoaded && (
+        <DiamondDeviceEmulator src={"/portal/previewer/header?one=1"} setIsDarkMode={setIsDarkMode} />
+      )}
+    </>
   )
 }
 

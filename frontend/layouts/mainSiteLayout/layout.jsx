@@ -1,12 +1,32 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { initSocket, setSocketId } from '@/utils/realtime/socket';
 
 // import './styles/tailwinds.css'
 
 const MainSiteLayout = ({ children, ...props }) => {
+  const [connected, setConnected] = useState(false)
+
+  useEffect(() => {
+
+    let socket = initSocket()
+
+    socket.on('server-socket-id', ({ id }) => {
+      setSocketId(id)
+      setConnected(true)
+    })
+
+    return () => {
+      socket.off('server-socket-id')
+    }
+  }, [])
+
   return (
     <div>
-      {children}
+      {connected && (
+        <>
+          {children}
+        </>
+      )}
     </div>
     // <div className="min-h-screen flex items-center justify-center bg-gray-100">
     //   <div className="bg-white p-8 rounded shadow-md">

@@ -30,14 +30,18 @@ import TopBar from '../../components/NavLinks/TopBar.component';
 import dynamic from 'next/dynamic';
 import { ListItemSecondaryAction } from '@mui/material';
 import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
-import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import RealTimeRadioRow from '@/components/realtime/RadioRow/RadioRow.realtime';
-import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
-import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
-import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
-import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
+// import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+// import RealTimeRadioRow from '@/components/realtime/RadioRow/RadioRow.realtime';
+// import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+// import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
+// import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+// import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
 import { SettingHeaderContext } from './context/SettingHeader.context';
 import SelectHeaderModal from './modals/SelectHeader.modal';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+import RealTimeMenu from '@/components/realtime/RealTimeMenu/RealTimeMenu';
+import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+import { initSocket } from '@/utils/realtime/socket';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
@@ -48,7 +52,17 @@ function WebsiteSettingsHeaderSidebar() {
   const router = useRouter()
 
   const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
-  const { isSelectionModalOpened, setIsSelectionModalOpened } = useContext(SettingHeaderContext)
+  const {
+    isLoaded,
+    isDarkMode,
+    setIsDarkMode,
+    entity,
+    menu,
+    isReady,
+    isReadyValue, setIsReadyValue,
+    isSelectionModalOpened,
+    setIsSelectionModalOpened
+  } = useContext(SettingHeaderContext)
 
   const circleStatus = {
     borderRadius: "50px",
@@ -78,33 +92,101 @@ function WebsiteSettingsHeaderSidebar() {
   }
 
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0, mb: "50px" }}>
       <SettingsBackButton
         label={"Main Menu"}
         href={"/portal/admin/settings/website/settings"}
       />
-
-
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
-      <HeaderRow label={"Select Header"} />
-      <ListItem>
-        <div>
 
-          <p>Explore the marketplace to find your desired header. Please note that available options might vary based on your header choice.</p>
-          <br />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleHeaderSelectionModal}
-          >
-            Choose Header
-          </Button>
-          <br />
+      {isLoaded && (
+        <>
 
-        </div>
-      </ListItem>
+          {/* <NavLinksWrapper /> */}
 
 
+          <HeaderRow label={"Select Header"} />
+          <ListItem>
+            <div>
+
+              <p>Explore the marketplace to find your desired header. Please note that available options might vary based on your header choice.</p>
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleHeaderSelectionModal}
+              >
+                Choose Header
+              </Button>
+              <br />
+
+            </div>
+          </ListItem>
+          <Divider component="li" style={{ borderTopWidth: "12px" }} />
+
+
+          <RealTimeMenu
+            entity={entity}
+            menu={menu?.menu}
+            isDarkMode={isDarkMode}
+            setIsDarkMode={setIsDarkMode}
+            onChangeByUser={(propInfo) => {
+              const socket = initSocket()
+
+              socket.emit('server-setting-header-change-prop', propInfo)
+            }}
+          />
+
+
+
+
+
+          {/* <Divider component="li" style={{ borderTopWidth: "5px" }} /> */}
+          <HeaderRow label={"Status"} />
+          <RealTimeSwitchRow
+            label={(
+              <>
+                <div style={isReadyValue ? circleStatusSuccessStyle : circleStatusDangerStyle}></div>
+                &nbsp;
+                <span>Ready?</span>
+              </>
+            )}
+            // label, data, entity, onChange
+            data={isReady}
+            entity={entity}
+            onChange={(value) => {
+              setIsReadyValue(value)
+              console.log('contents to be saved', value)
+            }}
+          />
+
+
+
+
+
+
+
+          <Divider component="li" style={{ borderTopWidth: "5px" }} />
+          <ListItem alignItems="flex-start">
+            <ListItemText
+              // primary="Advance Settings"
+              secondary={
+                <React.Fragment>
+                  <br />
+                  <Button
+                    variant="contained"
+                  // onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                </React.Fragment>
+              }
+            />
+          </ListItem>
+        </>
+      )}
+
+      {/* 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <HeaderRow label={"Select colors"} />
       <RealTimeColorPickerRow label={"Main color"} />
@@ -127,7 +209,6 @@ function WebsiteSettingsHeaderSidebar() {
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <TopBar />
-      {/* <NavLinksWrapper /> */}
       <RealTimeResortLockedRow />
 
 
@@ -195,7 +276,7 @@ function WebsiteSettingsHeaderSidebar() {
             </React.Fragment>
           }
         />
-      </ListItem>
+      </ListItem> */}
 
 
 

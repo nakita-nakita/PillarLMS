@@ -13,14 +13,18 @@ type SelectionType = {
 class RealTimePictureSelectionAdapter {
   private orderCounter: number = 0;
 
-  public id: string = uuidv4();
-  public name: string;
-  public order: number = 0;
+  // id
+  public id?: string = uuidv4();
+  public sameDocType? = "PICTURE_SELECTION:V1"
+  public name?: string;
 
-  public selection: string = "NO_IMAGE" // "NO_IMAGE", "CURRENT_IMAGE", uploadId
+  // props
+  public order?: number = 0;
 
-  public currentSelection: SelectionType
-  public uploads: SelectionType[] = []
+  public selection?: string = "NO_IMAGE" // "NO_IMAGE", "CURRENT_IMAGE", uploadId
+
+  public currentSelection?: SelectionType
+  public uploads?: SelectionType[] = []
 
   constructor({ picture, name }) {
     this.name = name;
@@ -33,7 +37,7 @@ class RealTimePictureSelectionAdapter {
     }
   }
 
-  async uploadPicture({ picture, socketLookUp }: { picture: string, socketLookUp: socketLookUpType }): Promise<number> {
+  async uploadPicture?({ picture, socketLookUp }: { picture: string, socketLookUp: socketLookUpType }): Promise<number> {
     if (socketLookUp && !socketLookUp.id) {
       socketLookUp.id = socketLookUp.userId
     }
@@ -53,12 +57,23 @@ class RealTimePictureSelectionAdapter {
     return this.order
   }
 
-  async updateSelection({ selection }: { selection: string }): Promise<number> {
+  async updateSelection?({ selection }: { selection: string }): Promise<number> {
     this.selection = selection;
 
     this.order = ++this.orderCounter;
 
     return this.order
+  }
+  
+  getData?() {
+    return {
+      sameDocType: this.sameDocType,
+      name: this.name,
+      order: this.order,
+      selection: this.selection,
+      currentSelection: this.currentSelection,
+      uploads: this.uploads,
+    }
   }
 }
 

@@ -1,113 +1,89 @@
-// import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-// import makeCollaborateSameDoc from "../../../../../../collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
-// import RealTimeYDocAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeYDocAdapter";
-// import { RealTimeAdapterPropertyValue } from "../../../../../../collaborate/sameDoc/preMain/scripts/SameDoc/set.script";
-// import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeSwitchAdapter";
-// import RealTimePictureSelectionAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimePictureSelectionAdapter";
-// import makeBackendSettingLinkSql from "../../../preMain/backendSettingFooter.sql";
-// import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
+import makeCollaborateSameDoc from "../../../../../../collaborate/sameDoc/preMain/collaborateSameDoc.ram-cache";
+import { RealTimeAdapterPropertyValue } from "../../../../../../collaborate/sameDoc/preMain/scripts/SameDoc/set.script";
+import RealTimeSwitchAdapter from "../../../../../../collaborate/sameDoc/forUsage/adapters/RealTimeSwitchAdapter";
+import makeBackendSettingFooterSql from "../../../preMain/backendSettingFooter.sql";
 
-// type input = {
-//   socketId: string;
-// }
+type input = {
+  socketId: string;
+}
 
-// export default function getOneRealTime(d: dependencies) {
-//   return async (args: input): Promise<returningSuccessObj<any>> => {
+export default function getOneRealTime(d: dependencies) {
+  return async (args: input): Promise<returningSuccessObj<any>> => {
 
-//     const entity = 'backendSettingLink'
-//     const settingsLinkSql = makeBackendSettingLinkSql(d);
-//     const sameDoc = makeCollaborateSameDoc(d)
+    const entity = 'backendSettingFooter'
 
-//     const record = await settingsLinkSql.getOne()
+    const settingFooterSql = makeBackendSettingFooterSql(d)
+    const sameDoc = makeCollaborateSameDoc(d)
 
-//     const doesEntityExist = await sameDoc.doesEntityExist({
-//       entity,
-//     })
+    const record = await settingFooterSql.getOne()
 
-//     if (doesEntityExist.result) {
-//       //get
-//       const entityRecord = await sameDoc.getByEntity({
-//         entity,
-//       })
+    const doesEntityExist = await sameDoc.doesEntityExist({
+      entity,
+    })
 
-//       await sameDoc.userConnectsToEntity({
-//         entity,
-//         socketId: args.socketId,
-//       })
+    if (doesEntityExist.result) {
+      //get
+      const entityRecord = await sameDoc.getByEntity({
+        entity,
+      })
 
-//       // // add subscription to user viewing entity
-//       // entityRecord.data.addSocket({
-//       //   socketId: args.socketId
-//       // })
+      const {menu, props, answers} = entityRecord.data.getData()
 
+      if (args.socketId) {
+        await sameDoc.userConnectsToEntity({
+          entity,
+          socketId: args.socketId,
+        })
+      }
 
-//       return {
-//         success: true,
-//         data: {
-//           ...record.data,
-//           ...entityRecord.data,
-//           entity,
-//         }
-//       }
+      const menuObj = {...menu}
+      return {
+        success: true,
+        data: {
+          ...record.data?.dataValues,
+          ...props,
+          menuJsonB: menuObj ? JSON.stringify(menuObj) : null,
+          userAnswersJsonB: Object.keys(answers).length ? JSON.stringify(answers): null,
+          entity,
+        }
+      }
 
-//     } else {
-//       //adapter for every realtime property
-//       const image: RealTimeAdapterPropertyValue = {
-//         adapter: new RealTimePictureSelectionAdapter({
-//           picture: record.data?.dataValues?.image,
-//           name: "image"
-//         }),
-//         name: "image"
-//       }
-//       //adapter for every realtime property
-//       const title: RealTimeAdapterPropertyValue = {
-//         adapter: new RealTimeYDocAdapter({
-//           initialText: record.data?.dataValues?.title || "",
-//           name: "title"
-//         }),
-//         name: "title"
-//       }
+    } else {
 
-//       //adapter for every realtime property
-//       const description: RealTimeAdapterPropertyValue = {
-//         adapter: new RealTimeYDocAdapter({
-//           initialText: record.data?.dataValues?.description || "",
-//           name: "description"
-//         }),
-//         name: "description"
-//       }
+      const setVariables = await sameDoc.adaptersFromMenuAndAnswers({
+        menu: record.data?.dataValues?.menuJsonB,
+        userAnswers: record.data?.dataValues?.userAnswersJsonB,
+      })
 
-//       const isReady: RealTimeAdapterPropertyValue = {
-//         adapter: new RealTimeSwitchAdapter({
-//           initialBoolean: record.data?.dataValues?.isReady || false,
-//           name: "isReady"
-//         }),
-//         name: "isReady"
-//       }
+      const isReady: RealTimeAdapterPropertyValue = {
+        adapter: new RealTimeSwitchAdapter({
+          initialBoolean: record.data?.dataValues?.isReady || false,
+          name: "isReady"
+        }),
+        name: "isReady"
+      }
 
+      const setEntity = await sameDoc.set({
+        entity,
+        properties: [...setVariables.data?.adapters, isReady],
+        menu: setVariables.data?.menu,
+        socketId: args.socketId,
+      })
 
+      const {menu, props, answers} = setEntity.data.getData()
 
-
-
-//       const setEntity = await sameDoc.set({
-//         entity,
-//         properties: [
-//             image,
-//             title,
-//             description,
-//             isReady,
-//         ],
-//         socketId: args.socketId,
-//       })
-
-//       return {
-//         success: true,
-//         data: {
-//           ...record.data?.dataValues,
-//           ...setEntity.data,
-//           entity,
-//         }
-//       }
-//     }
-//   }
-// }
+      return {
+        success: true,
+        data: {
+          ...record.data?.dataValues,
+          ...props,
+          menuJsonB: menu ? JSON.stringify({...menu}) : null,
+          userAnswersJsonB: Object.keys(answers).length ? JSON.stringify(answers): null,
+          entity,
+        }
+      }
+    }
+  }
+}

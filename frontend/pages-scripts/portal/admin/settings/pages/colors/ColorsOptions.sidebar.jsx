@@ -264,6 +264,7 @@ function WebsiteSettingsColorsSidebar() {
 
               </div>
             </ListItem>
+            
             <RealTimeColorPickerRow
               color={color1}
               setColor={updateColor1}

@@ -1,9 +1,6 @@
-
-
-
 'use client'
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -18,7 +15,6 @@ import Badge from '@mui/material/Badge';
 import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/navigation';
-import WebsiteSettingLayoutContext from '@/layouts/websiteSettingsLayout/WebsiteSettingLayout.context';
 import SettingsBackButton from '../../components/BackButton/BackButton.component';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { realtimeLink } from '@/utils/realtime/link';
@@ -28,44 +24,45 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
-import NavLinks from '../../components/NavLinks/NavLinks.component';
+// import NavLinks from '../../components/NavLinks/NavLinks.component';
 // import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
 import TopBar from '../../components/NavLinks/TopBar.component';
 import dynamic from 'next/dynamic';
 import { ListItemSecondaryAction } from '@mui/material';
 import NavLinksWrapper from '../../components/NavLinks/NavLinksWrapper.component';
-import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import RealTimeRadioRow from '@/components/realtime/RadioRow/RadioRow.realtime';
-import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
-import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
-import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
-import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
-import SelectFooterModal from './modals/SelectFooter.modal';
+// import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+// import RealTimeRadioRow from '@/components/realtime/RadioRow/RadioRow.realtime';
+// import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.realtime';
+// import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
+// import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+// import RealTimeColorPickerRow from '@/components/realtime/ColorPickerRow/ColorPickerRow.realtime';
 import { SettingFooterContext } from './context/SettingFooter.context';
+import SelectFooterModal from './modals/SelectFooter.modal';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
+import RealTimeMenu from '@/components/realtime/RealTimeMenu/RealTimeMenu';
+import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
+import { initSocket } from '@/utils/realtime/socket';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
 // });
 
 function WebsiteSettingsFooterSidebar() {
-  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
-  const { isSelectionModalOpened, setIsSelectionModalOpened } = useContext(SettingFooterContext)
-
   const theme = useTheme();
   const router = useRouter()
 
-  const changeUrl = (href) => {
-    // router.push(href)
-    realtimeLink({
-      to: href,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      meetingId: panelMeetingDoc.id,
-      router,
-      userId: idChip.id,
-      setPanelMeetingDoc,
-
-    })
-  }
+  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = useContext(AdminLayoutContext)
+  const {
+    isLoaded,
+    isDarkMode,
+    setIsDarkMode,
+    entity,
+    menu,
+    isReady,
+    isReadyValue, setIsReadyValue,
+    isSelectionModalOpened,
+    setIsSelectionModalOpened
+  } = useContext(SettingFooterContext)
 
   const circleStatus = {
     borderRadius: "50px",
@@ -90,49 +87,118 @@ function WebsiteSettingsFooterSidebar() {
     }
   }
 
-  const handleHeaderSelectionModal = () => {
+  const handleFooterSelectionModal = () => {
     setIsSelectionModalOpened(true)
   }
 
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
+    <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0, mb: "50px" }}>
       <SettingsBackButton
         label={"Main Menu"}
         href={"/portal/admin/settings/website/settings"}
       />
-
-
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
-      <HeaderRow label={"Select Footer"} />
-      <ListItem>
-        <div>
 
-          <p>Explore the marketplace to find your desired footer. Please note that available options might vary based on your header choice.</p>
-          <br />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleHeaderSelectionModal}
-          >
+      {isLoaded && (
+        <>
 
-            Choose Footer
-          </Button>
-          <br />
+          {/* <NavLinksWrapper /> */}
 
-        </div>
-      </ListItem>
 
+          <HeaderRow label={"Select Footer"} />
+          <ListItem>
+            <div>
+
+              <p>Explore the marketplace to find your desired header. Please note that available options might vary based on your header choice.</p>
+              <br />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleFooterSelectionModal}
+              >
+                Choose Footer
+              </Button>
+              <br />
+
+            </div>
+          </ListItem>
+          <Divider component="li" style={{ borderTopWidth: "12px" }} />
+
+
+          <RealTimeMenu
+            entity={entity}
+            menu={menu?.menu}
+            isDarkMode={isDarkMode}
+            setIsDarkMode={setIsDarkMode}
+            onChangeByUser={(propInfo) => {
+              const socket = initSocket()
+
+              socket.emit('server-setting-footer-change-prop', propInfo)
+            }}
+          />
+
+
+
+
+
+          {/* <Divider component="li" style={{ borderTopWidth: "5px" }} /> */}
+          <HeaderRow label={"Status"} />
+          <RealTimeSwitchRow
+            label={(
+              <>
+                <div style={isReadyValue ? circleStatusSuccessStyle : circleStatusDangerStyle}></div>
+                &nbsp;
+                <span>Ready?</span>
+              </>
+            )}
+            // label, data, entity, onChange
+            data={isReady}
+            entity={entity}
+            onChange={(value) => {
+              setIsReadyValue(value)
+              console.log('contents to be saved', value)
+            }}
+          />
+
+
+
+
+
+
+
+          <Divider component="li" style={{ borderTopWidth: "5px" }} />
+          <ListItem alignItems="flex-start">
+            <ListItemText
+              // primary="Advance Settings"
+              secondary={
+                <React.Fragment>
+                  <br />
+                  <Button
+                    variant="contained"
+                  // onClick={handleSave}
+                  >
+                    Save
+                  </Button>
+                </React.Fragment>
+              }
+            />
+          </ListItem>
+        </>
+      )}
+
+      {/* 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <HeaderRow label={"Select colors"} />
       <RealTimeColorPickerRow label={"Main color"} />
       <RealTimeColorPickerRow label={"Main text color"} />
       <RealTimeColorPickerRow label={"Menu color"} />
       <RealTimeColorPickerRow label={"Menu text color"} />
+      <RealTimeColorPickerRow label={"Hover menu color"} />
+      <RealTimeColorPickerRow label={"Hover menu text color"} />
       <RealTimeColorPickerRow label={"Social media icons color"} />
       <RealTimeColorPickerRow label={"Sign In button color"} />
       <RealTimeColorPickerRow label={"Sign In hover button color"} />
-      <RealTimeColorPickerRow label={"Admin Sign In button color"} />
-      <RealTimeColorPickerRow label={"Admin Sign In hover button color"} />
+
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <HeaderRow label={"Branding"} />
@@ -143,7 +209,6 @@ function WebsiteSettingsFooterSidebar() {
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
       <TopBar />
-      {/* <NavLinksWrapper /> */}
       <RealTimeResortLockedRow />
 
 
@@ -189,17 +254,7 @@ function WebsiteSettingsFooterSidebar() {
       )} />
       <RealTimeSwitchRow id="status" label={(
         <>
-          Show Client Log in button
-        </>
-      )} />
-      <RealTimeSwitchRow id="status" label={(
-        <>
-          Show Admin Log in button
-        </>
-      )} />
-      <RealTimeSwitchRow id="status" label={(
-        <>
-          Show Address
+          Show client sign in button
         </>
       )} />
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
@@ -221,23 +276,20 @@ function WebsiteSettingsFooterSidebar() {
             </React.Fragment>
           }
         />
-      </ListItem>
+      </ListItem> */}
+
+
+
 
 
 
 
 
       <SelectFooterModal
-        modalHeader={"Select Footer"}
+        modalFooter={"Select Footer"}
         isOpened={isSelectionModalOpened}
         onClose={() => setIsSelectionModalOpened(false)}
       />
-
-
-
-
-
-
 
 
 

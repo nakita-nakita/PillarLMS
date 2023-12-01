@@ -9,16 +9,38 @@ import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTime
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
 import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { EntityMenuType, sameDocMenuType } from "./adaptersFromMenuAndAnswers.script";
+import RealTimeColorSelectionAdapter from "../../../forUsage/adapters/RealTimeColorSelectionAdapter";
+
+export type RealTimeAllAdapters = RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter | RealTimeFaviconSelectionAdapter | RealTimeColorSelectionAdapter
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
-  adapter: RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter | RealTimeFaviconSelectionAdapter
+  adapter: RealTimeAllAdapters
 }
+
+
+type MenuItemAdapterType =
+  | {
+    header?: string;
+    type?: string;
+    isShowing?: any;
+    data?: any[]
+  };
+
+export type sameDocAdapterMenuType = {
+  menu: MenuItemAdapterType[];
+};
 
 type input = {
   socketId: string
   entity: string,
-  properties: any[]
+  properties: RealTimeAdapterPropertyValue[]
+  menu?: EntityMenuType
+}
+
+type resetPropertiesInput = {
+  newProperties: RealTimeAdapterPropertyValue[]
 }
 
 export default function set(d: dependencies) {
@@ -52,10 +74,102 @@ export default function set(d: dependencies) {
 
 
     //add properties
+    sameDoc[args.entity].props = sameDoc[args.entity].props || {}
+
     for (let i = 0; i < args.properties.length; i++) {
       const prop = args.properties[i];
 
-      sameDoc[args.entity][prop.name] = prop.adapter
+      sameDoc[args.entity].props[prop.name] = prop.adapter
+    }
+
+    // reset properties
+    sameDoc[args.entity].resetProps = async ({ newProperties }: resetPropertiesInput) => {
+      for (let i = 0; i < newProperties.length; i++) {
+        const prop = newProperties[i];
+
+        if (sameDoc[args.entity].props[prop.name] && sameDoc[args.entity].props[prop.name].sameDocType === prop.adapter.sameDocType) {
+          continue
+        }
+
+        sameDoc[args.entity].props[prop.name] = prop.adapter
+      }
+    }
+
+
+    // reset properties
+    sameDoc[args.entity].getData = () => {
+      const props = { ...sameDoc[args.entity].props }
+      let answers = {}
+
+      if (sameDoc[args.entity].menu) {
+        const menu: sameDocAdapterMenuType = {
+          menu: sameDoc[args.entity].menu.menu.map(m => {
+            const newData: MenuItemAdapterType = {
+              type: m.type || "CONTAINER:V1",
+              header: m.header,
+              data: [],
+            }
+
+            return newData;
+          })
+        }
+
+        for (let i = 0; i < sameDoc[args.entity].menu.menu.length; i++) {
+
+
+          const menuItem = sameDoc[args.entity].menu.menu[i];
+
+          if (menuItem?.isShowing) {
+
+            menu.menu[i].isShowing = props[menuItem.isShowing.name].getData()
+
+            answers[menu.menu[i].isShowing.name] = menu.menu[i].isShowing.booleanValue
+
+            delete props[menuItem.isShowing.name]
+          }
+
+          if (menuItem?.data?.length) {
+            for (let x = 0; x < menuItem.data.length; x++) {
+              const component = menuItem.data[x];
+              const data = props[component.name].getData()
+
+              menu.menu[i].data.push(data)
+
+              switch (data.sameDocType) {
+                case "SWITCH:V1":
+                  answers[data.name] = (data as any).booleanValue
+
+                  break;
+                case "YDOC:V1":
+                  answers[data.name] = (data as any).readableTextValue
+
+                  break;
+                case "COLOR_SELECTION:V1":
+                  answers[data.name] = (data as any).color
+                  break;
+
+                default:
+                  break;
+              }
+
+              delete props[component.name]
+            }
+          }
+        }
+
+        return {
+          menu,
+          props,
+          answers,
+        }
+
+      } else {
+        return {
+          menu: null,
+          props,
+          answers,
+        }
+      }
     }
 
     // manager sockets for this record.
@@ -74,8 +188,8 @@ export default function set(d: dependencies) {
 
       for (let i = 0; i < sameDoc[args.entity].sockets.length; i++) {
         const socket = sameDoc[args.entity].sockets[i];
-      
-        if(socket.socketId === socketId) {
+
+        if (socket.socketId === socketId) {
           sameDoc[args.entity].sockets.splice(i, 1)
 
           break;
@@ -86,6 +200,11 @@ export default function set(d: dependencies) {
       if (sameDoc[args.entity].sockets.length === 0) {
         delete sameDoc[args.entity]
       }
+    }
+
+    // install menu for database Json
+    if (args.menu) {
+      sameDoc[args.entity].menu = args.menu
     }
 
     return {

@@ -11,6 +11,8 @@ const PreviewComponentPage = () => {
   const router = useRouter()
   const theme = useTheme()
 
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [componentProps, setComponentProps] = useState({})
   const [webAssetImport, setWebAssetImport] = useState()
   const [backgroundColor, setBackgroundColor] = useState()
 
@@ -35,25 +37,51 @@ const PreviewComponentPage = () => {
       }
     }
 
+    if (modeQueryParam) {
+      setComponentProps({
+        props: {
+          data: {
+            system: {
+              state: {
+                isDisplayMode: true,
+                isFunctionalMode: false,
+                isDayMode: modeQueryParam.toString() === "day",
+                isNightMode: modeQueryParam.toString() === "night",
+              },
+              // socials
+            }
+          }
+        },
+      })
+    }
+
+    setIsLoaded(true)
+
+
 
   }, [router.query]);
 
   return (
-    <div
-      style={{
-        backgroundColor: backgroundColor,
-        minHeight: "390px",
-      }}
-    >
-      {webAssetImport && (
-        <DynamicComponent
-          filePath={webAssetImport}
-        />
+    <>
+      {isLoaded && (
+        <div
+          style={{
+            backgroundColor: backgroundColor,
+            minHeight: "390px",
+          }}
+        >
+          {webAssetImport && (
+            <DynamicComponent
+              filePath={webAssetImport}
+              props={componentProps?.props}
+            />
+          )}
+          <br />
+          <br />
+          <br />
+        </div>
       )}
-      <br />
-      <br />
-      <br />
-    </div>
+    </>
   );
 };
 

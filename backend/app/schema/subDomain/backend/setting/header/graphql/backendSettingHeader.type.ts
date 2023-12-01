@@ -2,20 +2,13 @@ import gql from "graphql-tag"
 
 const backendSettingHeaderGraphQLType = gql`
 
-#type BackendSettingHeaderRealTimeType {
-#  id: String,
-#  entity: String,
-#  title: RealTimeTextField,
-#  description: RealTimeTextField,
-#  image: RealTimePictureSelection,
-#  isReady: RealTimeSwitch
-#}
-  type BackendSettingHeaderType {
+  type BackendSettingHeaderRealTimeType {
     id: String,
+    entity: String,
     webAssetImport: String,
     menuJsonB: String,
     userAnswersJsonB: String,
-    isReady: Boolean
+    isReady: RealTimeSwitch
   }
 
   type BackendSettingHeaderBuiltInType {
@@ -29,11 +22,11 @@ const backendSettingHeaderGraphQLType = gql`
   }
 
   type Query {
-    # backendSettingHeader_getOneRealTime(socketId: String!): BackendSettingHeaderRealTimeType
+    backendSettingHeader_getOneRealTime(socketId: ID!): BackendSettingHeaderRealTimeType
     backendSettingHeaderBuiltIn_getMany:[BackendSettingHeaderBuiltInType]
   }
   type Mutation {
-    backendSettingHeader_upsertOne(id: ID!, webAssetImport: String, menuJsonB: String, userAnswersJsonB: String, isReady: Boolean): BackendSettingHeaderType
+    backendSettingHeader_upsertOne(id: ID!, webAssetImport: String, menuJsonB: String, userAnswersJsonB: String, isReady: Boolean): GlobalSuccessType
   }
 `
 

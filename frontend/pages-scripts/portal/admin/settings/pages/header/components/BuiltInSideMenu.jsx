@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import RenderSiteSideMenuSelection from './RenderSiteSideMenuSelection';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 // import RenderSiteSideMenuSelection from './RenderSiteSideMenuSelection';
 
 const BuiltInSideMenu = ({ builtInSites, onComponentSelect }) => {
-
-  console.log('builtInSites', builtInSites);
 
   const [open, setOpen] = useState(false);
   const [selectedComponents, setSelectedComponents] = useState([]);
@@ -12,10 +11,10 @@ const BuiltInSideMenu = ({ builtInSites, onComponentSelect }) => {
 
   return (
     <div>
+      <HeaderRow label={"Headers"} />
       {builtInSites && builtInSites.map(site => <RenderSiteSideMenuSelection
         site={site}
         onComponentSelect={(selection) => {
-          console.log('site: selection', selection)
 
           if (onComponentSelect) {
             onComponentSelect(selection)

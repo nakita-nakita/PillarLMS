@@ -4,7 +4,7 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 const backendSettingHeaderSecurity = {
   Query: {
     // backendSettingHeader_getOneRealTime: and(isAuthenticated, isAdmin),
-    // backendSettingHeader_getOneRealTime: isAuthenticated,
+    backendSettingHeader_getOneRealTime: isAuthenticated,
     backendSettingHeaderBuiltIn_getMany: isAuthenticated,
   },
   Mutation: {

@@ -7,6 +7,7 @@ import userDisconnectsFromEntity from "./scripts/SameDoc/userDisconnectsFromEnti
 import socketDisconnect_removeFromEntities from "./scripts/SameDoc/socketDisconnect_removeFromEntities.script";
 import userConnectsToEntity from "./scripts/SameDoc/userConnectsToEntity.script";
 import { dependencies } from "../../../../utils/dependencies/type/dependencyInjection.types";
+import adaptersFromMenuAndAnswers from "./scripts/SameDoc/adaptersFromMenuAndAnswers.script";
 
 export default function makeCollaborateSameDoc(d: dependencies) {
   return {
@@ -20,8 +21,11 @@ export default function makeCollaborateSameDoc(d: dependencies) {
     userConnectsToEntity: userConnectsToEntity(d),
     // used for disconnecting one socket user from an entity
     userDisconnectsFromEntity: userDisconnectsFromEntity(d),
-    
+
     // used for socket dropped and fire disconnect event
     socketDisconnect_removeFromEntities: socketDisconnect_removeFromEntities(d),
+
+    // create variables for set from database jsons
+    adaptersFromMenuAndAnswers: adaptersFromMenuAndAnswers(d),
   }
 }

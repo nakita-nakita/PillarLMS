@@ -1,5 +1,7 @@
 import sequelize from 'sequelize';
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { SelectionTypeEnum } from './backendSettingHeader.model';
+import { sameDocMenuType } from '../../../../schema/subDomain/collaborate/sameDoc/preMain/scripts/SameDoc/adaptersFromMenuAndAnswers.script';
 
 @Table({
   paranoid: true,
@@ -25,15 +27,25 @@ export default class backendSettingFooter extends Model {
   @Column({
     type: sequelize.JSONB,
   })
-  menuJsonB: string;
+  menuJsonB: sameDocMenuType;
 
   @Column({
     type: sequelize.JSONB,
   })
-  userAnswersJsonB: string;
+  userAnswersJsonB: any;
 
   @Column({
     type: sequelize.BOOLEAN,
   })
   isReady: boolean;
+  
+  @Column({
+    type: sequelize.ENUM("BUILT_IN", "PLUGIN", "MARKET"),
+  })
+  selectionType: SelectionTypeEnum;
+  
+  @Column({
+    type: sequelize.UUID
+  })
+  selectionId: string;
 }

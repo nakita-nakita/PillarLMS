@@ -44,7 +44,7 @@ export default function getOneRealTime(d: dependencies) {
         success: true,
         data: {
           ...record.data,
-          ...entityRecord.data,
+          ...entityRecord.data.props,
           entity,
         }
       }
@@ -193,7 +193,7 @@ export default function getOneRealTime(d: dependencies) {
         success: true,
         data: {
           ...record.data?.dataValues,
-          ...setEntity.data,
+          ...setEntity.data.props,
           entity,
         }
       }

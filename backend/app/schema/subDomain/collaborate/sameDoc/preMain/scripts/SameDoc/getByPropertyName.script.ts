@@ -33,7 +33,7 @@ export default function getByPropertyName(d: dependencies) {
       }
     }
 
-    if (!singleton.data.sameDoc[args.entity][args.name]) {
+    if (!singleton.data.sameDoc[args.entity]?.props[args.name]) {
       return {
         success: true,
         data: undefined
@@ -42,7 +42,7 @@ export default function getByPropertyName(d: dependencies) {
 
     return {
       success: true,
-      data: singleton.data.sameDoc[args.entity][args.name],
+      data: singleton.data.sameDoc[args.entity]?.props[args.name],
     }
   }
 }

@@ -14,6 +14,9 @@ const whites = ["#FFFFFF", "#F5F5F5", "#EBEBEB"];
 const blacks = ["#212121", "#121212", "#000000"];
 
 const ColorPaletteComponent = ({
+  isSelectable,
+  onSelect,
+  color,
   color1,
   color1Light1,
   color1Light2,
@@ -78,6 +81,8 @@ const ColorPaletteComponent = ({
   color7Dark3,
   color7Dark4,
 }) => {
+
+  const [selectedColor, setSelectedColor] = useState(color)
 
   const [colors, setColors] = useState([
     "#FF5733", "#33FF57", "#5733FF",
@@ -212,6 +217,14 @@ const ColorPaletteComponent = ({
     }
   }, [color1, color2, color3, color4, color5, color6, color7])
 
+  const handleSelection = (color) => {
+    setSelectedColor(color)
+
+    if (onSelect) {
+      onSelect(color)
+    }
+  }
+
   return (
     <Paper elevation={3}>
       <Box p={2}>
@@ -220,7 +233,14 @@ const ColorPaletteComponent = ({
         <Typography variant="h6">Color Palette</Typography>
         <Box mt={1} display="flex" justifyContent="space-between">
           {colors.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={50}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={50}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
 
@@ -229,71 +249,152 @@ const ColorPaletteComponent = ({
 
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {light1Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {light2Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {light3Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {light4Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
 
-        
+
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {colors.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
 
-        
+
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {dark1Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {dark2Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color} width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {dark3Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           {dark4Row.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / colors.length} height={25}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / colors.length}
+              height={25}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
 
         {/* Third Row - Greys */}
-        <Typography variant="h6" mt={2}>Greys</Typography>
+        <Typography variant="h6" mt={2}>Grays</Typography>
         <Box mt={1} display="flex" justifyContent="space-between">
           {greys.map((grey, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={grey} width={1 / 10} height={50}></Box>
+            <Box
+              key={index}
+              bgcolor={grey}
+              width={1 / 10}
+              height={50}
+              onClick={() => handleSelection(grey)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === grey ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
         </Box>
 
         <Box mt={2} display="flex" justifyContent="space-between">
           {whites.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / 10} height={50}></Box>
+            <Box
+              key={index}
+              bgcolor={color}
+              width={1 / 10}
+              height={50}
+              onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
 
           <Box width={4 / 10} height={50}></Box>
 
           {blacks.map((color, index) => (
-            <Box key={index} border="2px solid #212121" bgcolor={color} width={1 / 10} height={50}></Box>
+            <Box
+              key={index}
+              bgcolor={color} width={1 / 10}
+              height={50} onClick={() => handleSelection(color)}
+              sx={{ cursor: isSelectable ? 'pointer' : "default", border: selectedColor === color ? "2px solid #212121" : "2px solid #f1f4f5", transition: 'opacity 0.3s' }}
+            ></Box>
           ))}
 
         </Box>

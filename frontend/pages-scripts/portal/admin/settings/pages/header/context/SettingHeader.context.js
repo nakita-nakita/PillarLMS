@@ -3,83 +3,34 @@ import React, { useContext, useEffect, useState } from 'react'
 import { getSocketId } from '@/utils/realtime/socket';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { getSettingHeaderBuiltInGraphQL } from '../store/settingHeaderBuiltIn_getMany.store';
+import { getSettingHeaderRealTimeGraphQL } from '../store/settingHeader_getRealTime.store';
 
 export const SettingHeaderContext = React.createContext();
 
 export function SettingHeaderProvider({ children }) {
   const { updateEntity } = useContext(AdminLayoutContext)
 
-  const [isLoaded, setLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
+  // selected
   const [id, setId] = useState()
   const [entity, setEntity] = useState()
+  const [webAssetImport, setWebAssetImport] = useState()
+  const [menu, setMenu] = useState()
+  const [userAnswers, setUserAnswers] = useState()
+  const [userAnswersValue, setUserAnswersValue] = useState()
+  const [isReady, setIsReady] = useState()
+  const [isReadyValue, setIsReadyValue] = useState()
 
+  // selections
   const [isSelectionModalOpened, setIsSelectionModalOpened] = useState(false)
 
   const [builtInData, setBuiltInData] = useState([])
   const [builtInDataSelected, setBuiltInDataSelected] = useState({})
-  // const [builtInMenuData, setBuiltInMenuData] = useState([])
-  // const [builtInMenuDataFlat, setBuiltInDataFlat] = useState([])
-
-  // const createMenuData = (data) => {
-  //   const transformedData = [];
-
-  //   // Create a map to group components by theme and category
-  //   const componentMap = new Map();
-
-  //   data.forEach((component) => {
-  //     const { theme, category, ...rest } = component;
-  //     const themeKey = theme || 'Default';
-  //     const categoryKey = category || 'Uncategorized';
-
-  //     if (!componentMap.has(themeKey)) {
-  //       componentMap.set(themeKey, new Map());
-  //     }
-
-  //     if (!componentMap.get(themeKey).has(categoryKey)) {
-  //       componentMap.get(themeKey).set(categoryKey, []);
-  //     }
-
-  //     componentMap.get(themeKey).get(categoryKey).push({ ...rest });
-  //   });
-
-  //   // Convert the map to the desired array structure
-  //   componentMap.forEach((categories, theme) => {
-  //     const themeObject = { label: theme, category: [] };
-
-  //     categories.forEach((components, category) => {
-  //       const categoryObject = { label: category, components: [...components] };
-  //       themeObject.category.push(categoryObject);
-  //     });
-
-  //     transformedData.push(themeObject);
-  //   });
-
-  //   return transformedData;
-  // }
-
-  // const flattenMenuData = (data) => {
-  //   let returnArray = []
-
-  //   for (let i = 0; i < data.length; i++) {
-  //     const { category } = data[i]
-  //     for (let y = 0; y < category.length; y++) {
-  //       const { components } = category[y];
-
-  //       for (let x = 0; x < components.length; x++) {
-  //         const component = components[x];
-
-  //         returnArray.push(component)
-  //       }
-  //     }
-  //   }
-
-  //   return returnArray
-  // }
 
   const selectComponent = ({ id }) => {
     const data = builtInData.filter((component) => component.id === id)[0];
-    console.log('builtInData[index]', builtInData, data)
     setBuiltInDataSelected({ ...data })
   }
 
@@ -109,15 +60,6 @@ export function SettingHeaderProvider({ children }) {
     getSettingHeaderBuiltInGraphQL().then(response => {
       const data = response.data.backendSettingHeaderBuiltIn_getMany
       setBuiltInData(data)
-      console.log('data[0].id', data, data[0].id)
-
-      // const menuData = createMenuData([...data])
-      // setBuiltInMenuData(menuData)
-
-      // const flatten = flattenMenuData(menuData)
-
-      // // setBuiltInDataFlat
-      // setBuiltInDataFlat(flatten)      
     })
 
   }, [])
@@ -132,42 +74,47 @@ export function SettingHeaderProvider({ children }) {
     }
   }, [builtInData])
 
+  useEffect(() => {
+    getSettingHeaderRealTimeGraphQL({
+      socketId: getSocketId()
+    }).then(response => {
 
+      const data = response.data.backendSettingHeader_getOneRealTime
 
+      updateEntity({
+        entity: data.entity
+      })
 
-  // useEffect(() => {
-  //   const socketId = getSocketId()
-  //   getSettingHeaderGraphQL({
-  //     socketId,
-  //   }).then(result => {
-  //     const link = result.data.backendSettingHeader_getOneRealTime
+      setId(data.id)
+      setEntity(data.entity)
+      setWebAssetImport(data.webAssetImport)
+      setMenu(JSON.parse(data.menuJsonB))
+      setUserAnswers(JSON.parse(data.userAnswersJsonB))
+      setIsReady(data.isReady)
 
-  //     console.log('link data:', link)
-  //     updateEntity({
-  //       entity: link.entity
-  //     })
-  //     setId(link.id)
-  //     setEntity(link.entity)
-  //     setTitle(link.title)
-  //     setDescription(link.description)
-  //     setImage(link.image)
-  //     setCurrentImage(link.image?.currentSelection?.picture)
-  //     setIsReady(link.isReady)
-  //     setLoaded(true)
-  //   })
+      setIsLoaded(true)
+    })
+  }, [])
 
-  // }, [])
 
   return (
     <SettingHeaderContext.Provider value={{
-      isLoaded, setLoaded,
+      isLoaded, setIsLoaded,
+      isDarkMode, setIsDarkMode,
+      //selected
       id, setId,
       entity, setEntity,
+      webAssetImport, setWebAssetImport,
+      menu, setMenu,
+      userAnswers, setUserAnswers,
+      userAnswersValue, setUserAnswersValue,
+      isReady, setIsReady,
+      isReadyValue, setIsReadyValue,
+
+      //selections
       isSelectionModalOpened, setIsSelectionModalOpened,
       builtInData, setBuiltInData,
       builtInDataSelected, setBuiltInDataSelected,
-      // builtInMenuData, setBuiltInMenuData,
-      // builtInMenuDataFlat, setBuiltInDataFlat,
 
       // helper functions
       selectComponent,

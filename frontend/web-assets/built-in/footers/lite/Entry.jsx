@@ -1,9 +1,9 @@
 import React from 'react'
-import DisplayFooter from './DisplayFooter'
+import Footer from './Footer'
 
 function Entry(props) {
   return (
-    <DisplayFooter {...props} />
+    <Footer {...props} />
   )
 }
 

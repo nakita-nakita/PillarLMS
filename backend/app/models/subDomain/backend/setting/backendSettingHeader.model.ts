@@ -1,5 +1,12 @@
 import sequelize from 'sequelize';
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { sameDocMenuType } from '../../../../schema/subDomain/collaborate/sameDoc/preMain/scripts/SameDoc/adaptersFromMenuAndAnswers.script';
+
+export enum SelectionTypeEnum {
+  BUILT_IN = "BUILT_IN",
+  PLUGIN = "PLUGIN",
+  MARKET = "MARKET"
+}
 
 @Table({
   paranoid: true,
@@ -25,15 +32,26 @@ export default class backendSettingHeader extends Model {
   @Column({
     type: sequelize.JSONB,
   })
-  menuJsonB: string;
+  menuJsonB: sameDocMenuType;
 
   @Column({
     type: sequelize.JSONB,
   })
-  userAnswersJsonB: string;
+  userAnswersJsonB: any;
 
   @Column({
     type: sequelize.BOOLEAN,
   })
   isReady: boolean;
+
+  @Column({
+    type: sequelize.ENUM("BUILT_IN", "PLUGIN", "MARKET"),
+  })
+  selectionType: SelectionTypeEnum;
+  
+  @Column({
+    type: sequelize.UUID
+  })
+  selectionId: string;
+  
 }

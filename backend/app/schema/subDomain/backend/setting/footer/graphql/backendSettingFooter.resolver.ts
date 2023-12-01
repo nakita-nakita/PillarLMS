@@ -4,6 +4,21 @@ import makeBackendSettingFooterBuiltInMain from "../main/backendSettingFooterBui
 
 const backendSettingFooterGqlResolver = {
   Query: {
+    backendSettingFooter_getOneRealTime: async (parent, args, ctx) => {
+
+      const main = makeBackendSettingFooterMain(ctx.d)
+
+      const response = await main.getOneRealTime({
+        socketId: args.socketId
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
     backendSettingFooterBuiltIn_getMany: async (parent, args, ctx) => {
 
       const main = makeBackendSettingFooterBuiltInMain(ctx.d)

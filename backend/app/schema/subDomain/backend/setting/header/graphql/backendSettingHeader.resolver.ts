@@ -4,6 +4,21 @@ import makeBackendSettingHeaderBuiltInMain from "../main/backendSettingHeaderBui
 
 const backendSettingHeaderGqlResolver = {
   Query: {
+    backendSettingHeader_getOneRealTime: async (parent, args, ctx) => {
+
+      const main = makeBackendSettingHeaderMain(ctx.d)
+
+      const response = await main.getOneRealTime({
+        socketId: args.socketId
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
     backendSettingHeaderBuiltIn_getMany: async (parent, args, ctx) => {
 
       const main = makeBackendSettingHeaderBuiltInMain(ctx.d)

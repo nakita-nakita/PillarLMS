@@ -10,7 +10,7 @@ import UserChip from '@/components/chip/user.chip';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 
 
-function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
+function RealTimeSwitchRow({ id, label, data, entity, onChange, onChangeByUser }) {
 
   const { idChip, applySwitchBuffer } = useContext(AdminLayoutContext)
   // applyTextFieldSelectionBuffer
@@ -142,10 +142,9 @@ function RealTimeSwitchRow({ id, label, data, entity, onChange }) {
       booleanValue: newValue,
     })
 
-    // if (onChange) {
-    //   onChange(newValue)
-    // }
-
+    if (onChangeByUser) {
+      onChangeByUser(newValue)
+    }
   }
 
   return (

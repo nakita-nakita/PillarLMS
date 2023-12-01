@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { Modal, Box, Typography, Button } from '@mui/material';
 import InformationModal from '@/components/modals/Information.modal';
 import DiamondModal from '@/components/modals/Diamond.modal';
-import BuiltInHeaderSideMenu from '../components/BuiltInSideMenu';
+import BuiltInFooterSideMenu from '../components/BuiltInSideMenu';
 import { SettingFooterContext } from '../context/SettingFooter.context';
-import BuiltInHeaderDisplay from '../components/BuiltInFooterDisplay';
+import BuiltInFooterDisplay from '../components/BuiltInFooterDisplay';
 
 const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
-  const { builtInData, setBuiltInData, builtInMenuData, setBuiltInMenuData, } = useContext(SettingFooterContext)
+  const { builtInData } = useContext(SettingFooterContext)
 
   const handleSelect = (favicon) => {
     if (onSelect) {
@@ -23,19 +23,19 @@ const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
     <DiamondModal
       isOpened={isOpened}
       onClose={onClose}
-      modalHeader={"Select Footer"}
+      modalFooter={"Select Footer"}
       //   isOpened={open}
       //   onClose={onClose}
       //   header="Select Color Palette."
       //   disableSubmit
-      builtInSidemenuComponent={<BuiltInHeaderSideMenu
+      builtInSidemenuComponent={<BuiltInFooterSideMenu
         builtInSites={builtInData}
 
       // primaryText={"primary"}
       // secondaryText={"secondary"}
 
       />}
-      builtInDisplayComponent={<BuiltInHeaderDisplay 
+      builtInDisplayComponent={<BuiltInFooterDisplay
       />}
     >
 

@@ -2,21 +2,14 @@ import gql from "graphql-tag"
 
 const backendSettingFooterGraphQLType = gql`
 
-  # type BackendSettingFooterRealTimeType {
-  #   id: String,
-  #   entity: String,
-  #   title: RealTimeTextField,
-  #   description: RealTimeTextField,
-  #   image: RealTimePictureSelection,
-  #   isReady: RealTimeSwitch
-  # }
-  type BackendSettingFooterType {
-    id: String,
-    webAssetImport: String,
-    menuJsonB: String,
-    userAnswersJsonB: String,
-    isReady: Boolean
-  }
+   type BackendSettingFooterRealTimeType {
+     id: String,
+     entity: String,
+     webAssetImport: String,
+     menuJsonB: String,
+     userAnswersJsonB: String,
+     isReady: RealTimeSwitch
+   }
 
   type BackendSettingFooterBuiltInType {
     id: String,
@@ -29,11 +22,11 @@ const backendSettingFooterGraphQLType = gql`
   }
 
   type Query {
-    # backendSettingFooter_getOneRealTime(socketId: String!): BackendSettingFooterRealTimeType
+    backendSettingFooter_getOneRealTime(socketId: ID!): BackendSettingFooterRealTimeType
     backendSettingFooterBuiltIn_getMany:[BackendSettingFooterBuiltInType]
   }
   type Mutation {
-    backendSettingFooter_upsertOne(id: ID!, webAssetImport: String, menuJsonB: String, userAnswersJsonB: String, isReady: Boolean): BackendSettingFooterType
+    backendSettingFooter_upsertOne(id: ID!, webAssetImport: String, menuJsonB: String, userAnswersJsonB: String, isReady: Boolean): GlobalSuccessType
   }
 `
 

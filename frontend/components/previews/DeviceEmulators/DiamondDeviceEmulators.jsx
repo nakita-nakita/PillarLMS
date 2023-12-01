@@ -10,7 +10,7 @@ import Chip from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useTheme } from '@mui/material';
 
-function DiamondDeviceEmulator({ src }) {
+function DiamondDeviceEmulator({ src, setIsDarkMode }) {
   const theme = useTheme()
 
   const iframeRef = useRef(null);
@@ -41,7 +41,14 @@ function DiamondDeviceEmulator({ src }) {
   }
 
   const toggleMode = () => {
-    setMode((prevMode) => (prevMode === 'day' ? 'night' : 'day'));
+    setMode((prevMode) => {
+      
+      const newMode = (prevMode === 'day' ? 'night' : 'day')
+
+      setIsDarkMode(newMode === "night")
+
+      return newMode
+    });
   }
 
   const getIframeSrc = () => {
@@ -88,7 +95,7 @@ function DiamondDeviceEmulator({ src }) {
           color: mode === 'night' ? theme.palette.getContrastText(theme.palette.night.main) : theme.palette.getContrastText(theme.palette.day.main)
         }}
       >
-        Dark Mode
+        Night Mode
       </Button>
       {/* <span style={{ marginLeft: "22px" }}>
         <FormControlLabel

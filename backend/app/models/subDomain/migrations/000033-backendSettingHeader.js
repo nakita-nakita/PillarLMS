@@ -25,10 +25,10 @@ async function up({ context: queryInterface }) {
     
     //selection
     selectionType: {
-      type: sequelize.ENUM("BUILT_IN", "PLUG_IN"),
+      type: sequelize.ENUM("BUILT_IN", "PLUGIN", "MARKET"),
     },
     selectionId: {
-      type: sequelize.STRING,
+      type: sequelize.UUID,
     },
 
     // standard

@@ -4,7 +4,7 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 const backendSettingFooterSecurity = {
   Query: {
     // backendSettingFooter_getOneRealTime: and(isAuthenticated, isAdmin),
-    // backendSettingFooter_getOneRealTime: isAuthenticated,
+    backendSettingFooter_getOneRealTime: isAuthenticated,
     backendSettingFooterBuiltIn_getMany: isAuthenticated,
   },
   Mutation: {

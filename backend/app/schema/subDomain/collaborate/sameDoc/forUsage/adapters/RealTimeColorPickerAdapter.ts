@@ -6,21 +6,24 @@ import chroma from 'chroma-js';
 class RealTimeColorAdapter {
   private orderCounter: number = 0;
 
-  public id: string = uuidv4();
-  public order: number = 0;
-  public color: string;
-  public name: string;
-  // for display, not for functionality when created.
-  public user: socketLookUpType;
+  // id
+  public id?: string = uuidv4();
+  public sameDocType?= "COLOR_PICKER:V1"
+  public name?: string;
 
-  public colorLight1: string;
-  public colorLight2: string;
-  public colorLight3: string;
-  public colorLight4: string;
-  public colorDark1: string;
-  public colorDark2: string;
-  public colorDark3: string;
-  public colorDark4: string;
+  public order?: number = 0;
+  public color?: string;
+  // for display, not for functionality when created.
+  public user?: socketLookUpType;
+
+  public colorLight1?: string;
+  public colorLight2?: string;
+  public colorLight3?: string;
+  public colorLight4?: string;
+  public colorDark1?: string;
+  public colorDark2?: string;
+  public colorDark3?: string;
+  public colorDark4?: string;
 
   constructor({
     color,
@@ -58,7 +61,7 @@ class RealTimeColorAdapter {
     this.colorDark4 = colorDark4;
   }
 
-  async updateColor({ color, socketLookUp }: { color: string, socketLookUp: socketLookUpType }): Promise<number> {
+  async updateColor?({ color, socketLookUp }: { color: string, socketLookUp: socketLookUpType }): Promise<number> {
     if (socketLookUp && !socketLookUp.id) {
       socketLookUp.id = socketLookUp.userId
     }
@@ -77,6 +80,32 @@ class RealTimeColorAdapter {
     this.order = ++this.orderCounter;
 
     return this.order
+  }
+
+  getData?() {
+    let user = this.user ? {
+      displayName: this.user.displayName,
+      circleColor: this.user.circleColor,
+      labelColor: this.user.labelColor,
+      picture: this.user.picture,
+    } : null
+
+
+    return {
+      sameDocType: this.sameDocType,
+      order: this.order,
+      color: this.color,
+      name: this.name,
+      user,
+      colorLight1: this.colorLight1,
+      colorLight2: this.colorLight2,
+      colorLight3: this.colorLight3,
+      colorLight4: this.colorLight4,
+      colorDark1: this.colorDark1,
+      colorDark2: this.colorDark2,
+      colorDark3: this.colorDark3,
+      colorDark4: this.colorDark4,
+    }
   }
 }
 
