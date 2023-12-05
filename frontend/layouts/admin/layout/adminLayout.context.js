@@ -6,6 +6,7 @@ import { SnackbarProvider } from 'notistack';
 import SameDocEntity, { SameDocEntityContext } from '@/components/realtime/_buffer/SameDocEntity.context';
 import SameDocBuffer, { SameDocBufferContext } from '@/components/realtime/_buffer/SameDocBuffer.context';
 import { useRouter } from 'next/router';
+import SelectMediaManagerProvider from '@/components/realtime/MediaSelectionRow/modal/MediaManager/context/selectMediaManager.context';
 
 export const AdminLayoutContext = React.createContext();
 
@@ -152,7 +153,7 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
           name: showBranding.name,
         }))
       }
-      
+
     })
 
   }, [])
@@ -173,11 +174,13 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
       applyTextFieldSelectionBuffer,
       applySwitchBuffer,
     }}>
-      <SnackbarProvider>
-        <SettingTabsProvider>
-          {children}
-        </SettingTabsProvider>
-      </SnackbarProvider>
+      <SelectMediaManagerProvider>
+        <SnackbarProvider>
+          <SettingTabsProvider>
+            {children}
+          </SettingTabsProvider>
+        </SnackbarProvider>
+      </SelectMediaManagerProvider>
     </AdminLayoutContext.Provider>
   )
 }

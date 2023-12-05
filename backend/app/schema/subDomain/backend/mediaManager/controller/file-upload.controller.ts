@@ -24,7 +24,7 @@ export default ({ app }) => {
       folderId,
     })
 
-    d.subDomainTransaction.commit()
+    // d.subDomainTransaction.commit()
 
     return res.status(200).json({
       success: true,

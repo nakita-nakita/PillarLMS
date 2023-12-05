@@ -11,6 +11,7 @@ import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTime
 import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { RealTimeAdapterPropertyValue, RealTimeAllAdapters } from "./set.script";
 import RealTimeColorSelectionAdapter from "../../../forUsage/adapters/RealTimeColorSelectionAdapter";
+import RealTimeMediaSelectionAdapter from "../../../forUsage/adapters/RealTimeMediaSelectionAdapter";
 
 type sameDocMenuItemType =
   | {
@@ -121,6 +122,22 @@ const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing
         isShowing,
       })
 
+    case "MEDIA_SELECTION:V1":
+      let media
+
+      if (initialValue !== undefined) {
+        media = initialValue
+      }
+
+      if (userAnswers && userAnswers[prop]) {
+        media = userAnswers[prop].url
+      }
+
+      return new RealTimeMediaSelectionAdapter({
+        name: prop,
+        media,
+        label,
+      })
     default:
       return null
   }

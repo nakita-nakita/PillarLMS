@@ -23,19 +23,47 @@ const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
     <DiamondModal
       isOpened={isOpened}
       onClose={onClose}
-      modalHeader={"Select Header"}
+      title={"Select Header"}
+      
+      tabs={[
+        {
+          label: "Selected",
+          value: "SELECTED",
+        },
+        {
+          label: "Built-in",
+          value: "BUILT_IN",
+        },
+        {
+          label: "Market",
+          value: "MARKET",
+        },
+        {
+          label: "Agency",
+          value: "AGENCY",
+        },
+        {
+          label: "Favorites",
+          value: "FAVORITES",
+        },
+        {
+          label: "New",
+          value: "NEW",
+        },
+      ]}
+      selectedTabValue={"BUILT_IN"}
       //   isOpened={open}
       //   onClose={onClose}
       //   header="Select Color Palette."
       //   disableSubmit
-      builtInSidemenuComponent={<BuiltInHeaderSideMenu
+      SidemenuComponent={<BuiltInHeaderSideMenu
         builtInSites={builtInData}
 
       // primaryText={"primary"}
       // secondaryText={"secondary"}
 
       />}
-      builtInDisplayComponent={<BuiltInHeaderDisplay
+      DisplayComponent={<BuiltInHeaderDisplay
       />}
     >
 

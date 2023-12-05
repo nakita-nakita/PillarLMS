@@ -10,7 +10,19 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { List } from '@mui/material';
 
-const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSidemenuComponent, builtInDisplayComponent }) => {
+const DiamondModal = ({
+  isOpened,
+  onClose,
+  //top
+  title,
+  tabs,
+  selectedTabValue,
+  //body
+  SidemenuComponent,
+  DisplayComponent,
+  isFullDisplay,
+  FullDisplay,
+}) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(isOpened);
 
@@ -58,7 +70,7 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
         {/* Row 1: Modal Header and Close Button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: "10px 5px 10px 12px" }}>
           <Typography variant="h6" style={{ color: theme.palette.grey[800] }}>
-            {modalHeader}
+            {title}
           </Typography>
           <IconButton
             onClick={handleClose}
@@ -75,98 +87,77 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
 
         {/* Row 2: Tabs */}
         <Tabs
-          value={0}
+          value={selectedTabValue}
 
           onChange={() => { }}
           sx={{
-            backgroundColor: theme.palette.grey[700],
+            backgroundColor: theme.palette.primary.main,
             // color: theme.palette.grey[200],
             m: 0,
           }}
         >
-          <Tab
-            label="Built-in"
-            sx={{
-              color: theme.palette.grey[200],
-              minWidth: 'auto',
-              '&.Mui-selected': {
-                color: theme.palette.common.white,
-              },
-            }}
-          />
-          <Tab
-            label="Library"
-            sx={{
-              color: theme.palette.grey[200],
-              minWidth: 'auto',
-              '&.Mui-selected': {
-                color: theme.palette.common.white,
-              },
-            }}
-          />
-          <Tab
-            label="Favorites"
-            sx={{
-              color: theme.palette.grey[200],
-              minWidth: 'auto',
-              '&.Mui-selected': {
-                color: theme.palette.common.white,
-              },
-            }}
-          />
-          <Tab
-            label="New"
-            sx={{
-              color: theme.palette.grey[200],
-              minWidth: 'auto',
-              '&.Mui-selected': {
-                color: theme.palette.common.white,
-              },
-            }}
-          />
+
+          {tabs && tabs.length > 0 && tabs.map((tab) => (
+            <Tab
+              key={tab.label}
+              label={tab.label}
+              value={tab.value}
+              sx={{
+                color: theme.palette.grey[200],
+                minWidth: 'auto',
+                '&.Mui-selected': {
+                  color: theme.palette.common.white,
+                },
+              }}
+            />
+          ))}
         </Tabs>
 
         {/* Row 3: Left and Right Columns */}
         <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
+          {isFullDisplay && (
+            <>
+              {FullDisplay}
+            </>
+          )}
+          {!isFullDisplay && (
+            <Grid container spacing={2}>
+              {/* Left column for selection */}
+              <Grid item xs={3} sx={{
+                height: "calc(100vh - 96px)",
+              }}>
 
-
-          <Grid container spacing={2}>
-            {/* Left column for selection */}
-            <Grid item xs={3} sx={{
-              height: "calc(100vh - 96px)",
-            }}>
-
-              {/* Left Column */}
-              <Box
-                sx={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  // backgroundColor: "blue"
-                }}
-              >
-                <List
+                {/* Left Column */}
+                <Box
                   sx={{
-                    p: 0,
+                    flex: 1,
+                    overflowY: 'auto',
+                    // backgroundColor: "blue"
                   }}
                 >
-                  {builtInSidemenuComponent}
-                </List>
-              </Box>
-            </Grid>
+                  <List
+                    sx={{
+                      p: 0,
+                    }}
+                  >
+                    {SidemenuComponent}
+                  </List>
+                </Box>
+              </Grid>
 
-            {/* Right column for the main display */}
-            <Grid item xs={9} sx={{
-              overflowY: 'auto',
-              height: "calc(100vh - 96px)",
-              borderLeft: `1px solid ${theme.palette.grey[400]}`,
-              padding: "0 !important",
-            }}>
+              {/* Right column for the main display */}
+              <Grid item xs={9} sx={{
+                overflowY: 'auto',
+                height: "calc(100vh - 96px)",
+                borderLeft: `1px solid ${theme.palette.grey[400]}`,
+                padding: "0 !important",
+              }}>
 
-              {/* Right Column */}
-              {builtInDisplayComponent}
+                {/* Right Column */}
+                {DisplayComponent}
 
-              {/* <div>
+                {/* <div>
                 <SelectionHeader />
 
 
@@ -185,10 +176,9 @@ const DiamondModal = ({ modalHeader, isOpened, onClose, modalText, builtInSideme
 
                 </div>
               </div> */}
+              </Grid>
             </Grid>
-          </Grid>
-
-
+          )}
 
 
         </Box>

@@ -1,12 +1,8 @@
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSingleton from "../../../../_singleton/preMain/_singleton.ram-cache";
 import _ from "lodash"
-import RealTimeYDocAdapter from "../../../forUsage/adapters/RealTimeYDocAdapter";
-import RealTimeSwitchAdapter from "../../../forUsage/adapters/RealTimeSwitchAdapter";
-import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
-import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTimePictureSelectionAdapter";
-import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
 import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
+import { RealTimeAllAdapters } from "./set.script";
 
 type input = {
   entity: string,
@@ -15,7 +11,7 @@ type input = {
 
 export default function getByPropertyName(d: dependencies) {
 
-  return async (args: input): Promise<returningSuccessObj<RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimeColorAdapter | RealTimePictureSelectionAdapter | RealTimeFaviconSelectionAdapter>> => {
+  return async (args: input): Promise<returningSuccessObj<RealTimeAllAdapters>> => {
 
     const singletonFunc = makeSingleton(d)
 

@@ -43,9 +43,23 @@ function FunctionalBranding(props) {
         {user.isBrandShowing && (
           <>
             {user.isLogoShowing && (<>
-              <IconButton color="inherit" className="mr-2">
-                <HomeIcon />
-              </IconButton>
+              {user.logo?.type === "BUILT_IN" && (
+                <>
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${user.logo.url}`}
+                    style={{ height: "40px" }}
+                    alt="Preview"
+                    className="mr-2"
+                  />
+                </>
+              )}
+              {(!user.logo || user.logo?.type === "NONE") && (
+                <>
+                  <IconButton color="inherit" className="mr-2">
+                    <HomeIcon />
+                  </IconButton>
+                </>
+              )}
             </>
             )}
             {user.isBrandTextShowing && (

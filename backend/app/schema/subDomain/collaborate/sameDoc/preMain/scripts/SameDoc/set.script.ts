@@ -11,8 +11,9 @@ import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTime
 import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
 import { EntityMenuType, sameDocMenuType } from "./adaptersFromMenuAndAnswers.script";
 import RealTimeColorSelectionAdapter from "../../../forUsage/adapters/RealTimeColorSelectionAdapter";
+import RealTimeMediaSelectionAdapter from "../../../forUsage/adapters/RealTimeMediaSelectionAdapter";
 
-export type RealTimeAllAdapters = RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter | RealTimeFaviconSelectionAdapter | RealTimeColorSelectionAdapter
+export type RealTimeAllAdapters = RealTimeYDocAdapter | RealTimeSwitchAdapter | RealTimePictureSelectionAdapter | RealTimeColorAdapter | RealTimeFaviconSelectionAdapter | RealTimeColorSelectionAdapter | RealTimeMediaSelectionAdapter
 
 export type RealTimeAdapterPropertyValue = {
   name: string,
@@ -138,14 +139,21 @@ export default function set(d: dependencies) {
               switch (data.sameDocType) {
                 case "SWITCH:V1":
                   answers[data.name] = (data as any).booleanValue
-
                   break;
+
                 case "YDOC:V1":
                   answers[data.name] = (data as any).readableTextValue
-
                   break;
+
                 case "COLOR_SELECTION:V1":
                   answers[data.name] = (data as any).color
+                  break;
+
+                case "MEDIA_SELECTION:V1":
+                  answers[data.name] = {
+                    type: (data as any).selection === "NO_MEDIA" ? "NONE" : "BUILT_IN",
+                    url: (data as any).selection === "CURRENT_MEDIA" ? (data as any).currentSelection.media : (data as any).selection,
+                  }
                   break;
 
                 default:

@@ -7,6 +7,7 @@ import { Divider, useTheme } from '@mui/material'
 import { initSocket } from '@/utils/realtime/socket'
 import dynamic from 'next/dynamic'
 import RealTimeColorSelectionRow from '../../ColorSelectionRow/ColorSelectionRow.realtime'
+import RealTimeMediaSelectionRow from '../../MediaSelectionRow/MediaSelection'
 
 const DynamicRealTimeTextField = dynamic(() => import('@/components/realtime/TextFieldRow/TextField.realtime'), {
   ssr: false
@@ -31,7 +32,6 @@ const isShowingComponent = ({ isShowing, isDarkMode }) => {
 }
 
 const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode, containerLabel, onChangeByUser }) => {
-  console.log('menuItemRow', menuItemRow)
 
   const { sameDocType, label, isShowing, ...data } = menuItemRow
 
@@ -131,6 +131,29 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
         </div>
       )
 
+    case "MEDIA_SELECTION:V1":
+      return (<RealTimeMediaSelectionRow
+        label={label}
+        data={data}
+        entity={entity}
+        onChangeByUser={(value) => {
+
+          if (onChangeByUser) {
+            onChangeByUser({
+              type: sameDocType,
+              name: data.name,
+              value,
+            })
+          }
+          // const socket = initSocket()
+
+          // socket.emit('server-setting-header-change-prop', {
+          //   name: data.name,
+          //   value,
+          // })
+        }}
+      />)
+
     default:
       return <div></div>
   }
@@ -153,7 +176,6 @@ function MenuContainer({ menuItem, isDarkMode, setIsDarkMode, entity, onChangeBy
             entity={entity}
             onChangeByUser={(value) => {
               // setIsReadyValue(value)
-              console.log('Menu "isShowing" contents to be saved', value)
               const socket = initSocket()
 
               if (onChangeByUser) {

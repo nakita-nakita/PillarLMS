@@ -23,20 +23,46 @@ const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
     <DiamondModal
       isOpened={isOpened}
       onClose={onClose}
-      modalFooter={"Select Footer"}
+      title={"Select Footer"}
+      tabs={[
+        {
+          label: "Selected",
+          value: "SELECTED",
+        },
+        {
+          label: "Built-in",
+          value: "BUILT_IN",
+        },
+        {
+          label: "Market",
+          value: "MARKET",
+        },
+        {
+          label: "Agency",
+          value: "AGENCY",
+        },
+        {
+          label: "Favorites",
+          value: "FAVORITES",
+        },
+        {
+          label: "New",
+          value: "NEW",
+        },
+      ]}
+      selectedTabValue={"BUILT_IN"}
       //   isOpened={open}
       //   onClose={onClose}
       //   header="Select Color Palette."
       //   disableSubmit
-      builtInSidemenuComponent={<BuiltInFooterSideMenu
+      SidemenuComponent={<BuiltInFooterSideMenu
         builtInSites={builtInData}
 
       // primaryText={"primary"}
       // secondaryText={"secondary"}
 
       />}
-      builtInDisplayComponent={<BuiltInFooterDisplay
-      />}
+      DisplayComponent={<BuiltInFooterDisplay />}
     >
 
     </DiamondModal>
