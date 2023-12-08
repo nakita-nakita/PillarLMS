@@ -18,7 +18,8 @@ export default ({ socket, d }: input) => {
     sameDocColorPicker.updateColorChange({
       entity,
       name,
-      color,
+      color: color.color,
+      suggestedTextColor: color.suggestedTextColor,
       socketId: socket.id,
     })
   });

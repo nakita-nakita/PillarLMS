@@ -2,14 +2,22 @@ import gql from "graphql-tag"
 
 const backendSettingFooterGraphQLType = gql`
 
-   type BackendSettingFooterRealTimeType {
-     id: String,
-     entity: String,
-     webAssetImport: String,
-     menuJsonB: String,
-     userAnswersJsonB: String,
-     isReady: RealTimeSwitch
-   }
+  enum SelectionTypeEnum {
+    BUILT_IN, 
+    PLUGIN,
+    MARKET
+  }
+
+  type BackendSettingFooterRealTimeType {
+    id: String,
+    entity: String,
+    webAssetImport: String,
+    menuJsonB: String,
+    userAnswersJsonB: String,
+    selectionType: String,
+    selectionId: String,
+    isReady: RealTimeSwitch
+  }
 
   type BackendSettingFooterBuiltInType {
     id: String,
@@ -26,8 +34,14 @@ const backendSettingFooterGraphQLType = gql`
     backendSettingFooterBuiltIn_getMany:[BackendSettingFooterBuiltInType]
   }
   type Mutation {
-    backendSettingFooter_upsertOne(id: ID!, webAssetImport: String, menuJsonB: String, userAnswersJsonB: String, isReady: Boolean): GlobalSuccessType
+    backendSettingFooter_upsertOne(id: ID!, selectionType: SelectionTypeEnum!, selectionId: ID!, userAnswers: String, isReady: Boolean): GlobalSuccessType
+    backendSettingFooter_selectFooter(id: ID!, type: SelectionTypeEnum!, socketId: ID!): BackendSettingFooterRealTimeType
   }
 `
+
+
+// selectionType: {
+//   type: sequelize.ENUM("BUILT_IN", "PLUGIN", "MARKET"),
+// },
 
 export default backendSettingFooterGraphQLType

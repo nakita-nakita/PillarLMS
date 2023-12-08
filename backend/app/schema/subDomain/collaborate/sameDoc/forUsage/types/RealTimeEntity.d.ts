@@ -7,14 +7,19 @@ type socketInput = {
   socketId: string
 };
 
-type resetPropsInput = {
-  newProperties: RealTimeAdapterPropertyValue[]
+type updateMenuInput = {
+  menu?: sameDocMenuType
 }
 
 type getDataType = {
   menu?: sameDocAdapterMenuType,
   props?: RealTimeAllAdapters,
   answers?: any,
+  nonRealTimeProps?: any,
+}
+
+type updateMenuType = {
+  menu: EntityMenuType
 }
 
 export type EntityDocument = {
@@ -22,16 +27,23 @@ export type EntityDocument = {
   sockets?: socketLookUpType[];
   addSocket?: ({ socketId }: { socketId: string }) => Promise<void>;
   removeSocket?: ({ socketId }: { socketId: string }) => Promise<void>;
-  
+
   //properties control, properties for the entity object is namespace on step down to allow sharing between properties, sockets, and more!
   props?: {
     [propName: string]: RealTimeAllAdapters;
   }
-  resetProps?: (resetPropsInput) => Promise<void>;
+  nonRealTimeProps?: {
+    [propName: string]: any;
+  }
+  userAnswers?: {
+    [propName: string]: any;
+  }
+  updateUserAnswer?: ({name, value}) => Promise<void>
   
   //menu
   menu?: EntityMenuType
-  
+  updateMenu?: (updateMenuInput) => Promise<updateMenuType>;
+
   //props and menu
   getData?: () => getDataType
 };

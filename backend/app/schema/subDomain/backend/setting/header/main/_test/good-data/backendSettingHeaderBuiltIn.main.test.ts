@@ -9,6 +9,7 @@ jest.setTimeout(100000)
 
 describe("test backendSettingHeaderBuiltIn.main.js", () => {
   let d: dependencies
+  let seedId = "2ec57f1a-f355-48d5-8aa3-a8fc2e457ff4"
 
   beforeAll(async () => {
     
@@ -21,9 +22,19 @@ describe("test backendSettingHeaderBuiltIn.main.js", () => {
   test("getMany: can get many records.", async () => {
     const settingHeaderBuiltIn = makeBackendSettingHeaderBuiltInMain(d)
 
-    const getOne = await settingHeaderBuiltIn.getMany()
+    const getMany = await settingHeaderBuiltIn.getMany()
 
-    expect(getOne.data.length).toBeGreaterThan(0)
+    expect(getMany.data.length).toBeGreaterThan(0)
+  })
+
+  test("getOneById: can get one record.", async () => {
+    const settingHeaderBuiltIn = makeBackendSettingHeaderBuiltInMain(d)
+
+    const getOneById = await settingHeaderBuiltIn.getOneById({
+      id: seedId,
+    })
+
+    expect(getOneById.data.dataValues.id).toEqual(seedId)
   })
 
   afterAll(async () => {

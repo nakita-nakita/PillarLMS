@@ -1,11 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
 import { socketLookUpType } from '../../../_singleton/preMain/scripts/socketLookUp/socketRecord.types';
 
+export enum suggestedTextColorEnum {
+  DARK = "DARK",
+  LIGHT = "LIGHT",
+}
+
 type input = {
   color: any,
   name: string,
   label?: string,
   isShowing?: string,
+  suggestedTextColor?: suggestedTextColorEnum,
 }
 
 class RealTimeColorSelectionAdapter {
@@ -17,7 +23,8 @@ class RealTimeColorSelectionAdapter {
   public name?: string;
 
   public order?: number = 0;
-  public color?: any;
+  public color?: string;
+  public suggestedTextColor?: suggestedTextColorEnum;
   // for display, not for functionality when created.
   public user?: socketLookUpType;
 
@@ -30,20 +37,28 @@ class RealTimeColorSelectionAdapter {
     name,
     label,
     isShowing,
+    suggestedTextColor,
   }: input) {
-    this.name = name;
+    // data
+    this.name = name; 
     this.color = color;
-    //display
+    // display
     this.label = label;
     this.isShowing = isShowing;
+    // meta
+    this.suggestedTextColor = suggestedTextColor;
   }
 
-  async updateColor?({ color, socketLookUp }: { color: string, socketLookUp: socketLookUpType }): Promise<number> {
+  async updateColor?({ color, suggestedTextColor, socketLookUp }: { color: string, suggestedTextColor?: suggestedTextColorEnum, socketLookUp: socketLookUpType }): Promise<number> {
     if (socketLookUp && !socketLookUp.id) {
       socketLookUp.id = socketLookUp.userId
     }
     this.user = socketLookUp
     this.color = color
+
+    if (suggestedTextColor) {
+      this.suggestedTextColor = suggestedTextColor
+    }
 
 
     this.order = ++this.orderCounter;

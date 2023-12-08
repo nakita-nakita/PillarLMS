@@ -5,15 +5,13 @@ import { returningSuccessObj } from "../../../types/returningObjs.types";
 export default function errorHandler(error: returningSuccessObj<any>, loggers?: typeof console[] | any[]) {
 
   if (!loggers) {
-    console.error(error);
+    console.log(error);
   } else {
     loggers.map(logger => {
-      if (logger.error) {
-        return logger.error(error.humanMessage)
-      }
+
 
       if (logger.log) {
-        return logger.log(error.humanMessage)
+        return logger.log(error)
       }
     })
   }

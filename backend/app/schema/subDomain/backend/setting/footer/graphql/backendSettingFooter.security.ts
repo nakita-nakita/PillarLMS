@@ -10,6 +10,7 @@ const backendSettingFooterSecurity = {
   Mutation: {
     // backendSettingFooter_upsertOne: and(isAuthenticated, isAdmin),
     backendSettingFooter_upsertOne: isAuthenticated,
+    backendSettingFooter_selectFooter: isAuthenticated,
   }
 }
 

@@ -10,6 +10,7 @@ const backendSettingHeaderSecurity = {
   Mutation: {
     // backendSettingHeader_upsertOne: and(isAuthenticated, isAdmin),
     backendSettingHeader_upsertOne: isAuthenticated,
+    backendSettingHeader_selectHeader: isAuthenticated,
   }
 }
 

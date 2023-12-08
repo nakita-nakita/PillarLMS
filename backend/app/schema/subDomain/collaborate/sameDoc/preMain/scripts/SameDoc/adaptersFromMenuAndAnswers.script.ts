@@ -37,7 +37,7 @@ type input = {
 }
 
 
-type EntityMenuItemType =
+export type EntityMenuItemType =
   | {
     header?: string;
     type?: string;
@@ -69,7 +69,7 @@ type selectAdapterInput = {
   isShowing?: string,
 }
 
-const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing }: selectAdapterInput) => {
+export const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing }: selectAdapterInput) => {
   switch (type) {
     case "TEXTFIELD:V1":
       let initialText
@@ -94,7 +94,7 @@ const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing
         initialBoolean = initialValue
       }
 
-      if (userAnswers && userAnswers[prop]) {
+      if (userAnswers && userAnswers[prop] !== undefined && userAnswers[prop] !== null) {
         initialBoolean = userAnswers[prop]
       }
 
@@ -106,18 +106,22 @@ const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing
 
     case "COLOR_SELECTION:V1":
       let color
+      let suggestedTextColor;
 
-      if (initialValue !== undefined) {
-        color = initialValue
+      if (initialValue !== undefined && initialValue !== null) {
+        color = initialValue.color
+        suggestedTextColor = initialValue.suggestedTextColor
       }
 
       if (userAnswers && userAnswers[prop]) {
-        color = userAnswers[prop]
+        color = userAnswers[prop].color
+        suggestedTextColor = userAnswers[prop].suggestedTextColor
       }
 
       return new RealTimeColorSelectionAdapter({
         name: prop,
-        color,
+        color: color || "#fff",
+        suggestedTextColor, 
         label,
         isShowing,
       })
@@ -146,6 +150,10 @@ const selectAdapter = ({ type, prop, initialValue, userAnswers, label, isShowing
 export default function adaptersFromMenuAndAnswers(d: dependencies) {
 
   return async (args: input): Promise<returningSuccessObj<output>> => {
+    if (typeof (args.userAnswers) === 'string') {
+      args.userAnswers = JSON.parse(args.userAnswers)
+    }
+
     const adapters: RealTimeAdapterPropertyValue[] = []
     let menu: EntityMenuType = {
       menu: []

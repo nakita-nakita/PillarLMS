@@ -29,7 +29,7 @@ export default function getOneRealTime(d: dependencies) {
         entity,
       })
 
-      const {menu, props, answers} = entityRecord.data.getData()
+      const {menu, props, answers, nonRealTimeProps} = entityRecord.data.getData()
 
       if (args.socketId) {
         await sameDoc.userConnectsToEntity({
@@ -44,6 +44,7 @@ export default function getOneRealTime(d: dependencies) {
         data: {
           ...record.data?.dataValues,
           ...props,
+          ...nonRealTimeProps,
           menuJsonB: menuObj ? JSON.stringify(menuObj) : null,
           userAnswersJsonB: Object.keys(answers).length ? JSON.stringify(answers): null,
           entity,
@@ -70,14 +71,20 @@ export default function getOneRealTime(d: dependencies) {
         properties: [...setVariables.data?.adapters, isReady],
         menu: setVariables.data?.menu,
         socketId: args.socketId,
+        nonRealTimeProps: {
+          webAssetImport: record.data?.dataValues?.webAssetImport,
+          selectionType: record.data?.dataValues?.selectionType,
+          selectionId: record.data?.dataValues?.selectionId,
+        }
       })
 
-      const {menu, props, answers} = setEntity.data.getData()
+      const {menu, props, answers, nonRealTimeProps} = setEntity.data.getData()
 
       return {
         success: true,
         data: {
           ...record.data?.dataValues,
+          ...nonRealTimeProps,
           ...props,
           menuJsonB: menu ? JSON.stringify({...menu}) : null,
           userAnswersJsonB: Object.keys(answers).length ? JSON.stringify(answers): null,

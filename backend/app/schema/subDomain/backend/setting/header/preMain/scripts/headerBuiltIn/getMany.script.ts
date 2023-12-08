@@ -11,6 +11,7 @@ export default function getMany(d: dependencies) {
 
     const data = await db.backendSettingHeaderBuiltIn.findAll({
       transaction: d.subDomainTransaction,
+      order: [['createdAt', 'DESC']]
     }).catch(error => d.errorHandler(error, d.loggers))
 
     return {

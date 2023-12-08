@@ -17,12 +17,21 @@ export default ({ socket, d }: input) => {
       entity,
     })
 
-    record.data.sockets.map(s => {
-      s.socket.emit("setting-header-change-prop", {
-        entity,
+    if (record.data) {
+      record.data.updateUserAnswer({
         name: data.name,
         value: data.value,
       })
-    })
+    }
+
+    if (record.data.sockets) {
+      record.data.sockets.map(s => {
+        s.socket.emit("setting-header-change-prop", {
+          entity,
+          name: data.name,
+          value: data.value,
+        })
+      })
+    }
   });
 }

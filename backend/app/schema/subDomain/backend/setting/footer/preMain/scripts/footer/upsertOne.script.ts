@@ -1,8 +1,8 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
-import backendSettingLink from "../../../../../../../../models/subDomain/backend/setting/backendSettingLink.model";
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import backendSettingFooter from "../../../../../../../../models/subDomain/backend/setting/backendSettingFooter.model";
+import { selectionTypeEnum } from "../../../../header/main/scripts/header/upsertOne.script";
 
 type input = {
   id?: string
@@ -10,6 +10,8 @@ type input = {
   menuJsonB?: string
   userAnswersJsonB?: string
   isReady?: boolean
+  selectionType?: selectionTypeEnum,
+  selectionId?: string,
 }
 
 export default function upsertOne(d: dependencies) {

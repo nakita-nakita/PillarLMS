@@ -9,7 +9,7 @@ import RealTimePictureSelectionAdapter from "../../../forUsage/adapters/RealTime
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
 import RealTimeFaviconSelectionAdapter from "../../../forUsage/adapters/RealTimeFaviconSelectionAdapter";
 import { dependencies } from "../../../../../../utils/dependencies/type/dependencyInjection.types";
-import { EntityMenuType, sameDocMenuType } from "./adaptersFromMenuAndAnswers.script";
+import { EntityMenuItemType, EntityMenuType, sameDocMenuType, selectAdapter } from "./adaptersFromMenuAndAnswers.script";
 import RealTimeColorSelectionAdapter from "../../../forUsage/adapters/RealTimeColorSelectionAdapter";
 import RealTimeMediaSelectionAdapter from "../../../forUsage/adapters/RealTimeMediaSelectionAdapter";
 
@@ -38,10 +38,53 @@ type input = {
   entity: string,
   properties: RealTimeAdapterPropertyValue[]
   menu?: EntityMenuType
+  nonRealTimeProps?: {
+    [propName: string]: any;
+  },
+  userAnswers?: {
+    [propName: string]: any;
+  }
 }
 
-type resetPropertiesInput = {
-  newProperties: RealTimeAdapterPropertyValue[]
+type updateMenuInput = {
+  menu?: sameDocMenuType,
+  nonRealTimeProps?: any
+}
+
+function getTextColorBrightness(color) {
+  // Convert hex to RGB
+  if (color[0] === '#') {
+    color = color.slice(1);
+    const bigint = parseInt(color, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    color = `rgb(${r}, ${g}, ${b})`;
+  }
+
+  // Get RGB values
+  const rgb = color.match(/\d+/g);
+  const r = rgb[0];
+  const g = rgb[1];
+  const b = rgb[2];
+
+  // Calculate luminance
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+
+  // Check if luminance is above a certain threshold
+  return luminance > 128 ? 'DARK' : 'LIGHT';
+}
+
+
+const doesPropertyWithTypeExist = ({ prop, type, entityProps }: {
+  prop: string,
+  type: string,
+  entityProps: {
+    [propName: string]: RealTimeAllAdapters;
+  },
+}) => {
+
+  return entityProps[prop] !== undefined && entityProps[prop].sameDocType === type
 }
 
 export default function set(d: dependencies) {
@@ -83,24 +126,127 @@ export default function set(d: dependencies) {
       sameDoc[args.entity].props[prop.name] = prop.adapter
     }
 
-    // reset properties
-    sameDoc[args.entity].resetProps = async ({ newProperties }: resetPropertiesInput) => {
-      for (let i = 0; i < newProperties.length; i++) {
-        const prop = newProperties[i];
+    // add non real time props
+    sameDoc[args.entity].nonRealTimeProps = args.nonRealTimeProps
 
-        if (sameDoc[args.entity].props[prop.name] && sameDoc[args.entity].props[prop.name].sameDocType === prop.adapter.sameDocType) {
-          continue
+    // store user answers
+    sameDoc[args.entity].userAnswers = args.userAnswers || {}
+    sameDoc[args.entity].updateUserAnswer = async ({ name, value }) => {
+      sameDoc[args.entity].userAnswers[name] = value;
+    }
+
+    // reset properties
+    sameDoc[args.entity].updateMenu = async (args2: updateMenuInput) => {
+      let menu: EntityMenuType = {
+        menu: []
+      }
+
+      if (args2.nonRealTimeProps) {
+        sameDoc[args.entity].nonRealTimeProps = {
+          ...sameDoc[args.entity].nonRealTimeProps,
+          ...args2.nonRealTimeProps,
+        }
+      }
+
+      for (let i = 0; i < args2.menu.menu.length; i++) {
+        const m = args2.menu.menu[i];
+
+        const newMenuItem: EntityMenuItemType = {
+          header: m.header,
+          type: m.type,
+          data: []
         }
 
-        sameDoc[args.entity].props[prop.name] = prop.adapter
+
+        //   if (sameDoc[args.entity].props[prop.name] && sameDoc[args.entity].props[prop.name].sameDocType === prop.adapter.sameDocType) {
+        //     continue
+        //   }
+
+        //isShowing
+        if (m?.isShowing?.prop && !doesPropertyWithTypeExist({
+          prop: m.isShowing.prop,
+          type: "SWITCH:V1",
+          entityProps: sameDoc[args.entity].props,
+        })) {
+          const adapter = selectAdapter({
+            prop: m.isShowing.prop,
+            initialValue: true,
+            type: "SWITCH:V1",
+          })
+          sameDoc[args.entity].props[m?.isShowing?.prop] = adapter
+
+          newMenuItem.isShowing = {
+            // adapterId: adapter.id,
+            name: adapter.name,
+          }
+        } else if (m?.isShowing?.prop) {
+          newMenuItem.isShowing = {
+            // adapterId: adapter.id,
+            name: m.isShowing.prop,
+          }
+        }
+
+        for (let x = 0; x < m.data.length; x++) {
+          const data = m.data[x];
+
+          if (doesPropertyWithTypeExist({
+            prop: data.prop,
+            type: data.type,
+            entityProps: sameDoc[args.entity].props,
+          })) {
+            newMenuItem.data.push({
+              // adapterId: adapter.id,
+              name: data.prop,
+            })
+
+            continue
+          }
+          const adapter = selectAdapter({
+            type: data.type,
+            prop: data.prop,
+            label: data.label,
+            isShowing: data.isShowing,
+            initialValue: data.defaultValue,
+          })
+
+          if (adapter) {
+
+            newMenuItem.data.push({
+              // adapterId: adapter.id,
+              name: adapter.name,
+            })
+
+            sameDoc[args.entity].props[adapter.name] = adapter
+          }
+
+        }
+
+        menu.menu.push(newMenuItem)
       }
+
+      sameDoc[args.entity].menu = menu
+
+      return { menu }
+
+
+
+      // for (let i = 0; i < newProperties.length; i++) {
+      //   const prop = newProperties[i];
+
+      //   if (sameDoc[args.entity].props[prop.name] && sameDoc[args.entity].props[prop.name].sameDocType === prop.adapter.sameDocType) {
+      //     continue
+      //   }
+
+      //   sameDoc[args.entity].props[prop.name] = prop.adapter
+      // }
+
     }
 
 
     // reset properties
     sameDoc[args.entity].getData = () => {
       const props = { ...sameDoc[args.entity].props }
-      let answers = {}
+      // let answers = {}
 
       if (sameDoc[args.entity].menu) {
         const menu: sameDocAdapterMenuType = {
@@ -124,7 +270,7 @@ export default function set(d: dependencies) {
 
             menu.menu[i].isShowing = props[menuItem.isShowing.name].getData()
 
-            answers[menu.menu[i].isShowing.name] = menu.menu[i].isShowing.booleanValue
+            sameDoc[args.entity].userAnswers[menu.menu[i].isShowing.name] = menu.menu[i].isShowing.booleanValue
 
             delete props[menuItem.isShowing.name]
           }
@@ -132,35 +278,43 @@ export default function set(d: dependencies) {
           if (menuItem?.data?.length) {
             for (let x = 0; x < menuItem.data.length; x++) {
               const component = menuItem.data[x];
-              const data = props[component.name].getData()
+              const data = props[component.name]?.getData ? props[component.name]?.getData() : null
 
-              menu.menu[i].data.push(data)
+              if (data) {
 
-              switch (data.sameDocType) {
-                case "SWITCH:V1":
-                  answers[data.name] = (data as any).booleanValue
-                  break;
+                menu.menu[i].data.push(data)
 
-                case "YDOC:V1":
-                  answers[data.name] = (data as any).readableTextValue
-                  break;
+                switch (data.sameDocType) {
+                  case "SWITCH:V1":
+                    sameDoc[args.entity].userAnswers[data.name] = (data as any).booleanValue
+                    break;
 
-                case "COLOR_SELECTION:V1":
-                  answers[data.name] = (data as any).color
-                  break;
+                  case "YDOC:V1":
+                    sameDoc[args.entity].userAnswers[data.name] = (data as any).readableTextValue
+                    break;
 
-                case "MEDIA_SELECTION:V1":
-                  answers[data.name] = {
-                    type: (data as any).selection === "NO_MEDIA" ? "NONE" : "BUILT_IN",
-                    url: (data as any).selection === "CURRENT_MEDIA" ? (data as any).currentSelection.media : (data as any).selection,
-                  }
-                  break;
+                  case "COLOR_SELECTION:V1":
+                    sameDoc[args.entity].userAnswers[data.name] = {
 
-                default:
-                  break;
+                      color: (data as any).color,
+                      suggestedTextColor: getTextColorBrightness((data as any).color),
+                    }
+                    break;
+
+                  case "MEDIA_SELECTION:V1":
+                    sameDoc[args.entity].userAnswers[data.name] = {
+                      type: (data as any).selection === "NO_MEDIA" ? "NONE" : "BUILT_IN",
+                      url: (data as any).selection === "CURRENT_MEDIA" ? (data as any).currentSelection.media : (data as any).selection,
+                    }
+                    break;
+
+                  default:
+                    break;
+                }
+
+                delete props[component.name]
+
               }
-
-              delete props[component.name]
             }
           }
         }
@@ -168,14 +322,16 @@ export default function set(d: dependencies) {
         return {
           menu,
           props,
-          answers,
+          answers: sameDoc[args.entity]?.userAnswers,
+          nonRealTimeProps: sameDoc[args.entity]?.nonRealTimeProps,
         }
 
       } else {
         return {
           menu: null,
           props,
-          answers,
+          answers: sameDoc[args.entity]?.userAnswers,
+          nonRealTimeProps: sameDoc[args.entity]?.nonRealTimeProps,
         }
       }
     }

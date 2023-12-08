@@ -2,6 +2,7 @@ import { dependencies } from "../../../../../../utils/dependencies/type/dependen
 import { returningSuccessObj } from "../../../../../../utils/types/returningObjs.types";
 import makeSocketLookUp from "../../../../_singleton/preMain/socketLookUp.ram-cache";
 import RealTimeColorAdapter from "../../../forUsage/adapters/RealTimeColorPickerAdapter";
+import RealTimeColorSelectionAdapter, { suggestedTextColorEnum } from "../../../forUsage/adapters/RealTimeColorSelectionAdapter";
 import makeCollaborateSameDoc from "../../collaborateSameDoc.ram-cache";
 
 type input = {
@@ -9,6 +10,7 @@ type input = {
   entity: string
   name: string
   color: string
+  suggestedTextColor?: suggestedTextColorEnum
 }
 
 
@@ -23,14 +25,15 @@ export default function updateColorChange(d: dependencies) {
       socketId: args.socketId,
     })
 
-    const prop: RealTimeColorAdapter = (await sameDocEntity.getByPropertyName({
+    const prop: RealTimeColorSelectionAdapter = (await sameDocEntity.getByPropertyName({
       entity: args.entity,
       name: args.name,
-    })).data as RealTimeColorAdapter
+    })).data as RealTimeColorSelectionAdapter
 
     if (prop) {
       const orderNumber = await prop.updateColor({
         color: args.color,
+        suggestedTextColor: args.suggestedTextColor,
         socketLookUp: user.data,
       })
 

@@ -9,6 +9,7 @@ jest.setTimeout(100000)
 
 describe("test backendSettingFooterBuiltIn.main.js", () => {
   let d: dependencies
+  let seedId = "5ce91223-9685-4ee7-93c2-6e38bae8804f"
 
   beforeAll(async () => {
     
@@ -18,12 +19,22 @@ describe("test backendSettingFooterBuiltIn.main.js", () => {
 
   }, 100000)
 
-  test("getOne: can get record.", async () => {
+  test("getMany: can get many records.", async () => {
     const settingFooterBuiltIn = makeBackendSettingFooterBuiltInMain(d)
 
-    const getOne = await settingFooterBuiltIn.getMany()
+    const getMany = await settingFooterBuiltIn.getMany()
 
-    expect(getOne.data.length).toBeGreaterThan(0)
+    expect(getMany.data.length).toBeGreaterThan(0)
+  })
+
+  test("getOneById: can get one record.", async () => {
+    const settingFooterBuiltIn = makeBackendSettingFooterBuiltInMain(d)
+
+    const getOneById = await settingFooterBuiltIn.getOneById({
+      id: seedId,
+    })
+
+    expect(getOneById.data.dataValues.id).toEqual(seedId)
   })
 
   afterAll(async () => {

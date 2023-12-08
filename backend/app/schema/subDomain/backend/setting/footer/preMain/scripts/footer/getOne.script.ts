@@ -3,7 +3,7 @@ import { returningSuccessObj } from "../../../../../../../utils/types/returningO
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import backendSettingFooter from "../../../../../../../../models/subDomain/backend/setting/backendSettingFooter.model";
 
-export default function getOneById(d: dependencies) {
+export default function getOne(d: dependencies) {
 
   const db = d.subDomainDb.models;
 

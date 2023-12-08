@@ -1,17 +1,23 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
-import backendSettingHeader from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
+import backendSettingFooterBuiltIn from "../../../../../../../../models/subDomain/backend/setting/backendSettingFooterBuiltIn.model";
 
-export default function getOne(d: dependencies) {
+type input = {
+  id: string;
+}
+
+export default function getOneById(d: dependencies) {
 
   const db = d.subDomainDb.models;
 
-  return async (): Promise<returningSuccessObj<Model<backendSettingHeader> | null>> => {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSettingFooterBuiltIn> | null>> => {
 
-    const data = await db.backendSettingHeader.findOne({
+    const data = await db.backendSettingFooterBuiltIn.findOne({
+      where: {
+        id: args.id
+      },
       transaction: d.subDomainTransaction,
-      order: [['createdAt', 'DESC']]
     }).catch(error => d.errorHandler(error, d.loggers))
 
     return {
