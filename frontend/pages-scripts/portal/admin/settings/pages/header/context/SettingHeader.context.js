@@ -1,9 +1,12 @@
 // Libraries
 import React, { useContext, useEffect, useState } from 'react'
-import { getSocketId } from '@/utils/realtime/socket';
+import { getSocketId, initSocket } from '@/utils/realtime/socket';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { getSettingHeaderBuiltInGraphQL } from '../store/settingHeaderBuiltIn_getMany.store';
 import { getSettingHeaderRealTimeGraphQL } from '../store/settingHeader_getRealTime.store';
+import { selectSettingHeaderGraphQL } from '../store/settingHeader_selectHeader.store';
+import { postSettingHeaderGraphQL } from '../store/settingHeader_upsert.store';
+import { enqueueSnackbar } from 'notistack';
 
 export const SettingHeaderContext = React.createContext();
 
@@ -16,10 +19,12 @@ export function SettingHeaderProvider({ children }) {
   // selected
   const [id, setId] = useState()
   const [entity, setEntity] = useState()
+
+  const [selectionType, setSelectionType] = useState()
+  const [selectionId, setSelectionId] = useState()
   const [webAssetImport, setWebAssetImport] = useState()
   const [menu, setMenu] = useState()
   const [userAnswers, setUserAnswers] = useState()
-  const [userAnswersValue, setUserAnswersValue] = useState()
   const [isReady, setIsReady] = useState()
   const [isReadyValue, setIsReadyValue] = useState()
 
@@ -81,6 +86,7 @@ export function SettingHeaderProvider({ children }) {
 
       const data = response.data.backendSettingHeader_getOneRealTime
 
+      console.log("!@#!@#!@#!@#!@#", data)
       updateEntity({
         entity: data.entity
       })
@@ -89,12 +95,94 @@ export function SettingHeaderProvider({ children }) {
       setEntity(data.entity)
       setWebAssetImport(data.webAssetImport)
       setMenu(JSON.parse(data.menuJsonB))
+      setSelectionType(data.selectionType)
+      setSelectionId(data.selectionId)
       setUserAnswers(JSON.parse(data.userAnswersJsonB))
       setIsReady(data.isReady)
 
       setIsLoaded(true)
     })
   }, [])
+
+  const changeHeader = (info) => {
+    setIsLoaded(false)
+
+    selectSettingHeaderGraphQL({
+      ...info,
+      socketId: getSocketId(),
+    }).then(response => {
+      const data = response.data.backendSettingHeader_selectHeader
+
+      console.log('lkajsdlfkjasldkfjlasdf', data)
+      setWebAssetImport(data.webAssetImport)
+      setMenu(JSON.parse(data.menuJsonB))
+      setSelectionType(data.selectionType)
+      setSelectionId(data.selectionId)
+
+      setIsLoaded(true)
+    })
+  }
+
+  useEffect(() => {
+    const socket = initSocket()
+
+    socket.on("samedoc-header-selection-change", data => {
+      setIsLoaded(false)
+
+      getSettingHeaderRealTimeGraphQL({
+        socketId: getSocketId()
+      }).then(response => {
+
+        const data = response.data.backendSettingHeader_getOneRealTime
+
+        // setId(data.id)
+        // setEntity(data.entity)
+        setWebAssetImport(data.webAssetImport)
+        setMenu(JSON.parse(data.menuJsonB))
+        setSelectionType(data.selectionType)
+        setSelectionId(data.selectionId)
+        setUserAnswers(JSON.parse(data.userAnswersJsonB))
+        // setIsReady(data.isReady)
+
+        setIsLoaded(true)
+      })
+    })
+
+    return () => {
+      socket.off("samedoc-header-selection-change")
+    }
+  }, [])
+
+  const saveHeader = () => {
+    console.log('user answers', {
+      id,
+      isReady: isReadyValue,
+      selectionId,
+      selectionType,
+      userAnswers: JSON.stringify(userAnswers),
+    })
+    postSettingHeaderGraphQL({
+      id,
+      isReady: isReadyValue,
+      selectionId,
+      selectionType,
+      userAnswers: JSON.stringify(userAnswers),
+    }).then(response => {
+
+      if (response?.data?.backendSettingHeader_upsertOne?.success)
+        enqueueSnackbar("Header Saved")
+    })
+  }
+
+  const setAnswer = ({ name, value }) => {
+    setUserAnswers(prevState => {
+      const newState = { ...prevState }
+
+      newState[name] = value
+
+      return newState;
+    })
+  }
 
 
   return (
@@ -107,7 +195,6 @@ export function SettingHeaderProvider({ children }) {
       webAssetImport, setWebAssetImport,
       menu, setMenu,
       userAnswers, setUserAnswers,
-      userAnswersValue, setUserAnswersValue,
       isReady, setIsReady,
       isReadyValue, setIsReadyValue,
 
@@ -115,12 +202,15 @@ export function SettingHeaderProvider({ children }) {
       isSelectionModalOpened, setIsSelectionModalOpened,
       builtInData, setBuiltInData,
       builtInDataSelected, setBuiltInDataSelected,
+      changeHeader,
 
       // helper functions
       selectComponent,
       getNextComponent,
       getPreviousComponent,
 
+      saveHeader,
+      setAnswer,
     }}>
       {children}
     </SettingHeaderContext.Provider>

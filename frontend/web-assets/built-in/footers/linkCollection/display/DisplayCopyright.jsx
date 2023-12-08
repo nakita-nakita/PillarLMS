@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 
-const DisplayFooter = (props) => {
+const DisplayCopyright = (props) => {
   // imports
   const { system } = props.data;
   const {
@@ -10,7 +10,7 @@ const DisplayFooter = (props) => {
     isNightMode,
   } = system.state
 
-  const backgroundColorClass = isDayMode ? "bg-blue-400" : "bg-blue-700"
+  const backgroundColorClass = isDayMode ? "bg-stone-400" : "bg-stone-700"
   const backgroundColorTextClass = isDayMode ? "text-gray-800" : "text-gray-200"
 
   return (
@@ -22,4 +22,4 @@ const DisplayFooter = (props) => {
   );
 };
 
-export default DisplayFooter;
+export default DisplayCopyright;

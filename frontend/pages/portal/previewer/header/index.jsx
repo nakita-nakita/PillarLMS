@@ -32,7 +32,7 @@ const PreviewHeaderPage = (props) => {
       const data = response.data.backendSettingHeader_getOneRealTime
 
       const user = (JSON.parse(data.userAnswersJsonB))
-
+console.log('HEADER USER HEADER USER', user)
       setComponentProps({
         data: {
           user,
@@ -91,6 +91,7 @@ const PreviewHeaderPage = (props) => {
     const socket = initSocket()
 
     socket.on('setting-header-change-prop', data => {
+      
       console.log('setting-header-change-prop', data)
       if (data.name !== undefined && data.value !== undefined) {
         setComponentProps(prevState => {
@@ -101,10 +102,17 @@ const PreviewHeaderPage = (props) => {
       }
     })
 
+    socket.on("samedoc-header-selection-change", data => {
+      setIsLoaded(false)
+      initData()
+    })
+
     return () => {
       socket.off('setting-header-change-prop')
 
       socket.emit('server-samedoc-unsub-entity', { entity })
+
+      socket.off("samedoc-header-selection-change")
     }
   }, [])
 

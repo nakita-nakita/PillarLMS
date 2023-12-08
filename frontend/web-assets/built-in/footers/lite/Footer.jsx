@@ -1,6 +1,6 @@
 import React from 'react'
-import DisplayFooter from './display/DisplayFooter';
-import FunctionalFooter from './functional/FunctionalFooter';
+import DisplayCopyright from './display/DisplayCopyright';
+import FunctionalCopyright from './functional/FunctionalCopyright';
 
 function Footer(props) {
   const { system } = props.data;
@@ -18,8 +18,8 @@ function Footer(props) {
   return (
 
     <>
-      {isDisplayMode && (<DisplayFooter {...props} />)}
-      {isFunctionalMode && (<FunctionalFooter {...props} />)}
+      {isDisplayMode && (<DisplayCopyright {...props} />)}
+      {isFunctionalMode && (<FunctionalCopyright {...props} />)}
 
     </>
   )

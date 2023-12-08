@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import DiamondDeviceEmulator from '@/components/previews/DeviceEmulators/DiamondDeviceEmulators';
 
-const BuiltInHeaderDisplay = () => {
+const BuiltInHeaderDisplay = ({ onSelect }) => {
   const { builtInDataSelected, selectComponent, getNextComponent, getPreviousComponent } = useContext(SettingHeaderContext);
 
   const handleLeftClick = () => {
@@ -43,6 +43,16 @@ const BuiltInHeaderDisplay = () => {
   //     window.removeEventListener('message', adjustIframeHeight);
   //   };
   // }, [builtInDataSelected]);
+
+  const handleSelect = (event) => {
+    if (onSelect) {
+
+      onSelect({
+        type: "BUILT_IN",
+        id: builtInDataSelected.id,
+      })
+    }
+  }
 
   return (
     <div>
@@ -81,7 +91,7 @@ const BuiltInHeaderDisplay = () => {
             {/* <Button variant="contained" color="secondary">
             Select
           </Button> */}
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={event => handleSelect(event)}>
               Select and Close
             </Button>
           </Stack>

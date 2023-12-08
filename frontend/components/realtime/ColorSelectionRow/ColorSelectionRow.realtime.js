@@ -17,9 +17,18 @@ function RealTimeColorSelectionRow({ label, data, entity, containerLabel, onChan
 
   const { idChip } = useContext(AdminLayoutContext)
 
-  const [selectedColor, setSelectedColor] = useState(data.color.color || '#000000');
+  const [selectedColor, setSelectedColor] = useState(data.color || '#000000');
   useEffect(() => {
-    if (onChange) onChange(selectedColor.color);
+
+    if (onChange) {
+    console.log('selectedColor.color', data, selectedColor)
+      const newColor = {
+        color: selectedColor,
+        suggestedTextColor: theme.palette.getContrastText(selectedColor) === "#fff" ? "LIGHT" : "DARK",
+      }
+
+      onChange(newColor)
+    }
 
   }, [selectedColor])
   const [anchorEl, setAnchorEl] = useState(null);
@@ -194,7 +203,7 @@ function RealTimeColorSelectionRow({ label, data, entity, containerLabel, onChan
     })
 
     setUser(idChip)
-    
+
     if (onChangeByUser) {
       onChangeByUser(newColor)
     }

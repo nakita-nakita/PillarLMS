@@ -9,9 +9,9 @@ import BuiltInFooterDisplay from '../components/BuiltInFooterDisplay';
 const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
   const { builtInData } = useContext(SettingFooterContext)
 
-  const handleSelect = (favicon) => {
+  const handleSelect = (info) => {
     if (onSelect) {
-      onSelect(favicon)
+      onSelect(info)
     }
 
     if (onClose) {
@@ -62,7 +62,9 @@ const SelectFooterModal = ({ isOpened, onClose, onSelect }) => {
       // secondaryText={"secondary"}
 
       />}
-      DisplayComponent={<BuiltInFooterDisplay />}
+      DisplayComponent={<BuiltInFooterDisplay
+        onSelect={handleSelect}
+      />}
     >
 
     </DiamondModal>

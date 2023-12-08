@@ -41,7 +41,7 @@ import SelectFooterModal from './modals/SelectFooter.modal';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import RealTimeMenu from '@/components/realtime/RealTimeMenu/RealTimeMenu';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import { initSocket } from '@/utils/realtime/socket';
+import { getSocketId, initSocket } from '@/utils/realtime/socket';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
@@ -61,7 +61,10 @@ function WebsiteSettingsFooterSidebar() {
     isReady,
     isReadyValue, setIsReadyValue,
     isSelectionModalOpened,
-    setIsSelectionModalOpened
+    setIsSelectionModalOpened,
+    changeFooter,
+    saveFooter,
+    setAnswer,
   } = useContext(SettingFooterContext)
 
   const circleStatus = {
@@ -91,6 +94,14 @@ function WebsiteSettingsFooterSidebar() {
     setIsSelectionModalOpened(true)
   }
 
+  const handleFooterSelect = (info) => {
+    changeFooter(info)
+  }
+
+  const handleSave = () => {
+    saveFooter()
+  }
+
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0, mb: "50px" }}>
       <SettingsBackButton
@@ -109,7 +120,7 @@ function WebsiteSettingsFooterSidebar() {
           <ListItem>
             <div>
 
-              <p>Explore the marketplace to find your desired header. Please note that available options might vary based on your header choice.</p>
+              <p>Explore the marketplace to find your desired footer. Please note that available options might vary based on your footer choice.</p>
               <br />
               <Button
                 variant="contained"
@@ -135,6 +146,7 @@ function WebsiteSettingsFooterSidebar() {
 
               socket.emit('server-setting-footer-change-prop', propInfo)
             }}
+            setAnswer={setAnswer}
           />
 
 
@@ -175,7 +187,7 @@ function WebsiteSettingsFooterSidebar() {
                   <br />
                   <Button
                     variant="contained"
-                  // onClick={handleSave}
+                    onClick={handleSave}
                   >
                     Save
                   </Button>
@@ -289,6 +301,7 @@ function WebsiteSettingsFooterSidebar() {
         modalFooter={"Select Footer"}
         isOpened={isSelectionModalOpened}
         onClose={() => setIsSelectionModalOpened(false)}
+        onSelect={handleFooterSelect}
       />
 
 

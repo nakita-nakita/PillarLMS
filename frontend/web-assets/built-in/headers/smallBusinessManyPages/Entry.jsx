@@ -1,9 +1,9 @@
 import React from 'react'
-import DisplayNavbar from './DisplayNavbar'
+import Navbar from './Navbar'
 
 function Entry(props) {
   return (
-    <DisplayNavbar {...props} />
+    <Navbar {...props} />
   )
 }
 

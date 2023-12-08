@@ -9,9 +9,9 @@ import BuiltInHeaderDisplay from '../components/BuiltInHeaderDisplay';
 const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
   const { builtInData } = useContext(SettingHeaderContext)
 
-  const handleSelect = (favicon) => {
+  const handleSelect = (info) => {
     if (onSelect) {
-      onSelect(favicon)
+      onSelect(info)
     }
 
     if (onClose) {
@@ -24,7 +24,6 @@ const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
       isOpened={isOpened}
       onClose={onClose}
       title={"Select Header"}
-      
       tabs={[
         {
           label: "Selected",
@@ -64,6 +63,7 @@ const SelectHeaderModal = ({ isOpened, onClose, onSelect }) => {
 
       />}
       DisplayComponent={<BuiltInHeaderDisplay
+        onSelect={handleSelect}
       />}
     >
 

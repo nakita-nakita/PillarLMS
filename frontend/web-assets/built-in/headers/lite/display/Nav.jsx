@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
 import DisplayBranding from './Branding';
-import DisplayNightModeSwitch from './NightModeSwitch';
+import DisplayNightModeSwitch from './NightModeSwitchDesktop';
 
 function DisplayNav(props) {
   // imports

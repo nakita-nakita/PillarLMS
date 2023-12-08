@@ -31,7 +31,7 @@ const isShowingComponent = ({ isShowing, isDarkMode }) => {
   }
 }
 
-const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode, containerLabel, onChangeByUser }) => {
+const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode, containerLabel, onChangeByUser, setAnswer }) => {
 
   const { sameDocType, label, isShowing, ...data } = menuItemRow
 
@@ -62,6 +62,12 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
               //   name: data.name,
               //   value,
               // })
+            }}
+            onChange={value => {
+              setAnswer({
+                name: data.name,
+                value,
+              })
             }}
           />
         </div>
@@ -95,6 +101,12 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
               //   value,
               // })
             }}
+            onChange={value => {
+              setAnswer({
+                name: data.name,
+                value,
+              })
+            }}
           />
         </div>
       )
@@ -127,6 +139,12 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
               //   value,
               // })
             }}
+            onChange={value => {
+              setAnswer({
+                name: data.name,
+                value,
+              })
+            }}
           />
         </div>
       )
@@ -152,6 +170,12 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
           //   value,
           // })
         }}
+        onChange={value => {
+          setAnswer({
+            name: data.name,
+            value,
+          })
+        }}
       />)
 
     default:
@@ -159,7 +183,7 @@ const SelectComponentByType = ({ entity, menuItemRow, isDarkMode, setIsDarkMode,
   }
 }
 
-function MenuContainer({ menuItem, isDarkMode, setIsDarkMode, entity, onChangeByUser }) {
+function MenuContainer({ menuItem, isDarkMode, setIsDarkMode, entity, onChangeByUser, setAnswer }) {
   const theme = useTheme()
 
   return (
@@ -190,6 +214,12 @@ function MenuContainer({ menuItem, isDarkMode, setIsDarkMode, entity, onChangeBy
               //   value,
               // })
             }}
+            onChange={value => {
+              setAnswer({
+                name: menuItem.isShowing.name,
+                value,
+              })
+            }}
           />
           <Divider />
         </>
@@ -203,6 +233,7 @@ function MenuContainer({ menuItem, isDarkMode, setIsDarkMode, entity, onChangeBy
           setIsDarkMode={setIsDarkMode}
           containerLabel={menuItem.header}
           onChangeByUser={onChangeByUser}
+          setAnswer={setAnswer}
         />
       ))}
       <ListItem>

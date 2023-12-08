@@ -41,7 +41,7 @@ import SelectHeaderModal from './modals/SelectHeader.modal';
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import RealTimeMenu from '@/components/realtime/RealTimeMenu/RealTimeMenu';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
-import { initSocket } from '@/utils/realtime/socket';
+import { getSocketId, initSocket } from '@/utils/realtime/socket';
 
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
@@ -61,7 +61,10 @@ function WebsiteSettingsHeaderSidebar() {
     isReady,
     isReadyValue, setIsReadyValue,
     isSelectionModalOpened,
-    setIsSelectionModalOpened
+    setIsSelectionModalOpened,
+    changeHeader,
+    saveHeader,
+    setAnswer,
   } = useContext(SettingHeaderContext)
 
   const circleStatus = {
@@ -89,6 +92,14 @@ function WebsiteSettingsHeaderSidebar() {
 
   const handleHeaderSelectionModal = () => {
     setIsSelectionModalOpened(true)
+  }
+
+  const handleHeaderSelect = (info) => {
+    changeHeader(info)
+  }
+
+  const handleSave = () => {
+    saveHeader()
   }
 
   return (
@@ -135,6 +146,7 @@ function WebsiteSettingsHeaderSidebar() {
 
               socket.emit('server-setting-header-change-prop', propInfo)
             }}
+            setAnswer={setAnswer}
           />
 
 
@@ -175,7 +187,7 @@ function WebsiteSettingsHeaderSidebar() {
                   <br />
                   <Button
                     variant="contained"
-                  // onClick={handleSave}
+                    onClick={handleSave}
                   >
                     Save
                   </Button>
@@ -289,6 +301,7 @@ function WebsiteSettingsHeaderSidebar() {
         modalHeader={"Select Header"}
         isOpened={isSelectionModalOpened}
         onClose={() => setIsSelectionModalOpened(false)}
+        onSelect={handleHeaderSelect}
       />
 
 

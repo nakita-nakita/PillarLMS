@@ -1,5 +1,5 @@
 import React from 'react'
-import DisplayNavbar from './DisplayNavbar'
+import DisplayNavbar from './Navbar'
 
 function Entry(props) {
   return (

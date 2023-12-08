@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 
-const FunctionalFooter = (props) => {
+const FunctionalCopyright = (props) => {
   // imports
   const { system, user } = props.data;
   const {
@@ -49,4 +49,4 @@ const FunctionalFooter = (props) => {
   );
 };
 
-export default FunctionalFooter;
+export default FunctionalCopyright;
