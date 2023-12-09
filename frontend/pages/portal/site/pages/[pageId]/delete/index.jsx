@@ -30,6 +30,7 @@ const PageTemplateBuilder = () => {
 PageTemplateBuilder.getLayout = function getLayout(page) {
   return (
     <AdminLayout
+      hasNoEntity
       isWebsiteSetting
       SideMenu={<PageDeleteSidebar />}
       PageContext={SiteDesignerPageDeleteProvider}
