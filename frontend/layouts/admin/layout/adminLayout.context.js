@@ -7,11 +7,22 @@ import SameDocEntity, { SameDocEntityContext } from '@/components/realtime/_buff
 import SameDocBuffer, { SameDocBufferContext } from '@/components/realtime/_buffer/SameDocBuffer.context';
 import { useRouter } from 'next/router';
 import SelectMediaManagerProvider from '@/components/realtime/MediaSelectionRow/modal/MediaManager/context/selectMediaManager.context';
+import { useTheme } from '@mui/material';
+import { realtimeLink } from '@/utils/realtime/link';
+
+const circleStatus = {
+  borderRadius: "50px",
+  height: "15px",
+  width: "15px",
+  display: "inline-block",
+}
 
 export const AdminLayoutContext = React.createContext();
 
 export function AdminLayoutProvider({ hasNoEntity, children }) {
+  const theme = useTheme();
   const router = useRouter();
+
   const { applyTextFieldSelectionBuffer, applySwitchBuffer } = useContext(SameDocBufferContext)
   const { updateEntity } = useContext(SameDocEntityContext)
 
@@ -119,6 +130,35 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
     username: null,
   })
 
+  const circleStatusDangerStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.error.dark,
+  }
+
+  const circleStatusSuccessStyle = {
+    ...circleStatus,
+    backgroundColor: theme.palette.success.dark,
+  }
+
+  const CircleStatusSuccess = () => {
+    return <div style={circleStatusSuccessStyle}></div>
+  }
+
+  const CircleStatusDanger = () => {
+    return <div style={circleStatusDangerStyle}></div>
+  }
+
+  const navigate = (href) => {
+    realtimeLink({
+      to: href,
+      leaderUserId: panelMeetingDoc.leader?.id,
+      meetingId: panelMeetingDoc.id,
+      router,
+      userId: idChip.id,
+      setPanelMeetingDoc,
+    })
+  }
+
   useEffect(() => {
     getAdminLayoutInitGraphQL().then(initAdminStore => {
       const id = initAdminStore.data.backendUserBasicView_me;
@@ -169,10 +209,18 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
       notifications, setNotifications,
       tabs, setTabs,
       idChip, setIdChip,
+
       // applyOrder,
       updateEntity,
       applyTextFieldSelectionBuffer,
       applySwitchBuffer,
+
+      //status circles
+      CircleStatusSuccess,
+      CircleStatusDanger,
+
+      //links
+      navigate,
     }}>
       <SelectMediaManagerProvider>
         <SnackbarProvider>

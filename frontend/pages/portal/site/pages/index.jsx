@@ -1,25 +1,27 @@
 'use client'
 
 // Library
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 
 // Mine
 import tabsJson from '@/pages-scripts/portal/site/tabs.json';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import PagesDataGrid from '@/pages-scripts/portal/site/pages/components/data.grid';
 import AdminLayout from '@/layouts/admin/layout';
 
 // MUI
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import PageDataGrid from '@/pages-scripts/portal/site/pages/components/PageDataGrid';
+import PageDataGrid from '@/pages-scripts/portal/site/pages/index/components/PageDataGrid';
 import { Paper } from '@mui/material';
+import SiteDesignerPagesProvider, { SiteDesignerPagesContext } from '@/pages-scripts/portal/site/pages/index/context/SiteDesignerPages.context';
+import NewPageModal from '@/pages-scripts/portal/site/pages/index/modals/NewPage.modal';
 
 const Page = () => {
-  const { setTabs } = React.useContext(AdminLayoutContext)
+  const { setTabs } = useContext(AdminLayoutContext)
+  const { isNewPageModalOpen, setIsNewPageModalOpen, } = useContext(SiteDesignerPagesContext)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTabs(prevState => ({
       ...prevState,
       tabs: tabsJson.tabs,
@@ -27,6 +29,10 @@ const Page = () => {
     }))
 
   }, [])
+
+  const handleNew = () => {
+    setIsNewPageModalOpen(true)
+  }
 
   return (
 
@@ -38,21 +44,38 @@ const Page = () => {
     }}>
 
       <Stack spacing={2} direction="row">
-        <Button variant="contained" color="success">New</Button>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleNew}
+        >
+          New
+        </Button>
       </Stack>
       <br />
       <br />
-      <Paper sx={{p:0}} className='admin-card'>
+      <Paper sx={{ p: 0 }} className='admin-card'>
         <PageDataGrid />
       </Paper>
+
+      <NewPageModal
+        isOpened={isNewPageModalOpen}
+        onClose={() => {
+          setIsNewPageModalOpen(false)
+        }}
+      />
     </Box >
   )
 }
 
 Page.getLayout = function getLayout(page) {
   return (
-    <AdminLayout>
-      {page}
+    <AdminLayout
+      hasNoEntity
+    >
+      <SiteDesignerPagesProvider>
+        {page}
+      </SiteDesignerPagesProvider>
     </AdminLayout>
   )
 }
