@@ -14,7 +14,6 @@ import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // import AddCircleIcon from '@mui/icons-material/AddCircleIcon';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useRouter } from 'next/navigation';
 import AdminLayout from '@/layouts/admin/layout';
 import { Box, Button, FormControl, FormControlLabel, FormGroup, IconButton, MenuItem, Select, Switch } from '@mui/material';
 import PagePanelsDnd from '@/layouts/pageBuilderLayout/components/components/PagePanelsDnD';
@@ -25,7 +24,8 @@ import PageList from '@/layouts/pageBuilderLayout/components/components/PageList
 import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
 import { realtimeLink } from '@/utils/realtime/link';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import DeletePageListItem from '@/pages-scripts/portal/site/pages/delete/components/DeletePageListItem';
+import DeletePageListItem from '@/pages-scripts/portal/site/pages/page/delete/components/DeletePageListItem';
+import { useRouter } from 'next/router';
 // import PageDeignerLayoutContext from '../../pageDesignerLayout.context';
 
 const PageBuilderPage = () => {
@@ -118,9 +118,6 @@ const PageBuilderPage = () => {
       <ListItem
         button
         alignItems="flex-start"
-        secondaryAction={(
-          <div style={circleStatusSuccessStyle}></div>
-        )}
         onClick={() => changeUrl(`/portal/site/pages/22/browser-tabs/`)}
       >
         <ListItemAvatar>
@@ -138,9 +135,6 @@ const PageBuilderPage = () => {
       <ListItem
         button
         alignItems="flex-start"
-        secondaryAction={(
-          <div style={circleStatusSuccessStyle}></div>
-        )}
         onClick={() => changeUrl(`/portal/site/pages/22/link/`)}
       >
         <ListItemAvatar>
@@ -152,11 +146,11 @@ const PageBuilderPage = () => {
         />
       </ListItem>
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
-     
+
       <HeaderRow label={"Danger Zone"} />
-      <DeletePageListItem onClick={() => changeUrl(`/portal/site/pages/22/delete`)} />
+      <DeletePageListItem onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/delete`)} />
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
-     
+
       <HeaderRow label={"Advance Settings"} />
       <RealTimeSwitchRow id="status" label={(
         <>

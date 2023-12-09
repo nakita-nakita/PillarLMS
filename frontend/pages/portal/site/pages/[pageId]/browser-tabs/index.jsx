@@ -6,8 +6,8 @@ import React from 'react'
 // Mine
 import AdminLayout from '@/layouts/admin/layout';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import PageBrowserTabSidebar from '@/pages-scripts/portal/site/pages/browser-tabs/PageBrowserTabOptions.sidebar';
-import PagePreviewBrowserTabs from '@/pages-scripts/portal/site/pages/browser-tabs/PagePreviewBrowserTab.component';
+import PageBrowserTabSidebar from '@/pages-scripts/portal/site/pages/page/browser-tabs/PageBrowserTabOptions.sidebar';
+import PagePreviewBrowserTabs from '@/pages-scripts/portal/site/pages/page/browser-tabs/PagePreviewBrowserTab.component';
 
 const PageTemplateBuilder = () => {
   const { setTabs } = React.useContext(AdminLayoutContext)

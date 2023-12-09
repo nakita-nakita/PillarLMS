@@ -39,7 +39,7 @@ import RealTimeTextFieldRow from '@/components/realtime/TextFieldRow/TextField.r
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import RealTimeSwitchRow from '@/components/realtime/SwitchRow/SwitchRow.realtime';
 import { adminStyles } from '@/layouts/admin/layout/shared/styles/adminStyles';
-import DeletePageListItem from '@/pages-scripts/portal/site/pages/delete/components/DeletePageListItem';
+// import DeletePageListItem from '@/pages-scripts/portal/site/pages/delete/components/DeletePageListItem';
 import DeleteSectionListItem from '@/pages-scripts/portal/site/pages/section/delete/components/DeleteSectionListItem';
 
 function PageBuilderPage() {

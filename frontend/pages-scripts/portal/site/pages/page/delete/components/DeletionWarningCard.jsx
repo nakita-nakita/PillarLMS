@@ -2,7 +2,14 @@ import React from 'react';
 import { Card, CardContent, CardHeader, Typography, Button, Alert, Box } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 
-function DeletionWarningCard() {
+function DeletionWarningCard({ onClick }) {
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    }
+  }
+
   return (
     <Card elevation={3}>
       <CardHeader
@@ -19,7 +26,7 @@ function DeletionWarningCard() {
           If you proceed with deletion, you may need to handle the de-indexing from search engines separately. We currently do not provide a solution for automatic de-indexing.
         </Typography>
         <Box mt={2}>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={handleClick}>
             Delete Page
           </Button>
         </Box>
