@@ -7,6 +7,9 @@ export default {
     backendSiteDesignerPage_getOneById: isAuthenticated,
     // backendSiteDesignerPage_getManyWithPagination: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getManyWithPagination: isAuthenticated,
+
+    backendSiteDesignerPageBrowser_getOneByPageId: isAuthenticated,
+    backendSiteDesignerPageBrowser_getOneRealTimeByPageId: isAuthenticated,
   },
   Mutation: {
     // backendSiteDesignerPage_addOne: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-update']))),
@@ -15,5 +18,8 @@ export default {
     backendSiteDesignerPage_updateOne: isAuthenticated,
     // backendSiteDesignerPage_deleteOne: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-update']))),
     backendSiteDesignerPage_deleteOne: isAuthenticated,
+
+    backendSiteDesignerPageBrowser_upsertOne: isAuthenticated,
+
   }
 }

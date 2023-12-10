@@ -3,6 +3,7 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 
 const backendSettingSiteSecurity = {
   Query: {
+    backendSettingSite_getOne: isAuthenticated,
     // backendSettingSite_getOneRealTime: and(isAuthenticated, isAdmin),
     backendSettingSite_getOneRealTime: isAuthenticated,
   },

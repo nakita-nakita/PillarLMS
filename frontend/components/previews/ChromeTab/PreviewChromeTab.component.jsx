@@ -12,8 +12,8 @@ import Button from '@mui/material/Button';
 import StarIcon from '@mui/icons-material/Star';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-function PreviewChromeTab({ rightTab, favicon, leftTab }) {
-  console.log('favicon', favicon)
+function PreviewChromeTab({ rightTab, favicon, leftTab, url }) {
+  console.log('previewChromeTab', { rightTab, favicon, leftTab, url })
   return (
     <Paper elevation={3} style={{ borderRadius: '8px 8px 0 0', background: '#e9ecef' }}>
       {/* Tab Header */}
@@ -52,7 +52,7 @@ function PreviewChromeTab({ rightTab, favicon, leftTab }) {
         <IconButton size="small">
           <ArrowForwardIosIcon fontSize="small" />
         </IconButton>
-        <Input style={{ flexGrow: 1 }} />
+        <Input style={{ flexGrow: 1 }} value={url} />
         <Button variant="contained" size="small" style={{ marginLeft: '8px' }}>
           Go
         </Button>

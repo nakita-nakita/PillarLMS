@@ -3,6 +3,7 @@ import { isPublic, isAuthenticated, isAdmin, hasPermissions } from "../../../../
 
 const backendSettingLinkSecurity = {
   Query: {
+    backendSettingLink_getOne: isAuthenticated,
     // backendSettingLink_getOneRealTime: and(isAuthenticated, isAdmin),
     backendSettingLink_getOneRealTime: isAuthenticated,
   },

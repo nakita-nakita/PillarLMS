@@ -113,16 +113,16 @@ const PageBuilderPage = () => {
       <RealTimeResortLockedRow />
 
       <Divider component="li" style={{ borderTopWidth: "12px" }} />
-      <HeaderRow label={"External to page"} />
+      <HeaderRow label={"Meta Data"} />
 
       <ListItem
         button
         alignItems="flex-start"
-        onClick={() => changeUrl(`/portal/site/pages/22/browser-tabs/`)}
+        onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/browser-tabs/`)}
       >
         <ListItemAvatar>
           <Box width={35} height={35}>
-            <img alt="browser icon" src="\admin\icons\browser.png" width="100%" height="100%" />
+            <img alt="browser icon" src="\admin\icons\icons8-header-100.png" width="100%" height="100%" />
           </Box>
         </ListItemAvatar>
         <ListItemText
@@ -135,11 +135,13 @@ const PageBuilderPage = () => {
       <ListItem
         button
         alignItems="flex-start"
-        onClick={() => changeUrl(`/portal/site/pages/22/link/`)}
+        onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/link/`)}
       >
         <ListItemAvatar>
-          <Avatar alt="Meta-data for page" src="\admin\icons\link-icon.png" />
-        </ListItemAvatar>
+
+          <Box width={35} height={35}>
+            <img alt="page link" src="\admin\icons\icons8-links-64.png" width="100%" height="100%" />
+          </Box> </ListItemAvatar>
         <ListItemText
           primary="Links"
           secondary="When people send links between each other"

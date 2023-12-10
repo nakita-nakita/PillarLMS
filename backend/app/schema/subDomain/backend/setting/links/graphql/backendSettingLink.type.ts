@@ -19,6 +19,7 @@ type BackendSettingLinkRealTimeType {
   }
 
   type Query {
+    backendSettingLink_getOne: BackendSettingLinkType
     backendSettingLink_getOneRealTime(socketId: String!): BackendSettingLinkRealTimeType
   }
   type Mutation {

@@ -18,6 +18,19 @@ const backendSettingLinkGqlResolver = {
         return graphqlError(response)
       }
     },
+    backendSettingLink_getOne: async (parent, args, ctx) => {
+
+      const main = makeBackendSettingLinkMain(ctx.d)
+
+      const response = await main.getOne()
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
   },
   Mutation: {
     backendSettingLink_upsertOne: async (parent, args, ctx) => {

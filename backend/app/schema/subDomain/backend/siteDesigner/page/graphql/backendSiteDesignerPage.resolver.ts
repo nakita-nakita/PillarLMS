@@ -1,5 +1,6 @@
 import graphqlError from "../../../../../utils/graphql/grarphql.errorhandler";
 import makeBackendSiteDesignerPageMain from "../main/backendSiteDesignerPage.main";
+import makeBackendSiteDesignerPageBrowserMain from "../main/backendSiteDesignerPageBrowser.main";
 
 const backendSiteDesignerPageResolver = {
   Query: {
@@ -32,7 +33,39 @@ const backendSiteDesignerPageResolver = {
       } else {
         return graphqlError(response)
       }
-    }
+    },
+    backendSiteDesignerPageBrowser_getOneByPageId: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageBrowserMain(ctx.d)
+
+      const response = await main.getOneByPageId({
+        pageId: args.pageId,
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    backendSiteDesignerPageBrowser_getOneRealTimeByPageId: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageBrowserMain(ctx.d)
+
+      const response = await main.getOneRealTimeByPageId({
+        pageId: args.pageId,
+        socketId: args.socketId,
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+
+
+
   },
   Mutation: {
     backendSiteDesignerPage_addOne: async (parent, args, ctx) => {
@@ -77,6 +110,22 @@ const backendSiteDesignerPageResolver = {
 
       if (response?.success) {
         return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    backendSiteDesignerPageBrowser_upsertOne: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageBrowserMain(ctx.d)
+
+      const response = await main.upsertOne({
+        id: args.id,
+        pageId: args.pageId,
+        tabName: args.tabName,
+      })
+
+      if (response?.success) {
+        return response
 
       } else {
         return graphqlError(response)

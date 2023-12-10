@@ -18,6 +18,7 @@ const applicationType = gql`
   }
 
   type Query {
+    backendSettingSite_getOne: SettingSiteType
     backendSettingSite_getOneRealTime(socketId: ID!): SettingSiteRealTimeType
   }
   type Mutation {

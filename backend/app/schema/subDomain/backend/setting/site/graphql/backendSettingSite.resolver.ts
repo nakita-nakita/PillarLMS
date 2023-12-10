@@ -4,6 +4,19 @@ import makeBackendSettingSiteMain from "../main/backendSettingSite.main";
 
 const backendSettingSiteGqlResolver = {
   Query: {
+    backendSettingSite_getOne: async (parent, args, ctx) => {
+
+      const main = makeBackendSettingSiteMain(ctx.d)
+
+      const response = await main.getOne()
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
     backendSettingSite_getOneRealTime: async (parent, args, ctx) => {
 
       const main = makeBackendSettingSiteMain(ctx.d)
