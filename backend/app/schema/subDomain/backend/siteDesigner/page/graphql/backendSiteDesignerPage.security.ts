@@ -10,6 +10,9 @@ export default {
 
     backendSiteDesignerPageBrowser_getOneByPageId: isAuthenticated,
     backendSiteDesignerPageBrowser_getOneRealTimeByPageId: isAuthenticated,
+
+    backendSiteDesignerPageLink_getOneByPageId: isAuthenticated,
+    backendSiteDesignerPageLink_getOneRealTimeByPageId: isAuthenticated,
   },
   Mutation: {
     // backendSiteDesignerPage_addOne: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-update']))),
@@ -20,6 +23,8 @@ export default {
     backendSiteDesignerPage_deleteOne: isAuthenticated,
 
     backendSiteDesignerPageBrowser_upsertOne: isAuthenticated,
+
+    backendSiteDesignerPageLink_upsertOne: isAuthenticated,
 
   }
 }

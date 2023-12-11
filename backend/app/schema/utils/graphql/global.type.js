@@ -89,6 +89,12 @@ const userType = gql`
     createdAt: String
   }
 
+  type MediaSelectionType {
+    id: String
+    media: String
+    user: UserDisplay
+  }
+
   type RealTimeFaviconSelection {
     order: Int
     name: String
@@ -97,6 +103,13 @@ const userType = gql`
     uploads: [FaviconSelectionType]
   }
 
+  type RealTimeMediaSelection {
+    order: Int
+    name: String
+    selection: String
+    currentSelection: MediaSelectionType
+    uploads: [MediaSelectionType]
+  }
 
 `;
 export default userType;

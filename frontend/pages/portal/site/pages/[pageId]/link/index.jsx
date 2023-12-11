@@ -10,6 +10,7 @@ import WebsiteSettingsLinkSidebar from '@/pages-scripts/portal/admin/settings/pa
 import PreviewLink from '@/pages-scripts/portal/admin/settings/pages/link/PreviewLink.component';
 import PagePreviewLink from '@/pages-scripts/portal/site/pages/page/link/PagePreviewLink.component';
 import PageLinkSidebar from '@/pages-scripts/portal/site/pages/page/link/PageLinkOptions.sidebar';
+import SiteDesignerPageLinkProvider from '@/pages-scripts/portal/site/pages/page/link/context/SiteDesignerPageLink.context';
 
 const PageTemplateBuilder = () => {
   const { setTabs } = React.useContext(AdminLayoutContext)
@@ -30,7 +31,11 @@ const PageTemplateBuilder = () => {
 
 PageTemplateBuilder.getLayout = function getLayout(page) {
   return (
-    <AdminLayout isWebsiteSetting SideMenu={<PageLinkSidebar/>}>
+    <AdminLayout
+      isWebsiteSetting
+      PageContext={SiteDesignerPageLinkProvider}
+      SideMenu={<PageLinkSidebar />}
+    >
       {page}
     </AdminLayout>
   )

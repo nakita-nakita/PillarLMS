@@ -12,6 +12,10 @@ const backendSiteDesignerPageType = gql`
 
   ${paginationType("BackendSiteDesignerPagePaginationType", "BackendSiteDesignerPageType")}
   
+  # =====================================
+  # Browser
+  # =====================================
+
   type backendSiteDesignerPageBrowser {
     id: ID
     tabName: String
@@ -25,6 +29,29 @@ const backendSiteDesignerPageType = gql`
     entity: String
   }
 
+  # =====================================
+  # Link
+  # =====================================
+
+  type backendSiteDesignerPageLink {
+    id: ID
+    pageId: ID
+    title: String
+    description: String
+    picture: String
+    pictureAlt: String
+  }
+
+  type backendSiteDesignerPageLinkRealTime {
+    entity: String
+    id: ID
+    pageId: ID
+    title: RealTimeTextField
+    description: RealTimeTextField
+    picture: RealTimeMediaSelection
+  }
+
+
   type Query {
     backendSiteDesignerPage_getOneById(id: ID): BackendSiteDesignerPageType
     backendSiteDesignerPage_getManyWithPagination(q: String, page: Int, pageSize: Int): BackendSiteDesignerPagePaginationType
@@ -32,7 +59,11 @@ const backendSiteDesignerPageType = gql`
     # browser
     backendSiteDesignerPageBrowser_getOneByPageId(pageId: ID!): backendSiteDesignerPageBrowser
     backendSiteDesignerPageBrowser_getOneRealTimeByPageId(pageId: ID!, socketId: ID!): backendSiteDesignerPageBrowserRealTime
-  
+
+    # link
+    backendSiteDesignerPageLink_getOneByPageId(pageId: ID!): backendSiteDesignerPageLink
+    backendSiteDesignerPageLink_getOneRealTimeByPageId(pageId: ID!, socketId: ID!): backendSiteDesignerPageLinkRealTime
+
   }
 
   type Mutation {
@@ -42,6 +73,10 @@ const backendSiteDesignerPageType = gql`
 
     # browser
     backendSiteDesignerPageBrowser_upsertOne(pageId: ID!, id: ID, tabName: String): GlobalSuccessType
+
+    # link
+    backendSiteDesignerPageLink_upsertOne(pageId: ID!, id: ID, title: String, description: String, picture: String, pictureAlt: String): GlobalSuccessType
+
   }
 `;
 export default backendSiteDesignerPageType;

@@ -260,7 +260,7 @@ function RealTimeMediaSelectionRow({ data, entity, onChangeByUser, onChange }) {
         {/* Tabs Content View */}
         <Box flex="1" display="flex" alignItems="center" justifyContent="center" p={2} bgcolor={theme.palette.grey[200]}>
           {/* {tabValue === "NO_MEDIA" && <InsertDriveFileIcon />} */}
-          {tabValue === "CURRENT_MEDIA" && currentSelection && <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${currentSelection.media}`} alt="Current Image Placeholder" style={{ width: "16px", height: "16px" }} />}
+          {tabValue === "CURRENT_MEDIA" && currentSelection && <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${currentSelection.media}`} alt="Current Image Placeholder" style={{ width: "100%" }} />}
 
           {uploads.length > 0 && uploads.map((upload, i) => {
 

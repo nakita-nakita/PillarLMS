@@ -1,6 +1,7 @@
 import graphqlError from "../../../../../utils/graphql/grarphql.errorhandler";
 import makeBackendSiteDesignerPageMain from "../main/backendSiteDesignerPage.main";
 import makeBackendSiteDesignerPageBrowserMain from "../main/backendSiteDesignerPageBrowser.main";
+import makeBackendSiteDesignerPageLinkMain from "../main/backendSiteDesignerPageLink.main";
 
 const backendSiteDesignerPageResolver = {
   Query: {
@@ -50,6 +51,35 @@ const backendSiteDesignerPageResolver = {
     },
     backendSiteDesignerPageBrowser_getOneRealTimeByPageId: async (parent, args, ctx) => {
       const main = makeBackendSiteDesignerPageBrowserMain(ctx.d)
+
+      const response = await main.getOneRealTimeByPageId({
+        pageId: args.pageId,
+        socketId: args.socketId,
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    backendSiteDesignerPageLink_getOneByPageId: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageLinkMain(ctx.d)
+
+      const response = await main.getOneByPageId({
+        pageId: args.pageId,
+      })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    backendSiteDesignerPageLink_getOneRealTimeByPageId: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageLinkMain(ctx.d)
 
       const response = await main.getOneRealTimeByPageId({
         pageId: args.pageId,
@@ -122,6 +152,25 @@ const backendSiteDesignerPageResolver = {
         id: args.id,
         pageId: args.pageId,
         tabName: args.tabName,
+      })
+
+      if (response?.success) {
+        return response
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    backendSiteDesignerPageLink_upsertOne: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageLinkMain(ctx.d)
+
+      const response = await main.upsertOne({
+        id: args.id,
+        pageId: args.pageId,
+        title: args.title,
+        description: args.description,
+        picture: args.picture,
+        pictureAlt: args.pictureAlt,
       })
 
       if (response?.success) {
