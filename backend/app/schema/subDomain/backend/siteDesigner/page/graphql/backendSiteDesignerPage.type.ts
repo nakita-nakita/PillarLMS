@@ -51,6 +51,45 @@ const backendSiteDesignerPageType = gql`
     picture: RealTimeMediaSelection
   }
 
+  # =====================================
+  # Built-in components
+  # =====================================
+
+  enum LoudSectionEnum {
+    HOMEPAGE
+    NORMALPAGE
+  }
+
+  enum PageSectionEnum {
+    LIST
+    IMAGE
+    TEXT
+    OTHER
+  }
+  
+
+  type backendSiteDesignerPageSectionLoudBuiltIn {
+    id: String,
+    category: LoudSectionEnum,
+    webAssetImport: String,
+    menuJsonB: String,
+    description: String,
+    author: String,
+    authorLink: String,
+    name: String,
+  }
+
+  type backendSiteDesignerPageSectionNormalBuiltIn {
+    id: String,
+    category: PageSectionEnum,
+    webAssetImport: String,
+    menuJsonB: String,
+    description: String,
+    author: String,
+    authorLink: String,
+    name: String,
+  }
+
 
   type Query {
     backendSiteDesignerPage_getOneById(id: ID): BackendSiteDesignerPageType
@@ -64,6 +103,10 @@ const backendSiteDesignerPageType = gql`
     backendSiteDesignerPageLink_getOneByPageId(pageId: ID!): backendSiteDesignerPageLink
     backendSiteDesignerPageLink_getOneRealTimeByPageId(pageId: ID!, socketId: ID!): backendSiteDesignerPageLinkRealTime
 
+
+    # built-in
+    backendSiteDesignerPageSectionLoudBuiltIn_getMany:[backendSiteDesignerPageSectionLoudBuiltIn]
+    backendSiteDesignerPageSectionNormalBuiltIn_getMany:[backendSiteDesignerPageSectionNormalBuiltIn]
   }
 
   type Mutation {

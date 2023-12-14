@@ -8,11 +8,18 @@ export default {
     // backendSiteDesignerPage_getManyWithPagination: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getManyWithPagination: isAuthenticated,
 
+    // browser
     backendSiteDesignerPageBrowser_getOneByPageId: isAuthenticated,
     backendSiteDesignerPageBrowser_getOneRealTimeByPageId: isAuthenticated,
 
+    // link
     backendSiteDesignerPageLink_getOneByPageId: isAuthenticated,
     backendSiteDesignerPageLink_getOneRealTimeByPageId: isAuthenticated,
+
+    // built-in
+    backendSiteDesignerPageSectionLoudBuiltIn_getMany: isAuthenticated,
+    backendSiteDesignerPageSectionNormalBuiltIn_getMany: isAuthenticated,
+
   },
   Mutation: {
     // backendSiteDesignerPage_addOne: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-update']))),

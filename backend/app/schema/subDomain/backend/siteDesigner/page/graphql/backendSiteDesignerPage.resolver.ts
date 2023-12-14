@@ -2,6 +2,8 @@ import graphqlError from "../../../../../utils/graphql/grarphql.errorhandler";
 import makeBackendSiteDesignerPageMain from "../main/backendSiteDesignerPage.main";
 import makeBackendSiteDesignerPageBrowserMain from "../main/backendSiteDesignerPageBrowser.main";
 import makeBackendSiteDesignerPageLinkMain from "../main/backendSiteDesignerPageLink.main";
+import makeBackendSiteDesignerPageSectionLoudBuiltInMain from "../main/backendSiteDesignerPageSectionLoudBuiltIn.main";
+import makeBackendSiteDesignerPageSectionNormalBuiltInMain from "../main/backendSiteDesignerPageSectionNormalBuiltIn.main";
 
 const backendSiteDesignerPageResolver = {
   Query: {
@@ -85,6 +87,34 @@ const backendSiteDesignerPageResolver = {
         pageId: args.pageId,
         socketId: args.socketId,
       })
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    
+    backendSiteDesignerPageSectionLoudBuiltIn_getMany: async (parent, args, ctx) => {
+
+      const main = makeBackendSiteDesignerPageSectionLoudBuiltInMain(ctx.d)
+
+      const response = await main.getMany()
+
+      if (response?.success) {
+        return response.data
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    
+    backendSiteDesignerPageSectionNormalBuiltIn_getMany: async (parent, args, ctx) => {
+
+      const main = makeBackendSiteDesignerPageSectionNormalBuiltInMain(ctx.d)
+
+      const response = await main.getMany()
 
       if (response?.success) {
         return response.data
