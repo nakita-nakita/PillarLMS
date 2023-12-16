@@ -10,6 +10,11 @@ const userType = gql`
     result: Boolean
   }
 
+  enum SelectionTypeEnum {
+    BUILT_IN, 
+    PLUGIN,
+    MARKET
+  }
   
   type UserDisplay { 
     id: ID!

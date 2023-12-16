@@ -5,6 +5,7 @@ export default {
   Query: {
     // backendSiteDesignerPage_getOneById: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getOneById: isAuthenticated,
+    backendSiteDesignerPage_getOneRealTimeById: isAuthenticated,
     // backendSiteDesignerPage_getManyWithPagination: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getManyWithPagination: isAuthenticated,
 
@@ -15,6 +16,14 @@ export default {
     // link
     backendSiteDesignerPageLink_getOneByPageId: isAuthenticated,
     backendSiteDesignerPageLink_getOneRealTimeByPageId: isAuthenticated,
+
+    // sections
+    backendSiteDesignerPageSectionLoud_getOneByPageId: isAuthenticated,
+    backendSiteDesignerPageSectionLoud_getOneRealTimeByPageId: isAuthenticated,
+
+    backendSiteDesignerPageSectionNormal_getManyByPageId: isAuthenticated,
+    backendSiteDesignerPageSectionNormal_getOneById: isAuthenticated,
+    backendSiteDesignerPageSectionNormal_getOneRealTimeById: isAuthenticated,
 
     // built-in
     backendSiteDesignerPageSectionLoudBuiltIn_getMany: isAuthenticated,
@@ -33,5 +42,12 @@ export default {
 
     backendSiteDesignerPageLink_upsertOne: isAuthenticated,
 
+    // sections
+    backendSiteDesignerPageSectionLoud_upsertOne: isAuthenticated,
+    backendSiteDesignerPageSectionLoud_deleteOne: isAuthenticated,
+
+    backendSiteDesignerPageSectionNormal_addOne: isAuthenticated,
+    backendSiteDesignerPageSectionNormal_updateOne: isAuthenticated,
+    backendSiteDesignerPageSectionNormal_deleteOne: isAuthenticated,
   }
 }

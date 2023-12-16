@@ -2,7 +2,7 @@ import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 import backendSettingFooter from "../../../../../../../../models/subDomain/backend/setting/backendSettingFooter.model";
-import { selectionTypeEnum } from "../../../../header/main/scripts/header/upsertOne.script";
+import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
 
 type input = {
   id?: string
@@ -10,7 +10,7 @@ type input = {
   menuJsonB?: string
   userAnswersJsonB?: string
   isReady?: boolean
-  selectionType?: selectionTypeEnum,
+  selectionType?: SelectionTypeEnum,
   selectionId?: string,
 }
 

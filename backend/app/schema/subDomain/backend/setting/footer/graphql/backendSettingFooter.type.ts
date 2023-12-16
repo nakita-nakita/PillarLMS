@@ -2,12 +2,6 @@ import gql from "graphql-tag"
 
 const backendSettingFooterGraphQLType = gql`
 
-  enum SelectionTypeEnum {
-    BUILT_IN, 
-    PLUGIN,
-    MARKET
-  }
-
   type BackendSettingFooterRealTimeType {
     id: String,
     entity: String,

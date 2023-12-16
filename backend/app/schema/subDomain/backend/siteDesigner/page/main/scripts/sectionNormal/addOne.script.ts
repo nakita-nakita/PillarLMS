@@ -1,32 +1,34 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
-import backendSettingFooter from "../../../../../../../../models/subDomain/backend/setting/backendSettingFooter.model";
-import makeBackendSettingFooterSql from "../../../preMain/backendSettingFooter.sql";
-import makeBackendSettingFooterBuiltInMain from "../../backendSettingFooterBuiltIn.main";
+import backendSiteDesignerPageSectionNormal from "../../../../../../../../models/subDomain/backend/siteDesigner/page/backendSiteDesignerPageSectionNormal.model";
+import makeBackendSiteDesignerPageSectionNormalSql from "../../../preMain/backendSiteDesignerPageSectionNormal.sql";
+import makeBackendSiteDesignerPageSectionNormalBuiltInSql from "../../../preMain/backendSiteDesignerPageSectionNormalBuiltIn.sql";
 import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
 
 type input = {
-  id?: string
-  userAnswers: string
-  isReady?: boolean,
-  selectionType?: SelectionTypeEnum,
-  selectionId?: string,
-}
+  pageId: string;
+  name: string;
+  selectionType: SelectionTypeEnum;
+  selectionId: string;
+  orderNumber: number;
+  userAnswersJsonB?: string;
+  isReady?: boolean;
+};
 
 // selectionType: SelectionTypeEnum;
 
-export default function upsertOne(d: dependencies) {
-  return async (args: input): Promise<returningSuccessObj<Model<backendSettingFooter> | null>> => {
+export default function addOne(d: dependencies) {
+  return async (args: input): Promise<returningSuccessObj<Model<backendSiteDesignerPageSectionNormal> | null>> => {
 
-    const sql = makeBackendSettingFooterSql(d);
+    const sql = makeBackendSiteDesignerPageSectionNormalSql(d);
 
     let webAssetImport: string;
     let menuJsonB: any;
 
     switch (args.selectionType) {
       case SelectionTypeEnum.BUILT_IN:
-        const builtInMain = makeBackendSettingFooterBuiltInMain(d)
+        const builtInMain = makeBackendSiteDesignerPageSectionNormalBuiltInSql(d)
 
         // update with getOne function in future. 
         const builtIn = await builtInMain.getOneById({
@@ -41,7 +43,7 @@ export default function upsertOne(d: dependencies) {
         return {
           success: false,
           humanMessage: "Error with selecting component. 'BUILT_IN', 'PLUGIN', 'AGENCY', 'MARKET' ",
-          errorIdentifier: "backendSettingFooter_upsertOne:0001",
+          errorIdentifier: "backendSiteDesignerPageSectionNormal_addOne:0001",
         }
     }
 
@@ -49,15 +51,16 @@ export default function upsertOne(d: dependencies) {
     // menuJsonB?: string
     // userAnswersJsonB?: string
 
-    const response = sql.upsertOne({
-      id: args.id,
+    const response = sql.addOne({
+      pageId: args.pageId,
+      name: args.name,
+      orderNumber: args.orderNumber,
       webAssetImport: webAssetImport,
       menuJsonB: menuJsonB,
-      userAnswersJsonB: args.userAnswers,
+      userAnswersJsonB: args.userAnswersJsonB,
       isReady: args.isReady,
       selectionType: args.selectionType,
       selectionId: args.selectionId,
-
     }).catch(error => d.errorHandler(error, d.loggers))
 
     return response

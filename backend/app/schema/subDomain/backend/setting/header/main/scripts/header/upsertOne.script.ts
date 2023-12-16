@@ -1,21 +1,16 @@
 import { Model } from "sequelize";
 import { returningSuccessObj } from "../../../../../../../utils/types/returningObjs.types";
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
-import backendSettingHeader from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
 import makeBackendSettingHeaderSql from "../../../preMain/backendSettingHeader.sql";
 import makeBackendSettingHeaderBuiltInMain from "../../backendSettingHeaderBuiltIn.main";
+import backendSettingHeader, { SelectionTypeEnum } from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
 
-export enum selectionTypeEnum {
-  BUILT_IN = "BUILT_IN",
-  PLUGIN = "PLUGIN",
-  MARKET = "MARKET",
-}
 
 type input = {
   id?: string
   userAnswers: string
   isReady?: boolean,
-  selectionType?: selectionTypeEnum,
+  selectionType?: SelectionTypeEnum,
   selectionId?: string,
 }
 
@@ -30,7 +25,7 @@ export default function upsertOne(d: dependencies) {
     let menuJsonB: any;
 
     switch (args.selectionType) {
-      case selectionTypeEnum.BUILT_IN:
+      case SelectionTypeEnum.BUILT_IN:
         const builtInMain = makeBackendSettingHeaderBuiltInMain(d)
 
         // update with getOne function in future. 
