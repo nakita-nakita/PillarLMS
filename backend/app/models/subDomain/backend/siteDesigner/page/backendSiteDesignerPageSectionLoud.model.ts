@@ -23,6 +23,16 @@ export default class backendSiteDesignerPageSectionLoud extends Model {
   @Column({
     type: sequelize.STRING,
   })
+  name: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
+  author: string;
+  
+  @Column({
+    type: sequelize.STRING,
+  })
   webAssetImport: string;
 
   @Column({

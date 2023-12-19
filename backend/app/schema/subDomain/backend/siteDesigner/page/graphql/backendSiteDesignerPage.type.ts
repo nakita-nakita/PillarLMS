@@ -64,6 +64,8 @@ const backendSiteDesignerPageType = gql`
 
   type BackendSiteDesignerPageSectionLoudType {
     id: ID
+    name: String
+    author: String
     webAssetImport: String
     menuJsonB: String
     userAnswersJsonB: String
@@ -76,6 +78,8 @@ const backendSiteDesignerPageType = gql`
   type BackendSiteDesignerPageSectionLoudRealTimeType {
     id: ID
     entity: String
+    name: String
+    author: String
     webAssetImport: String
     menuJsonB: String
     userAnswersJsonB: String
@@ -88,6 +92,7 @@ const backendSiteDesignerPageType = gql`
   type BackendSiteDesignerPageSectionNormalType {
     id: ID
     name: String
+    author: String
     webAssetImport: String
     menuJsonB: String
     userAnswersJsonB: String
@@ -100,7 +105,8 @@ const backendSiteDesignerPageType = gql`
   type BackendSiteDesignerPageSectionNormalRealTimeType {
     id: ID
     entity: String
-    name: RealTimeTextField
+    name: String
+    author: String
     webAssetImport: String
     menuJsonB: String
     userAnswersJsonB: String
@@ -167,7 +173,7 @@ const backendSiteDesignerPageType = gql`
     backendSiteDesignerPageSectionLoud_getOneByPageId(pageId: ID!): BackendSiteDesignerPageSectionLoudType
     backendSiteDesignerPageSectionLoud_getOneRealTimeByPageId(pageId: ID!, socketId: ID!): BackendSiteDesignerPageSectionLoudRealTimeType
     
-    backendSiteDesignerPageSectionNormal_getManyByPageId(pageId: ID!): BackendSiteDesignerPageSectionNormalType
+    backendSiteDesignerPageSectionNormal_getManyByPageId(pageId: ID!): [BackendSiteDesignerPageSectionNormalType]
     backendSiteDesignerPageSectionNormal_getOneById(id: ID!): BackendSiteDesignerPageSectionNormalType
     backendSiteDesignerPageSectionNormal_getOneRealTimeById(id: ID!, socketId: ID!): BackendSiteDesignerPageSectionNormalRealTimeType
     
@@ -192,7 +198,7 @@ const backendSiteDesignerPageType = gql`
     backendSiteDesignerPageSectionLoud_upsertOne(pageId: ID!, selectionType: SelectionTypeEnum, selectionId: ID, userAnswersJsonB: String, isReady: Boolean): BackendSiteDesignerPageSectionLoudType
     backendSiteDesignerPageSectionLoud_deleteOne(id: ID!): GlobalSuccessType
 
-    backendSiteDesignerPageSectionNormal_addOne(pageId: ID!, name: String, selectionType: SelectionTypeEnum, selectionId: ID, orderNumber: Int, userAnswersJsonB: String, isReady: Boolean): BackendSiteDesignerPageSectionNormalType
+    backendSiteDesignerPageSectionNormal_addOne(pageId: ID!, selectionType: SelectionTypeEnum, selectionId: ID, orderNumber: Int, userAnswersJsonB: String, isReady: Boolean): BackendSiteDesignerPageSectionNormalType
     backendSiteDesignerPageSectionNormal_updateOne(id: ID!, name: String, selectionType: SelectionTypeEnum, selectionId: ID, orderNumber: Int, userAnswersJsonB: String, isReady: Boolean): BackendSiteDesignerPageSectionNormalType
     backendSiteDesignerPageSectionNormal_deleteOne(id: ID!): GlobalSuccessType
   }

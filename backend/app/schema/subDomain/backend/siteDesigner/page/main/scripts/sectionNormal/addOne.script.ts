@@ -8,10 +8,11 @@ import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/back
 
 type input = {
   pageId: string;
-  name: string;
   selectionType: SelectionTypeEnum;
   selectionId: string;
   orderNumber: number;
+  name?: string;
+  author?: string;
   userAnswersJsonB?: string;
   isReady?: boolean;
 };
@@ -25,6 +26,8 @@ export default function addOne(d: dependencies) {
 
     let webAssetImport: string;
     let menuJsonB: any;
+    let name: string;
+    let author: string;
 
     switch (args.selectionType) {
       case SelectionTypeEnum.BUILT_IN:
@@ -37,6 +40,18 @@ export default function addOne(d: dependencies) {
 
         webAssetImport = builtIn.data.dataValues.webAssetImport
         menuJsonB = builtIn.data.dataValues.menuJsonB
+
+        if (args.name) {
+          name = args.name
+        } else {
+          name = builtIn.data.dataValues.name
+        }
+
+        if (args.author) {
+          author = args.author
+        } else {
+          author = builtIn.data.dataValues.author
+        }
         break;
 
       default:
@@ -53,7 +68,8 @@ export default function addOne(d: dependencies) {
 
     const response = sql.addOne({
       pageId: args.pageId,
-      name: args.name,
+      name,
+      author,
       orderNumber: args.orderNumber,
       webAssetImport: webAssetImport,
       menuJsonB: menuJsonB,

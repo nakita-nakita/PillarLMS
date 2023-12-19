@@ -10,6 +10,8 @@ import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/back
 type Input = {
   pageId: string;
   id?: string;
+  name?: string;
+  author?: string;
   selectionType?: SelectionTypeEnum;
   selectionId?: string;
   userAnswersJsonB?: string;
@@ -25,6 +27,8 @@ export default function upsertOne(d: dependencies) {
 
     let webAssetImport: string;
     let menuJsonB: any;
+    let name: string;
+    let author: string;
 
     if (args.selectionType) {
       switch (args.selectionType) {
@@ -38,6 +42,18 @@ export default function upsertOne(d: dependencies) {
 
           webAssetImport = builtIn.data.dataValues.webAssetImport
           menuJsonB = builtIn.data.dataValues.menuJsonB
+
+          if (args.name) {
+            name = args.name
+          } else {
+            name = builtIn.data.dataValues.name
+          }
+
+          if (args.author) {
+            author = args.author
+          } else {
+            author = builtIn.data.dataValues.author
+          }
           break;
 
         default:
@@ -55,6 +71,8 @@ export default function upsertOne(d: dependencies) {
 
     const response = sql.upsertOne({
       id: args.id,
+      name,
+      author,
       pageId: args.pageId,
       webAssetImport: webAssetImport,
       menuJsonB: menuJsonB,

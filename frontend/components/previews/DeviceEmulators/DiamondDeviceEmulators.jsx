@@ -10,7 +10,7 @@ import Chip from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useTheme } from '@mui/material';
 
-function DiamondDeviceEmulator({ src, setIsDarkMode }) {
+function DiamondDeviceEmulator({ src, setIsDarkMode, height }) {
   const theme = useTheme()
 
   const iframeRef = useRef(null);
@@ -116,7 +116,7 @@ function DiamondDeviceEmulator({ src, setIsDarkMode }) {
           borderRadius={2}
           overflow="hidden"
           mx="auto"
-          style={{ height: '400px', width: deviceWidth }}
+          style={{ height: height || '400px', width: deviceWidth }}
         >
           <iframe
             ref={iframeRef}

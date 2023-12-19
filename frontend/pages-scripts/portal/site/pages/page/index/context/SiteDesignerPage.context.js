@@ -5,13 +5,15 @@ import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { loadPageGraphQL } from '../store/loadPageData.store';
 import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
+import { createNormalSectionGraphQL } from '../store/createNormalSection.store';
+import { createLoudSectionGraphQL } from '../store/createLoudSection.story';
 
 export const SiteDesignerPageContext = React.createContext();
 
 export function SiteDesignerPageProvider({ children }) {
   const router = useRouter();
 
-  const { updateEntity } = useContext(AdminLayoutContext)
+  const { updateEntity, navigate } = useContext(AdminLayoutContext)
 
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -20,7 +22,7 @@ export function SiteDesignerPageProvider({ children }) {
   const [entity, setEntity] = useState()
   const [slug, setSlug] = useState()
 
-
+  //component options
   const [isLoudSectionModalOpened, setIsLoudSectionModalOpened] = useState(false)
   const [isNormalSectionModalOpened, setIsNormalSectionModalOpened] = useState(false)
   const [loudSectionBuiltIn, setLoudSectionBuiltIn] = useState([])
@@ -28,6 +30,9 @@ export function SiteDesignerPageProvider({ children }) {
   const [normalSectionBuiltIn, setNormalSectionBuiltIn] = useState([])
   const [normalSectionBuiltInSelected, setNormalSectionBuiltInSelected] = useState()
 
+  // GUI
+  const [loudSection, setLoudSection] = useState()
+  const [sections, setSections] = useState([])
   const [isReady, setIsReady] = useState()
   const [isReadyValue, setIsReadyValue] = useState()
 
@@ -105,6 +110,30 @@ export function SiteDesignerPageProvider({ children }) {
     return normalSectionBuiltIn[normalSectionBuiltIn.length - 1]; // Return the last component if the component with the given ID is not found or if it's the first component
   };
 
+  const createNormalSection = (info) => {
+    createNormalSectionGraphQL({
+      pageId: router.query.pageId,
+      selectionId: info.id,
+      selectionType: info.type,
+    }).then(response => {
+      const data = response.data.backendSiteDesignerPageSectionNormal_addOne
+
+      navigate(`/portal/site/pages/${router.query.pageId}/section/${data.id}`)
+    })
+  }
+
+  const createLoudSection = (info) => {
+    createLoudSectionGraphQL({
+      pageId: router.query.pageId,
+      selectionId: info.id,
+      selectionType: "BUILT_IN",
+    }).then(response => {
+      const data = response.data.backendSiteDesignerPageSectionLoud_upsertOne
+
+      navigate(`/portal/site/pages/${router.query.pageId}/loud-section/${data.id}`)
+    })
+  }
+
 
 
   useEffect(() => {
@@ -134,19 +163,23 @@ export function SiteDesignerPageProvider({ children }) {
       socketId: getSocketId(),
     }).then(response => {
 
-      const pageData = response.data.backendSiteDesignerPage_getOneById
+      const pageData = response.data.backendSiteDesignerPage_getOneRealTimeById
       const loudBuiltInData = response.data.backendSiteDesignerPageSectionLoudBuiltIn_getMany
       const normalBuiltInData = response.data.backendSiteDesignerPageSectionNormalBuiltIn_getMany
-
-      // updateEntity({
-      //   entity: data.entity
-      // })
-
-      setId(router.query.pageId)
-      // setEntity(data.entity)
+      const sectionsData = response.data.backendSiteDesignerPageSectionNormal_getManyByPageId
+      const loudSectionData = response.data.backendSiteDesignerPageSectionLoud_getOneByPageId
 
 
-      setSlug(pageData.slug)
+
+      if (pageData) {
+        setId(pageData.id)
+        updateEntity({
+          entity: pageData.entity
+        })
+        setEntity(pageData.entity)
+        setIsReady(pageData.isReady)
+        setSlug(pageData.slug)
+      }
 
       const loudHomePageSectionBuiltIn = loudBuiltInData.filter(l => l.category === "HOMEPAGE")
       const loudNormalPageSectionBuiltIn = loudBuiltInData.filter(l => l.category === "NORMALPAGE")
@@ -171,6 +204,14 @@ export function SiteDesignerPageProvider({ children }) {
 
       // setIsReady(data.isReady)
 
+      if (sectionsData) {
+        setSections(sectionsData)
+      }
+
+      if (loudSectionData) {
+        setLoudSection(loudSectionData)
+      }
+
       setIsLoaded(true)
     })
   }, [])
@@ -183,6 +224,7 @@ export function SiteDesignerPageProvider({ children }) {
       id, setId,
       slug, setSlug,
       entity, setEntity,
+      
 
       isLoudSectionModalOpened, setIsLoudSectionModalOpened,
       isNormalSectionModalOpened, setIsNormalSectionModalOpened,
@@ -194,6 +236,8 @@ export function SiteDesignerPageProvider({ children }) {
       isReady, setIsReady,
       isReadyValue, setIsReadyValue,
 
+      loudSection, setLoudSection,
+      sections, setSections,
 
       selectLoudSectionComponent,
       getNextLoudSectionComponent,
@@ -202,7 +246,8 @@ export function SiteDesignerPageProvider({ children }) {
       getNextNormalSectionComponent,
       getPreviousNormalSectionComponent,
 
-
+      createNormalSection,
+      createLoudSection,
     }}>
       {children}
     </SiteDesignerPageContext.Provider>

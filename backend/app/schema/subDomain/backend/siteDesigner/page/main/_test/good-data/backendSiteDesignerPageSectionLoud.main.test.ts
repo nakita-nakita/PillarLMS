@@ -41,6 +41,8 @@ describe("test backendSiteDesignerPageSectionLoud.main.js", () => {
 
     expect(upsertOne.data.dataValues.userAnswersJsonB).toEqual(JSON.stringify({ testing: "testing" }))
     expect(upsertOne.data.dataValues.isReady).toBe(true)
+    expect(upsertOne.data.dataValues.name).toBe('Gif/Image Intro')
+    expect(upsertOne.data.dataValues.author).toBe('built-in')
     expect(upsertOne.data.dataValues.selectionId).toBe("a3cf9afa-262a-4c82-b290-f35e6eafca9d")
     expect(upsertOne.data.dataValues.selectionType).toBe(SelectionTypeEnum.BUILT_IN)
     expect(upsertOne.data.dataValues.menuJsonB).not.toBeUndefined()

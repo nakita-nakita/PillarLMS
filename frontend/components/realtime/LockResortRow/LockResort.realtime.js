@@ -1,35 +1,43 @@
-'use client'
-
-import React from 'react';
+import React, { useState } from 'react';
 import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 
-function RealTimeResortLockedRow() {
+function RealTimeResortLockedRow({ isOnlyPerson }) {
+  const handleOrderChange = () => {
+    // Your logic for handling order change
+  };
+
   return (
-    <ListItem>
-      <Box display="flex" alignItems="center" width="100%">
+    <>
+      <ListItem>
+        <Box display="flex" alignItems="center" width="100%">
 
-        {/* Left Text */}
-        <Box
-          display="flex"
-          alignItems="center"
-          flexGrow={1}
-          overflow="hidden"
-          style={{
-            display: '-webkit-box',
-            WebkitLineClamp: 2,  // Adjust as needed
-            WebkitBoxOrient: 'vertical'
-          }}
-        >
-          0:03 locked
+          {/* Button */}
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleOrderChange}
+            disabled={isOnlyPerson === undefined || isOnlyPerson === true}
+          >
+            Change Order
+          </Button>
+
+          {/* Secondary Action with Chip */}
+          <ListItemSecondaryAction>
+            <Box marginLeft={2}>
+              <Chip label="User Chip" />
+            </Box>
+          </ListItemSecondaryAction>
+
         </Box>
+      </ListItem>
+      <Divider component="li" style={{ borderTopWidth: "1px" }} />
 
-        {/* Chip Component */}
-        <Chip label="YourChipLabel" />
-
-      </Box>
-    </ListItem>
+    </>
   );
 }
 

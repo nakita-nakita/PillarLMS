@@ -31,6 +31,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RealTimeResortLockedRow from '@/components/realtime/LockResortRow/LockResort.realtime';
 import DeletePageListItem from '../delete/components/DeletePageListItem';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import LoudSectionItem from './components/LoudSectionItem';
 // const DynamicNavLinksWrapper = dynamic(() => import('../../components/NavLinks/NavLinksWrapper.component'), {
 //   ssr: false,
 // });
@@ -45,15 +46,24 @@ function SiteDesignerPageSidebar() {
     isLoudSectionModalOpened, setIsLoudSectionModalOpened,
     isNormalSectionModalOpened, setIsNormalSectionModalOpened,
 
-    normalSectionBuiltInSelected,
-    selectNormalSectionComponent,
-    getNextNormalSectionComponent,
-    getPreviousNormalSectionComponent,
+    createNormalSection,
+    createLoudSection,
+
+
+    isReady, setIsReady,
+    isReadyValue, setIsReadyValue,
+
+    entity,
+
+    loudSection, setLoudSection,
+    sections, setSections,
+
   } = useContext(SiteDesignerPageContext);
 
   const {
     CircleStatusSuccess,
     CircleStatusDanger,
+    navigate,
   } = useContext(AdminLayoutContext)
 
   const handleNewLoudSection = () => {
@@ -70,25 +80,17 @@ function SiteDesignerPageSidebar() {
         <>
           <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0 }}>
             <SettingsBackButton
-              label={"Main Menu"}
+              label={"Pages"}
               href={"/portal/site/pages/"}
             />
 
 
             <Divider component="li" style={{ borderTopWidth: "12px" }} />
             <HeaderRow label={"Loud Section"} />
-            <ListItem>
-              <div>
-                <Button
-                  variant="contained"
-                  onClick={handleNewLoudSection}
-                >
-                  New Loud Section
-
-                </Button>
-
-              </div>
-            </ListItem>
+            <LoudSectionItem
+              onSelectCreateSummary={handleNewLoudSection}
+            />
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
             <HeaderRow
               label={"Sections"}
               secondaryAction={
@@ -111,15 +113,15 @@ function SiteDesignerPageSidebar() {
 
 
             <RealTimeResortLockedRow />
-            <PageList />
+            <PageList sections={sections} />
 
-            <Divider component="li" style={{ borderTopWidth: "12px" }} />
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
             <HeaderRow label={"Meta Data"} />
 
             <ListItem
               button
               alignItems="flex-start"
-              onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/browser-tabs/`)}
+              onClick={() => navigate(`/portal/site/pages/${router.query.pageId}/browser-tabs/`)}
             >
               <ListItemAvatar>
                 <Box width={35} height={35}>
@@ -136,7 +138,7 @@ function SiteDesignerPageSidebar() {
             <ListItem
               button
               alignItems="flex-start"
-              onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/link/`)}
+              onClick={() => navigate(`/portal/site/pages/${router.query.pageId}/link/`)}
             >
               <ListItemAvatar>
 
@@ -148,22 +150,32 @@ function SiteDesignerPageSidebar() {
                 secondary="When people send links between each other"
               />
             </ListItem>
-            <Divider component="li" style={{ borderTopWidth: "12px" }} />
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
 
             <HeaderRow label={"Danger Zone"} />
-            <DeletePageListItem onClick={() => changeUrl(`/portal/site/pages/${router.query.pageId}/delete`)} />
-            <Divider component="li" style={{ borderTopWidth: "12px" }} />
-
-            <HeaderRow label={"Advance Settings"} />
-            <RealTimeSwitchRow id="status" label={(
-              <>
-                <CircleStatusSuccess />
-                &nbsp;
-                <span>Status</span>
-              </>
-            )} />
-
-            <Divider component="li" style={{ borderTopWidth: "12px" }} />
+            <DeletePageListItem onClick={() => navigate(`/portal/site/pages/${router.query.pageId}/delete`)} />
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <HeaderRow label={"Status"} />
+            <RealTimeSwitchRow
+              label={(
+                <>
+                  {isReadyValue
+                    ? <CircleStatusSuccess />
+                    : <CircleStatusDanger />
+                  }
+                  &nbsp;
+                  <span>Ready?</span>
+                </>
+              )}
+              // label, data, entity, onChange
+              data={isReady}
+              entity={entity}
+              onChange={(value) => {
+                setIsReadyValue(value)
+                console.log('contents to be saved', value)
+              }}
+            />
+            <Divider component="li" style={{ borderTopWidth: "5px" }} />
             <ListItem alignItems="flex-start">
               {/* <ListItemAvatar>
         <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
@@ -184,6 +196,7 @@ function SiteDesignerPageSidebar() {
               onClose={() => {
                 setIsLoudSectionModalOpened(false)
               }}
+              onSelect={info => createLoudSection(info)}
             />
 
             <SelectNormalSectionModal
@@ -191,6 +204,7 @@ function SiteDesignerPageSidebar() {
               onClose={() => {
                 setIsNormalSectionModalOpened(false)
               }}
+              onSelect={info => createNormalSection(info)}
             />
 
             {/* <Divider variant="inset" component="li" />
@@ -216,6 +230,9 @@ function SiteDesignerPageSidebar() {
       />
     </ListItem> */}
           </List>
+          <br />
+          <br />
+          <br />
         </>
       )}
     </>

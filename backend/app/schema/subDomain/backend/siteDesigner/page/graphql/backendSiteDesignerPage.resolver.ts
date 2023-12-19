@@ -32,7 +32,7 @@ const backendSiteDesignerPageResolver = {
       })
 
       if (response?.success) {
-        return response.data.dataValues
+        return response.data
 
       } else {
         return graphqlError(response)
@@ -346,7 +346,7 @@ const backendSiteDesignerPageResolver = {
 
       const response = await main.addOne({
         pageId: args.pageId,
-        name: args.name,
+        name: undefined,
         selectionType: args.selectionType,
         selectionId: args.selectionId,
         orderNumber: args.orderNumber,
@@ -355,7 +355,7 @@ const backendSiteDesignerPageResolver = {
       })
 
       if (response?.success) {
-        return response
+        return response.data
 
       } else {
         return graphqlError(response)
@@ -375,7 +375,7 @@ const backendSiteDesignerPageResolver = {
       })
 
       if (response?.success) {
-        return response
+        return response.data
 
       } else {
         return graphqlError(response)

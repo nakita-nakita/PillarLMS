@@ -58,7 +58,7 @@ export default function getOneRealTime(d: dependencies) {
 
       const setVariables = await sameDoc.adaptersFromMenuAndAnswers({
         menu: record.data?.dataValues?.menuJsonB,
-        userAnswers: record.data?.dataValues?.userAnswersJsonB,
+        userAnswers: record.data?.dataValues?.userAnswersJsonB || {},
       })
 
       const isReady: RealTimeAdapterPropertyValue = {

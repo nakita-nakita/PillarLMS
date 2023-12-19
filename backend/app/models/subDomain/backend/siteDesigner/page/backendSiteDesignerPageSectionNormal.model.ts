@@ -28,6 +28,11 @@ export default class backendSiteDesignerPageSectionNormal extends Model {
   @Column({
     type: sequelize.STRING,
   })
+  author: string;
+
+  @Column({
+    type: sequelize.STRING,
+  })
   webAssetImport: string;
 
   @Column({

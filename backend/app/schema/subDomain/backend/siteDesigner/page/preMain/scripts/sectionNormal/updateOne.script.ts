@@ -7,6 +7,7 @@ import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/back
 type input = {
   id: string;
   name?: string;
+  author?: string;
   webAssetImport?: string;
   selectionType?: SelectionTypeEnum;
   selectionId?: string;

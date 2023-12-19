@@ -46,15 +46,18 @@ export function SiteDesignerPageBrowserProvider({ children }) {
 
         setSlug(pageData.slug)
         setTabName(pageBrowser.tabName)
-        setFavicon(siteData.favicon)
-        setTabOrgName(siteData.tab)
+
+        if (siteData) {
+          setFavicon(siteData.favicon)
+          setTabOrgName(siteData.tab)
+        }
 
         setIsLoaded(true)
       })
     }
   }, [])
 
-  const save = ({pageId, tabName}) => {
+  const save = ({ pageId, tabName }) => {
     savePageBrowserGraphQL({
       pageId,
       tabName,

@@ -10,6 +10,12 @@ async function up({ context: queryInterface }) {
     },
 
     // GUI
+    name: {
+      type: sequelize.STRING,
+    },
+    author: {
+      type: sequelize.STRING,
+    },
     webAssetImport: {
       type: sequelize.STRING,
     },

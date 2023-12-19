@@ -13,6 +13,9 @@ async function up({ context: queryInterface }) {
     name: {
       type: sequelize.STRING,
     },
+    author: {
+      type: sequelize.STRING,
+    },
     webAssetImport: {
       type: sequelize.STRING,
     },

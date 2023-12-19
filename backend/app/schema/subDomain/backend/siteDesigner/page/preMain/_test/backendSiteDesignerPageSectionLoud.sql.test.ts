@@ -31,6 +31,8 @@ describe("test backendSiteDesignerPageSectionLoud.sql.js", () => {
 
     const upsertOne = await loud.upsertOne({
       pageId,
+      author: "author",
+      name: "name",
       menuJsonB: JSON.stringify({ testing: "testing" }),
       userAnswersJsonB: JSON.stringify({ testing: "testing" }),
       webAssetImport: "webAssetImport",
@@ -38,6 +40,8 @@ describe("test backendSiteDesignerPageSectionLoud.sql.js", () => {
     })
     record1Id = upsertOne.data.dataValues.id
 
+    expect(upsertOne.data.dataValues.author).toEqual("author")
+    expect(upsertOne.data.dataValues.name).toEqual("name")
     expect(upsertOne.data.dataValues.menuJsonB).toEqual(JSON.stringify({ testing: "testing" }))
     expect(upsertOne.data.dataValues.userAnswersJsonB).toEqual(JSON.stringify({ testing: "testing" }))
     expect(upsertOne.data.dataValues.webAssetImport).toEqual("webAssetImport")

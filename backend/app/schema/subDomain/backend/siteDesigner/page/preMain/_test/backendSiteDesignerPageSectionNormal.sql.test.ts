@@ -33,6 +33,7 @@ describe("test backendSiteDesignerPageSectionNormal.sql.js", () => {
     const addOne = await normal.addOne({
       pageId,
       name: "name",
+      author: "author",
       selectionId: "1ce59109-a2fb-4aef-b923-6d9c4c2fcbda",
       selectionType: SelectionTypeEnum.BUILT_IN,
       orderNumber: 1,
@@ -46,6 +47,7 @@ describe("test backendSiteDesignerPageSectionNormal.sql.js", () => {
     expect(addOne.data.dataValues.menuJsonB).toEqual(JSON.stringify({ testing: "testing" }))
     expect(addOne.data.dataValues.selectionId).toEqual("1ce59109-a2fb-4aef-b923-6d9c4c2fcbda")
     expect(addOne.data.dataValues.name).toEqual("name")
+    expect(addOne.data.dataValues.author).toEqual("author")
     expect(addOne.data.dataValues.selectionType).toEqual(SelectionTypeEnum.BUILT_IN)
     expect(addOne.data.dataValues.orderNumber).toEqual(1)
     expect(addOne.data.dataValues.userAnswersJsonB).toEqual(JSON.stringify({ testing: "testing" }))

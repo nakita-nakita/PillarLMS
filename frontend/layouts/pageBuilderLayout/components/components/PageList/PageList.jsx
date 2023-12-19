@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
@@ -10,34 +10,21 @@ import Delete from '@mui/icons-material/Delete';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import FiberManualRecord from '@mui/icons-material/FiberManualRecord';
 import DragIndicator from '@mui/icons-material/DragIndicator';
-import { Link } from '@mui/material';
+import { Link, useTheme } from '@mui/material';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { realtimeLink } from '@/utils/realtime/link';
 import { useRouter } from 'next/router';
 
-function PageList() {
+function PageList({ sections }) {
   const router = useRouter();
-  const { setTabs, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+  const theme = useTheme();
+  const { navigate } = useContext(AdminLayoutContext)
 
 
-  const [pages, setPages] = useState([
-    { id: 'page1', label: 'Section 1', isActive: true },
-    { id: 'page2', label: 'Section 2', isActive: false },
-    { id: 'page3', label: 'Section 3', isActive: true },
-  ]);
+  const [pages, setPages] = useState(sections || []);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const changeUrl = (to) => {
-    realtimeLink({
-      to,
-      meetingId: panelMeetingDoc.id,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      router,
-      setPanelMeetingDoc,
-      userId: idChip.id,
-    })
-  }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,10 +52,10 @@ function PageList() {
             {pages.map((page, index) => (
               <Draggable key={page.id} draggableId={page.id} index={index}>
                 {(draggableProvided) => (
-                  <ListItem 
-                    ref={draggableProvided.innerRef} 
-                    {...draggableProvided.draggableProps} 
-                    style={{ 
+                  <ListItem
+                    ref={draggableProvided.innerRef}
+                    {...draggableProvided.draggableProps}
+                    style={{
                       ...draggableProvided.draggableProps.style,
                       borderBottom: '1px solid #e0e0e0'
                     }}
@@ -76,29 +63,43 @@ function PageList() {
                     <IconButton {...draggableProvided.dragHandleProps}>
                       <DragIndicator />
                     </IconButton>
-                    <Link onClick={() => changeUrl('/portal/site/pages/42/section/42')}>
-                    {page.label}
-                    </Link>
-                    <IconButton edge="end" onClick={handleClick}>
-                      <MoreVert />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
+                    <Link
+                      style={{
+                        cursor: "pointer",
+                        paddingLeft: "5px",
+                      }}
+                      onClick={() => navigate(`/portal/site/pages/${router.query.pageId}/section/${page.id}`)}
                     >
-                      <MenuItem onClick={handleClose}>
-                        <Edit fontSize="small" />
-                        &nbsp; Edit
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <Delete fontSize="small" />
-                        &nbsp; Delete
-                      </MenuItem>
-                    </Menu>
+                      {page.name}
+                      <br />
+                      <small style={{
+                        color: theme.palette.grey[800],
+                        textDecoration: "none",
+                      }}>
+                        {page.author}
+
+                      </small>
+                    </Link>
                     <ListItemSecondaryAction>
-                      <FiberManualRecord style={{ color: page.isActive ? 'green' : 'red' }} />
+                      <IconButton edge="end" onClick={handleClick}>
+                        <MoreVert />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleClose}>
+                          <Edit fontSize="small" />
+                          &nbsp; Edit
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>
+                          <Delete fontSize="small" />
+                          &nbsp; Delete
+                        </MenuItem>
+                      </Menu>
+
                     </ListItemSecondaryAction>
                   </ListItem>
                 )}
@@ -139,8 +140,8 @@ export default PageList;
 
 
 
-// // 
-// // 
+// //
+// //
 
 
 
