@@ -63,6 +63,14 @@ describe("test backendSiteDesignerPageSectionLoud.main.js", () => {
     expect(getOneByPageId.data.dataValues.webAssetImport).not.toBeUndefined()
   })
 
+  test("getMany: can get all records.", async () => {
+    const pageMain = makeBackendSiteDesignerPageSectionLoudMain(d)
+
+    const getMany = await pageMain.getMany()
+
+    expect(getMany.data.length).toBe(1)
+  })
+
   test("deleteOne: can delete record.", async () => {
     const loud = makeBackendSiteDesignerPageSectionLoudMain(d)
 

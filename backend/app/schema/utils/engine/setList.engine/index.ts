@@ -1,12 +1,22 @@
 import { Op, Transaction } from "sequelize";
-import { WhereOptions, ModelCtor, Model } from "sequelize";
-import backendPermission from "../../../../models/subDomain/backend/permission/backendPermission.model";
-import { dObj } from "../../types/dependencyInjection.types";
 import { returningSuccessObj } from "../../types/returningObjs.types";
+import { dependencies } from "../../dependencies/type/dependencyInjection.types";
+import { Model, ModelCtor } from "sequelize-typescript";
 
-export default function makeSetList({ errorHandler, loggers, }: dObj) {
 
-  return async ({ dbEntity, setArray, currentDbArray, transaction }: { dbEntity: ModelCtor<Model<any, any>>, setArray: any[], currentDbArray: Model<any>[], transaction: Transaction }): Promise<returningSuccessObj<null>> => {
+
+export default function makeSetList<Type>(d: dependencies) {
+
+  type input = {
+    dbEntity: any,
+    // dbEntity: ModelCtor<Model<any, any>>,
+    setArray: any[],
+    currentDbArray: any,
+    // currentDbArray: Model<any>[],
+    transaction: Transaction
+  }
+
+  return async ({ dbEntity, setArray, currentDbArray, transaction }: input): Promise<returningSuccessObj<null>> => {
 
     const deleteList: string[] = currentDbArray.filter((currentArr) => {
       for (let i = 0; i < setArray.length; i++) {
@@ -26,7 +36,7 @@ export default function makeSetList({ errorHandler, loggers, }: dObj) {
           updateOnDuplicate: ["id"],
           transaction,
         }
-      ).catch(error => errorHandler(error, loggers))
+      ).catch(error => d.errorHandler(error, d.loggers))
     }
 
     if (deleteList.length) {
@@ -37,7 +47,7 @@ export default function makeSetList({ errorHandler, loggers, }: dObj) {
           }
         },
         transaction,
-      }).catch(error => errorHandler(error, loggers))
+      }).catch(error => d.errorHandler(error, d.loggers))
     }
 
     return {

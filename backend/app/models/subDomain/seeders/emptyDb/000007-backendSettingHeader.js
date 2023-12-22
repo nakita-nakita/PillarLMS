@@ -9,7 +9,7 @@ async function up({ context: queryInterface }) {
       userAnswersJsonB: JSON.stringify({}),
 
       selectionType: "BUILT_IN",
-      selectionId: "5ce91223-9685-4ee7-93c2-6e38bae8804f",
+      selectionId: "2ec57f1a-f355-48d5-8aa3-a8fc2e457ff4",
 
       //standard
       createdAt: new Date(),

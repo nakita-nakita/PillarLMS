@@ -16,7 +16,7 @@ describe("test backendSiteDesignerPage.main.js", () => {
 
   }, 100000)
 
-  test("addOne: backendSiteDesignerPage can add record.", async () => {
+  test("addOne: can add record.", async () => {
     const pageMain = makeBackendSiteDesignerPageMain(d)
 
     const addOne = await pageMain.addOne({
@@ -29,7 +29,15 @@ describe("test backendSiteDesignerPage.main.js", () => {
     expect(addOne.data.dataValues.isReady).toEqual(true)
   })
 
-  test("getOneById: backendSiteDesignerPage can add record.", async () => {
+  test("getMany: can get all records.", async () => {
+    const pageMain = makeBackendSiteDesignerPageMain(d)
+
+    const getMany = await pageMain.getMany()
+
+    expect(getMany.data.length).toBe(1)
+  })
+
+  test("getOneById: can get record.", async () => {
     const pageMain = makeBackendSiteDesignerPageMain(d)
 
     const getOneById = await pageMain.getOneById({
@@ -39,7 +47,7 @@ describe("test backendSiteDesignerPage.main.js", () => {
     expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
   })
 
-  test("updateOne: backendSiteDesignerPages can update record.", async () => {
+  test("updateOne: can update record.", async () => {
     const pageMain = makeBackendSiteDesignerPageMain(d)
 
     const updatePage = await pageMain.updateOne({
@@ -51,7 +59,7 @@ describe("test backendSiteDesignerPage.main.js", () => {
     expect(updatePage.data.dataValues.isReady).toEqual(true)
   })
 
-  test("updateOne: backendSiteDesignerPages can update record.", async () => {
+  test("getManyWithPagination: can get many with pagination.", async () => {
     const pageMain = makeBackendSiteDesignerPageMain(d)
 
     const getManyWithPagination = await pageMain.getManyWithPagination({})
@@ -68,7 +76,7 @@ describe("test backendSiteDesignerPage.main.js", () => {
     expect(deleteOne.success).toBe(true)
   })
 
-  test("getOneById: backendSiteDesignerPage can add record.", async () => {
+  test("getOneById: double check for deleted record.", async () => {
     const pageMain = makeBackendSiteDesignerPageMain(d)
 
     const getOneById = await pageMain.getOneById({

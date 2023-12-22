@@ -105,6 +105,14 @@ describe("test backendSiteDesignerPageSectionNormal.main.js", () => {
     expect(getOneById.data.dataValues.isReady).toBe(false)
   })
 
+  test("getMany: can get all records.", async () => {
+    const pageMain = makeBackendSiteDesignerPageSectionNormalMain(d)
+
+    const getMany = await pageMain.getMany()
+
+    expect(getMany.data.length).toBe(1)
+  })
+
   test("deleteOne: can delete record.", async () => {
     const normal = makeBackendSiteDesignerPageSectionNormalMain(d)
 

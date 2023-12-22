@@ -26,7 +26,7 @@ describe("test backendSiteDesignerPageLink.sql.js", () => {
 
   }, 100000)
 
-  test("upsertOne: backendSiteDesignerPageLink can add record.", async () => {
+  test("upsertOne: can add record.", async () => {
     const pageSql = makeBackendSiteDesignerPageLinkSql(d)
 
     const upsertOne = await pageSql.upsertOne({
@@ -45,7 +45,7 @@ describe("test backendSiteDesignerPageLink.sql.js", () => {
     expect(upsertOne.data.dataValues.pictureAlt).toEqual("pictureAlt")
   })
 
-  test("getOneById: backendSiteDesignerPageLink can add record.", async () => {
+  test("getOneById: can get record.", async () => {
     const pageSql = makeBackendSiteDesignerPageLinkSql(d)
 
     const getOneByPageId = await pageSql.getOneByPageId({
@@ -59,7 +59,7 @@ describe("test backendSiteDesignerPageLink.sql.js", () => {
     expect(getOneByPageId.data.dataValues.pictureAlt).toEqual("pictureAlt")
   })
 
-  test("upsertOne: backendSiteDesignerPageLink can update record.", async () => {
+  test("upsertOne: can edit record.", async () => {
     const pageSql = makeBackendSiteDesignerPageLinkSql(d)
 
     const upsertOne = await pageSql.upsertOne({
@@ -76,6 +76,14 @@ describe("test backendSiteDesignerPageLink.sql.js", () => {
     expect(upsertOne.data.dataValues.description).toEqual("description2")
     expect(upsertOne.data.dataValues.picture).toEqual("picture2")
     expect(upsertOne.data.dataValues.pictureAlt).toEqual("pictureAlt2")
+  })
+
+  test("getMany: can get all records.", async () => {
+    const pageSql = makeBackendSiteDesignerPageLinkSql(d)
+
+    const getMany = await pageSql.getMany()
+
+    expect(getMany.data.length).toBe(1)
   })
 
   afterAll(async () => {

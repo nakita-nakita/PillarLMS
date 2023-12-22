@@ -5,7 +5,7 @@ import makeBackendSiteDesignerPageMain from "../../main/backendSiteDesignerPage.
 jest.setTimeout(100000)
 
 
-describe("test backendSiteDesignerPageBrowserBrowser.sql.js", () => {
+describe("test backendSiteDesignerPageBrowser.sql.js", () => {
   let d: dependencies
   let recordId: string
   let pageRecordId: string
@@ -26,7 +26,7 @@ describe("test backendSiteDesignerPageBrowserBrowser.sql.js", () => {
 
   }, 100000)
 
-  test("upsertOne: backendSiteDesignerPageBrowser can add record.", async () => {
+  test("upsertOne: can add record.", async () => {
     const pageSql = makeBackendSiteDesignerPageBrowserSql(d)
 
     const upsertOne = await pageSql.upsertOne({
@@ -39,7 +39,7 @@ describe("test backendSiteDesignerPageBrowserBrowser.sql.js", () => {
     expect(upsertOne.data.dataValues.tabName).toEqual("blah")
   })
 
-  test("getOneById: backendSiteDesignerPageBrowser can add record.", async () => {
+  test("getOneById: can get record.", async () => {
     const pageSql = makeBackendSiteDesignerPageBrowserSql(d)
 
     const getOneByPageId = await pageSql.getOneByPageId({
@@ -50,7 +50,7 @@ describe("test backendSiteDesignerPageBrowserBrowser.sql.js", () => {
     expect(getOneByPageId.data.dataValues.tabName).toEqual("blah")
   })
 
-  test("upsertOne: backendSiteDesignerPageBrowser can update record.", async () => {
+  test("upsertOne: can edit record.", async () => {
     const pageSql = makeBackendSiteDesignerPageBrowserSql(d)
 
     const upsertOne = await pageSql.upsertOne({
@@ -61,6 +61,14 @@ describe("test backendSiteDesignerPageBrowserBrowser.sql.js", () => {
 
     expect(upsertOne.data.dataValues.pageId).toEqual(pageRecordId)
     expect(upsertOne.data.dataValues.tabName).toEqual("blah2")
+  })
+  
+  test("getMany: can get all records.", async () => {
+    const pageSql = makeBackendSiteDesignerPageBrowserSql(d)
+
+    const getMany = await pageSql.getMany()
+
+    expect(getMany.data.length).toBe(1)
   })
 
   afterAll(async () => {

@@ -7,6 +7,7 @@ import makeBackendSiteDesignerPageSql from "../../../preMain/backendSiteDesigner
 import { dependencies } from "../../../../../../../utils/dependencies/type/dependencyInjection.types";
 
 type input = { 
+  id?: string
   slug: string
   isReady?: boolean
 }

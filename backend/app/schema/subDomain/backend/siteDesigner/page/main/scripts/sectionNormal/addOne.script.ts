@@ -7,6 +7,7 @@ import makeBackendSiteDesignerPageSectionNormalBuiltInSql from "../../../preMain
 import { SelectionTypeEnum } from "../../../../../../../../models/subDomain/backend/setting/backendSettingHeader.model";
 
 type input = {
+  id?: string;
   pageId: string;
   selectionType: SelectionTypeEnum;
   selectionId: string;

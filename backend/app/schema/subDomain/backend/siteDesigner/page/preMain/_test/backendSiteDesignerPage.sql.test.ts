@@ -16,7 +16,7 @@ describe("test backendSiteDesignerPage.sql.js", () => {
 
   }, 100000)
 
-  test("addOne: backendSiteDesignerPage can add record.", async () => {
+  test("addOne: can add record.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 
     const addOne = await pageSql.addOne({
@@ -29,7 +29,15 @@ describe("test backendSiteDesignerPage.sql.js", () => {
     expect(addOne.data.dataValues.isReady).toEqual(true)
   })
 
-  test("getOneById: backendSiteDesignerPage can add record.", async () => {
+  test("getMany: can get all records.", async () => {
+    const pageSql = makeBackendSiteDesignerPageSql(d)
+
+    const getMany = await pageSql.getMany()
+
+    expect(getMany.data.length).toBe(1)
+  })
+
+  test("getOneById: can get record.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 
     const getOneById = await pageSql.getOneById({
@@ -39,7 +47,7 @@ describe("test backendSiteDesignerPage.sql.js", () => {
     expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
   })
 
-  test("updateOne: backendSiteDesignerPages can update record.", async () => {
+  test("updateOne: can update record.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 
     const updatePage = await pageSql.updateOne({
@@ -51,7 +59,7 @@ describe("test backendSiteDesignerPage.sql.js", () => {
     expect(updatePage.data.dataValues.isReady).toEqual(true)
   })
 
-  test("updateOne: backendSiteDesignerPages can update record.", async () => {
+  test("getManyWithPagination: can get many with pagination.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 
     const getManyWithPagination = await pageSql.getManyWithPagination({})
@@ -68,7 +76,7 @@ describe("test backendSiteDesignerPage.sql.js", () => {
     expect(deleteOne.success).toBe(true)
   })
 
-  test("getOneById: backendSiteDesignerPage can add record.", async () => {
+  test("getOneById: double check for deleted record.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 
     const getOneById = await pageSql.getOneById({

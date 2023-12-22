@@ -2,36 +2,34 @@
 const sequelize = require('sequelize');
 
 async function up({ context: queryInterface }) {
-  await queryInterface.createTable('backendSiteDesignerSetting', {
+  await queryInterface.createTable('clientSiteBrowser', {
     id: {
       type: sequelize.UUID,
       defaultValue: sequelize.UUIDV4,
       primaryKey: true,
     },
-    canAllRead: {
-      type: sequelize.BOOLEAN,
-      defaultValue: false,
+    favicon: {
+      type: sequelize.STRING,
     },
-    canAllUpdate: {
-      type: sequelize.BOOLEAN,
-      defaultValue: false,
+    tab: {
+      type: sequelize.STRING,
     },
     createdAt: {
       allowNull: false,
-      type: sequelize.DATE,
+      type: sequelize.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: sequelize.DATE,
+      type: sequelize.DATE
     },
     deletedAt: {
-      type: sequelize.DATE,
+      type: sequelize.DATE
     },
   });
 }
 
 async function down({ context: queryInterface }) {
-  await queryInterface.dropTable('backendSiteDesignerSetting');
+  await queryInterface.dropTable('clientSiteBrowser');
 }
 
 module.exports = { up, down };

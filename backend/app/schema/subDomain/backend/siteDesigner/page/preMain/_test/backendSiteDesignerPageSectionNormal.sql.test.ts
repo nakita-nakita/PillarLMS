@@ -88,7 +88,7 @@ describe("test backendSiteDesignerPageSectionNormal.sql.js", () => {
   })
 
 
-  test("updateOne: can add record.", async () => {
+  test("updateOne: can edit record.", async () => {
     const normal = makeBackendSiteDesignerPageSectionNormalSql(d)
 
     const updateOne = await normal.updateOne({
@@ -122,6 +122,14 @@ describe("test backendSiteDesignerPageSectionNormal.sql.js", () => {
     expect(getOneById.data.dataValues.userAnswersJsonB).toEqual(JSON.stringify({ testing: "testing3" }))
     expect(getOneById.data.dataValues.webAssetImport).toEqual("webAssetImport2")
     expect(getOneById.data.dataValues.isReady).toBe(false)
+  })
+
+  test("getMany: can get all records.", async () => {
+    const pageSql = makeBackendSiteDesignerPageSectionNormalSql(d)
+
+    const getMany = await pageSql.getMany()
+
+    expect(getMany.data.length).toBe(1)
   })
 
   test("deleteOne: can delete record.", async () => {

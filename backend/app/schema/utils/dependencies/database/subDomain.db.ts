@@ -46,11 +46,11 @@ export default async function connectToSubDomainDb(): Promise<Sequelize> {
 
   // Grad all files to build database
   let dbResolvers = [
-    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*.model.ts`),
-    ...glob.sync(`${__dirname}/../../../../models/subDomain/backend/*/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/*/*/*/*/*/*.model.ts`),
+    ...glob.sync(`${__dirname}/../../../../models/subDomain/*/*/*/*/*/*/*.model.ts`),
   ];
 
   let dbModels = dbResolvers.map(dbFilePath => {

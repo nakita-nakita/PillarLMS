@@ -74,6 +74,14 @@ describe("test backendSiteDesignerPageSectionLoud.sql.js", () => {
     expect(getOneByPageId.data.dataValues.webAssetImport).toEqual("webAssetImport")
     expect(getOneByPageId.data.dataValues.isReady).toBe(true)
   })
+  
+  test("getMany: can get all records.", async () => {
+    const pageSql = makeBackendSiteDesignerPageSectionLoudSql(d)
+
+    const getMany = await pageSql.getMany()
+
+    expect(getMany.data.length).toBe(1)
+  })
 
   test("deleteOne: can delete record.", async () => {
     const loud = makeBackendSiteDesignerPageSectionLoudSql(d)
