@@ -23,9 +23,12 @@ import makeBackendSiteDesignerPageLinkMain from "../../../../page/main/backendSi
 import makeBackendSiteDesignerPageSectionLoudMain from "../../../../page/main/backendSiteDesignerPageSectionLoud.main";
 import makeBackendSiteDesignerPageSectionNormalMain from "../../../../page/main/backendSiteDesignerPageSectionNormal.main";
 import endMainFromError from "../../../../../../../utils/graphql/endMainFromError.func";
+import makeBackendSiteDesignerPublishRecordMain from "../../backendSiteDesignerPublishRecord.main";
+import backendSiteDesignerPublishRecord from "../../../../../../../../models/subDomain/backend/siteDesigner/publish/backendSiteDesignerPublishRecord.model";
+import { Model } from "sequelize";
 
 export default function publishSite(d: dependencies) {
-  return async (): Promise<returningSuccessObj<null>> => {
+  return async (): Promise<returningSuccessObj<Model<backendSiteDesignerPublishRecord> | null>> => {
 
     try {
       //import
@@ -64,39 +67,69 @@ export default function publishSite(d: dependencies) {
 
       // website
       const browser = await backendSettingBrowser.getOne()
-      await clientSiteBrowser.upsertOne(browser.data.dataValues)
+      if (browser.data) {
+        await clientSiteBrowser.upsertOne(browser.data.dataValues)
+      }
 
       const colors = await backendSettingColors.getOne()
-      await clientSiteColors.upsertOne(colors.data.dataValues)
+      if (colors.data) {
+        await clientSiteColors.upsertOne(colors.data.dataValues)
+      }
 
       const footer = await backendSettingFooter.getOne()
-      await clientSiteFooter.upsertOne(footer.data.dataValues)
+      if (footer.data) {
+        await clientSiteFooter.upsertOne(footer.data.dataValues)
+      }
 
       const header = await backendSettingHeader.getOne()
-      await clientSiteHeader.upsertOne(header.data.dataValues)
+      if (header.data) {
+        await clientSiteHeader.upsertOne(header.data.dataValues)
+      }
 
       const link = await backendSettingLink.getOne()
-      await clientSiteLink.upsertOne(link.data.dataValues)
+      if (link.data) {
+        await clientSiteLink.upsertOne(link.data.dataValues)
+      }
 
       const organization = await backendSettingOrganization.getOne()
-      await clientSiteOrganization.upsertOne(organization.data.dataValues)
+      if (organization.data) {
+        await clientSiteOrganization.upsertOne(organization.data.dataValues)
+      }
 
 
       // pages
       const page = await backendSettingPage.getMany()
-      await clientSitePage.setList(page.data.map(p => p.dataValues))
+      if (page.data) {
+        await clientSitePage.setList(page.data.map(p => p.dataValues))
+      }
 
       const pageBrowser = await backendSiteDesignerPageBrowser.getMany()
-      await clientSitePageBrowser.setList(pageBrowser.data.map(p => p.dataValues))
+      if (pageBrowser.data) {
+        await clientSitePageBrowser.setList(pageBrowser.data.map(p => p.dataValues))
+      }
 
       const pageLink = await backendSiteDesignerPageLink.getMany()
-      await clientSitePageLink.setList(pageLink.data.map(p => p.dataValues))
+      if (pageLink) {
+        await clientSitePageLink.setList(pageLink.data.map(p => p.dataValues))
+      }
 
       const pageSectionLoud = await backendSiteDesignerPageSectionLoud.getMany()
-      await clientSitePageSectionLoud.setList(pageSectionLoud.data.map(p => p.dataValues))
+      if (pageSectionLoud.data) {
+        await clientSitePageSectionLoud.setList(pageSectionLoud.data.map(p => p.dataValues))
+      }
 
       const pageSectionNormal = await backendSiteDesignerPageSectionNormal.getMany()
-      await clientSitePageSectionNormal.setList(pageSectionNormal.data.map(p => p.dataValues))
+      if (pageSectionNormal.data) {
+        await clientSitePageSectionNormal.setList(pageSectionNormal.data.map(p => p.dataValues))
+      }
+
+      //record:
+      const publishRecord = makeBackendSiteDesignerPublishRecordMain(d)
+      const response = await publishRecord.addOne({
+        numberOfPages: page.data.length
+      })
+
+      return response
 
     } catch (ex) {
       return endMainFromError({
@@ -106,6 +139,5 @@ export default function publishSite(d: dependencies) {
     }
 
 
-    return null
   }
 }

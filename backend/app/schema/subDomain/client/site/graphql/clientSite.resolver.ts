@@ -149,7 +149,7 @@ const clientSiteResolver = {
       })
 
       if (response?.success) {
-        return response.data.dataValues
+        return response.data
 
       } else {
         return graphqlError(response)

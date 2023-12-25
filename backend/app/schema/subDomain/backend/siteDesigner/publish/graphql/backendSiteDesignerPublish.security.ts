@@ -3,6 +3,9 @@ import { isAuthenticated, isAdmin, isPublic, hasPermissions } from "../../../../
 
 export default {
   Query: {
+    backendSiteDesignerPublishRecord_getManyWithPagination: isAuthenticated,
+  },
+  Mutation: {
     backendSiteDesignerPublish_publishSite: isAuthenticated,
   },
 }
