@@ -10,6 +10,7 @@ export default {
     clientSiteBrowser_getOne: isPublic,
     clientSiteOrganization_getOne: isPublic,
     clientSitePage_getOneById: isPublic,
+    clientSitePage_getOneBySlug: isPublic,
     clientSitePageBrowser_getOneByPageId: isPublic,
     clientSitePageLink_getOneByPageId: isPublic,
     clientSitePageSectionLoud_getOneByPageId: isPublic,

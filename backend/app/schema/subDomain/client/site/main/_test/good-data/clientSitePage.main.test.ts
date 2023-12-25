@@ -38,6 +38,16 @@ describe("test clientSitePage.main.js", () => {
     expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
   })
 
+  test("getOneBySlug: can get one record.", async () => {
+    const pageMain = makeClientSitePageMain(d)
+
+    const getOneById = await pageMain.getOneBySlug({
+      slug: "/test/should-not-be-saved/",
+    })
+
+    expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
+  })
+
   test("updateOne: can update record.", async () => {
     const pageMain = makeClientSitePageMain(d)
 

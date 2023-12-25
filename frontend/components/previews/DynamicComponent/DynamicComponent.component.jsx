@@ -6,8 +6,6 @@ const getDynamicComponent = async (c) => {
     loading: () => <p>Loading...</p>,
   })
 
-  console.log('component', component)
-
   return component
 }
 

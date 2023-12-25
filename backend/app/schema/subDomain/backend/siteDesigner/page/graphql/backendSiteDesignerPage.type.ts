@@ -158,6 +158,7 @@ const backendSiteDesignerPageType = gql`
   type Query {
     # page
     backendSiteDesignerPage_getOneById(id: ID!): BackendSiteDesignerPageType
+    backendSiteDesignerPage_getOneBySlug(slug: String!): BackendSiteDesignerPageType
     backendSiteDesignerPage_getOneRealTimeById(id: ID!, socketId: ID!): BackendSiteDesignerPageRealTimeType
     backendSiteDesignerPage_getManyWithPagination(q: String, page: Int, pageSize: Int): BackendSiteDesignerPagePaginationType
   

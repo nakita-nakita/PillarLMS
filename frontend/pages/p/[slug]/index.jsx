@@ -6,8 +6,34 @@ import { useRouter } from 'next/router';
 import MainSiteLayout from '@/layouts/mainSiteLayout/layout';
 import DynamicComponent from '@/components/previews/DynamicComponent/DynamicComponent.component';
 import { useTheme } from '@mui/material';
+import { getClientPageIdBySlugGraphQL } from '@/pages-scripts/p/store/getClientPageId.store';
+import { callSubDomainApiMiddlewareWithToken } from '@/utils/graphql/backend-api.middleware';
+import { getClientPageGraphQL } from '@/pages-scripts/p/store/getClientPage.store';
 
-const Page = () => {
+const createComponentProps = ({ organization, userAnswers, webAssetImport }) => {
+  if (typeof (userAnswers) === "string") {
+    userAnswers = JSON.parse(userAnswers)
+  }
+
+  return {
+    webAssetImport,
+    data: {
+      user: userAnswers,
+      system: {
+        state: {
+          isDisplayMode: false,
+          isFunctionalMode: true,
+          // isDayMode: //added later
+          // isNightMode //added later 
+        },
+        // socials
+      }
+
+    },
+  };
+}
+
+const Page = (props) => {
   const router = useRouter()
   const theme = useTheme()
 
@@ -70,20 +96,78 @@ const Page = () => {
             minHeight: "390px",
           }}
         >
-          {webAssetImport && (
+          {props?.header?.webAssetImport && (
             <DynamicComponent
-              filePath={webAssetImport}
-              props={componentProps?.props}
+              filePath={props.header.webAssetImport}
+              props={props.header}
             />
           )}
-          <br />
-          <br />
-          <br />
+
+          {props?.loudSection?.webAssetImport && (
+            <DynamicComponent
+              filePath={props.loudSection.webAssetImport}
+              props={props.loudSection}
+            />
+          )}
+
+          {props?.sections && props?.sections.map(section => (
+            <DynamicComponent
+              filePath={section.webAssetImport}
+              props={section}
+            />
+          )
+          )}
+
+
+          {props?.footer?.webAssetImport && (
+            <DynamicComponent
+              filePath={props.footer.webAssetImport}
+              props={props.footer}
+            />
+          )}
         </div>
       )}
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+
+  const { slug } = context.params;
+  const response = await getClientPageIdBySlugGraphQL({
+    slug: `/p/${slug}`,
+  })
+
+  const pageId = response.clientSitePage_getOneBySlug.id
+
+  const pageData = await getClientPageGraphQL({
+    pageId,
+  })
+
+  return {
+    props: {
+      header: createComponentProps({
+        webAssetImport: pageData.clientSiteHeader_getOne.webAssetImport,
+        userAnswers: JSON.parse(pageData.clientSiteHeader_getOne?.userAnswersJsonB || "{}"),
+      }),
+      footer: createComponentProps({
+        webAssetImport: pageData.clientSiteFooter_getOne.webAssetImport,
+        userAnswers: JSON.parse(pageData.clientSiteFooter_getOne?.userAnswersJsonB || "{}"),
+      }),
+      loudSection: createComponentProps({
+        webAssetImport: pageData.clientSitePageSectionLoud_getOneByPageId.webAssetImport,
+        userAnswers: JSON.parse(pageData.clientSitePageSectionLoud_getOneByPageId?.userAnswersJsonB || "{}"),
+      }),
+      sections: pageData.clientSitePageSectionNormal_getManyByPageId.map(section => {
+        return createComponentProps({
+          webAssetImport: section.webAssetImport,
+          userAnswers: JSON.parse(section?.userAnswersJsonB || "{}"),
+        })
+      })
+    }
+  }
+}
+
 
 Page.getLayout = function getLayout(page) {
   return (

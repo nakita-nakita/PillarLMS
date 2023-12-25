@@ -23,6 +23,20 @@ const backendSiteDesignerPageResolver = {
         return graphqlError(response)
       }
     },
+    backendSiteDesignerPage_getOneBySlug: async (parent, args, ctx) => {
+      const main = makeBackendSiteDesignerPageMain(ctx.d)
+
+      const response = await main.getOneBySlug({
+        slug: args.slug,
+      })
+
+      if (response?.success) {
+        return response.data.dataValues
+
+      } else {
+        return graphqlError(response)
+      }
+    },
     backendSiteDesignerPage_getOneRealTimeById: async (parent, args, ctx) => {
       const main = makeBackendSiteDesignerPageMain(ctx.d)
 

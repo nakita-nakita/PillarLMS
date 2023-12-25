@@ -216,6 +216,7 @@ const clientSitePageType = gql`
 
     # page
     clientSitePage_getOneById(id: ID!): ClientSitePageType
+    clientSitePage_getOneBySlug(slug: String!): ClientSitePageType
 
     # page meta
     clientSitePageBrowser_getOneByPageId(pageId: ID!): ClientSitePageBrowser

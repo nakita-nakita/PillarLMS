@@ -5,6 +5,7 @@ export default {
   Query: {
     // backendSiteDesignerPage_getOneById: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getOneById: isAuthenticated,
+    backendSiteDesignerPage_getOneBySlug: isAuthenticated,
     backendSiteDesignerPage_getOneRealTimeById: isAuthenticated,
     // backendSiteDesignerPage_getManyWithPagination: and(isAuthenticated, or(isAdmin, hasPermissions(['backend-siteDesigner-read']))),
     backendSiteDesignerPage_getManyWithPagination: isAuthenticated,

@@ -43,7 +43,10 @@ const clientSiteResolver = {
       const response = await main.getOne()
 
       if (response?.success) {
-        return response.data.dataValues
+        return {
+          ...response.data.dataValues,
+          userAnswersJsonB: JSON.stringify(response.data.dataValues.userAnswersJsonB),
+        }
 
       } else {
         return graphqlError(response)
@@ -90,6 +93,20 @@ const clientSiteResolver = {
 
       const response = await main.getOneById({
         id: args.id,
+      })
+
+      if (response?.success) {
+        return response.data.dataValues
+
+      } else {
+        return graphqlError(response)
+      }
+    },
+    clientSitePage_getOneBySlug: async (parent, args, ctx) => {
+      const main = makeClientSitePageMain(ctx.d)
+
+      const response = await main.getOneBySlug({
+        slug: args.slug,
       })
 
       if (response?.success) {

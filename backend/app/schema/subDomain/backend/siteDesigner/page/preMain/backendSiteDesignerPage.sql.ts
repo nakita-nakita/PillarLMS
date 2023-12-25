@@ -5,6 +5,7 @@ import getManyWithPagination from "./scripts/pageSql/getManyWithPagination.scrip
 import getMany from "./scripts/pageSql/getMany.script"
 import getOneById from "./scripts/pageSql/getOneById.script"
 import updateOne from "./scripts/pageSql/updateOne.script"
+import getOneBySlug from "./scripts/pageSql/getOneBySlug.script"
 
 export default function makeBackendSiteDesignerPageSql(d: dependencies) {
 
@@ -14,6 +15,7 @@ export default function makeBackendSiteDesignerPageSql(d: dependencies) {
     getManyWithPagination: getManyWithPagination(d),
     getMany: getMany(d),
     getOneById: getOneById(d),
+    getOneBySlug: getOneBySlug(d),
     updateOne: updateOne(d),
   }
 }

@@ -38,6 +38,16 @@ describe("test clientSitePage.sql.js", () => {
     expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
   })
 
+  test("getOneBySlug: can get one record.", async () => {
+    const pageSql = makeClientSitePageSql(d)
+
+    const getOneById = await pageSql.getOneBySlug({
+      slug: "/test/should-not-be-saved/",
+    })
+
+    expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
+  })
+
   test("updateOne: can update record.", async () => {
     const pageSql = makeClientSitePageSql(d)
 

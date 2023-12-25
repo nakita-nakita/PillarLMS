@@ -47,6 +47,16 @@ describe("test backendSiteDesignerPage.sql.js", () => {
     expect(getOneById.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
   })
 
+  test("getOneBySlug: can get record by slug.", async () => {
+    const pageSql = makeBackendSiteDesignerPageSql(d)
+
+    const getOneBySlug = await pageSql.getOneBySlug({
+      slug: "/test/should-not-be-saved/"
+    })
+
+    expect(getOneBySlug.data.dataValues.slug).toEqual("/test/should-not-be-saved/")
+  })
+
   test("updateOne: can update record.", async () => {
     const pageSql = makeBackendSiteDesignerPageSql(d)
 

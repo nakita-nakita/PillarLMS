@@ -7,6 +7,7 @@ import getManyWithPagination from "./scripts/pageMain/getManyWithPagination.scri
 import getOneById from "./scripts/pageMain/getOneById.script"
 import getOneRealTimeById from "./scripts/pageMain/getOneRealTimeById.script"
 import updateOne from "./scripts/pageMain/updateOne.script"
+import getOneBySlug from "./scripts/pageMain/getOneBySlug.script"
 
 export default function makeBackendSiteDesignerPageMain(d: dependencies) {
   const validators = makeValidations(d)
@@ -17,6 +18,7 @@ export default function makeBackendSiteDesignerPageMain(d: dependencies) {
     getManyWithPagination: getManyWithPagination(d),
     getMany: getMany(d),
     getOneById: getOneById(d),
+    getOneBySlug: getOneBySlug(d),
     getOneRealTimeById: getOneRealTimeById(d),
     updateOne: updateOne(d),
     ...validators
