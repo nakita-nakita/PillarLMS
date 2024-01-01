@@ -167,7 +167,7 @@ function WebsiteSettingsBrowserTabSidebar() {
             />
 
 
-            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <Divider component="li" style={{ borderTopWidth: "12px" }} />
             <HeaderRow label={"Browser Tab Options"} />
             <br />
             <DynamicRealTimeTextField

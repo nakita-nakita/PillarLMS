@@ -17,26 +17,15 @@ import SettingsBackButton from '../../components/BackButton/BackButton.component
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
 import { realtimeLink } from '@/utils/realtime/link';
 import { Box } from '@mui/material';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 
 function WebsiteSettingsHomeSidebar() {
   const websiteLayoutContext = React.useContext(WebsiteSettingLayoutContext)
   const theme = useTheme();
   const router = useRouter()
 
-  const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc } = React.useContext(AdminLayoutContext)
+  const { navigate } = React.useContext(AdminLayoutContext)
 
-  const changeUrl = (href) => {
-    // router.push(href)
-    realtimeLink({
-      to: href,
-      leaderUserId: panelMeetingDoc.leader?.id,
-      meetingId: panelMeetingDoc.id,
-      router,
-      userId: idChip.id,
-      setPanelMeetingDoc,
-
-    })
-  }
 
   const circleStatus = {
     borderRadius: "50px",
@@ -68,7 +57,7 @@ function WebsiteSettingsHomeSidebar() {
         isPrimary
       />
       {/* <ListItemButton
-          onClick={() => changeUrl("/portal/admin/settings/website")}
+          onClick={() => navigate("/portal/admin/settings/website")}
           sx={{
             // backgroundColor: theme.palette.grey[100],
             backgroundColor: theme.palette.primary.main,
@@ -126,7 +115,10 @@ function WebsiteSettingsHomeSidebar() {
 
 
       {/* <br /> */}
-      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/colors")} sx={MenuStyle}>
+      <HeaderRow
+        label='Branding'
+      />
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/colors")} sx={MenuStyle}>
 
         <ListItem
           alignItems="flex-start"
@@ -156,7 +148,37 @@ function WebsiteSettingsHomeSidebar() {
         </ListItem>
       </ListItemButton>
       <Divider variant="inset" component="li" />
-      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/header")} sx={MenuStyle}>
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/background-color")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusDangerStyle}></div>
+          )}>
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="browser icon" src="\admin\icons\icons8-sheet-of-paper-48.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
+          <ListItemText
+            primary="Background Color"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                  </Typography> */}
+                Pick your background color
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+      <Divider variant="inset" component="li" />
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/font")} sx={MenuStyle}>
 
         <ListItem
           alignItems="flex-start"
@@ -164,13 +186,48 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-        <ListItemAvatar>
           <ListItemAvatar>
             <Box width={35} height={35}>
-              <img alt="browser icon" src="\admin\icons\icons8-header-100.png" width="100%" height="100%" />
+              <img alt="column icon" src="\admin\icons\icons8-font-100.png" width="100%" height="100%" />
             </Box>
           </ListItemAvatar>
-        </ListItemAvatar>
+          <ListItemText
+            primary="Font"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                Website font selection
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+      <HeaderRow
+        label='Website'
+      />
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/header")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+          <ListItemAvatar>
+            <ListItemAvatar>
+              <Box width={35} height={35}>
+                <img alt="header icon" src="\admin\icons\icons8-nav-96.png" width="100%" height="100%" />
+              </Box>
+            </ListItemAvatar>
+          </ListItemAvatar>
           <ListItemText
             primary="Header"
             secondary={
@@ -191,7 +248,7 @@ function WebsiteSettingsHomeSidebar() {
       </ListItemButton>
 
       <Divider variant="inset" component="li" />
-      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/footer")} sx={MenuStyle}>
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/footer")} sx={MenuStyle}>
 
         <ListItem
           alignItems="flex-start"
@@ -199,11 +256,11 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-        <ListItemAvatar>
-          <Box width={35} height={35}>
-            <img alt="browser icon" src="\admin\icons\icons8-footer-100.png" width="100%" height="100%" />
-          </Box>
-        </ListItemAvatar>
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="footer icon" src="\admin\icons\icons8-footer-100.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
           <ListItemText
             primary="Footer"
             secondary={
@@ -224,7 +281,7 @@ function WebsiteSettingsHomeSidebar() {
       </ListItemButton>
 
       <Divider variant="inset" component="li" />
-      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/browser-tabs")} sx={MenuStyle}>
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/column")} sx={MenuStyle}>
 
         <ListItem
           alignItems="flex-start"
@@ -232,11 +289,49 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-        <ListItemAvatar>
-          <Box width={35} height={35}>
-            <img alt="browser icon" src="\admin\icons\icons8-tab-48.png" width="100%" height="100%" />
-          </Box>
-        </ListItemAvatar>
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="column icon" src="\admin\icons\icons8-column-48.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
+          <ListItemText
+            primary="Column"
+            secondary={
+              <React.Fragment>
+                {/* <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    Status
+                  </Typography> */}
+                The desktop monitor sizing
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+      </ListItemButton>
+
+
+
+
+      <HeaderRow
+        label='Meta Data'
+      />
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/browser-tabs")} sx={MenuStyle}>
+
+        <ListItem
+          alignItems="flex-start"
+          secondaryAction={(
+            <div style={circleStatusSuccessStyle}></div>
+          )}
+        >
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="browser tab icon" src="\admin\icons\icons8-apps-tab-48.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
           <ListItemText
             primary="Browser Tabs"
             secondary={
@@ -265,7 +360,7 @@ function WebsiteSettingsHomeSidebar() {
 
 
       <Divider variant="inset" component="li" />
-      <ListItemButton onClick={() => changeUrl("/portal/admin/settings/website/settings/link")} sx={MenuStyle}>
+      <ListItemButton onClick={() => navigate("/portal/admin/settings/website/settings/link")} sx={MenuStyle}>
 
         <ListItem
           alignItems="flex-start"
@@ -273,11 +368,11 @@ function WebsiteSettingsHomeSidebar() {
             <div style={circleStatusSuccessStyle}></div>
           )}
         >
-        <ListItemAvatar>
-          <Box width={35} height={35}>
-            <img alt="browser icon" src="\admin\icons\icons8-links-64.png" width="100%" height="100%" />
-          </Box>
-        </ListItemAvatar>
+          <ListItemAvatar>
+            <Box width={35} height={35}>
+              <img alt="link icon" src="\admin\icons\icons8-link-48.png" width="100%" height="100%" />
+            </Box>
+          </ListItemAvatar>
           <ListItemText
             primary="Links"
             secondary={

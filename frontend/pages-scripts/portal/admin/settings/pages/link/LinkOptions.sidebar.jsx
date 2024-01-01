@@ -181,7 +181,7 @@ function WebsiteSettingsLinkSidebar() {
 
 
 
-            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <Divider component="li" style={{ borderTopWidth: "12px" }} />
             <HeaderRow label={"Social Link Data"} />
             <DynamicRealTimeTextField
               label={"Title"}

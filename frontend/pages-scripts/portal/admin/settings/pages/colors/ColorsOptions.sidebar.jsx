@@ -251,7 +251,7 @@ function WebsiteSettingsColorsSidebar() {
             />
 
 
-            <Divider component="li" style={{ borderTopWidth: "5px" }} />
+            <Divider component="li" style={{ borderTopWidth: "12px" }} />
             <HeaderRow label='Color selection' />
             <ListItem>
               <div>
@@ -264,7 +264,7 @@ function WebsiteSettingsColorsSidebar() {
 
               </div>
             </ListItem>
-            
+
             <RealTimeColorPickerRow
               color={color1}
               setColor={updateColor1}
