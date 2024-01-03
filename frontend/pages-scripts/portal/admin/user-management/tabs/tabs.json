@@ -1,0 +1,20 @@
+{
+  "tabs": [
+    {
+      "link": "/portal/admin/user-management/system-users",
+      "name": "System Users"
+    },
+    {
+      "link": "/portal/admin/user-management/client-users",
+      "name": "Client Users"
+    },
+    {
+      "link": "/portal/admin/user-management/invited-users",
+      "name": "Invited System Users"
+    },
+    {
+      "link": "/portal/admin/user-management/roles",
+      "name": "Roles"
+    }
+  ]
+}

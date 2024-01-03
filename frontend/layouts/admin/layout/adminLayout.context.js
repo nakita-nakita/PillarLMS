@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import SelectMediaManagerProvider from '@/components/realtime/MediaSelectionRow/modal/MediaManager/context/selectMediaManager.context';
 import { useTheme } from '@mui/material';
 import { realtimeLink } from '@/utils/realtime/link';
+import { UserManagementTabsProvider } from '@/pages-scripts/portal/admin/user-management/tabs/UserManagementTabs.context';
 
 const circleStatus = {
   borderRadius: "50px",
@@ -225,7 +226,9 @@ export function AdminLayoutProvider({ hasNoEntity, children }) {
       <SelectMediaManagerProvider>
         <SnackbarProvider>
           <SettingTabsProvider>
-            {children}
+            <UserManagementTabsProvider>
+              {children}
+            </UserManagementTabsProvider>
           </SettingTabsProvider>
         </SnackbarProvider>
       </SelectMediaManagerProvider>

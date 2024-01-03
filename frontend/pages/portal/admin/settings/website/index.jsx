@@ -65,7 +65,7 @@ const Page = () => {
     setTabs(prevState => ({
       ...prevState,
       tabs: tabsJson.tabs,
-      selectedValue: 1,
+      selectedValue: 2,
     }))
 
     settingsTabsContext.setTabs(prevState => ({
