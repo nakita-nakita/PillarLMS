@@ -318,7 +318,7 @@ export default function Navigator(props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
 
             sx={{
               py: 0,
@@ -347,7 +347,7 @@ export default function Navigator(props) {
 
               </ListItemText>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           {/* <ListItemButton>
 
             <ListItem
@@ -494,7 +494,7 @@ export default function Navigator(props) {
             </ListItemText>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
 
             sx={{
               py: 0,
@@ -521,7 +521,7 @@ export default function Navigator(props) {
 
               </ListItemText>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             sx={{
               py: 0,
