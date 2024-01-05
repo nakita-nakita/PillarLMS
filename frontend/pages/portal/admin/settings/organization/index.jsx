@@ -657,24 +657,6 @@ const Page = () => {
                 </ListItem>
               </List>
             </Paper>
-            {/* <br />
-      <h2>Select Bible Version</h2>
-      <Paper elevation={3} className='admin-card'>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Select default bible translations</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            // value={age}
-            label="Select default bible translations"
-          // onChange={handleChange}
-          >
-            <MenuItem value={10}>Amplified Bible</MenuItem>
-            <MenuItem value={20}>Amplified Bible, Classic Edition</MenuItem>
-            <MenuItem value={30}>The Books of the Bible NT</MenuItem>
-            <MenuItem value={40}>English: Berean Study Bible</MenuItem>
-          </Select>
-        </FormControl> */}
           </>
         )}
       </Box>
