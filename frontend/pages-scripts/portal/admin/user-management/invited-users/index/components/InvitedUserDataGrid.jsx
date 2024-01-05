@@ -71,18 +71,18 @@ export default function InvitedUserDataGrid() {
                   cursor: "pointer",
                 }}
               >
-                Approved
+                User Approved
               </p>
 
             )}
             {params.row.status === "REJECTED" && (
               <p>
-                Declined
+                User Declined
               </p>
             )}
             {params.row.status === "REVOKED" && (
               <p>
-                Revoke
+                Invitation Revoked
               </p>
             )}
 

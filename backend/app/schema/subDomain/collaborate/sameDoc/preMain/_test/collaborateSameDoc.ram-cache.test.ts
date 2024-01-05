@@ -118,8 +118,9 @@ describe("test collaborateSameDoc.ram-cache.js", () => {
       socketId: "testSocketId1",
     })
 
-    expect(sameDocSet.data.prop1).not.toBe(undefined)
-    expect(sameDocSet.data.prop2).not.toBe(undefined)
+    //quick fix with .props, 90% sure
+    expect(sameDocSet.data.props.prop1).not.toBe(undefined)
+    expect(sameDocSet.data.props.prop2).not.toBe(undefined)
     expect(sameDocSet.data.sockets.length).toBe(1)
 
     // expect(mockEmit1).toBeCalled()
@@ -148,9 +149,9 @@ describe("test collaborateSameDoc.ram-cache.js", () => {
     const sameDocGet = await sameDoc.getByEntity({
       entity,
     })
-
-    expect(sameDocGet.data.prop1).not.toBe(undefined)
-    expect(sameDocGet.data.prop2).not.toBe(undefined)
+// quick fixed with props... 90% sure
+    expect(sameDocGet.data.props.prop1).not.toBe(undefined)
+    expect(sameDocGet.data.props.prop2).not.toBe(undefined)
     expect(sameDocGet.data.sockets.length).toBe(1)
     // expect(mockEmit1).toBeCalled()
     // expect(mockEmit1.mock.calls[0][0]).toBe('meeting-user-left');
