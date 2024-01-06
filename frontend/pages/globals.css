@@ -40,3 +40,8 @@ a {
 .ql-container {
   overflow: inherit !important;
 }
+
+
+.react-calendar-timeline .rct-header-root {
+  background: rgb(66, 66, 66) !important;
+}
