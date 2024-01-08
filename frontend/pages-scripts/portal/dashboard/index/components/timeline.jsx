@@ -5,12 +5,12 @@ import 'react-calendar-timeline/lib/Timeline.css';
 const TimelineComponent = () => {
   // Placeholder data for the timeline
   const items = [
-    { id: 1, group: 1, title: 'Project Bar', start_time: new Date(2024, 0, 1), end_time: new Date(2024, 0, 5) },
+    { id: 1, group: 1, title: 'Rome', start_time: new Date(2024, 0, 1), end_time: new Date(2024, 0, 5) },
     { id: 2, group: 2, title: 'Ready/Not Ready', start_time: new Date(2024, 0, 3), end_time: new Date(2024, 0, 7) },
   ];
 
   const groups = [
-    { id: 1, title: 'Project Bar' },
+    { id: 1, title: 'Projects' },
     { id: 2, title: 'Ready/Not Ready' },
   ];
 
