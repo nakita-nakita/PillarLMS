@@ -5,7 +5,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, styled, useTheme } from '@mui/material';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import ConfigurationStatusNotReadyDataGrid from '@/pages-scripts/portal/dashboard/configuration-status/not-ready/components/ConfigurationStatusNotReadyDataGrid';
+import DraftedPagesTotalDataGrid from '@/pages-scripts/portal/dashboard/drafted-pages/total/components/DraftedPagesTotalDataGrid';
+import ProjectDraftedPagesDeletedDataGrid from '@/pages-scripts/portal/dashboard/projects/drafted-pages/deleted/components/ProjectDraftedPagesDeletedDataGrid';
+import ProjectDraftedPagesTotalDataGrid from '@/pages-scripts/portal/dashboard/projects/drafted-pages/total/components/ProjectDraftedPagesTotalDataGrid';
 
 
 function Page() {
@@ -15,7 +17,7 @@ function Page() {
     <Box sx={{ flexGrow: 1, width: '100%', maxWidth: '900px', m: 'auto', mt: 2 }}>
       {/* Breadcrumb */}
       <Breadcrumbs aria-label="breadcrumb">
-        <Link
+      <Link
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
@@ -27,21 +29,28 @@ function Page() {
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
-          onClick={() => navigate("/portal/dashboard")}
+          onClick={() => navigate("/portal/dashboard/project/42")}
         >
-          Configuration Status
+          Project
+        </Link>
+        <Link
+          sx={{ lineHeight: "50px", cursor: "pointer" }}
+          underline="hover"
+          color="inherit"
+          onClick={() => navigate("/portal/dashboard/project/42")}
+        >
+          Drafted Pages
         </Link>
         <Typography
-          sx={{ lineHeight: "50px", cursor: "pointer" }}
           color="text.primary"
         >
-          Not Ready
+          Total
         </Typography>
       </Breadcrumbs>
 
 
-      <Paper elevation={3} sx={{ padding: 0 }}>
-        <ConfigurationStatusNotReadyDataGrid />
+      <Paper elevation={3} sx={{ p: 0 }}>
+        <ProjectDraftedPagesTotalDataGrid />
       </Paper>
     </Box>
   );

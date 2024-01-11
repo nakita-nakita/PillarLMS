@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, styled, useTheme } from '@mui/material';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import ConfigurationStatusChangedDataGrid from '@/pages-scripts/portal/dashboard/configuration-status/changed/components/ConfigurationStatusChangedDataGrid';
 
 
 function Page() {
@@ -39,7 +40,8 @@ function Page() {
       </Breadcrumbs>
 
 
-      <Paper elevation={3} sx={{ padding: 2 }}>
+      <Paper elevation={3} sx={{ padding: 0 }}>
+        <ConfigurationStatusChangedDataGrid />
       </Paper>
     </Box>
   );

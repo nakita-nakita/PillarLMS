@@ -3,9 +3,10 @@ import AdminLayout from '@/layouts/admin/layout';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, styled, useTheme } from '@mui/material';
+import { Breadcrumbs, Button, Divider, Link, List, ListItem, ListItemText, styled, useTheme } from '@mui/material';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import ConfigurationStatusNotReadyDataGrid from '@/pages-scripts/portal/dashboard/configuration-status/not-ready/components/ConfigurationStatusNotReadyDataGrid';
+import DiamondDeviceEmulator from '@/components/previews/DeviceEmulators/DiamondDeviceEmulators';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 
 
 function Page() {
@@ -27,22 +28,48 @@ function Page() {
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
-          onClick={() => navigate("/portal/dashboard")}
+          onClick={() => navigate("/portal/dashboard/project/42")}
         >
-          Configuration Status
+          Project
+        </Link>
+        <Link
+          sx={{ lineHeight: "50px", cursor: "pointer" }}
+          underline="hover"
+          color="inherit"
+          onClick={() => navigate("/portal/dashboard/project/42")}
+        >
+          Drafted Pages
+        </Link>
+        <Link
+          sx={{ lineHeight: "50px", cursor: "pointer" }}
+          underline="hover"
+          color="inherit"
+          onClick={() => navigate("/portal/dashboard/project/42/drafted-pages/total")}
+        >
+          Total
         </Link>
         <Typography
-          sx={{ lineHeight: "50px", cursor: "pointer" }}
           color="text.primary"
         >
-          Not Ready
+          View
         </Typography>
       </Breadcrumbs>
 
+      <Paper elevation={3} sx={{ p: 0 }}>
+        <List sx={{ p: 0 }}>
+          <HeaderRow
+            label='/p/awesome-page'
+            secondaryAction={(
+              <>
+                <Button variant='contained' color='primary'>Restore</Button>
 
-      <Paper elevation={3} sx={{ padding: 0 }}>
-        <ConfigurationStatusNotReadyDataGrid />
+              </>
+            )}
+          />
+        </List>
       </Paper>
+
+      <DiamondDeviceEmulator src={"about:blank"} />
     </Box>
   );
 }

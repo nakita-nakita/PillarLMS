@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, styled, useTheme } from '@mui/material';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
-import ConfigurationStatusNotReadyDataGrid from '@/pages-scripts/portal/dashboard/configuration-status/not-ready/components/ConfigurationStatusNotReadyDataGrid';
+import ProjectConfigurationStatusChangedDataGrid from '@/pages-scripts/portal/dashboard/projects/configuration-status/changed/components/ProjectConfigurationStatusChangedDataGrid';
 
 
 function Page() {
@@ -27,21 +27,28 @@ function Page() {
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
-          onClick={() => navigate("/portal/dashboard")}
+          onClick={() => navigate("/portal/dashboard/project/42")}
+        >
+          Project
+        </Link>
+        <Link
+          sx={{ lineHeight: "50px", cursor: "pointer" }}
+          underline="hover"
+          color="inherit"
+          onClick={() => navigate("/portal/dashboard/project/42")}
         >
           Configuration Status
         </Link>
         <Typography
-          sx={{ lineHeight: "50px", cursor: "pointer" }}
           color="text.primary"
         >
-          Not Ready
+          Changed
         </Typography>
       </Breadcrumbs>
 
 
-      <Paper elevation={3} sx={{ padding: 0 }}>
-        <ConfigurationStatusNotReadyDataGrid />
+      <Paper elevation={3} sx={{ p: 0 }}>
+        <ProjectConfigurationStatusChangedDataGrid />
       </Paper>
     </Box>
   );

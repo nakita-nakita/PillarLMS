@@ -10,6 +10,7 @@ import { Avatar, Badge, Chip, Divider, Link, List, ListItem, ListItemButton, Lis
 import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 import TimelineComponent from '@/pages-scripts/portal/dashboard/index/components/timeline';
 import AdminLayoutContext from '@/layouts/admin/layout/adminLayout.context';
+import { DashboardProvider } from '@/pages-scripts/portal/dashboard/index/context/Dashboard.context';
 
 function CircularProgressWithLabel(props) {
 
@@ -401,7 +402,9 @@ DashboardPage.getLayout = function getLayout(page) {
     <AdminLayout
       hasNoEntity
     >
-      {page}
+      <DashboardProvider>
+        {page}
+      </DashboardProvider>
     </AdminLayout>
   );
 }

@@ -16,7 +16,7 @@ function Page() {
     <Box sx={{ flexGrow: 1, width: '100%', maxWidth: '900px', m: 'auto', mt: 2 }}>
       {/* Breadcrumb */}
       <Breadcrumbs aria-label="breadcrumb">
-        <Link
+      <Link
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
@@ -28,26 +28,32 @@ function Page() {
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
-          onClick={() => navigate("/portal/dashboard")}
+          onClick={() => navigate("/portal/dashboard/project/42")}
         >
-          New Pages
+          Project
         </Link>
         <Link
           sx={{ lineHeight: "50px", cursor: "pointer" }}
           underline="hover"
           color="inherit"
-          onClick={() => navigate("/portal/dashboard/new-pages/deleted")}
+          onClick={() => navigate("/portal/dashboard/project/42")}
         >
-          Deleted
+          Published Pages
+        </Link>
+        <Link
+          sx={{ lineHeight: "50px", cursor: "pointer" }}
+          underline="hover"
+          color="inherit"
+          onClick={() => navigate("/portal/dashboard/project/42/published-pages/changed")}
+        >
+          Changed
         </Link>
         <Typography
-          sx={{ lineHeight: "50px", cursor: "pointer" }}
           color="text.primary"
         >
           View
         </Typography>
       </Breadcrumbs>
-
 
       <Paper elevation={3} sx={{ p: 0 }}>
         <List sx={{ p: 0 }}>
@@ -62,7 +68,6 @@ function Page() {
           />
         </List>
       </Paper>
-
 
       <DiamondDeviceEmulator src={"about:blank"} />
     </Box>
