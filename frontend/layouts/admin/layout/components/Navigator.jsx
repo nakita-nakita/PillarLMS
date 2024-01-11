@@ -21,6 +21,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Typography from '@mui/material/Typography';
+import HeaderRow from '@/components/global/HeaderRow/HeaderRow.component';
 
 export default function Navigator(props) {
   const { setLeftDrawer, idChip, panelMeetingDoc, setPanelMeetingDoc, leftDrawer } = React.useContext(AdminLayoutContext)
@@ -99,35 +100,44 @@ export default function Navigator(props) {
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem sx={{ ...itemCategory, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "#230f34" }}>
+        <ListItem
+          style={{
+            backgroundColor: "rgb(59 0 0)",
+            color: "white",
+          }}
+        >
+          <div>
 
-          <br />
-          {leftDrawer.shouldApplyToTopNavMenu && (
-            <div style={{textAlign: "center"}}>
-              <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${leftDrawer.logo}`} alt="Description of image" style={{width: "150px"}} />
+            {!leftDrawer?.shouldApplyToTopNavMenu && (
+              <br />
+            )}
+            <Typography
+              variant='h5'
+            >
+              Pillar RCM with CMS
+            </Typography>
+            {!leftDrawer?.shouldApplyToTopNavMenu && (
+              <br />
+            )}
+          </div>
+
+        </ListItem>
+        {leftDrawer.shouldApplyToTopNavMenu && (
+          <ListItem sx={{ ...itemCategory, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "#230f34" }}>
+            <br />
+            <div style={{ textAlign: "center" }}>
+              <img src={`${process.env.NEXT_PUBLIC_WEB_API_URL}${leftDrawer.logo}`} alt="Description of image" style={{ width: "150px" }} />
               <br />
               <br />
               <h2>{leftDrawer.name}</h2>
             </div>
-          )}
-          {/* <Alert severity="warning">
-            <small>
-              <strong>
-                Upgrade
-              </strong>
-            </small>
-            <hr />
-            <span>
-              Building Plan
-            </span>
-          </Alert> */}
-          <br />
-
-        </ListItem>
+            <br />
+          </ListItem>
+        )}
 
 
         <ListItem
-          sx={{ py: 0, px: 0, ...topHeader, fontSize: "11px", color: '#fff', backgroundColor: "aliceblue" }}
+          sx={{ py: 0, px: 0, fontSize: "11px", }}
           onClick={() => changeUrl("/portal/profile")}
         >
           <ListItemButton>
@@ -317,169 +327,6 @@ export default function Navigator(props) {
               </ListItemText>
             </ListItemButton>
           </ListItem>
-
-          {/* <ListItem
-
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/courses') ? theme.palette.grey[300] : "initial",
-            }}
-            onClick={() => changeUrl("/portal/courses/discussion/")}
-            secondaryAction={
-              <div style={circleStatusSuccessStyle}></div>
-            }
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <img src="/admin/icons/icons8-course-assign-100.png" style={{ width: "50px", height: "50px" }} />
-              </ListItemIcon>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Courses
-                </Typography>
-
-
-              </ListItemText>
-            </ListItemButton>
-          </ListItem> */}
-          {/* <ListItemButton>
-
-            <ListItem
-              
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Pricing Models
-                </Typography>
-
-
-              </ListItemText>
-            </ListItem>
-          </ListItemButton> */}
-
-          {/* <br /> */}
-          {/* <ListItem 
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-            <ListItemText>
-              <Typography color="inherit" variant="h6" component="h3"
-                style={{
-                  // lineHeight: 1.1,
-                  color: theme.palette.grey[700]
-                }}
-              >
-                <small>
-
-                  Use Cases
-                </small>
-              </Typography>
-
-
-            </ListItemText>
-          </ListItem> */}
-          {/* <ListItemButton>
-
-            <ListItem 
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Account Managing
-                </Typography>
-
-
-              </ListItemText>
-            </ListItem>
-          </ListItemButton> */}
-          {/* <ListItemButton>
-            <ListItem 
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Marketing
-                </Typography>
-
-
-              </ListItemText>
-            </ListItem>
-          </ListItemButton> */}
-          {/* <ListItemButton>
-            <ListItem 
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Finance
-                </Typography>
-
-
-              </ListItemText>
-            </ListItem>
-          </ListItemButton> */}
-          {/* <ListItemButton>
-            <ListItem 
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/admin/') ? theme.palette.grey[300] : "initial",
-            }}>
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Analytics
-                </Typography>
-
-
-              </ListItemText>
-            </ListItem>
-          </ListItemButton> */}
           <ListItem
             sx={{ pt: "26px", pb: "2px" }}
           >
@@ -493,35 +340,6 @@ export default function Navigator(props) {
               </Typography>
             </ListItemText>
           </ListItem>
-
-          {/* <ListItem
-
-            sx={{
-              py: 0,
-              px: 0,
-              background: router.pathname.startsWith('/portal/analytics') ? theme.palette.grey[300] : "initial",
-            }}
-            onClick={() => changeUrl("/portal/analytics")}
-          >
-            <ListItemButton>
-              <ListItemIcon>
-                <img src="/admin/icons/icons8-analytics-100.png" style={{ width: "50px", height: "50px" }} />
-              </ListItemIcon>
-
-              <ListItemText>
-                <Typography color="inherit" variant="h6" component="h2"
-                  style={{
-                    // lineHeight: 1.1,
-                    color: theme.palette.grey[900]
-                  }}
-                >
-                  Analytics
-                </Typography>
-
-
-              </ListItemText>
-            </ListItemButton>
-          </ListItem> */}
           <ListItem
             sx={{
               py: 0,
@@ -529,6 +347,9 @@ export default function Navigator(props) {
               background: router.pathname.startsWith('/portal/admin') ? theme.palette.grey[300] : "initial",
             }}
             onClick={() => changeUrl("/portal/admin/user-management")}
+            secondaryAction={
+              <div style={circleStatusSuccessStyle}></div>
+            }
           >
             <ListItemButton>
               <ListItemIcon>
@@ -576,6 +397,20 @@ export default function Navigator(props) {
               </ListItemText>
             </ListItem>
           </ListItemButton>
+          <br />
+          <Divider />
+          <br />
+          <div
+            style={{
+              padding: "8px 15px",
+              color: theme.palette.grey[700]
+            }}
+          >
+            <small>
+
+              Version: Pre-Alpha
+            </small>
+          </div>
 
         </Box>
       </List>

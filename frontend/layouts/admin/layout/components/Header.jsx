@@ -66,11 +66,6 @@ function Header(props) {
             </Grid>
             <Grid item xs />
 
-            {/* This is why pillarLMS test is slightly higher, todo: put in grid item soon. */}
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              PillarLMS
-            </Typography>
-
             <Grid item>
               <Tooltip title="Who is on the page">
                 <IconButton

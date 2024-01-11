@@ -69,8 +69,8 @@ function Page({ searchParams }) {
         setUserToken({
           token: response.data.foundationAuth_signin.token,
         })
-        if (!searchParams || isEmpty(searchParams)){
-          router.push("/portal/media-manager/")
+        if (!searchParams || isEmpty(searchParams)) {
+          router.push("/portal/dashboard/")
         } else {
           router.push(searchParams.url)
         }
